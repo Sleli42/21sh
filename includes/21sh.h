@@ -41,12 +41,13 @@ typedef struct			s_all
 	char				**path2exec;
 	char				**parsecmd;
 	char				*oldpwd;
+	int					fd2open;
 }						t_all;
 
 typedef	struct			s_redirect
 {
 	char				*action_name;
-	void				(*f)(char *);
+	void				(*f)(t_all *, char *);
 }						t_redirect;
 
 typedef	struct			s_builtins
@@ -115,13 +116,13 @@ void		free_all(t_all *all, char *cmd);
 /*
 *** ============================================================ redirection.c
 */
-void		dup_and_exec(char **argv, int fd2open, int fd2back, int fd2dup);
-void		erase_and_replace(char *cmd);
-void		add_to_end(char *cmd);
-void		read_file(char *cmd);
-void		read_stdin(char *cmd);
+void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
+void		erase_and_replace(t_all *all, char *cmd);
+void		add_to_end(t_all *all, char *cmd);
+void		read_file(t_all *all, char *cmd);
+void		read_stdin(t_all *all, char *cmd);
 /*
 *** ============================================================ pipe.c
 */
-void		create_pipe(char *cmd);
+void		create_pipe(t_all *all, char *cmd);
 #endif

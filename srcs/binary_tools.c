@@ -45,6 +45,7 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 		{
 			stop = 1;
 			exec_binary(bin_tmp, argv_bin, all->dupenv);
+			break ;
 		}
 		ft_strdel(&bin_tmp);
 		ct++;

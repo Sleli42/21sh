@@ -12,7 +12,8 @@
 
 #include "21sh.h"
 
-void	create_pipe(char *cmd)
+void	create_pipe(t_all *all, char *cmd)
 {
+	(void)all;
 	printf("[ pipe ] -> %s\n", cmd);
 }

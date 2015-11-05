@@ -33,7 +33,8 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 			if (ft_strcmp(cmp, redirection[i].action_name) == 0)
 			{
 				ft_strdel(&cmp);
-				redirection[i].f(cmd);
+				redirection[i].f(all, cmd);
+				return ;
 			}
 			i++;
 		}
@@ -54,7 +55,6 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	{"exit", free_all}};
 	i = 0;
 	stop = 0;
-	//write(1, "Here\n", 5);
 	while (i < 6)
 	{
 		if (ft_strncmp(cmd, built[i].action_name,
@@ -74,7 +74,6 @@ void	exec_command(t_all *all)
 	int		i;
 
 	i = 0;
-//	printf("%s\n", all->parsecmd[i]);
 	if (all->parsecmd != NULL)
 	{
 		while (all->parsecmd[i])

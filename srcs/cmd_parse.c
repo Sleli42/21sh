@@ -12,8 +12,6 @@
 
 #include "21sh.h"
 
-void	display_tab(char **tab);
-
 void	parse_command(t_all *all, char *buff)
 {
 	int		i;
@@ -26,22 +24,6 @@ void	parse_command(t_all *all, char *buff)
 		while (all->parsecmd[++i])
 			all->parsecmd[i] = ft_epur_str(all->parsecmd[i]);
 }
-
-void	display_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	if (tab && *tab)
-	{
-		while (tab[i])
-		{
-			printf("|%s|\n", tab[i]);
-			i++;
-		}
-	}
-}
-
 
 int		check_redirection(char *s)
 {

@@ -12,72 +12,84 @@
 
 #include "21sh.h"
 
-void	dup_and_exec(char **argv, int fd2open, int fd2back, int fd2dup)
+/*
+int dup2(int oldfd, int newfd);
+
+dup2() transforme newfd en une copie de oldfd, fermant auparavant newfd
+       si besoin est, mais prenez note des points suivants.
+
+       *  Si  oldfd n’est pas un descripteur de fichier valable, alors l’appel
+          échoue et newfd n’est pas fermé.
+
+       *  Si oldfd est un descripteur de fichier valable et newfd  a  la  même
+          valeur que oldfd, alors dup2() ne fait rien et renvoie newfd.
+*/
+
+void	dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup)
 {
-	dup2(fd2open, fd2dup);
-	close(fd2open);
-	execve(argv[0], argv, NULL);
-	//exec_right_binary(all, argv);
+	dup2(all->fd2open, fd2dup);
+	close(all->fd2open);
+	exec_right_binary(all, argv);
 	dup2(fd2back, fd2dup);
 	close(fd2back);
 	del_array(&argv);
 }
 
-void	erase_and_replace(char *cmd)
+void	erase_and_replace(t_all *all, char *cmd)
 {
 	char	**redirect;
 	char	**argv;
 	int		dupstdout;
-	int		fd2open;
 
 	argv = NULL;
+	redirect = NULL;
 	redirect = ft_strsplit(cmd, '>');
-	redirect[1] = ft_epur_str(redirect[1 + 1]);
-	if ((fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-		write(1, "err0r\n", 6);//shell_error("OPEN", redirect[1]);
+	redirect[1] = ft_epur_str(redirect[1]);
+	if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		write(1, "err0r1\n", 6);//shell_error("OPEN", redirect[1]);
 	argv = ft_strsplit(redirect[0], ' ');
-	dupstdout = dup(STDOUT_FILENO);
+	dupstdout = dup(1);
+	dup_and_exec(all, argv, dupstdout, 1);
 	del_array(&redirect);
-	dup_and_exec(argv, fd2open, dupstdout, STDOUT_FILENO);
 }
 
-void	add_to_end(char *cmd)
+void	add_to_end(t_all *all, char *cmd)
 {
 	char	**redirect;
 	char	**argv;
 	int		dupstdout;
-	int		fd2open;
 
 	argv = NULL;
+	redirect = NULL;
 	redirect = ft_strsplit(cmd, '>');
 	redirect[1] = ft_epur_str(redirect[1 + 1]);
-	if ((fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
-		write(1, "err0r\n", 6);//shell_error("OPEN", redirect[1]);
+	if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
+		write(1, "err0r2\n", 6);//shell_error("OPEN", redirect[1]);
 	argv = ft_strsplit(redirect[0], ' ');
-	dupstdout = dup(STDOUT_FILENO);
+	dupstdout = dup(1);
+	dup_and_exec(all, argv, dupstdout, 1);
 	del_array(&redirect);
-	dup_and_exec(argv, fd2open, dupstdout, STDOUT_FILENO);
 }
 
-void	read_file(char *cmd)
+void	read_file(t_all *all, char *cmd)
 {
 	char	**redirect;
 	char	**argv;
 	int		dupstdin;
-	int		fd2open;
 
 	argv = NULL;
-	redirect = ft_strsplit(cmd, '>');
-	redirect[1] = ft_epur_str(redirect[1 + 2]);
-	if ((fd2open = open(redirect[1], O_RDONLY)) == -1)
+	redirect = NULL;
+	redirect = ft_strsplit(cmd, '<');
+	redirect[1] = ft_epur_str(redirect[1]);
+	if ((all->fd2open = open(redirect[1], O_RDONLY)) == -1)
 		write(1, "err0r\n", 6);//shell_error("OPEN", redirect[1]);
 	argv = ft_strsplit(redirect[0], ' ');
-	dupstdin = dup(STDIN_FILENO);
+	dupstdin = dup(0);
+	dup_and_exec(all, argv, dupstdin, 0);
 	del_array(&redirect);
-	dup_and_exec(argv, fd2open, dupstdin, STDIN_FILENO);
 }
 
-void	read_stdin(char *cmd)
+void	read_stdin(t_all *all, char *cmd)
 {
 	char	**redirect;
 	char	**argv;
@@ -85,10 +97,11 @@ void	read_stdin(char *cmd)
 	char	*buff;
 	int		dupstdin;
 
+	(void)all;
 	argv = NULL;
 	buff = NULL;
 	redirect = ft_strsplit(cmd, '<');
-	key = ft_epur_str(redirect[1 + 2]);
+	key = ft_epur_str(redirect[1 + 1]);
 	argv = ft_strsplit(redirect[0], ' ');
 	while (1)
 	{
@@ -97,7 +110,7 @@ void	read_stdin(char *cmd)
 		if (ft_strcmp(key, buff) == 0)
 		{
 			dupstdin = dup(0);
-			dup_and_exec(argv, STDIN_FILENO, dupstdin, STDIN_FILENO);
+			dup_and_exec(all, argv, dupstdin, 0);
 			break ;
 		}
 		else
