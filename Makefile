@@ -15,13 +15,19 @@ RM = rm -rf
 FLAGS = -g -Wall -Wextra -Werror
 LDFLAGS = -I./includes/ -I./libft/include/
 
-SRC = main.c \
-		error.c \
+SRC = binary_tools.c \
+		builtins.c \
+		cmd_exec.c \
+		cmd_parse.c \
 		dlist.c \
-		init.c \
-		tools.c \
 		env.c \
-		parse_cmd.c
+		error.c \
+		init.c \
+		main.c \
+		pipe.c \
+		redirection.c \
+		tools.c
+
 
 OBJ = $(SRC:.c=.o)
 

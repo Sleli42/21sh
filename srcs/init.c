@@ -47,8 +47,9 @@ t_all		*init_all(char **env)
 	i = 0;
 	if (!(all = (t_all *)malloc(sizeof(t_all))))
 		error("MALLOC");
-	all->dupenv = ft_dupenv(env);
 	all->env = init_env(env);
+	all->dupenv = ft_dupenv(env);
+	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	all->parsecmd = NULL;
 	return (all);
 }

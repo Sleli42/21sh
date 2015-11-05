@@ -33,7 +33,7 @@ void	erase_and_replace(char *cmd)
 	argv = NULL;
 	redirect = ft_strsplit(cmd, '>');
 	redirect[1] = ft_epur_str(redirect[1 + 1]);
-	if ((fd2open = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+	if ((fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 		write(1, "err0r\n", 6);//shell_error("OPEN", redirect[1]);
 	argv = ft_strsplit(redirect[0], ' ');
 	dupstdout = dup(STDOUT_FILENO);

@@ -12,39 +12,41 @@
 
 #include "21sh.h"
 
-void	pwd_display(t_all *all)
+void	pwd_display(t_all *all, char *cmd)
 {
 	char	*pwd;
 	char	*buff;
 
 	(void)all;
+	(void)cmd;
 	buff = NULL;
 	pwd = getcwd(buff, 42);
 	ft_putendl(pwd);
 }
 
-void	goto_dir(t_all *all)
+void	goto_dir(t_all *all, char *cmd)
 {
 	char	*buff;
 
 	buff = NULL;
 	all->oldpwd = getcwd(buff, 42);
 	all->oldpwd = ft_strjoin(all->oldpwd, "/");
-	all->cmd = ft_strdup(all->cmd + 3);
-	if (all->cmd[0] == '\0')
-		all->cmd = ft_strdup("/nfs/zfs-student-5/users/2014/lubaujar/");
-	else if (all->cmd[0] == '-')
-		all->cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
-	if (access(all->cmd, F_OK) == 0)
+	cmd = ft_strdup(cmd + 3);
+	if (cmd[0] == '\0')
+		cmd = ft_strdup("/nfs/zfs-student-5/users/2014/lubaujar/");
+	else if (cmd[0] == '-')
+		cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
+	if (access(cmd, F_OK) == 0)
 	{
-		if (chdir(all->cmd) == -1)
+		if (chdir(cmd) == -1)
 			error("DIR");
 		update_oldpwd(all);
 	}
 }
 
-void	free_all(t_all *all)
+void	free_all(t_all *all, char *cmd)
 {
+	(void)cmd;
 	// while (all->env->lenght-- != 0)
 	// 	dlst_del_one(all->env, all->env->head->s);
 	// if (all->path2exec != NULL)

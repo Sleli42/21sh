@@ -28,3 +28,23 @@ char	*find_env_arg(t_all *all, char *arg2find)
 	}
 	return (NULL);
 }
+
+void	update_oldpwd(t_all *all)
+{
+	t_node	*nav;
+
+	nav = all->env->head;
+	if (nav)
+	{
+		while (nav)
+		{
+			if (ft_strncmp(nav->s, "OLDPWD", 6) == 0)
+			{
+				ft_strdel(&nav->s);
+				nav->s = ft_strjoin("OLDPWD=", all->oldpwd);
+				return ;
+			}
+			nav = nav->next;
+		}
+	}
+}

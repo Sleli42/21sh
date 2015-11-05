@@ -12,10 +12,11 @@
 
 #include "21sh.h"
 
-void	env_display(t_all *all)
+void	env_display(t_all *all, char *cmd)
 {
 	t_node	*nav;
 
+	(void)cmd;
 	nav = all->env->head;
 	if (nav)
 	{
@@ -27,12 +28,12 @@ void	env_display(t_all *all)
 	}
 }
 
-// void	env_set(t_all *all)
-// {
-// 	dlst_add_back(all->env, dlst_new(all->cmd + 8));
-// }
+void	env_set(t_all *all, char *cmd)
+{
+	dlst_add_back(all->env, dlst_new(cmd + 8));
+}
 
-// void	env_unset(t_all *all)
-// {
-// 	dlst_del_one(all->env, (all->cmd + 10));
-// }
+void	env_unset(t_all *all, char *cmd)
+{
+	dlst_del_one(all->env, (cmd + 10));
+}
