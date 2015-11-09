@@ -31,13 +31,10 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 		while (i < 5)
 		{
 			if (ft_strcmp(cmp, redirection[i].action_name) == 0)
-			{
-				ft_strdel(&cmp);
 				redirection[i].f(all, cmd);
-				return ;
-			}
 			i++;
 		}
+		ft_strdel(&cmp);
 	}
 }
 
@@ -67,6 +64,14 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	}
 	if (!stop)
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
+}
+
+void	display_tab(char **tb)
+{
+	int		ct = 0;
+
+	while (tb[ct])
+		printf("== %s\n", tb[ct++]);
 }
 
 void	exec_command(t_all *all)

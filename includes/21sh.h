@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <libft.h>
 # include <stdio.h>
+# include <sys/types.h> 
+# include <sys/wait.h>
 
 # define	MAXLEN		4096
 
@@ -40,6 +42,7 @@ typedef struct			s_all
 	char				**dupenv;
 	char				**path2exec;
 	char				**parsecmd;
+	char				**pipe;
 	char				*oldpwd;
 	int					fd2open;
 }						t_all;
@@ -124,5 +127,9 @@ void		read_stdin(t_all *all, char *cmd);
 /*
 *** ============================================================ pipe.c
 */
+char		*create_good_path(t_all *all, char *cmd);
 void		create_pipe(t_all *all, char *cmd);
+void		exec_pipe_process(t_all *all, char *cmd, char **args);
+void		exec_last_pipe_process(t_all *all, char *cmd, char **args);
+
 #endif
