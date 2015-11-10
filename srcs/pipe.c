@@ -29,6 +29,42 @@ char	*create_good_path(t_all *all, char *cmd)
 	return (NULL);
 }
 
+int		check_redirect(char *s)
+{
+	while (*s)
+	{
+		if (*s == '>' || *s == '<')
+			return (1);
+		s++;
+	}
+	return (0);
+}
+
+char	*redirected_in_args(char **args, int *redir_type)
+{
+	int		i;
+	char	*file_redir;
+
+	i = 0;
+	while (args[i])
+	{
+		if (ft_strequ(args[i], ">") || ft_strequ(args[i], ">>"))
+		{
+			if (ft_strequ(args[i], ">"))
+				*redir_type = 1;
+			else
+				*redir_type = 2;
+			free(args[i]);
+			file_redir = args[i + 1];
+			args[i] = NULL;
+			args[i + 1] = NULL;
+			return (file_redir);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	create_pipe(t_all *all, char *cmd)
 {
 	char	**args;
@@ -45,6 +81,14 @@ void	create_pipe(t_all *all, char *cmd)
 			all->pipe[i] = ft_epur_str(all->pipe[i]);
 			args = ft_strsplit(all->pipe[i], ' ');
 			goodpath = create_good_path(all, args[0]);
+			if (check_redirect(all->pipe[i]))
+			{
+				int redir_type;
+				//char *file_redir;
+				printf("%s\n", redirected_in_args(args, &redir_type));
+				//printf("%s\n", ft_strchr(all->pipe[i], '>'));
+				ft_putstr("redirection detected\n");
+			}
 			if (ft_tablen(&all->pipe[i]) > 1)
 				exec_pipe_process(all, goodpath, args);
 			else
