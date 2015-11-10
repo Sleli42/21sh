@@ -69,11 +69,14 @@ void	create_pipe(t_all *all, char *cmd)
 {
 	char	**args;
 	char	*goodpath;
+	char	*file;
 	int		i;
+	int		redirect;
 	pid_t	pid;
 
 	i = 0;
 	all->pipe = ft_strsplit(cmd, '|');
+	file = NULL;
 	if ((pid = fork()) == 0)
 	{
 		while (all->pipe[i])
@@ -82,19 +85,14 @@ void	create_pipe(t_all *all, char *cmd)
 			args = ft_strsplit(all->pipe[i], ' ');
 			goodpath = create_good_path(all, args[0]);
 			if (check_redirect(all->pipe[i]))
-			{
-				int redir_type;
-				//char *file_redir;
-				printf("%s\n", redirected_in_args(args, &redir_type));
-				//printf("%s\n", ft_strchr(all->pipe[i], '>'));
-				ft_putstr("redirection detected\n");
-			}
+				file = redirected_in_args(args, &redirect);
 			if (ft_tablen(&all->pipe[i]) > 1)
 				exec_pipe_process(all, goodpath, args);
 			else
-				exec_last_pipe_process(all, goodpath, args);
+				exec_redirect(all, goodpath, args, file, redirect);
 			del_array(&args);
 			ft_strdel(&goodpath);
+			ft_strdel(&file);
 			i++; 
 		}
 		exit(0);
@@ -126,19 +124,48 @@ void	exec_pipe_process(t_all *all, char *cmd, char **args)
 	}
 }
 
-void	exec_last_pipe_process(t_all *all, char *cmd, char **args)
+int		open_file(char *file, int redir)
+{
+	int		fd;
+
+	if (file)
+	{
+		if (redir == 1)
+		{
+			if ((fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+				write(1, "open err0r\n", 11);
+		}
+		else
+		{
+			if ((fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
+				write(1, "open err0r\n", 11);
+		}
+	}
+	return (fd);
+}
+
+void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 {
 	pid_t	child;
+	//int		status;
+	int		fd;
 
+	fd = open_file(file, redir);
 	if (cmd == NULL)
 		return ;
 	if ((child = fork()) == -1)
 		write(1, "fork  error\n", 11);
 	if (child == 0)
 	{
+		if (file != NULL)
+		{
+			dup2(fd, 1);
+			close(fd);
+		}
 		if (execve(cmd, args, all->dupenv) == -1)
 			write(1, "execve error\n", 13);
 	}
 	else
 		wait(NULL);
+		//waitpid(child, &status, 0);
 }

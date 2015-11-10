@@ -16,6 +16,11 @@
 mkdir test ; cd test ; ls -a ; ls | cat | wc -c > fifi ; cat fifi
 */
 
+void	display_tab(char **tab) {
+	while (tab && *tab)
+		printf("[%s]\n", *tab++);
+}
+
 void	loop(t_all *all)
 {
 	int		r;
@@ -34,6 +39,7 @@ void	loop(t_all *all)
 		else if (r > 0)
 		{
 			parse_command(all, buff);
+			//display_tab(all->parsecmd);
 			exec_command(all);
 		}
 	}

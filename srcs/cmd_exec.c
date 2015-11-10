@@ -66,14 +66,6 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
 }
 
-void	display_tab(char **tb)
-{
-	int		ct = 0;
-
-	while (tb[ct])
-		printf("== %s\n", tb[ct++]);
-}
-
 void	exec_command(t_all *all)
 {
 	int		i;

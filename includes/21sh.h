@@ -130,6 +130,7 @@ void		read_stdin(t_all *all, char *cmd);
 char		*create_good_path(t_all *all, char *cmd);
 void		create_pipe(t_all *all, char *cmd);
 void		exec_pipe_process(t_all *all, char *cmd, char **args);
-void		exec_last_pipe_process(t_all *all, char *cmd, char **args);
+int			open_file(char *file, int redir);
+void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
 
 #endif
