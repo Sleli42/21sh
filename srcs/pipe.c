@@ -37,33 +37,26 @@ void	create_pipe(t_all *all, char *cmd)
 	pid_t	pid;
 
 	i = 0;
-	args = NULL;
-	goodpath = NULL;
-	//printf("to pipe: |%s|\n", cmd);
 	all->pipe = ft_strsplit(cmd, '|');
 	if ((pid = fork()) == 0)
 	{
-	while (all->pipe[i])
-	{
-		all->pipe[i] = ft_epur_str(all->pipe[i]);
-		args = ft_strsplit(all->pipe[i], ' ');
-		goodpath = create_good_path(all, args[0]);
-		if (ft_tablen(&all->pipe[i]) > 1)
-			exec_pipe_process(all, goodpath, args);
-		else
-			exec_last_pipe_process(all, goodpath, args);
-		del_array(&args);
-		ft_strdel(&goodpath);
-		//printf("<%s>\n", all->pipe[i]);
-		//printf("%zu\n", ft_tablen(&all->pipe[i]));
-		i++; 
-	}
+		while (all->pipe[i])
+		{
+			all->pipe[i] = ft_epur_str(all->pipe[i]);
+			args = ft_strsplit(all->pipe[i], ' ');
+			goodpath = create_good_path(all, args[0]);
+			if (ft_tablen(&all->pipe[i]) > 1)
+				exec_pipe_process(all, goodpath, args);
+			else
+				exec_last_pipe_process(all, goodpath, args);
+			del_array(&args);
+			ft_strdel(&goodpath);
+			i++; 
+		}
+		exit(0);
 	}
 	else
 		wait(NULL);
-	//exit(1);
-	//write(0, "\n", 1);
-	//write(1, "finish\n", 7);
 }
 
 void	exec_pipe_process(t_all *all, char *cmd, char **args)
@@ -72,8 +65,6 @@ void	exec_pipe_process(t_all *all, char *cmd, char **args)
 	int		fds[2];
 
 	pipe(fds);
-//	printf("|%s|\n", args[0]);
-//	printf("|%s|\n", args[1]);	
 	if ((child = fork()) == -1)
 		write(1, "fork  error\n", 11);
 	else if (child == 0)
@@ -94,7 +85,6 @@ void	exec_pipe_process(t_all *all, char *cmd, char **args)
 void	exec_last_pipe_process(t_all *all, char *cmd, char **args)
 {
 	pid_t	child;
-	//int		statut;
 
 	if (cmd == NULL)
 		return ;

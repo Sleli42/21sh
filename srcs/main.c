@@ -26,7 +26,8 @@ void	loop(t_all *all)
 	{
 		write(1, "$: ", 3);
 		ft_memset(buff, 0, ft_strlen(buff));
-		r = read(0, buff, (MAXLEN - 1));
+		if ((r = read(0, buff, (MAXLEN - 1))) == -1)
+			return ;
 		buff[r - 1] = '\0';
 		if (r == 0)
 			return ;

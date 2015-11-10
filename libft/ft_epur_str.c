@@ -25,8 +25,6 @@ char	*ft_epur_str(char *s)
 		return (NULL);
 	while ((s[i] && s[i] == ' ') || (s[i] && s[i] == '\t'))
 		i++;
-	if (s[i] == ' ' || s[i] == '\t')
-		i = i + 1;
 	while (s[i])
 	{
 		ret[j++] = s[i++];
