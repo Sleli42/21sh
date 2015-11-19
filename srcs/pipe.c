@@ -128,6 +128,7 @@ int		open_file(char *file, int redir)
 {
 	int		fd;
 
+	fd = 0;
 	if (file)
 	{
 		if (redir == 1)
