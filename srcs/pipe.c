@@ -147,7 +147,6 @@ int		open_file(char *file, int redir)
 void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 {
 	pid_t	child;
-	//int		status;
 	int		fd;
 
 	fd = open_file(file, redir);
@@ -167,5 +166,4 @@ void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 	}
 	else
 		wait(NULL);
-		//waitpid(child, &status, 0);
 }

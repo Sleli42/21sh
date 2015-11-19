@@ -19,8 +19,24 @@
 # include <stdio.h>
 # include <sys/types.h> 
 # include <sys/wait.h>
+// termcaps
+# include <term.h>
+# include <termios.h>
+# include <curses.h>
+# include <sys/ioctl.h>
 
 # define	MAXLEN		4096
+# define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
+# define 	K_DOWN		(buff[0] == 27 && buff[1] == 91 && buff[2] == 66)
+# define 	K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
+# define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
+# define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
+# define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
+# define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
+# define 	K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
+# define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
+
+typedef struct termios	t_termios;
 
 typedef struct			s_node
 {
@@ -38,6 +54,12 @@ typedef struct			s_dlist
 
 typedef struct			s_all
 {
+	// TERM 2 USE && TERM 2 RESTORE
+	t_termios			term;
+	t_termios			restore;
+	t_dlist				*cmd_history;
+
+	// PARSE && EXEC
 	t_dlist				*env;
 	char				**dupenv;
 	char				**path2exec;
@@ -62,6 +84,7 @@ typedef	struct			s_builtins
 /*
 *** ============================================================ main.c
 */
+void		display_prompt(t_all *all);
 void		loop(t_all *all);
 /*
 *** ============================================================ init.c
@@ -73,6 +96,7 @@ t_all		*init_all(char **env);
 *** ============================================================ error.c
 */
 void		error(char *err);
+void		term_error(char *err);
 /*
 *** ============================================================ dlist.c
 */
@@ -132,5 +156,12 @@ void		create_pipe(t_all *all, char *cmd);
 void		exec_pipe_process(t_all *all, char *cmd, char **args);
 int			open_file(char *file, int redir);
 void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
+/*
+*** ============================================================ termcaps.c
+*/
+t_all		*f_cpy(t_all *all);
+int			lu_putchar(int c);
+void		tputs_termcap(char *tc);
+void		restore_term(t_termios restore);
 
 #endif

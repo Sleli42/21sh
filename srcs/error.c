@@ -17,3 +17,15 @@ void	error(char *err)
 	if (ft_strcmp(err, "MALLOC") == 0)
 		ft_putendl("Malloc error.");
 }
+
+void	term_error(char *err)
+{
+	if (!ft_strcmp(err, "GETENV"))
+		ft_putstr("getenv() error\n");
+	if (!ft_strcmp(err, "TGETENT"))
+		ft_putstr("tgetent() error\n");
+	if (!ft_strcmp(err, "TCGETATTR"))
+		ft_putstr("tcgetattr() error\n");
+	if (!ft_strcmp(err, "TCSETATTR"))
+		ft_putstr("TCSETATTR() error\n");
+}

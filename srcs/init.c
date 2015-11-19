@@ -39,12 +39,46 @@ t_dlist		*init_env(char **env)
 	return (list_env);
 }
 
+void		fct_sig(int sig)
+{
+	if (sig == SIGINT || sig == SIGCONT)
+		display_prompt(f_cpy(NULL));
+	else
+		exit(0);
+}
+
+static void		catch_sig(void)
+{
+	signal(SIGINT, fct_sig);
+	signal(SIGCONT, fct_sig);
+}
+
+void		init_termios(t_termios term)
+{
+		char	*term_name;
+
+	if ((term_name = getenv("TERM")) == NULL)
+		term_error("GETENV");
+	if (tgetent(NULL, term_name) == -1)
+		term_error("TGETENT");
+	if (tcgetattr(1, &term) == -1)
+		term_error("TCGETATTR");
+	term.c_lflag &= ~(ICANON);
+	term.c_lflag &= ~(ECHO);
+	term.c_cc[VMIN] = 1;
+	term.c_cc[VTIME] = 0;
+	if (tcsetattr(1, TCSADRAIN, &term) == -1)
+		term_error("TCSETATTR");
+}
+
 t_all		*init_all(char **env)
 {
 	t_all	*all;
 
 	if (!(all = (t_all *)malloc(sizeof(t_all))))
 		error("MALLOC");
+	catch_sig();
+	init_termios(all->term);
 	all->env = init_env(env);
 	all->dupenv = ft_dupenv(env);
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');

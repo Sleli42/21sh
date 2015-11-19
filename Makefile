@@ -26,7 +26,8 @@ SRC = binary_tools.c \
 		main.c \
 		pipe.c \
 		redirection.c \
-		tools.c
+		tools.c \
+		termcaps.c
 
 
 OBJ = $(SRC:.c=.o)
@@ -41,7 +42,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS) $(INCS)
-	@gcc $(FLAGS) -o $@ $^ -L./libft/ -lft
+	@gcc $(FLAGS) -o $@ $^ -L./libft/ -lft -ltermcap
 	@echo "\\033[1;34m\tPlease wait ...\\033[0;39m"
 	@echo "\\033[1;34m\t\texec ./21sh\\033[0;39m"
 
