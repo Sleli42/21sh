@@ -21,7 +21,7 @@ void	display_tab(char **tab) {
 		printf("[%s]\n", *tab++);
 }
 */
-void		read_key(void) {
+void		read_key(char *cmd) {
 	char	buff[3] = {0};
 
 	read(0, buff, 3);
@@ -30,11 +30,12 @@ void		read_key(void) {
 	else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
 		printf("GO TO DIRECTION\n");
 	else
-		printf("CHAR\n");
+		ft_putstr(cmd);
 }
 
 void	display_prompt(t_all *all) {
 	(void)all;
+	tputs_termcap("ve");
 	write(1, "$: ", 3);
 }
 
@@ -62,8 +63,9 @@ void	init_term(void)
 	if (tcgetattr(0, &term) == -1)
 		term_error("TCGETATTR");
 	term.c_lflag &= ~(ECHO | ICANON);
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
+	/* lire une touche [ fleches, backspace .. ] */
+	// term.c_cc[VMIN] = 1;
+	// term.c_cc[VTIME] = 0;
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		term_error("TCSETATTR");
 }
@@ -75,16 +77,19 @@ void	loop(t_all *all)
 
 	r = 0;
 	//f_cpy(all);
+	init_term();
 	while (1091111096051)
 	{
-		//display_prompt(all);
-		write(1, "$: ", 3);
+		display_prompt(all);
+		//write(1, "$: ", 3);
 		ft_memset(buff, 0, ft_strlen(buff));
 		if ((r = read(0, buff, (MAXLEN - 1))) == -1)
 			return ;
-		init_term();
-		read_key();
-		reset_term();
+		if (K_UP || K_DOWN)
+			printf("GO TO HISTORY\n");
+		else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
+			printf("GO TO DIRECTION\n");
+		//read_key(buff);
 		printf("%d\n", r);
 		printf("%s\n", buff);
 		buff[r - 1] = '\0';
@@ -97,6 +102,7 @@ void	loop(t_all *all)
 		}
 		//tputs_termcap("ei");
 	}
+	reset_term();
 }
 
 int		main(int ac, char **av, char **env)
