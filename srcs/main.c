@@ -64,12 +64,12 @@ void	init_term(void)
 		term_error("TCGETATTR");
 	term.c_lflag &= ~(ECHO | ICANON);
 	/* lire une touche [ fleches, backspace .. ] */
-	// term.c_cc[VMIN] = 1;
-	// term.c_cc[VTIME] = 0;
+	term.c_cc[VMIN] = 1;
+	term.c_cc[VTIME] = 0;
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		term_error("TCSETATTR");
 }
-
+/*
 void	loop(t_all *all)
 {
 	int		r;
@@ -89,6 +89,8 @@ void	loop(t_all *all)
 			printf("GO TO HISTORY\n");
 		else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
 			printf("GO TO DIRECTION\n");
+		else
+			ft_putchar(buff[r]);
 		//read_key(buff);
 		printf("%d\n", r);
 		printf("%s\n", buff);
@@ -104,6 +106,36 @@ void	loop(t_all *all)
 	}
 	reset_term();
 }
+*/
+
+void	loop(t_all *all)
+{
+	char	buff[MAXLEN];
+	char	*cmd;
+	int		i = 0;
+
+	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+		return ;
+	display_prompt(all);
+	ft_memset(buff, 0, MAXLEN - 1);
+	while (*buff != '\n')
+	{
+		read(0, buff, (MAXLEN - 1));
+		if (K_ENTER)
+			break ;
+		if (K_UP || K_DOWN)
+			printf("GO TO HISTORY\n");
+		else if (K_RIGHT || K_LEFT || K_DELETE)
+			printf("GO TO DIRECTION\n");
+		else
+			ft_putchar(*buff);
+		cmd[i++] = *buff;
+		// printf("|%c|", *buff);
+	}
+	cmd[i] = '\0';
+	printf("cmd: %s\n", cmd);
+	loop(all);
+}
 
 int		main(int ac, char **av, char **env)
 {
@@ -112,6 +144,7 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	all = init_all(env);
+	init_term();
 	loop(all);
 	restore_term(all->restore);
 	write(1, "\n", 1);
