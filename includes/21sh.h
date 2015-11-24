@@ -162,6 +162,7 @@ void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
 t_all		*f_cpy(t_all *all);
 int			lu_putchar(int c);
 void		tputs_termcap(char *tc);
+void		move_cursor(char *buff, char *cmd, int *i);
 void		restore_term(t_termios restore);
 
 #endif

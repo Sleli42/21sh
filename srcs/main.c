@@ -112,11 +112,18 @@ void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
 	char	*cmd;
-	int		i = 0;
+	int		i;
 
-	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
-		return ;
+	/*
+	***
+	*** faire une liste pour la commande
+	***
+	*/
+
+	i = 0;
 	display_prompt(all);
+	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
 	while (*buff != '\n')
 	{
@@ -124,16 +131,36 @@ void	loop(t_all *all)
 		if (K_ENTER)
 			break ;
 		if (K_UP || K_DOWN)
-			printf("GO TO HISTORY\n");
-		else if (K_RIGHT || K_LEFT || K_DELETE)
-			printf("GO TO DIRECTION\n");
+		{
+			// printf("GO TO HISTORY\n");
+			loop(all);
+		}
+		else if (K_RIGHT || K_LEFT)
+		{
+			move_cursor(buff, cmd, &i);
+			//loop(all);
+		}
 		else
+		{
 			ft_putchar(*buff);
-		cmd[i++] = *buff;
-		// printf("|%c|", *buff);
+			cmd[i++] = *buff;
+		}
+		//cmd[i++] = *buff;
+		//ft_putnbr_fd(i, 1);
 	}
-	cmd[i] = '\0';
-	printf("cmd: %s\n", cmd);
+	write(1, "\n", 1);
+	//printf("|%d|\n", cmd[i - 1]);
+	if (cmd[i - 1] == 10)
+		cmd[i - 1] = 0;
+	else
+		cmd[i] = 0;
+	printf("|%s|\n", cmd);
+	if (cmd && i > 1)
+	{
+		parse_command(all, cmd);
+		exec_command(all);
+		ft_strdel(&cmd);
+	}
 	loop(all);
 }
 

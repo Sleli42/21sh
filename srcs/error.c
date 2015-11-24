@@ -16,6 +16,7 @@ void	error(char *err)
 {
 	if (ft_strcmp(err, "MALLOC") == 0)
 		ft_putendl("Malloc error.");
+	return ;
 }
 
 void	term_error(char *err)
