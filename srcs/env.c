@@ -30,7 +30,7 @@ void	env_display(t_all *all, char *cmd)
 
 void	env_set(t_all *all, char *cmd)
 {
-	dlst_add_back(all->env, dlst_new(cmd + 8));
+	dlst_add_back((t_dlist *)all->env, (t_node *)dlst_node_new(cmd + 8));
 }
 
 void	env_unset(t_all *all, char *cmd)

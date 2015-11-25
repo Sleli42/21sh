@@ -114,12 +114,7 @@ void	loop(t_all *all)
 	char	*cmd;
 	int		i;
 
-	/*
-	***
-	*** faire une liste pour la commande
-	***
-	*/
-
+	// all->cmd = create_cmd_dlst();
 	i = 0;
 	display_prompt(all);
 	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -142,25 +137,31 @@ void	loop(t_all *all)
 		}
 		else
 		{
+			//if (all->cmd->lenght == all->cmd->tail->pos)
+				// dlst_add_back(all->cmd, dlst_cmd_new(*buff));
+			//printf("|%d|\n", *buff);
+			// if (*buff != 0 || *buff != 10)
+			// 	tputs_termcap("pc");
 			ft_putchar(*buff);
 			cmd[i++] = *buff;
 		}
 		//cmd[i++] = *buff;
 		//ft_putnbr_fd(i, 1);
 	}
+	// display_dlst(all->cmd);
 	write(1, "\n", 1);
 	//printf("|%d|\n", cmd[i - 1]);
 	if (cmd[i - 1] == 10)
 		cmd[i - 1] = 0;
 	else
 		cmd[i] = 0;
-	printf("|%s|\n", cmd);
-	if (cmd && i > 1)
-	{
-		parse_command(all, cmd);
-		exec_command(all);
-		ft_strdel(&cmd);
-	}
+	//printf("|%s|\n", cmd);
+	// if (cmd && i > 1)
+	// {
+	// 	parse_command(all, cmd);
+	// 	exec_command(all);
+	// 	ft_strdel(&cmd);
+	// }
 	loop(all);
 }
 

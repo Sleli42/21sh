@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-t_dlist			*create_dlst(void)
+t_dlist			*create_env_dlst(void)
 {
 	t_dlist	*new;
 
@@ -26,7 +26,7 @@ t_dlist			*create_dlst(void)
 	return (new);
 }
 
-t_node			*dlst_new(char *data)
+void			*dlst_node_new(char *data)
 {
 	t_node	*new;
 
@@ -40,8 +40,11 @@ t_node			*dlst_new(char *data)
 	return (new);
 }
 
-t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
+t_dlist			*dlst_add_back(void *tmp, void *tnode)
 {
+	t_dlist *lst = (t_dlist*)tmp;
+	t_node	*node = (t_node*)tnode;
+	
 	if (lst && node)
 	{
 		if (lst->tail == NULL)

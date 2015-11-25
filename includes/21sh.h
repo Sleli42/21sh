@@ -52,12 +52,22 @@ typedef struct			s_dlist
 	size_t				lenght;
 }						t_dlist;
 
+typedef struct			s_cmd
+{
+	char				c;
+	size_t				pos;
+	size_t				lenght;
+	struct s_cmd		*next;
+	struct s_cmd		*prev;
+}						t_cmd;
+
 typedef struct			s_all
 {
 	// TERM 2 USE && TERM 2 RESTORE
 	t_termios			term;
 	t_termios			restore;
 	t_dlist				*cmd_history;
+	t_cmd				*cmd;
 
 	// PARSE && EXEC
 	t_dlist				*env;
@@ -100,11 +110,16 @@ void		term_error(char *err);
 /*
 *** ============================================================ dlist.c
 */
-t_dlist		*create_dlst(void);
-t_node		*dlst_new(char *data);
-t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
+t_dlist		*create_env_dlst(void);
+void		*dlst_node_new(char *data);
+t_dlist		*dlst_add_back(void *lst, void *node);
 t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
 int			update_list(t_dlist *lst, t_node *elem);
+/*
+*** ============================================================ dlist_2.c
+*/
+t_cmd		*create_cmd_dlst(void);
+t_cmd		*dlst_cmd_new(char c);
 /*
 *** ============================================================= env.c
 */
