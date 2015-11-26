@@ -20,13 +20,13 @@ t_dlist			*create_env_dlst(void)
 	if (new != NULL)
 	{
 		new->lenght = 0;
-		new->head = NULL;
-		new->tail = NULL;
+		new->head_node = NULL;
+		new->tail_node = NULL;
 	}
 	return (new);
 }
 
-void			*dlst_node_new(char *data)
+t_node		*dlst_node_new(char *data)
 {
 	t_node	*new;
 
@@ -40,23 +40,20 @@ void			*dlst_node_new(char *data)
 	return (new);
 }
 
-t_dlist			*dlst_add_back(void *tmp, void *tnode)
+t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
 {
-	t_dlist *lst = (t_dlist*)tmp;
-	t_node	*node = (t_node*)tnode;
-	
 	if (lst && node)
 	{
-		if (lst->tail == NULL)
+		if (lst->tail_node == NULL)
 		{
-			lst->head = node;
-			lst->tail = node;
+			lst->head_node = node;
+			lst->tail_node = node;
 		}
 		else
 		{
-			lst->tail->next = node;
-			node->prev = lst->tail;
-			lst->tail = node;
+			lst->tail_node->next = node;
+			node->prev = lst->tail_node;
+			lst->tail_node = node;
 		}
 		lst->lenght++;
 	}
@@ -68,7 +65,7 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 	t_node	*tmp;
 	int		found;
 
-	tmp = lst->head;
+	tmp = lst->head_node;
 	found = 0;
 	if (lst)
 	{
@@ -78,7 +75,7 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 			{
 				if (!tmp->next && !tmp->prev)
 				{
-					ft_strdel(&lst->head->s);
+					ft_strdel(&lst->head_node->s);
 					free(lst);
 				}
 				else
@@ -96,14 +93,14 @@ int				update_list(t_dlist *lst, t_node *elem)
 {
 	if (!elem->next && elem->prev)
 	{
-		lst->tail = elem->prev;
-		lst->tail->next = NULL;
+		lst->tail_node = elem->prev;
+		lst->tail_node->next = NULL;
 		ft_strdel(&elem->s);
 	}
 	else if (!elem->prev && elem->next)
 	{
-		lst->head = elem->next;
-		lst->head->prev = NULL;
+		lst->head_node = elem->next;
+		lst->head_node->prev = NULL;
 		ft_strdel(&elem->s);
 	}
 	else

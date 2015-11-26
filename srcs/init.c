@@ -35,7 +35,7 @@ t_dlist		*init_env(char **env)
 	i = 0;
 	list_env = create_env_dlst();
 	while (env[i])
-		dlst_add_back((void *)list_env, dlst_node_new(env[i++]));
+		dlst_add_back(list_env, dlst_node_new(env[i++]));
 	return (list_env);
 }
 
@@ -70,12 +70,13 @@ void		init_termios(t_termios term)
 		term_error("TGETENT");
 }
 
-// void	display_env(void *lst)
+// void	display_env(t_dlist *lst)
 // {
-// 	t_node	*tmp = (t_node *)lst->head;
+// 	t_node	*tmp = lst->head_node;
 
-// 	while ((tmp = tmp->next)) {
-// 		printf("[ %s ]", tmp->s);
+// 	while (tmp) {
+// 		printf("[ %s ]\n", tmp->s);
+// 		tmp = tmp->next;
 // 	}
 // }
 
@@ -87,8 +88,7 @@ t_all		*init_all(char **env)
 		error("MALLOC");
 	//catch_sig();
 	//init_termios(all->term);
-	all->env = init_env((void*)env);
-	display_env(all->env);
+	all->env = init_env(env);
 	all->dupenv = ft_dupenv(env);
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	all->parsecmd = NULL;

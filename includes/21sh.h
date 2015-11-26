@@ -47,8 +47,8 @@ typedef struct			s_node
 
 typedef struct			s_dlist
 {
-	struct s_node		*head;
-	struct s_node		*tail;
+	struct s_node		*head_node;
+	struct s_node		*tail_node;
 	size_t				lenght;
 }						t_dlist;
 
@@ -60,6 +60,12 @@ typedef struct			s_cmd
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
 }						t_cmd;
+
+typedef struct			s_dlist2
+{
+	struct s_cmd		*head;
+	struct s_cmd		*tail;
+}						t_dlist2;
 
 typedef struct			s_all
 {
@@ -111,8 +117,8 @@ void		term_error(char *err);
 *** ============================================================ dlist.c
 */
 t_dlist		*create_env_dlst(void);
-void		*dlst_node_new(char *data);
-t_dlist		*dlst_add_back(void *lst, void *node);
+t_node		*dlst_node_new(char *data);
+t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
 t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
 int			update_list(t_dlist *lst, t_node *elem);
 /*

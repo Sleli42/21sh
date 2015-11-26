@@ -114,7 +114,7 @@ void	loop(t_all *all)
 	char	*cmd;
 	int		i;
 
-	// all->cmd = create_cmd_dlst();
+	all->cmd = create_cmd_dlst();
 	i = 0;
 	display_prompt(all);
 	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))

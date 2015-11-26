@@ -16,7 +16,7 @@ char	*find_env_arg(t_all *all, char *arg2find)
 {
 	t_node		*nav;
 
-	nav = all->env->head;
+	nav = all->env->head_node;
 	if (nav)
 	{
 		while (nav)
@@ -33,7 +33,7 @@ void	update_oldpwd(t_all *all)
 {
 	t_node	*nav;
 
-	nav = all->env->head;
+	nav = all->env->head_node;
 	if (nav)
 	{
 		while (nav)
