@@ -108,6 +108,15 @@ void	loop(t_all *all)
 }
 */
 
+void	display_dlst(t_dlist2 *lst) {
+	t_cmd	*tmp = lst->head;
+
+	while (tmp) {
+		printf("[%c]*pos: %zu-", tmp->c, tmp->pos);
+		tmp = tmp->next;
+	}
+}
+
 void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
@@ -144,13 +153,13 @@ void	loop(t_all *all)
 			// 	tputs_termcap("pc");
 			ft_putchar(*buff);
 			cmd[i++] = *buff;
+			dlst_add_back_2(all->cmd, dlst_cmd_new(*buff));
 		}
 		//cmd[i++] = *buff;
 		//ft_putnbr_fd(i, 1);
 	}
-	// display_dlst(all->cmd);
-	write(1, "\n", 1);
-	//printf("|%d|\n", cmd[i - 1]);
+	display_dlst(all->cmd);
+	printf("\n|%s|\n", cmd);
 	if (cmd[i - 1] == 10)
 		cmd[i - 1] = 0;
 	else

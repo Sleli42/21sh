@@ -12,19 +12,18 @@
 
 #include "21sh.h"
 
-t_cmd			*create_cmd_dlst(void)
+t_dlist2		*create_cmd_dlst(void)
 {
-	t_cmd	*new;
+	t_dlist2	*new;
 
-	new = (t_cmd *)malloc(sizeof(t_cmd));
+	new = (t_dlist2 *)malloc(sizeof(t_dlist2));
 	if (new != NULL)
 	{
-		new->c = 0;
-		new->pos = 0;
 		new->lenght = 0;
-		new->next = NULL;
-		new->prev = NULL;
+		new->tail = NULL;
+		new->head = NULL;
 	}
+	return (new);
 }
 
 t_cmd			*dlst_cmd_new(char c)
@@ -39,37 +38,23 @@ t_cmd			*dlst_cmd_new(char c)
 		new->next = NULL;
 		new->prev = NULL;
 	}
+	return (new);
 }
 
-t_cmd			*dlst_add_back_2(t_cmd *lst, t_cmd *node)
+t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 {
 	if (lst && node)
 	{
-		if (lst == NULL)
-			lst = node;
-		else
+		if (lst->tail == NULL)
 		{
-			while (lst->next)
-				lst = lst->next;
-			lst = node;
-		}
-	}
-}
-
-t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
-{
-	if (lst && node)
-	{
-		if (lst->tail_node == NULL)
-		{
-			lst->head_node = node;
-			lst->tail_node = node;
+			lst->head = node;
+			lst->tail = node;
 		}
 		else
 		{
-			lst->tail_node->next = node;
-			node->prev = lst->tail_node;
-			lst->tail_node = node;
+			lst->tail->next = node;
+			node->prev = lst->tail;
+			lst->tail = node;
 		}
 		lst->lenght++;
 	}
