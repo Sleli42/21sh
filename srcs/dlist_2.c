@@ -26,7 +26,7 @@ t_dlist2		*create_cmd_dlst(void)
 	return (new);
 }
 
-t_cmd			*dlst_cmd_new(char c)
+t_cmd			*dlst_cmd_new(char c, size_t pos)
 {
 	t_cmd	*new;
 
@@ -34,7 +34,7 @@ t_cmd			*dlst_cmd_new(char c)
 	if (new)
 	{
 		new->c = c;
-		new->pos++;
+		new->pos = pos;
 		new->next = NULL;
 		new->prev = NULL;
 	}

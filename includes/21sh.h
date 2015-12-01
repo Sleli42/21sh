@@ -55,7 +55,8 @@ typedef struct			s_dlist
 typedef struct			s_cmd
 {
 	char				c;
-	static size_t		pos;
+	//char				*cmd;
+	size_t				pos;
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
 }						t_cmd;
@@ -116,16 +117,17 @@ void		term_error(char *err);
 /*
 *** ============================================================ dlist.c
 */
-t_dlist		*create_env_dlst(void);
+t_dlist		*create_dlst(void);
 t_node		*dlst_node_new(char *data);
 t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
 t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
 int			update_list(t_dlist *lst, t_node *elem);
+void		del_dlist(t_dlist *lst);
 /*
 *** ============================================================ dlist_2.c
 */
 t_dlist2	*create_cmd_dlst(void);
-t_cmd		*dlst_cmd_new(char c);
+t_cmd		*dlst_cmd_new(char c, size_t pos);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
 /*
 *** ============================================================= env.c
@@ -186,5 +188,10 @@ int			lu_putchar(int c);
 void		tputs_termcap(char *tc);
 void		move_cursor(char *buff, char *cmd, int *i);
 void		restore_term(t_termios restore);
+/*
+*** ============================================================ history.c
+*/
+char		*display_last_cmd(t_dlist *lst, size_t pos);
+char		*goto_latest_commands(t_all *all, size_t lenght);
 
 #endif

@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-t_dlist			*create_env_dlst(void)
+t_dlist			*create_dlst(void)
 {
 	t_dlist	*new;
 
@@ -111,4 +111,27 @@ int				update_list(t_dlist *lst, t_node *elem)
 	}
 	lst->lenght--;
 	return (1);
+}
+
+void			del_dlist(t_dlist *lst)
+{
+	t_node	*next_elem;
+	t_node	*tmp;
+
+	tmp = lst->tail_node;
+	next_elem = NULL;
+	if (tmp)
+	{
+		while (tmp)
+		{
+			next_elem = tmp->next;
+			if (tmp->s)
+				ft_strdel(&tmp->s);
+			if (tmp)
+				free(tmp);
+			tmp = next_elem;
+			if (tmp == lst->tail_node)
+				return ;
+		}
+	}
 }

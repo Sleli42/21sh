@@ -28,7 +28,8 @@ SRC = binary_tools.c \
 		pipe.c \
 		redirection.c \
 		tools.c \
-		termcaps.c
+		termcaps.c \
+		history.c
 
 
 OBJ = $(SRC:.c=.o)

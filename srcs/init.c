@@ -33,7 +33,7 @@ t_dlist		*init_env(char **env)
 
 	list_env = NULL;
 	i = 0;
-	list_env = create_env_dlst();
+	list_env = create_dlst();
 	while (env[i])
 		dlst_add_back(list_env, dlst_node_new(env[i++]));
 	return (list_env);
@@ -90,6 +90,8 @@ t_all		*init_all(char **env)
 	//init_termios(all->term);
 	all->env = init_env(env);
 	all->dupenv = ft_dupenv(env);
+	all->cmd_history = create_dlst();
+	// all->cmd = create_cmd_dlst();
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	all->parsecmd = NULL;
 	all->pipe = NULL;
