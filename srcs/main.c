@@ -111,23 +111,27 @@ void	loop(t_all *all)
 void	display_dlst(t_dlist2 *lst) {
 	t_cmd	*tmp = lst->head;
 
+	printf("\n");
+	printf("[ ");
 	while (tmp) {
-		printf("\n[%c]*pos: '%zu'", tmp->c, tmp->pos);
+		printf("[ %c ] ", tmp->c);
 		tmp = tmp->next;
 	}
+	printf(" ]");
+	printf("\n");
 }
 
 void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
-	char	*cmd;
+	// char	*cmd;
 	int		i;
 	int		key;
 
 	i = 0;
-	all->cmd = create_cmd_dlst();
+	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
-	if (!(cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
 	while (*buff != '\n')
@@ -135,25 +139,26 @@ void	loop(t_all *all)
 		read(0, buff, (MAXLEN - 1));
 		if ((key = check_keys_arrows(buff)) < 0)
 			break ;
+		else if (key > 0)
+			make_moves(all, buff);
 		else
 		{
 			ft_putchar(*buff);
-			cmd[i++] = *buff;
-			dlst_add_back_2(all->cmd, dlst_cmd_new(*buff, (size_t)i));
+			all->cmd[i++] = *buff;
+			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, (size_t)i));
 		}
+		//printf("cursor pos: %zu", all->cmd_termcaps->tail->pos);
 	}
-	if (cmd[i - 1] == 10)
-		cmd[i - 1] = 0;
-	else
-		cmd[i] = 0;
+	display_dlst(all->cmd_termcaps);
+	all->cmd[i] = 0;
+	//printf("%s\n", all->cmd);
 	write(1, "\n", 1);
-	dlst_add_back(all->cmd_history, dlst_node_new(cmd));
-	// printf("|%s|\n", cmd);
-	if (cmd && i > 1)
+	dlst_add_back(all->cmd_history, dlst_node_new(all->cmd));
+	if (all->cmd && i > 1)
 	{
-		parse_command(all, cmd);
+		parse_command(all, all->cmd);
 		exec_command(all);
-		ft_strdel(&cmd);
+		ft_strdel(&all->cmd);
 	}
 	loop(all);
 }

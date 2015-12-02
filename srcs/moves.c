@@ -26,3 +26,15 @@ int		check_keys_arrows(char buff[3])
 	}
 	return (0);
 }
+
+void	make_moves(t_all *all, char buff[3])
+{
+	// if (K_DELETE)
+	// {
+
+	// }
+	if (K_LEFT)
+	{
+		
+	}
+}

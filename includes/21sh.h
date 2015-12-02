@@ -55,7 +55,6 @@ typedef struct			s_dlist
 typedef struct			s_cmd
 {
 	char				c;
-	//char				*cmd;
 	size_t				pos;
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
@@ -74,7 +73,7 @@ typedef struct			s_all
 	t_termios			term;
 	t_termios			restore;
 	t_dlist				*cmd_history;
-	t_dlist2			*cmd;
+	t_dlist2			*cmd_termcaps;
 
 	// PARSE && EXEC
 	t_dlist				*env;
@@ -83,6 +82,7 @@ typedef struct			s_all
 	char				**parsecmd;
 	char				**pipe;
 	char				*oldpwd;
+	char				*cmd;
 	int					fd2open;
 }						t_all;
 
@@ -197,5 +197,6 @@ char		*goto_latest_commands(t_all *all, size_t lenght);
 *** ============================================================ moves.c
 */
 int			check_keys_arrows(char buff[3]);
+void		make_moves(t_all *all, char buff[3]);
 
 #endif
