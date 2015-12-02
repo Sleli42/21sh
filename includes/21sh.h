@@ -193,5 +193,9 @@ void		restore_term(t_termios restore);
 */
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 char		*goto_latest_commands(t_all *all, size_t lenght);
+/*
+*** ============================================================ moves.c
+*/
+int			check_keys_arrows(char buff[3]);
 
 #endif

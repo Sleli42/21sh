@@ -29,7 +29,8 @@ SRC = binary_tools.c \
 		redirection.c \
 		tools.c \
 		termcaps.c \
-		history.c
+		history.c \
+		moves.c
 
 
 OBJ = $(SRC:.c=.o)

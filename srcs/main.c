@@ -122,6 +122,7 @@ void	loop(t_all *all)
 	char	buff[MAXLEN];
 	char	*cmd;
 	int		i;
+	int		key;
 
 	i = 0;
 	all->cmd = create_cmd_dlst();
@@ -132,45 +133,22 @@ void	loop(t_all *all)
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
-		if (K_ENTER)
+		if ((key = check_keys_arrows(buff)) < 0)
 			break ;
-		if (K_UP || K_DOWN)
-		{
-			if (K_UP)
-				cmd = ft_strdup(goto_latest_commands(all, all->cmd_history->lenght - 1));
-			if (K_DOWN)
-				cmd = goto_latest_commands(all, all->cmd_history->lenght + 1);
-			// printf("GO TO HISTORY\n");
-		//	loop(all);
-		}
-		else if (K_RIGHT || K_LEFT)
-		{
-			move_cursor(buff, cmd, &i);
-			//loop(all);
-		}
 		else
 		{
-			//if (all->cmd->lenght == all->cmd->tail->pos)
-				// dlst_add_back(all->cmd, dlst_cmd_new(*buff));
-			//printf("|%d|\n", *buff);
-			// if (*buff != 0 || *buff != 10)
-			// 	tputs_termcap("pc");
 			ft_putchar(*buff);
 			cmd[i++] = *buff;
 			dlst_add_back_2(all->cmd, dlst_cmd_new(*buff, (size_t)i));
 		}
-		//cmd[i++] = *buff;
-		//ft_putnbr_fd(i, 1);
 	}
 	if (cmd[i - 1] == 10)
 		cmd[i - 1] = 0;
 	else
 		cmd[i] = 0;
 	write(1, "\n", 1);
-	// display_dlst(all->cmd);
-	// printf("\n|%s|\n", cmd);
 	dlst_add_back(all->cmd_history, dlst_node_new(cmd));
-	printf("|%s|\n", cmd);
+	// printf("|%s|\n", cmd);
 	if (cmd && i > 1)
 	{
 		parse_command(all, cmd);
