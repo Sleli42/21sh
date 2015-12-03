@@ -21,92 +21,23 @@ void	display_tab(char **tab) {
 		printf("[%s]\n", *tab++);
 }
 */
-void		read_key(char *cmd) {
-	char	buff[3] = {0};
+// void		read_key(char *cmd) {
+// 	char	buff[3] = {0};
 
-	read(0, buff, 3);
-	if (K_UP || K_DOWN)
-		printf("GO TO HISTORY\n");
-	else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
-		printf("GO TO DIRECTION\n");
-	else
-		ft_putstr(cmd);
-}
+// 	read(0, buff, 3);
+// 	if (K_UP || K_DOWN)
+// 		printf("GO TO HISTORY\n");
+// 	else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
+// 		printf("GO TO DIRECTION\n");
+// 	else
+// 		ft_putstr(cmd);
+// }
 
 void	display_prompt(t_all *all) {
 	(void)all;
 	tputs_termcap("ve");
 	write(1, "$: ", 3);
 }
-
-void 	reset_term(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(0, &term) == -1)
-		term_error("TCGETATTR");
-	term.c_lflag &= ~(ECHO | ICANON);
-	if (tcsetattr(0, TCSADRAIN, &term) == -1)
-		term_error("TCSETATTR");
-}
-
-void	init_term(void)
-{
-	char	*term_name;
-	struct termios	term;
-
-	term_name = NULL;
-	if (tgetent(NULL, term_name) == -1)
-		term_error("TGETENT");
-	if ((term_name = getenv("TERM=")) == NULL)
-		term_error("GETENV");
-	if (tcgetattr(0, &term) == -1)
-		term_error("TCGETATTR");
-	term.c_lflag &= ~(ECHO | ICANON);
-	/* lire une touche [ fleches, backspace .. ] */
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
-	if (tcsetattr(0, TCSADRAIN, &term) == -1)
-		term_error("TCSETATTR");
-}
-/*
-void	loop(t_all *all)
-{
-	int		r;
-	char	buff[MAXLEN];
-
-	r = 0;
-	//f_cpy(all);
-	init_term();
-	while (1091111096051)
-	{
-		display_prompt(all);
-		//write(1, "$: ", 3);
-		ft_memset(buff, 0, ft_strlen(buff));
-		if ((r = read(0, buff, (MAXLEN - 1))) == -1)
-			return ;
-		if (K_UP || K_DOWN)
-			printf("GO TO HISTORY\n");
-		else if (K_RIGHT || K_LEFT || K_DELETE || K_SPACE)
-			printf("GO TO DIRECTION\n");
-		else
-			ft_putchar(buff[r]);
-		//read_key(buff);
-		printf("%d\n", r);
-		printf("%s\n", buff);
-		buff[r - 1] = '\0';
-		if (r == 0)
-			return ;
-		if (r > 0)
-		{
-			parse_command(all, buff);
-			exec_command(all);
-		}
-		//tputs_termcap("ei");
-	}
-	reset_term();
-}
-*/
 
 void	display_dlst(t_dlist2 *lst) {
 	t_cmd	*tmp = lst->head;
@@ -121,14 +52,32 @@ void	display_dlst(t_dlist2 *lst) {
 	printf("\n");
 }
 
+void	create_cmd(t_all *all)
+{
+	t_cmd	*nav;
+	int		i;
+
+	nav = all->cmd_termcaps->head;
+	i = 0;
+	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+		error("MALLOC");
+	if (nav)
+	{
+		while (nav)
+		{
+			all->cmd[i++] = nav->c;
+			nav = nav->next;
+		}
+		all->cmd[i] = '\0';
+	}
+}
+
 void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
-	// char	*cmd;
-	int		i;
 	int		key;
+	int		stop = 0;
 
-	i = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -140,22 +89,27 @@ void	loop(t_all *all)
 		if ((key = check_keys_arrows(buff)) < 0)
 			break ;
 		else if (key > 0)
+		{
 			make_moves(all, buff);
+			stop = 1;
+		}
 		else
 		{
 			ft_putchar(*buff);
-			all->cmd[i++] = *buff;
-			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, (size_t)i));
+			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 		//printf("cursor pos: %zu", all->cmd_termcaps->tail->pos);
 	}
-	display_dlst(all->cmd_termcaps);
-	all->cmd[i] = 0;
-	//printf("%s\n", all->cmd);
+	//all->cmd[i] = 0;
+	//display_dlst(all->cmd_termcaps);
 	write(1, "\n", 1);
-	dlst_add_back(all->cmd_history, dlst_node_new(all->cmd));
-	if (all->cmd && i > 1)
+	printf("stop: %d\n", stop);
+	if (!stop)
+		create_cmd(all);
+	//printf("|%s|\n", all->cmd);
+	if (all->cmd)
 	{
+		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd));
 		parse_command(all, all->cmd);
 		exec_command(all);
 		ft_strdel(&all->cmd);

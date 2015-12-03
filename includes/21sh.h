@@ -108,6 +108,8 @@ void		loop(t_all *all);
 */
 char		**ft_dupenv(char **env);
 t_dlist		*init_env(char **env);
+void		init_term(void);
+void 		reset_term(void);
 t_all		*init_all(char **env);
 /*
 *** ============================================================ error.c
@@ -191,8 +193,9 @@ void		restore_term(t_termios restore);
 /*
 *** ============================================================ history.c
 */
+void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
-char		*goto_latest_commands(t_all *all, size_t lenght);
+void		goto_latest_commands(t_all *all, char buff[3]);
 /*
 *** ============================================================ moves.c
 */

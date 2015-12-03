@@ -13,11 +13,11 @@
 #include "21sh.h"
 
 void	display_dlst_history(t_dlist *lst) {
-	t_node	*tmp = lst->head_node;
+	t_node	*tmp = lst->tail_node;
 
 	while (tmp) {
 		printf("-> %s\n", tmp->s);
-		tmp = tmp->next;
+		tmp = tmp->prev;
 	}
 }
 
@@ -38,20 +38,30 @@ char	*display_last_cmd(t_dlist *lst, size_t pos)
 	return (tmp->s);
 }
 
-char	*goto_latest_commands(t_all *all, size_t lenght)
+// char	*goto_latest_commands(t_all *all, size_t lenght)
+// {
+// 	char	*cmd2exec;
+// 	//display_prompt(all);
+// 	if (lenght <= all->cmd_history->lenght)
+// 	{
+// 		cmd2exec = display_last_cmd(all->cmd_history, lenght);
+// 		return (cmd2exec);
+// 		/*
+// 		write(1, "\n", 1);
+// 		parse_command(all, cmd2exec);
+// 		exec_command(all);
+// 		*/
+// 	}
+// 	return (NULL);
+// 	//display_dlst_history(all->cmd_history);
+// }
+
+void	goto_latest_commands(t_all *all, char buff[3])
 {
-	char	*cmd2exec;
-	//display_prompt(all);
-	if (lenght <= all->cmd_history->lenght)
+	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0)
 	{
-		cmd2exec = display_last_cmd(all->cmd_history, lenght);
-		return (cmd2exec);
-		/*
-		write(1, "\n", 1);
-		parse_command(all, cmd2exec);
-		exec_command(all);
-		*/
+		all->cmd = all->cmd_history->tail_node->s;
+		ft_putstr(all->cmd);
+		//printf("|%s|\n", all->cmd);
 	}
-	return (NULL);
-	//display_dlst_history(all->cmd_history);
 }

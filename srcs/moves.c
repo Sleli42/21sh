@@ -29,12 +29,17 @@ int		check_keys_arrows(char buff[3])
 
 void	make_moves(t_all *all, char buff[3])
 {
+	if (K_UP || K_DOWN)
+	{
+		//display_dlst_history(all->cmd_history);
+		goto_latest_commands(all, buff);
+	}
 	// if (K_DELETE)
 	// {
 
 	// }
-	if (K_LEFT)
-	{
+	// if (K_LEFT)
+	// {
 		
-	}
+	// }
 }
