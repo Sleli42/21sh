@@ -108,5 +108,6 @@ t_all		*init_all(char **env)
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	all->parsecmd = NULL;
 	all->pipe = NULL;
+	all->current = NULL;
 	return (all);
 }

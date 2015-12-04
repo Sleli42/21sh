@@ -58,10 +58,21 @@ char	*display_last_cmd(t_dlist *lst, size_t pos)
 
 void	goto_latest_commands(t_all *all, char buff[3])
 {
-	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0)
+	int	i = all->cmd_termcaps->lenght;
+	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0
+		&& all->cmd_history->tail_node != NULL)
 	{
+		//printf("|%s|\n", all->current);
+		if (i == 0 && all->current != NULL)
+			i = ft_strlen(all->current);
+		while (i--)
+		{
+			tputs_termcap("dc");
+			tputs_termcap("le");
+		}
 		all->cmd = all->cmd_history->tail_node->s;
+		all->cmd_history->tail_node = all->cmd_history->tail_node->prev;
+		all->current = ft_strdup(all->cmd);
 		ft_putstr(all->cmd);
-		//printf("|%s|\n", all->cmd);
 	}
 }

@@ -87,7 +87,10 @@ void	loop(t_all *all)
 	{
 		read(0, buff, (MAXLEN - 1));
 		if ((key = check_keys_arrows(buff)) < 0)
+		{
+			ft_strdel(&all->current);
 			break ;
+		}
 		else if (key > 0)
 		{
 			make_moves(all, buff);
@@ -103,7 +106,7 @@ void	loop(t_all *all)
 	//all->cmd[i] = 0;
 	//display_dlst(all->cmd_termcaps);
 	write(1, "\n", 1);
-	printf("stop: %d\n", stop);
+//	printf("stop: %d\n", stop);
 	if (!stop)
 		create_cmd(all);
 	//printf("|%s|\n", all->cmd);
