@@ -101,15 +101,10 @@ void	loop(t_all *all)
 			ft_putchar(*buff);
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
-		//printf("cursor pos: %zu", all->cmd_termcaps->tail->pos);
 	}
-	//all->cmd[i] = 0;
-	//display_dlst(all->cmd_termcaps);
 	write(1, "\n", 1);
-//	printf("stop: %d\n", stop);
 	if (!stop)
 		create_cmd(all);
-	//printf("|%s|\n", all->cmd);
 	if (all->cmd)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd));

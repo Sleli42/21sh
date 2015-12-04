@@ -56,22 +56,35 @@ char	*display_last_cmd(t_dlist *lst, size_t pos)
 // 	//display_dlst_history(all->cmd_history);
 // }
 
-void	goto_latest_commands(t_all *all, char buff[3])
+void	new_line(t_all *all)
 {
 	int	i = all->cmd_termcaps->lenght;
+
+	if (i == 0 && all->current != NULL)
+		i = ft_strlen(all->current);
+	while (i--)
+	{
+		tputs_termcap("dc");
+		tputs_termcap("le");
+	}
+}
+
+void	goto_latest_commands(t_all *all, char buff[3])
+{
 	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0
 		&& all->cmd_history->tail_node != NULL)
 	{
-		//printf("|%s|\n", all->current);
-		if (i == 0 && all->current != NULL)
-			i = ft_strlen(all->current);
-		while (i--)
-		{
-			tputs_termcap("dc");
-			tputs_termcap("le");
-		}
+		new_line(all);
 		all->cmd = all->cmd_history->tail_node->s;
 		all->cmd_history->tail_node = all->cmd_history->tail_node->prev;
+		all->current = ft_strdup(all->cmd);
+		ft_putstr(all->cmd);
+	}
+	if (K_DOWN && all->cmd_history && all->cmd_history->lenght > 0
+		&& all->cmd_history->head_node != NULL)
+	{
+		all->cmd = all->cmd_history->tail_node->s;
+		all->cmd_history->head_node = all->cmd_history->head_node->next;
 		all->current = ft_strdup(all->cmd);
 		ft_putstr(all->cmd);
 	}

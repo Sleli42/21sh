@@ -196,6 +196,7 @@ void		restore_term(t_termios restore);
 */
 void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
+void		new_line(t_all *all);
 void		goto_latest_commands(t_all *all, char buff[3]);
 /*
 *** ============================================================ moves.c
