@@ -77,6 +77,7 @@ typedef struct			s_all
 
 	// PARSE && EXEC
 	t_dlist				*env;
+	t_node				*nav;
 	char				**dupenv;
 	char				**path2exec;
 	char				**parsecmd;

@@ -83,14 +83,12 @@ void	loop(t_all *all)
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
+	all->nav = all->cmd_history->tail_node;
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
 		if ((key = check_keys_arrows(buff)) < 0)
-		{
-			ft_strdel(&all->current);
 			break ;
-		}
 		else if (key > 0)
 		{
 			make_moves(all, buff);
@@ -102,10 +100,13 @@ void	loop(t_all *all)
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 	}
+//	display_dlst_history(all->cmd_history);
 	write(1, "\n", 1);
 	if (!stop)
 		create_cmd(all);
-	if (all->cmd)
+	else
+		ft_strdel(&all->current);
+	if (all->cmd[0] != 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd));
 		parse_command(all, all->cmd);

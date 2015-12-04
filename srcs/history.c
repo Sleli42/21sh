@@ -15,7 +15,7 @@
 void	display_dlst_history(t_dlist *lst) {
 	t_node	*tmp = lst->tail_node;
 
-	while (tmp) {
+	while (tmp != NULL) {
 		printf("-> %s\n", tmp->s);
 		tmp = tmp->prev;
 	}
@@ -60,6 +60,7 @@ void	new_line(t_all *all)
 {
 	int	i = all->cmd_termcaps->lenght;
 
+	//printf("curr: %s\n", all->current);
 	if (i == 0 && all->current != NULL)
 		i = ft_strlen(all->current);
 	while (i--)
@@ -72,19 +73,20 @@ void	new_line(t_all *all)
 void	goto_latest_commands(t_all *all, char buff[3])
 {
 	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0
-		&& all->cmd_history->tail_node != NULL)
+		&& all->nav != NULL)
 	{
 		new_line(all);
-		all->cmd = all->cmd_history->tail_node->s;
-		all->cmd_history->tail_node = all->cmd_history->tail_node->prev;
+		all->cmd = all->nav->s;
+		all->nav = all->nav->prev;
 		all->current = ft_strdup(all->cmd);
 		ft_putstr(all->cmd);
 	}
 	if (K_DOWN && all->cmd_history && all->cmd_history->lenght > 0
-		&& all->cmd_history->head_node != NULL)
+		&& all->nav != NULL)
 	{
-		all->cmd = all->cmd_history->tail_node->s;
-		all->cmd_history->head_node = all->cmd_history->head_node->next;
+		new_line(all);
+		all->nav = all->nav->next;
+		all->cmd = all->nav->s;
 		all->current = ft_strdup(all->cmd);
 		ft_putstr(all->cmd);
 	}
