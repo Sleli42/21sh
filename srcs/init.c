@@ -32,10 +32,10 @@ t_dlist		*init_env(char **env)
 	int		i;
 
 	list_env = NULL;
-	i = 0;
+	i = -1;
 	list_env = create_dlst();
-	while (env[i])
-		dlst_add_back(list_env, dlst_node_new(env[i++]));
+	while (env[++i])
+		dlst_add_back(list_env, dlst_node_new(env[i], (size_t)i));
 	return (list_env);
 }
 
@@ -110,5 +110,6 @@ t_all		*init_all(char **env)
 	all->pipe = NULL;
 	all->nav = NULL;
 	all->current = NULL;
+	all->ct = 0;
 	return (all);
 }

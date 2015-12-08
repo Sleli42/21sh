@@ -41,6 +41,7 @@ typedef struct termios	t_termios;
 typedef struct			s_node
 {
 	char				*s;
+	size_t				index;
 	struct s_node		*next;
 	struct s_node		*prev;
 }						t_node;
@@ -74,7 +75,7 @@ typedef struct			s_all
 	t_termios			restore;
 	// HISTORY
 	t_dlist				*cmd_history;
-	static size_t		index;
+	int					ct;
 	// TERMCAPS
 	t_dlist2			*cmd_termcaps;
 
@@ -125,7 +126,7 @@ void		term_error(char *err);
 *** ============================================================ dlist.c
 */
 t_dlist		*create_dlst(void);
-t_node		*dlst_node_new(char *data);
+t_node		*dlst_node_new(char *data, size_t index);
 t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
 t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
 int			update_list(t_dlist *lst, t_node *elem);

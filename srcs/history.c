@@ -17,6 +17,8 @@ void	display_dlst_history(t_dlist *lst) {
 
 	while (tmp != NULL) {
 		printf("-> %s\n", tmp->s);
+		printf("-> %zu\n", tmp->index);
+		printf("-> %zu\n", lst->lenght);
 		tmp = tmp->prev;
 	}
 }
@@ -65,34 +67,45 @@ void	new_line(t_all *all)
 		i = ft_strlen(all->current);
 	while (i--)
 	{
-		tputs_termcap("dc");
-		tputs_termcap("le");
+		tputs_termcap("dc"); // efface 1 char sous le curseur
+		tputs_termcap("le"); // deplace le curseur de 1 vers la gauche
 	}
 }
 
+/*
+$: -> echo lol
+-> 4 -> l
+-> 4 -> i
+-> lol
+-> 3 -> i
+-> 4 -> l
+-> ok
+-> 2 . . .
+-> 4 . . .
+-> ls -l
+-> 1 . . .
+-> 4 . . .
+*/
+
 void	goto_latest_commands(t_all *all, char buff[3])
 {
-
-	// index pour histo
-
-
 	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0
 		&& all->nav != NULL)
 	{
 		new_line(all);
-		//printf("%zu\n", all->cmd_history->lenght);
 		all->cmd = all->nav->s;
-		all->nav = all->nav->prev;
+		if (all->nav->index > 0)
+			all->nav = all->nav->prev;
 		all->current = ft_strdup(all->cmd);
 		ft_putstr(all->cmd);
 	}
 	if (K_DOWN && all->cmd_history && all->cmd_history->lenght > 0
 		&& all->nav != NULL)
 	{
-		new_line(all);
-		all->nav = all->nav->next;
-		all->cmd = all->nav->s;
-		all->current = ft_strdup(all->cmd);
-		ft_putstr(all->cmd);
+		// new_line(all);
+		// all->nav = all->nav->next;
+		// all->cmd = all->nav->s;
+		// all->current = ft_strdup(all->cmd);
+		// ft_putstr(all->cmd);
 	}
 }

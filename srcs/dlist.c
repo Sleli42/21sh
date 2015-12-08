@@ -26,7 +26,7 @@ t_dlist			*create_dlst(void)
 	return (new);
 }
 
-t_node		*dlst_node_new(char *data)
+t_node		*dlst_node_new(char *data, size_t index)
 {
 	t_node	*new;
 
@@ -34,6 +34,7 @@ t_node		*dlst_node_new(char *data)
 	if (new)
 	{
 		new->s = ft_strdup(data);
+		new->index = index;
 		new->next = NULL;
 		new->prev = NULL;
 	}
