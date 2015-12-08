@@ -72,7 +72,10 @@ typedef struct			s_all
 	// TERM 2 USE && TERM 2 RESTORE
 	t_termios			term;
 	t_termios			restore;
+	// HISTORY
 	t_dlist				*cmd_history;
+	static size_t		index;
+	// TERMCAPS
 	t_dlist2			*cmd_termcaps;
 
 	// PARSE && EXEC

@@ -72,10 +72,15 @@ void	new_line(t_all *all)
 
 void	goto_latest_commands(t_all *all, char buff[3])
 {
+
+	// index pour histo
+
+
 	if (K_UP && all->cmd_history && all->cmd_history->lenght > 0
 		&& all->nav != NULL)
 	{
 		new_line(all);
+		//printf("%zu\n", all->cmd_history->lenght);
 		all->cmd = all->nav->s;
 		all->nav = all->nav->prev;
 		all->current = ft_strdup(all->cmd);
