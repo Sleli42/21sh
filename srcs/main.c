@@ -100,16 +100,14 @@ void	loop(t_all *all)
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 	}
-	// printf("stop: |%d|\n", stop);
-	write(1, "\n", 1);
 	(!stop) ? create_cmd(all) : ft_strdel(&all->current);
+	(!stop) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}
-	//display_dlst_history(all->cmd_history);
 	loop(all);
 }
 

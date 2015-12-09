@@ -24,6 +24,8 @@ int		check_keys_arrows(char buff[3])
 	{
 		return (2);
 	}
+	if (K_TAB)
+		return (3);
 	return (0);
 }
 
@@ -34,6 +36,8 @@ void	make_moves(t_all *all, char buff[3])
 		//display_dlst_history(all->cmd_history);
 		goto_latest_commands(all, buff);
 	}
+	if (K_TAB)
+		open_and_read_dir(all);
 	// if (K_DELETE)
 	// {
 

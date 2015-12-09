@@ -24,6 +24,7 @@
 # include <termios.h>
 # include <curses.h>
 # include <sys/ioctl.h>
+# include <dirent.h>
 
 # define	MAXLEN		4096
 # define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
@@ -35,6 +36,7 @@
 # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
 # define 	K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
 # define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
+# define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 
 typedef struct termios	t_termios;
 
@@ -75,7 +77,6 @@ typedef struct			s_all
 	t_termios			restore;
 	// HISTORY
 	t_dlist				*cmd_history;
-	int					ct;
 	// TERMCAPS
 	t_dlist2			*cmd_termcaps;
 
@@ -208,5 +209,8 @@ void		goto_latest_commands(t_all *all, char buff[3]);
 */
 int			check_keys_arrows(char buff[3]);
 void		make_moves(t_all *all, char buff[3]);
+/*
+*** ============================================================ autocomplete.c
+*/
 
 #endif

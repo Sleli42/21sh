@@ -110,6 +110,5 @@ t_all		*init_all(char **env)
 	all->pipe = NULL;
 	all->nav = NULL;
 	all->current = NULL;
-	all->ct = 0;
 	return (all);
 }
