@@ -59,9 +59,37 @@ char	*search_equ(char *dir)
 	return (NULL);
 }
 
-void	open_directory(t_all *all)
+// void	display_elems(t_dlist *list)
+// {
+// 	t_node	*nav = list->head_node;
+// 	int		i = 0;
+
+// 	while (nav)
+// 	{
+// 		if (i % 3)
+// 			printf("\n");
+// 		ft_putstr(nav->s);
+// 		ft_putchar('\t');
+// 		i++;
+// 		nav = nav->next;
+// 	}
+// }
+
+void	list_elems(t_all *all, DIR *entry)
 {
 	t_dirent	*dirp;
+
+	all->list_dir = create_dlst();
+	while ((dirp = readdir(entry)))
+		dlst_add_back(all->list_dir, dlst_node_new(dirp->d_name, all->list_dir->lenght));
+	display_elems(all->list_dir);
+	/***
+					go to ft_select . . .
+	***/
+}
+
+void	open_directory(t_all *all)
+{
 	DIR			*entry;
 	char		*dir;
 
@@ -80,35 +108,13 @@ void	open_directory(t_all *all)
 			entry = opendir(dir);
 		}
 	}
-	while ((dirp = readdir(entry)) != NULL)
-	{
-		//printf("%s\n", dirp->d_name);
-	}
+	list_elems(all, entry);
+	// while ((dirp = readdir(entry)) != NULL)
+	// {
+	// 	printf("%s\n", dirp->d_name);
+	// }
 	if (closedir(entry) == -1)
 		error("CLOSEDIR");
 	ft_strdel(&dir);
 }
-
-/*
-t_all	*open_directory(t_opt *opt, char *dir_name)
-{
-	t_all		*list;
-	t_dirent	*dirp;
-	DIR			*entry;
-	char		*path;
-
-	list = NULL;
-	if (!(entry = opendir(dir_name)))
-		err();
-	while ((dirp = readdir(entry)) != NULL)
-	{
-		path = ft_strjoin(dir_name, dirp->d_name);
-		list_elem(&list, opt, dirp->d_name, path);
-		ft_strdel(&path);
-	}
-	if (closedir(entry) == -1)
-		err();
-	return (list);
-}
-*/
 

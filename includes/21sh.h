@@ -81,7 +81,7 @@ typedef struct			s_all
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 	// AUTOCOMPLETE
-	// t_dlist				*;
+	t_dlist				*list_dir;
 
 	// PARSE && EXEC
 	t_dlist				*env;
