@@ -76,8 +76,8 @@ void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
 	int		key;
-	int		stop = 0;
 
+	all->stop = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -91,8 +91,8 @@ void	loop(t_all *all)
 			break ;
 		else if (key > 0)
 		{
+			all->stop = 1;
 			make_moves(all, buff);
-			stop = 1;
 		}
 		else
 		{
@@ -100,8 +100,8 @@ void	loop(t_all *all)
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 	}
-	(!stop) ? create_cmd(all) : ft_strdel(&all->current);
-	(!stop) ? write(1, "\n", 1) : write(1, "\0", 1);
+	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
+	(!all->stop) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));

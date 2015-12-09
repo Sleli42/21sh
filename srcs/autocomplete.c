@@ -23,7 +23,10 @@ char	*find_path(char *cmd)
 	if (!(path = (char *)malloc(sizeof(char *))))
 		error("MALLOC");
 	while (cmd[ct] != ' ')
-		path[i++] = cmd[ct--];
+		ct--;
+	while (cmd[ct++])
+		path[i++] = cmd[ct];
+	path[i] = 0;
 	if (path[0] == 0 && ft_strlen(cmd) > 1)
 		path = ft_strdup(".");
 	if (path[ft_strlen(path) - 1] != '/')
@@ -31,7 +34,32 @@ char	*find_path(char *cmd)
 	return (path);
 }
 
-void	open_and_read_dir(t_all *all)
+char	*search_equ(char *dir)
+{
+	t_dirent	*dirp;
+	DIR			*entry;
+	char		*tofind;
+	int			ct;
+
+	ct = -1;
+	if (!(tofind = (char *)malloc(sizeof(char) * ft_strlen(dir))))
+		error("MALLOC");
+	while (++ct < (int)ft_strlen(dir) - 1)
+		tofind[ct] = dir[ct];
+	tofind[++ct] = 0;
+	if (!(entry = opendir("./")))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)) != NULL)
+	{
+		if (ft_strncmp(tofind, dirp->d_name, ft_strlen(tofind)) == 0)
+			return (ft_strdup(dirp->d_name));
+	}
+	if (closedir(entry) == -1)
+		error("CLOSEDIR");
+	return (NULL);
+}
+
+void	open_directory(t_all *all)
 {
 	t_dirent	*dirp;
 	DIR			*entry;
@@ -40,13 +68,25 @@ void	open_and_read_dir(t_all *all)
 	create_cmd(all);
 	dir = find_path(all->cmd);
 	if (!(entry = opendir(dir)))
-		error("OPENDIR");
+	{
+		if ((dir = search_equ(dir)) == NULL)
+		{
+			write(1, "\n", 1);
+			loop(all);
+		}
+		else
+		{
+			add_missing_char_to_cmd(all, dir);
+			entry = opendir(dir);
+		}
+	}
 	while ((dirp = readdir(entry)) != NULL)
 	{
-		printf("%s\n", dirp->d_name);
+		//printf("%s\n", dirp->d_name);
 	}
 	if (closedir(entry) == -1)
 		error("CLOSEDIR");
+	ft_strdel(&dir);
 }
 
 /*

@@ -78,8 +78,10 @@ typedef struct			s_all
 	t_termios			restore;
 	// HISTORY
 	t_dlist				*cmd_history;
-	// TERMCAPS
+	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
+	// AUTOCOMPLETE
+	// t_dlist				*;
 
 	// PARSE && EXEC
 	t_dlist				*env;
@@ -92,6 +94,7 @@ typedef struct			s_all
 	char				*cmd;
 	char				*current;
 	int					fd2open;
+	int					stop;
 }						t_all;
 
 typedef	struct			s_redirect
@@ -151,6 +154,7 @@ void		env_unset(t_all *all, char *cmd);
 */
 char		*find_env_arg(t_all *all, char *arg2find);
 void		update_oldpwd(t_all *all);
+void		add_missing_char_to_cmd(t_all *all, char *s);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -215,6 +219,7 @@ void		make_moves(t_all *all, char buff[3]);
 *** ============================================================ autocomplete.c
 */
 char		*find_path(char *cmd);
-void		open_and_read_dir(t_all *all);
+char		*search_equ(char *dir);
+void		open_directory(t_all *all);
 
 #endif

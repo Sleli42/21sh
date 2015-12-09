@@ -48,3 +48,19 @@ void	update_oldpwd(t_all *all)
 		}
 	}
 }
+
+void	add_missing_char_to_cmd(t_all *all, char *s)
+{
+	t_cmd	*nav;
+	int		ct;
+
+	nav = all->cmd_termcaps->tail;
+	ct = ft_strlen(s) - 1;
+	while (nav->c != s[ct])
+		ct--;
+	while (s[ct++])
+	{
+		write(1, &s[ct], 1);
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct], all->cmd_termcaps->lenght));
+	}
+}
