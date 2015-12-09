@@ -83,8 +83,6 @@ void	loop(t_all *all)
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
-	// if (all->cmd_history->tail_node->s != NULL)
-	// 	printf("tail: %s\n", all->cmd_history->tail_node->s);
 	all->nav = all->cmd_history->tail_node;
 	while (*buff != '\n')
 	{
@@ -102,26 +100,16 @@ void	loop(t_all *all)
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 	}
-	// if (all->cmd_history->lenght > 1)
-	// {
-	// 	printf("nav: %s\n", all->nav->s);
-	// 	all->nav = all->cmd_history->tail_node;
-	// 	printf("nav: %s\n", all->nav->s);
-	// }
-	//display_dlst_history(all->cmd_history);
+	// printf("stop: |%d|\n", stop);
 	write(1, "\n", 1);
-	if (!stop)
-		create_cmd(all);
-	else
-		ft_strdel(&all->current);
-	if (all->cmd[0] != 0)
+	(!stop) ? create_cmd(all) : ft_strdel(&all->current);
+	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
 		parse_command(all, all->cmd);
 		exec_command(all);
-		ft_strdel(&all->cmd);
 	}
-	display_dlst_history(all->cmd_history);
+	//display_dlst_history(all->cmd_history);
 	loop(all);
 }
 

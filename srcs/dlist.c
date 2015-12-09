@@ -119,7 +119,7 @@ void			del_dlist(t_dlist *lst)
 	t_node	*next_elem;
 	t_node	*tmp;
 
-	tmp = lst->tail_node;
+	tmp = lst->head_node;
 	next_elem = NULL;
 	if (tmp)
 	{
