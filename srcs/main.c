@@ -59,7 +59,7 @@ void	create_cmd(t_all *all)
 
 	nav = all->cmd_termcaps->head;
 	i = 0;
-	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+	if (!(all->cmd = (char *)malloc(sizeof(char) * all->cmd_termcaps->lenght + 1)))
 		error("MALLOC");
 	if (nav)
 	{

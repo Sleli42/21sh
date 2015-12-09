@@ -16,6 +16,10 @@ void	error(char *err)
 {
 	if (ft_strcmp(err, "MALLOC") == 0)
 		ft_putendl("Malloc error.");
+	if (ft_strcmp(err, "OPENDIR") == 0)
+		ft_putendl("Opendir() error.");
+	if (ft_strcmp(err, "CLOSEDIR") == 0)
+		ft_putendl("Closedir() error.");
 	return ;
 }
 

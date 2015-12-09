@@ -30,7 +30,8 @@ SRC = binary_tools.c \
 		tools.c \
 		termcaps.c \
 		history.c \
-		moves.c
+		moves.c \
+		autocomplete.c
 
 
 OBJ = $(SRC:.c=.o)

@@ -38,6 +38,7 @@
 # define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
 # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 
+typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
 
 typedef struct			s_node
@@ -108,6 +109,7 @@ typedef	struct			s_builtins
 /*
 *** ============================================================ main.c
 */
+void		create_cmd(t_all *all);
 void		display_prompt(t_all *all);
 void		loop(t_all *all);
 /*
@@ -212,5 +214,7 @@ void		make_moves(t_all *all, char buff[3]);
 /*
 *** ============================================================ autocomplete.c
 */
+char		*find_path(char *cmd);
+void		open_and_read_dir(t_all *all);
 
 #endif
