@@ -135,6 +135,7 @@ t_dlist		*create_dlst(void);
 t_node		*dlst_node_new(char *data, size_t index);
 t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
 t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
+int			len_lst_node(t_node *lst);
 int			update_list(t_dlist *lst, t_node *elem);
 void		del_dlist(t_dlist *lst);
 /*
@@ -155,6 +156,7 @@ void		env_unset(t_all *all, char *cmd);
 char		*find_env_arg(t_all *all, char *arg2find);
 void		update_oldpwd(t_all *all);
 void		add_missing_char_to_cmd(t_all *all, char *s);
+int			find_maxlen_elem(t_dlist *lst);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -220,6 +222,8 @@ void		make_moves(t_all *all, char buff[3]);
 */
 char		*find_path(char *cmd);
 char		*search_equ(char *dir);
+void		swap_elems(t_node **a, t_node **b);
+void		sort_name(t_node *lst);
 void		open_directory(t_all *all);
 
 #endif

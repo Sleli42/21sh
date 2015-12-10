@@ -64,3 +64,17 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct], all->cmd_termcaps->lenght));
 	}
 }
+
+int		find_maxlen_elem(t_dlist *lst)
+{
+	t_node		*nav = lst->head_node;
+	int			ret = 0;
+
+	while (nav && nav->next)
+	{
+		if (ft_strlen(nav->s) > ft_strlen(nav->next->s))
+			ret = ft_strlen(nav->s);
+		nav = nav->next;
+	}
+	return (ret);
+}

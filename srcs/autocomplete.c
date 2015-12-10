@@ -58,22 +58,113 @@ char	*search_equ(char *dir)
 		error("CLOSEDIR");
 	return (NULL);
 }
+/*
+void	sort_name(t_all **alst)
+{s
+	t_all	*tmp;
+	int		i;
 
-// void	display_elems(t_dlist *list)
-// {
-// 	t_node	*nav = list->head_node;
-// 	int		i = 0;
+	tmp = *alst;
+	i = 0;
+	if (tmp)
+	{
+		while (i++ < len_lst(tmp))
+		{
+			while (tmp->next)
+			{
+				if (ft_strcmp(tmp->content->name, tmp->next->content->name) > 0)
+					swap_elem(&tmp, &tmp->next);
+				tmp = tmp->next;
+			}
+			tmp = *alst;
+		}
+	}
+}
 
-// 	while (nav)
-// 	{
-// 		if (i % 3)
-// 			printf("\n");
-// 		ft_putstr(nav->s);
-// 		ft_putchar('\t');
-// 		i++;
-// 		nav = nav->next;
-// 	}
-// }
+void	swap_elem(t_all **a, t_all **b)
+{
+	t_infos	*temp;
+
+	temp = (*a)->content;
+	(*a)->content = (*b)->content;
+	(*b)->content = temp;
+}
+*/
+
+void	swap_elems(t_node **a, t_node **b)
+{
+	t_node	*tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void	sort_name(t_node *lst)
+{
+	t_node			*nav;
+	int				i;
+
+	nav = lst;
+	i = 0;
+	// printf("%d\n", i);
+	if (nav)
+	{
+		while (i++ < len_lst_node(lst))
+		{
+			while (nav && nav->next)
+			{
+				if (ft_strcmp(nav->s, nav->next->s) > 0)
+				{
+					swap_elems(&nav, &nav->next);
+				}
+				nav = nav->next;
+			}
+			nav = lst;
+		}
+	}
+}
+
+void	display_dlst(t_dlist *lst)
+{
+	t_node	*nav = lst->head_node;
+
+	while (nav)
+	{
+		printf("%s\n", nav->s);
+		nav = nav->next;
+	}
+}
+
+void	display_elems(t_dlist *list)
+{
+	t_node	*nav;
+	int		i = 0;
+	// int		ct = 4;
+	int		maxlen = find_maxlen_elem(list);
+
+	display_dlst(list);
+	sort_name(list->head_node);
+	//write(1, "end\n", 4);
+	display_dlst(list);
+	return ;
+	nav = list->head_node;
+	write(1, "\n", 1);
+	while (nav)
+	{
+		if (nav->s[0] != '.')
+		{
+			i = ft_strlen(nav->s);
+			ft_putstr(nav->s);
+			while (i < maxlen)
+			{
+				write(1, " ", 1);
+				i++;
+			}
+		}
+		nav = nav->next;
+	}
+}
 
 void	list_elems(t_all *all, DIR *entry)
 {
@@ -81,8 +172,13 @@ void	list_elems(t_all *all, DIR *entry)
 
 	all->list_dir = create_dlst();
 	while ((dirp = readdir(entry)))
-		dlst_add_back(all->list_dir, dlst_node_new(dirp->d_name, all->list_dir->lenght));
+	{
+		if (dirp->d_name[0] != '.')
+			dlst_add_back(all->list_dir,
+				dlst_node_new(dirp->d_name, all->list_dir->lenght));
+	}
 	display_elems(all->list_dir);
+	write(1, "\n", 1);
 	/***
 					go to ft_select . . .
 	***/

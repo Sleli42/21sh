@@ -90,6 +90,21 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 	return (lst);
 }
 
+int				len_lst_node(t_node *lst)
+{
+	t_node		*nav;
+	int			ret;
+
+	nav = lst;
+	ret = 0;
+	while (nav)
+	{
+		ret++;
+		nav = nav->next;
+	}
+	return (ret);
+}
+
 int				update_list(t_dlist *lst, t_node *elem)
 {
 	if (!elem->next && elem->prev)

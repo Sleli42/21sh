@@ -39,7 +39,7 @@ void	display_prompt(t_all *all) {
 	write(1, "$: ", 3);
 }
 
-void	display_dlst(t_dlist2 *lst) {
+void	display_dlst2(t_dlist2 *lst) {
 	t_cmd	*tmp = lst->head;
 
 	printf("\n");
