@@ -91,38 +91,70 @@ void	swap_elem(t_all **a, t_all **b)
 }
 */
 
-void	swap_elems(t_node **a, t_node **b)
+void	swap_elems(t_node *a, t_node *b)
 {
-	t_node	*tmp;
+	char	*tmp_s;
+	int		tmp_i;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	tmp_s = ft_strdup(a->s);
+	tmp_i = a->index;
+	ft_strdel(&a->s);
+	a->s = ft_strdup(b->s);
+	a->index = b->index;
+	ft_strdel(&b->s);
+	b->s = ft_strdup(tmp_s);
+	ft_strdel(&tmp_s);
+	b->index = tmp_i;
 }
 
-void	sort_name(t_node *lst)
+void	sort_name(t_node **lst)
 {
 	t_node			*nav;
 	int				i;
 
-	nav = lst;
-	i = 0;
-	// printf("%d\n", i);
+	nav = *lst;
+	i = len_lst_node(*lst);
 	if (nav)
 	{
-		while (i++ < len_lst_node(lst))
+		while (i--)
 		{
+			nav = *lst;
 			while (nav && nav->next)
 			{
 				if (ft_strcmp(nav->s, nav->next->s) > 0)
-				{
-					swap_elems(&nav, &nav->next);
-				}
+					swap_elems(nav, nav->next);
 				nav = nav->next;
 			}
-			nav = lst;
 		}
 	}
+}
+
+void	display_elems(t_dlist *list)
+{
+
+	/*
+			A REFAIRE AVEC WINSIZE */
+	// t_node	*nav;
+	// int		i = 0;
+	// // int		ct = 4;
+	// int		maxlen = find_maxlen_elem(list);
+
+	// nav = list->head_node;
+	// write(1, "\n", 1);
+	// while (nav)
+	// {
+	// 	if (nav->s[0] != '.')
+	// 	{
+	// 		i = ft_strlen(nav->s);
+	// 		ft_putstr(nav->s);
+	// 		while (i < maxlen)
+	// 		{
+	// 			write(1, " ", 1);
+	// 			i++;
+	// 		}
+	// 	}
+	// 	nav = nav->next;
+	// }
 }
 
 void	display_dlst(t_dlist *lst)
@@ -132,36 +164,6 @@ void	display_dlst(t_dlist *lst)
 	while (nav)
 	{
 		printf("%s\n", nav->s);
-		nav = nav->next;
-	}
-}
-
-void	display_elems(t_dlist *list)
-{
-	t_node	*nav;
-	int		i = 0;
-	// int		ct = 4;
-	int		maxlen = find_maxlen_elem(list);
-
-	display_dlst(list);
-	sort_name(list->head_node);
-	//write(1, "end\n", 4);
-	display_dlst(list);
-	return ;
-	nav = list->head_node;
-	write(1, "\n", 1);
-	while (nav)
-	{
-		if (nav->s[0] != '.')
-		{
-			i = ft_strlen(nav->s);
-			ft_putstr(nav->s);
-			while (i < maxlen)
-			{
-				write(1, " ", 1);
-				i++;
-			}
-		}
 		nav = nav->next;
 	}
 }
@@ -205,6 +207,7 @@ void	open_directory(t_all *all)
 		}
 	}
 	list_elems(all, entry);
+	all->stop = 0;
 	// while ((dirp = readdir(entry)) != NULL)
 	// {
 	// 	printf("%s\n", dirp->d_name);

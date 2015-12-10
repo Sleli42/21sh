@@ -38,8 +38,11 @@
 # define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
 # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 
+# define 	NOTATTY 	1
+
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
+typedef struct winsize	t_winsize;
 
 typedef struct			s_node
 {
@@ -80,8 +83,9 @@ typedef struct			s_all
 	t_dlist				*cmd_history;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
-	// AUTOCOMPLETE
+		// --AUTOCOMPLETE
 	t_dlist				*list_dir;
+	t_winsize			ws;
 
 	// PARSE && EXEC
 	t_dlist				*env;
@@ -120,6 +124,8 @@ void		loop(t_all *all);
 */
 char		**ft_dupenv(char **env);
 t_dlist		*init_env(char **env);
+int			init_tty(void);
+void		init_windows_size(t_all *all);
 void		init_term(void);
 void 		reset_term(void);
 t_all		*init_all(char **env);
@@ -222,8 +228,8 @@ void		make_moves(t_all *all, char buff[3]);
 */
 char		*find_path(char *cmd);
 char		*search_equ(char *dir);
-void		swap_elems(t_node **a, t_node **b);
-void		sort_name(t_node *lst);
+void		swap_elems(t_node *a, t_node *b);
+void		sort_name(t_node **lst);
 void		open_directory(t_all *all);
 
 #endif

@@ -53,6 +53,23 @@ t_dlist		*init_env(char **env)
 // 	signal(SIGCONT, fct_sig);
 // }
 
+int		init_tty(void)
+{
+	int		tty;
+
+	if ((tty = ttyslot()) == -1)
+		return (-1);
+	if (isatty(tty) == 0)
+		return (NOTATTY);
+	return (tty);
+}
+
+void	init_windows_size(t_all *all)
+{
+	if (ioctl(init_tty(), TIOCGWINSZ, &all->ws) == -1)
+		term_error("ioctl");
+}
+
 void	init_term(void)
 {
 	char	*term_name;
@@ -82,16 +99,6 @@ void 	reset_term(void)
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		term_error("TCSETATTR");
 }
-
-// void	display_env(t_dlist *lst)
-// {
-// 	t_node	*tmp = lst->head_node;
-
-// 	while (tmp) {
-// 		printf("[ %s ]\n", tmp->s);
-// 		tmp = tmp->next;
-// 	}
-// }
 
 t_all		*init_all(char **env)
 {
