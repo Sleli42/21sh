@@ -15,7 +15,10 @@
 int		check_keys_arrows(char buff[3])
 {
 	if (K_ENTER)
+	{
+		tputs_termcap("me");
 		return (-1);
+	}
 	if (K_UP || K_DOWN)
 	{
 		return (1);
@@ -25,7 +28,9 @@ int		check_keys_arrows(char buff[3])
 		return (2);
 	}
 	if (K_TAB)
+	{
 		return (3);
+	}
 	return (0);
 }
 

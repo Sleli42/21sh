@@ -12,6 +12,21 @@
 
 #include "21sh.h"
 
+t_clist		*create_clst(void)
+{
+	t_clist	*new;
+
+	if (!(new = (t_clist *)malloc(sizeof(t_clist))))
+		return (NULL);
+	else
+	{
+		new->lenght = 0;
+		new->head = NULL;
+		new->tail = NULL;
+	}
+	return (new);
+}
+
 t_select	*clst_create_elem(char *s)
 {
 	t_select	*new;
@@ -21,6 +36,7 @@ t_select	*clst_create_elem(char *s)
 	new->arg = ft_strdup(s);
 	new->onArg = 0;
 	new->next = NULL;
+	new->prev = NULL;
 	return (new);
 }
 
@@ -28,28 +44,46 @@ t_clist		*clst_add_elem_back(t_clist *lst, t_select *node)
 {
 	if (lst && node)
 	{
-		if (lst->tail_node == NULL)
+		if (lst->tail == NULL)
 		{
-			lst->head_node = node;
-			lst->tail_node = node;
+			lst->head = node;
+			lst->tail = node;
 		}
 		else
 		{
-			lst->tail_node->next = node;
-			node->prev = lst->tail_node;
-			lst->tail_node = node;
+			lst->tail->next = node;
+			node->prev = lst->tail;
+			lst->tail = node;
 		}
 		lst->lenght++;
 	}
 	return (lst);
 }
 
+int			len_clst(t_select *lst)
+{
+	t_select	*nav;
+	int			ret;
+
+	nav = lst;
+	ret = 0;
+	if (nav)
+	{
+		while (nav)
+		{
+			ret++;
+			nav = nav->next;
+		}
+	}
+	return (ret);
+}
+
 void		del_clist(t_clist **lst)
 {
-	t_clist		*next_elem;
-	t_clist		*nav;
+	t_select	*next_elem;
+	t_select	*nav;
 
-	nav = *lst;
+	nav = (*lst)->head;
 	next_elem = NULL;
 	if (nav)
 	{

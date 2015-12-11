@@ -65,15 +65,15 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 	}
 }
 
-int		find_maxlen_elem(t_dlist *lst)
+int		find_maxlen_elem(t_clist *lst)
 {
-	t_node		*nav = lst->head_node;
+	t_select	*nav = lst->head;
 	int			ret = 0;
 
 	while (nav && nav->next)
 	{
-		if (ft_strlen(nav->s) > ft_strlen(nav->next->s))
-			ret = ft_strlen(nav->s);
+		if (ft_strlen(nav->arg) > ft_strlen(nav->next->arg))
+			ret = ft_strlen(nav->arg);
 		nav = nav->next;
 	}
 	return (ret);

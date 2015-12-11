@@ -79,6 +79,7 @@ typedef struct			s_select
 	char				*arg;
 	int					onArg;
 	struct s_select		*next;
+	struct s_select		*prev;
 }						t_select;
 
 typedef struct			s_clist
@@ -99,11 +100,12 @@ typedef struct			s_all
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
-//  t_dlist				*list_dir;
 	t_winsize			ws;
 	int					maxlen_arg;
 	int					files_by_row;
 	int					already_open;
+	int					nb_char_write;
+	int					ct_select;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -168,6 +170,14 @@ t_dlist2	*create_cmd_dlst(void);
 t_cmd		*dlst_cmd_new(char c, size_t pos);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
 /*
+*** ============================================================ clist.c
+*/
+t_clist		*create_clst(void);
+t_select	*clst_create_elem(char *s);
+t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
+int			len_clst(t_select *lst);
+void		del_clist(t_clist **lst);
+/*
 *** ============================================================= env.c
 */
 void		env_display(t_all *all, char *cmd);
@@ -179,7 +189,7 @@ void		env_unset(t_all *all, char *cmd);
 char		*find_env_arg(t_all *all, char *arg2find);
 void		update_oldpwd(t_all *all);
 void		add_missing_char_to_cmd(t_all *all, char *s);
-int			find_maxlen_elem(t_dlist *lst);
+int			find_maxlen_elem(t_clist *lst);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -243,10 +253,12 @@ void		make_moves(t_all *all, char buff[3]);
 /*
 *** ============================================================ autocomplete.c
 */
+int			define_nb_files_by_row(t_all *all, t_clist *lst);
 char		*find_path(char *cmd);
 char		*search_equ(char *dir);
-void		swap_elems(t_node *a, t_node *b);
-void		sort_name(t_node **lst);
+void		swap_elems(t_select *a, t_select *b);
+void		sort_name(t_select **lst);
+void		list_elems(t_all *all, DIR *entry);
 void		open_directory(t_all *all);
 
 #endif

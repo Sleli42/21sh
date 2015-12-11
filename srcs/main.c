@@ -36,6 +36,7 @@ void	display_tab(char **tab) {
 void	display_prompt(t_all *all) {
 	(void)all;
 	tputs_termcap("ve");
+	tputs_termcap("me");
 	write(1, "$: ", 3);
 }
 
@@ -72,12 +73,27 @@ void	create_cmd(t_all *all)
 	}
 }
 
+void	display_current_arg(t_all *all)
+{
+	t_select	*nav;
+
+	nav = all->list_dir->head;
+	while (nav)
+	{
+		if (nav->onArg)
+			write(0, nav->arg, ft_strlen(nav->arg));
+		nav = nav->next;
+	}
+}
+
 void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
 	int		key;
 
 	all->stop = 0;
+	all->already_open = 0;
+	all->ct_select = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -87,6 +103,8 @@ void	loop(t_all *all)
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
+		// if (all->already_open)
+		// 	display_current_arg(all);
 		if ((key = check_keys_arrows(buff)) < 0)
 			break ;
 		else if (key > 0)

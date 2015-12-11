@@ -59,29 +59,29 @@ char	*search_equ(char *dir)
 	return (NULL);
 }
 
-void	swap_elems(t_node *a, t_node *b)
+void	swap_elems(t_select *a, t_select *b)
 {
 	char	*tmp_s;
-	int		tmp_i;
+	//int		tmp_i;
 
-	tmp_s = ft_strdup(a->s);
-	tmp_i = a->index;
-	ft_strdel(&a->s);
-	a->s = ft_strdup(b->s);
-	a->index = b->index;
-	ft_strdel(&b->s);
-	b->s = ft_strdup(tmp_s);
+	tmp_s = ft_strdup(a->arg);
+	//tmp_i = a->index;
+	ft_strdel(&a->arg);
+	a->arg = ft_strdup(b->arg);
+	//a->index = b->index;
+	ft_strdel(&b->arg);
+	b->arg = ft_strdup(tmp_s);
 	ft_strdel(&tmp_s);
-	b->index = tmp_i;
+	//b->index = tmp_i;
 }
 
-void	sort_name(t_node **lst)
+void	sort_name(t_select **lst)
 {
-	t_node			*nav;
+	t_select		*nav;
 	int				i;
 
 	nav = *lst;
-	i = len_lst_node(*lst);
+	i = len_clst(*lst);
 	if (nav)
 	{
 		while (i--)
@@ -89,7 +89,7 @@ void	sort_name(t_node **lst)
 			nav = *lst;
 			while (nav && nav->next)
 			{
-				if (ft_strcmp(nav->s, nav->next->s) > 0)
+				if (ft_strcmp(nav->arg, nav->next->arg) > 0)
 					swap_elems(nav, nav->next);
 				nav = nav->next;
 			}
@@ -97,7 +97,7 @@ void	sort_name(t_node **lst)
 	}
 }
 
-int		define_nb_files_by_row(t_all *all, t_dlist *lst)
+int		define_nb_files_by_row(t_all *all, t_clist *lst)
 {
 	int		ret;
 
@@ -114,53 +114,73 @@ int		define_nb_files_by_row(t_all *all, t_dlist *lst)
 	return (ret);
 }
 
-void	display_elems(t_all *all, t_dlist *lst)
+void	display_elems(t_all *all, t_clist *lst)
 {
-	t_node	*nav;
-	int		ct;
-	int		len;
+	t_select	*nav;
+	int			ct;
+	int			len;
 
-	nav = lst->head_node;
+	nav = lst->head;
 	ct = 0;
 	all->files_by_row = define_nb_files_by_row(all, lst);
 	while (nav)
 	{
-		len = ft_strlen(nav->s);
+		len = ft_strlen(nav->arg);
 		if (ct == all->files_by_row - 1)
 		{
 			write(1, "\n", 1);
 			ct = 0;
 		}
-		ft_putstr(nav->s);
-		while (len++ < (all->maxlen_arg + 11) && nav->next != NULL)
+		(nav->onArg == 1) ? tputs_termcap("mr") : tputs_termcap("me");
+		ft_putstr(nav->arg);
+		while (len++ < (all->maxlen_arg + 11))
 			write(1, " ", 1);
 		ct++;
 		nav = nav->next;
 	}
-}
-
-void	display_dlst(t_dlist *lst)
-{
-	t_node	*nav = lst->head_node;
-
-	while (nav)
-	{
-		printf("%s\n", nav->s);
-		nav = nav->next;
-	}
+	all->nb_char_write = (all->maxlen_arg + 11) * (int)lst->lenght;
 }
 
 void	list_elems(t_all *all, DIR *entry)
 {
 	t_dirent	*dirp;
 
-	all->list_dir = create_dlst();
+	all->list_dir = create_clst();
 	while ((dirp = readdir(entry)))
 		if (dirp->d_name[0] != '.')
 			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-	sort_name(&all->list_dir->head_node);
+	sort_name(&all->list_dir->head);
 	init_windows_size(all);
-	write(1, "\n", 1);
+	//write(1, "\n", 1);
+}
+
+void	select_arg(t_all *all)
+{
+	t_select	*nav = all->list_dir->head;
+	int			i = -1;
+
+	// write(1, "here\n", 5);
+	if (all->ct_select == (int)all->list_dir->lenght)
+	{
+		all->list_dir->tail->onArg = 0;
+		all->ct_select = 0;
+	}
+	while (++i < all->ct_select)
+		nav = nav->next;
+	nav->onArg = 1;
+	if (nav->prev)
+		nav->prev->onArg = 0;
+	all->ct_select++;
+	// printf("selected arg-> %s\n", nav->arg);
+}
+
+void	new_line_autocomplet(t_all *all)
+{
+	while (all->nb_char_write--)
+	{
+		tputs_termcap("dc");
+		tputs_termcap("le");
+	}
 }
 
 void	open_directory(t_all *all)
@@ -168,8 +188,11 @@ void	open_directory(t_all *all)
 	DIR			*entry;
 	char		*dir;
 
-	// if (!all->already_open)
-	// {
+	all->stop = 0;
+	//tputs_termcap("sc");
+	if (!all->already_open)
+	{
+		write(1, "\n", 1);
 		create_cmd(all);
 		dir = find_path(all->cmd);
 		if (!(entry = opendir(dir)))
@@ -188,14 +211,18 @@ void	open_directory(t_all *all)
 		list_elems(all, entry);
 		display_elems(all, all->list_dir);
 		all->already_open = 1;
-		all->stop = 0;
 		if (closedir(entry) == -1)
 			error("CLOSEDIR");
 		ft_strdel(&dir);
 	}
-	// else
-	// {
-
-	// }
+	else
+	{
+		new_line_autocomplet(all);
+		// tputs_termcap("dm");
+		// tputs_termcap("cb");
+		// tputs_termcap("ed");
+		select_arg(all);
+		display_elems(all, all->list_dir);
+		//tputs_termcap("ve");
+	}
 }
-
