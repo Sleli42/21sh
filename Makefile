@@ -21,6 +21,7 @@ SRC = binary_tools.c \
 		cmd_parse.c \
 		dlist.c \
 		dlist_2.c \
+		clist.c \
 		env.c \
 		error.c \
 		init.c \

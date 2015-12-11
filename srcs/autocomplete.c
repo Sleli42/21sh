@@ -58,38 +58,6 @@ char	*search_equ(char *dir)
 		error("CLOSEDIR");
 	return (NULL);
 }
-/*
-void	sort_name(t_all **alst)
-{s
-	t_all	*tmp;
-	int		i;
-
-	tmp = *alst;
-	i = 0;
-	if (tmp)
-	{
-		while (i++ < len_lst(tmp))
-		{
-			while (tmp->next)
-			{
-				if (ft_strcmp(tmp->content->name, tmp->next->content->name) > 0)
-					swap_elem(&tmp, &tmp->next);
-				tmp = tmp->next;
-			}
-			tmp = *alst;
-		}
-	}
-}
-
-void	swap_elem(t_all **a, t_all **b)
-{
-	t_infos	*temp;
-
-	temp = (*a)->content;
-	(*a)->content = (*b)->content;
-	(*b)->content = temp;
-}
-*/
 
 void	swap_elems(t_node *a, t_node *b)
 {
@@ -129,32 +97,46 @@ void	sort_name(t_node **lst)
 	}
 }
 
-void	display_elems(t_dlist *list)
+int		define_nb_files_by_row(t_all *all, t_dlist *lst)
 {
+	int		ret;
 
-	/*
-			A REFAIRE AVEC WINSIZE */
-	// t_node	*nav;
-	// int		i = 0;
-	// // int		ct = 4;
-	// int		maxlen = find_maxlen_elem(list);
+	all->maxlen_arg = find_maxlen_elem(lst);
+	ret = 0;
+	// printf("largeur: %d\n", all->ws.ws_col);
+	// printf("maxlen: %d\n", all->maxlen_arg);
+	while (all->ws.ws_col > (all->maxlen_arg + 9))
+	{
+		all->ws.ws_col -= (all->maxlen_arg + 9);
+		ret++;
+	}
+	// printf("ret = %d\n", ret);
+	return (ret);
+}
 
-	// nav = list->head_node;
-	// write(1, "\n", 1);
-	// while (nav)
-	// {
-	// 	if (nav->s[0] != '.')
-	// 	{
-	// 		i = ft_strlen(nav->s);
-	// 		ft_putstr(nav->s);
-	// 		while (i < maxlen)
-	// 		{
-	// 			write(1, " ", 1);
-	// 			i++;
-	// 		}
-	// 	}
-	// 	nav = nav->next;
-	// }
+void	display_elems(t_all *all, t_dlist *lst)
+{
+	t_node	*nav;
+	int		ct;
+	int		len;
+
+	nav = lst->head_node;
+	ct = 0;
+	all->files_by_row = define_nb_files_by_row(all, lst);
+	while (nav)
+	{
+		len = ft_strlen(nav->s);
+		if (ct == all->files_by_row - 1)
+		{
+			write(1, "\n", 1);
+			ct = 0;
+		}
+		ft_putstr(nav->s);
+		while (len++ < (all->maxlen_arg + 11) && nav->next != NULL)
+			write(1, " ", 1);
+		ct++;
+		nav = nav->next;
+	}
 }
 
 void	display_dlst(t_dlist *lst)
@@ -174,16 +156,11 @@ void	list_elems(t_all *all, DIR *entry)
 
 	all->list_dir = create_dlst();
 	while ((dirp = readdir(entry)))
-	{
 		if (dirp->d_name[0] != '.')
-			dlst_add_back(all->list_dir,
-				dlst_node_new(dirp->d_name, all->list_dir->lenght));
-	}
-	display_elems(all->list_dir);
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	sort_name(&all->list_dir->head_node);
+	init_windows_size(all);
 	write(1, "\n", 1);
-	/***
-					go to ft_select . . .
-	***/
 }
 
 void	open_directory(t_all *all)
@@ -191,29 +168,34 @@ void	open_directory(t_all *all)
 	DIR			*entry;
 	char		*dir;
 
-	create_cmd(all);
-	dir = find_path(all->cmd);
-	if (!(entry = opendir(dir)))
-	{
-		if ((dir = search_equ(dir)) == NULL)
-		{
-			write(1, "\n", 1);
-			loop(all);
-		}
-		else
-		{
-			add_missing_char_to_cmd(all, dir);
-			entry = opendir(dir);
-		}
-	}
-	list_elems(all, entry);
-	all->stop = 0;
-	// while ((dirp = readdir(entry)) != NULL)
+	// if (!all->already_open)
 	// {
-	// 	printf("%s\n", dirp->d_name);
+		create_cmd(all);
+		dir = find_path(all->cmd);
+		if (!(entry = opendir(dir)))
+		{
+			if ((dir = search_equ(dir)) == NULL)
+			{
+				write(1, "\n", 1);
+				loop(all);
+			}
+			else
+			{
+				add_missing_char_to_cmd(all, dir);
+				entry = opendir(dir);
+			}
+		}	
+		list_elems(all, entry);
+		display_elems(all, all->list_dir);
+		all->already_open = 1;
+		all->stop = 0;
+		if (closedir(entry) == -1)
+			error("CLOSEDIR");
+		ft_strdel(&dir);
+	}
+	// else
+	// {
+
 	// }
-	if (closedir(entry) == -1)
-		error("CLOSEDIR");
-	ft_strdel(&dir);
 }
 

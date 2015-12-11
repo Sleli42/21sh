@@ -74,6 +74,20 @@ typedef struct			s_dlist2
 	size_t				lenght;
 }						t_dlist2;
 
+typedef struct			s_select
+{
+	char				*arg;
+	int					onArg;
+	struct s_select		*next;
+}						t_select;
+
+typedef struct			s_clist
+{
+	struct s_select		*head;
+	struct s_select		*tail;
+	size_t				lenght;
+}						t_clist;
+
 typedef struct			s_all
 {
 	// TERM 2 USE && TERM 2 RESTORE
@@ -84,9 +98,12 @@ typedef struct			s_all
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
-	t_dlist				*list_dir;
+	t_clist				*list_dir;
+//  t_dlist				*list_dir;
 	t_winsize			ws;
-
+	int					maxlen_arg;
+	int					files_by_row;
+	int					already_open;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
