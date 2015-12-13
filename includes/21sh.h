@@ -100,6 +100,7 @@ typedef struct			s_all
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
+	t_select			*nav_dir;
 	t_winsize			ws;
 	int					maxlen_arg;
 	int					files_by_row;
@@ -261,6 +262,7 @@ char		*search_equ(char *dir);
 void		swap_elems(t_select *a, t_select *b);
 void		sort_name(t_select **lst);
 void		list_elems(t_all *all, DIR *entry);
+void		display_current(t_all *all, t_select *nav);
 void		open_directory(t_all *all);
 
 #endif

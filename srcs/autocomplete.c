@@ -131,7 +131,7 @@ void	display_elems(t_all *all, t_clist *lst)
 			write(1, "\n", 1);
 			ct = 0;
 		}
-		(nav->onArg == 1) ? tputs_termcap("mr") : tputs_termcap("me");
+		//(nav->onArg == 1) ? tputs_termcap("mr") : tputs_termcap("me");
 		ft_putstr(nav->arg);
 		while (len++ < (all->maxlen_arg + 11))
 			write(1, " ", 1);
@@ -183,11 +183,17 @@ void	new_line_autocomplet(t_all *all)
 	}
 }
 
+void	display_current(t_all *all, t_select *nav)
+{
+	ft_putstr(nav->arg);
+	all->nb_char_write = ft_strlen(nav->arg);
+}
+
 void	open_directory(t_all *all)
 {
 	DIR			*entry;
 	char		*dir;
-
+	
 	all->stop = 0;
 	//tputs_termcap("sc");
 	if (!all->already_open)
@@ -209,6 +215,7 @@ void	open_directory(t_all *all)
 			}
 		}	
 		list_elems(all, entry);
+		all->nav_dir = all->list_dir->head;
 		//display_elems(all, all->list_dir);
 		all->already_open = 1;
 		if (closedir(entry) == -1)
@@ -218,6 +225,10 @@ void	open_directory(t_all *all)
 	else
 	{
 		new_line_autocomplet(all);
+		display_current(all, all->nav_dir);
+		all->nav_dir = all->nav_dir->next;
+		/* SIMPLE DISPLAY */
+
 		//simple_display();
 		// tputs_termcap("dm");
 		// tputs_termcap("cb");
