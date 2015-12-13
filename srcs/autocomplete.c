@@ -192,7 +192,7 @@ void	open_directory(t_all *all)
 	//tputs_termcap("sc");
 	if (!all->already_open)
 	{
-		write(1, "\n", 1);
+		//write(1, "\n", 1); ---> to select autocomplete
 		create_cmd(all);
 		dir = find_path(all->cmd);
 		if (!(entry = opendir(dir)))
@@ -209,7 +209,7 @@ void	open_directory(t_all *all)
 			}
 		}	
 		list_elems(all, entry);
-		display_elems(all, all->list_dir);
+		//display_elems(all, all->list_dir);
 		all->already_open = 1;
 		if (closedir(entry) == -1)
 			error("CLOSEDIR");
@@ -218,11 +218,12 @@ void	open_directory(t_all *all)
 	else
 	{
 		new_line_autocomplet(all);
+		//simple_display();
 		// tputs_termcap("dm");
 		// tputs_termcap("cb");
 		// tputs_termcap("ed");
-		select_arg(all);
-		display_elems(all, all->list_dir);
+		//select_arg(all);
+		//display_elems(all, all->list_dir);
 		//tputs_termcap("ve");
 	}
 }

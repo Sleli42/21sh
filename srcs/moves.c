@@ -31,6 +31,10 @@ int		check_keys_arrows(char buff[3])
 	{
 		return (3);
 	}
+	if (K_DELETE)
+	{
+		return (4);
+	}
 	return (0);
 }
 
@@ -51,6 +55,14 @@ void	make_moves(t_all *all, char buff[3])
 		}
 		else
 			open_directory(all);
+	}
+	if (K_DELETE)
+	{
+		//printf("%c && %c\n", all->cmd_termcaps->tail->c, buff[0]);
+		dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
+		tputs_termcap("le");
+		tputs_termcap("dc");
+		all->stop = 0;
 	}
 	// if (K_DELETE)
 	// {

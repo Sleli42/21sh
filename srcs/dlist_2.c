@@ -60,3 +60,51 @@ t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 	}
 	return (lst);
 }
+
+t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
+{
+	t_cmd	*tmp;
+	int		found;
+
+	tmp = lst->tail;
+	found = 0;
+	if (lst)
+	{
+		while (tmp && !found)
+		{
+			if (tmp->c == arg2del)
+			{
+			
+				if (!tmp->next && !tmp->prev)
+					free(lst);
+				else
+					found = update_list2(lst, tmp);
+				lst->lenght--;
+				free(tmp);
+			}
+			tmp = tmp->prev;
+		}
+	}
+	return (lst);
+}
+
+int			update_list2(t_dlist2 *lst, t_cmd *elem)
+{
+	if (!elem->next && elem->prev)
+	{
+		lst->tail = elem->prev;
+		lst->tail->next = NULL;
+	}
+	else if (!elem->prev && elem->next)
+	{
+		lst->head = elem->next;
+		lst->head->prev = NULL;;
+	}
+	else
+	{
+		elem->prev->next = elem->next;
+		elem->next->prev = elem->prev;
+	}
+	lst->lenght--;
+	return (1);
+}
