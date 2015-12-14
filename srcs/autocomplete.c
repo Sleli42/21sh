@@ -147,10 +147,14 @@ void	list_elems(t_all *all, DIR *entry)
 
 	all->list_dir = create_clst();
 	while ((dirp = readdir(entry)))
+	{
 		if (dirp->d_name[0] != '.')
+		{
 			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-	sort_name(&all->list_dir->head);
-	init_windows_size(all);
+		}
+	}
+	//sort_name(&all->list_dir->head);
+	//init_windows_size(all);
 	//write(1, "\n", 1);
 }
 
@@ -226,9 +230,14 @@ void	open_directory(t_all *all)
 	{
 		new_line_autocomplet(all);
 		display_current(all, all->nav_dir);
-		all->nav_dir = all->nav_dir->next;
+		all->nav_dir = (all->nav_dir->next) ? all->nav_dir->next : all->list_dir->head;
+		//if (all->cmd_termcaps->tail->c == '/')
+		//{
+		//	add_to_cmd(all, ft_strjoin(all->nav_dir->prev->arg, "/"));
+		//	all->already_open = 0;
+			//printf("go sous directory autocomplet\n");
+		//}
 		/* SIMPLE DISPLAY */
-
 		//simple_display();
 		// tputs_termcap("dm");
 		// tputs_termcap("cb");

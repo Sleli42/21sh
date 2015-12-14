@@ -106,7 +106,12 @@ void	loop(t_all *all)
 		// if (all->already_open)
 		// 	display_current_arg(all);
 		if ((key = check_keys_arrows(buff)) < 0)
+		{
+			if (all->already_open)
+				add_to_cmd(all, all->nav_dir->prev->arg);
+				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
 			break ;
+		}
 		else if (key > 0)
 		{
 			all->stop = 1;
@@ -114,6 +119,11 @@ void	loop(t_all *all)
 		}
 		else
 		{
+			if (*buff == '/')
+			{
+				add_to_cmd(all, all->nav_dir->prev->arg/*ft_strjoin(all->nav_dir->prev->arg, "/")*/);
+				all->already_open = 0;
+			}
 			ft_putchar(*buff);
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}

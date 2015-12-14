@@ -65,6 +65,19 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 	}
 }
 
+void	add_to_cmd(t_all *all, char *s)
+{
+	int		ct;
+
+	ct = 0;
+	new_line_autocomplet(all);
+	while (s[ct])
+	{
+		write(1, &s[ct], 1);
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++], all->cmd_termcaps->lenght));	
+	}
+}
+
 int		find_maxlen_elem(t_clist *lst)
 {
 	t_select	*nav = lst->head;

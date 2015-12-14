@@ -192,6 +192,7 @@ void		env_unset(t_all *all, char *cmd);
 char		*find_env_arg(t_all *all, char *arg2find);
 void		update_oldpwd(t_all *all);
 void		add_missing_char_to_cmd(t_all *all, char *s);
+void		add_to_cmd(t_all *all, char *s);
 int			find_maxlen_elem(t_clist *lst);
 /*
 *** ============================================================ binary_tools.c
@@ -262,6 +263,7 @@ char		*search_equ(char *dir);
 void		swap_elems(t_select *a, t_select *b);
 void		sort_name(t_select **lst);
 void		list_elems(t_all *all, DIR *entry);
+void		new_line_autocomplet(t_all *all);
 void		display_current(t_all *all, t_select *nav);
 void		open_directory(t_all *all);
 
