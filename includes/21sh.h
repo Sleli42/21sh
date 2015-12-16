@@ -35,6 +35,7 @@
 # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
 # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
 # define 	K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
+# define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
 # define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
 # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 
@@ -97,6 +98,7 @@ typedef struct			s_all
 	// HISTORY
 	t_dlist				*cmd_history;
 	int					already_in_history;
+	int					is_history;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
@@ -139,6 +141,7 @@ typedef	struct			s_builtins
 */
 void	display_dlst2(t_dlist2 *lst);
 
+void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
 void		create_cmd(t_all *all);
 void		display_prompt(t_all *all);
 void		loop(t_all *all);

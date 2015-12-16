@@ -31,7 +31,7 @@ int		check_keys_arrows(char buff[3])
 	{
 		return (3);
 	}
-	if (K_DELETE)
+	if (K_DELETE || K_DELETE2)
 	{
 		return (4);
 	}
@@ -40,12 +40,10 @@ int		check_keys_arrows(char buff[3])
 
 void	make_moves(t_all *all, char buff[3])
 {
+	//write(1, "here\n", 5);
 	//printf("|%c|\n", all->cmd_termcaps->tail->c);
 	if (K_UP || K_DOWN)
-	{
-		//display_dlst_history(all->cmd_history);
 		goto_latest_commands(all, buff);
-	}
 	if (K_TAB)
 	{
 		if (!all->cmd_termcaps->head)
@@ -56,34 +54,20 @@ void	make_moves(t_all *all, char buff[3])
 		else
 			open_directory(all);
 	}
-	if (K_DELETE)
+	if (K_DELETE || K_DELETE2)
 	{
-		//display_dlst2(all->cmd_termcaps);
+		if (all->already_in_history)
+			realloc_termcaps_cmd(all, all->cmd);
 		tputs_termcap("me");
 		tputs_termcap("dm");
-		// printf("\nlenght list[fct]: %zu\n", all->cmd_termcaps->lenght);
-		//printf("------>|%c|\n", all->cmd_termcaps->head->c);
-		//printf("%c && %c\n", all->cmd_termcaps->tail->c, buff[0]);
+	//	display_dlst2(all->cmd_termcaps);
 		if (all->cmd_termcaps->lenght > 0)
 		{
-			//printf("------>|%c|\n", all->cmd_termcaps->head->c);
 			dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
-			//printf("lenght list[add]: %zu\n", all->cmd_termcaps->lenght);
-			// del_dlist2(all->cmd_termcaps);
 			tputs_termcap("le");
 			tputs_termcap("dc");
 		}
 		tputs_termcap("ed");
-		// if (all->cmd_termcaps->lenght > 0)
-		// {
-		// 	dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
-		// 	tputs_termcap("le");
-		// 	tputs_termcap("dc");
-		// }
 		all->stop = 0;
 	}
-	// if (K_LEFT)
-	// {
-		
-	// }
 }
