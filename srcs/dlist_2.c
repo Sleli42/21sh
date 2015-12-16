@@ -44,6 +44,7 @@ t_cmd			*dlst_cmd_new(char c, size_t pos)
 
 t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 {
+	//printf("--->|%c|\n", node->c);
 	if (lst && node)
 	{
 		if (lst->tail == NULL)
@@ -59,7 +60,23 @@ t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 		}
 		lst->lenght++;
 	}
+	//printf("lenght list[add]: %zu\n", lst->lenght);
 	return (lst);
+}
+
+int				len_lst_cmd(t_cmd *lst)
+{
+	t_cmd		*nav;
+	int			ret;
+
+	nav = lst;
+	ret = 0;
+	while (nav)
+	{
+		ret++;
+		nav = nav->next;
+	}
+	return (ret);
 }
 
 t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
@@ -71,15 +88,19 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
 	found = 0;
 	if (lst)
 	{
+		// display_dlst2(lst);
 		while (tmp && !found)
 		{
 			if (tmp->c == arg2del)
 			{
-			
 				if (!tmp->next && !tmp->prev)
 				{
-					free(lst);
+					tmp->c = 0;
+					free(tmp);
+					lst->lenght--;
+					lst->tail = NULL;
 					return (lst);
+					// return (lst);
 				}
 				else
 					found = update_list2(lst, tmp);
@@ -96,16 +117,19 @@ int			update_list2(t_dlist2 *lst, t_cmd *elem)
 {
 	if (!elem->next && elem->prev)
 	{
+		elem->c = 0;
 		lst->tail = elem->prev;
 		lst->tail->next = NULL;
 	}
 	else if (!elem->prev && elem->next)
 	{
+		elem->c = 0;
 		lst->head = elem->next;
 		lst->head->prev = NULL;;
 	}
 	else
 	{
+		elem->c = 0;
 		elem->prev->next = elem->next;
 		elem->next->prev = elem->prev;
 	}

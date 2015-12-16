@@ -35,8 +35,8 @@ void	display_tab(char **tab) {
 
 void	display_prompt(t_all *all) {
 	(void)all;
-	tputs_termcap("ve");
 	tputs_termcap("me");
+	tputs_termcap("ve");
 	write(1, "$: ", 3);
 }
 
@@ -60,7 +60,7 @@ void	create_cmd(t_all *all)
 
 	nav = all->cmd_termcaps->head;
 	i = 0;
-	if (!(all->cmd = (char *)malloc(sizeof(char) * all->cmd_termcaps->lenght + 1)))
+	if (!(all->cmd = (char *)malloc(sizeof(char) * len_lst_cmd(all->cmd_termcaps->head) + 1)))
 		error("MALLOC");
 	if (nav)
 	{
@@ -86,6 +86,28 @@ void	display_current_arg(t_all *all)
 	}
 }
 
+// void	update_cmd_line(t_all *all, char *char2add)
+// {
+// 	all->cmd = ft_strjoin(all->cmd, char2add);
+// }
+
+void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
+{
+	int		ct;
+
+	ct = 0;
+	while (cmd2realloc[ct])
+	{
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct], ct));
+		ct++;
+	}
+	//display_dlst2(all->cmd_termcaps);
+	all->already_in_history = 0;
+	// if (all->cmd_termcaps == NULL)
+
+	// 	printf("NULLLLLLLL %s\n", cmd2realloc);
+}
+
 void	loop(t_all *all)
 {
 	char	buff[MAXLEN];
@@ -93,6 +115,7 @@ void	loop(t_all *all)
 
 	all->stop = 0;
 	all->already_open = 0;
+	all->already_in_history = 0;
 	all->ct_select = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
@@ -124,14 +147,23 @@ void	loop(t_all *all)
 				add_to_cmd(all, all->nav_dir->prev->arg/*ft_strjoin(all->nav_dir->prev->arg, "/")*/);
 				all->already_open = 0;
 			}
+			if (all->already_in_history)
+			{
+				realloc_termcaps_cmd(all, all->cmd);
+				ft_strdel(&all->current);
+				all->stop = 0;
+			}
 			ft_putchar(*buff);
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
 		}
 	}
 	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
 	(!all->stop) ? write(1, "\n", 1) : write(1, "\0", 1);
+	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
+		: write(1, "\0", 1);
+	//printf("stop == %d\n", all->stop);
 	printf("cmd: |%s|\n", all->cmd);
-	printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
+	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));

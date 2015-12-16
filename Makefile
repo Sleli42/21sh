@@ -6,13 +6,13 @@
 #    By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/03 15:54:43 by lubaujar          #+#    #+#              #
-#    Updated: 2015/11/03 15:54:44 by lubaujar         ###   ########.fr        #
+#    Updated: 2015/12/16 14:22:04 by lubaujar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 21sh
 RM = rm -rf
-FLAGS = -g -Wall -Wextra -Werror
+FLAGS = -g -gmodules -fexceptions -ftrapv -fcommon -Wall -Wextra -Werror
 LDFLAGS = -I./includes/ -I./libft/include/
 
 SRC = binary_tools.c \

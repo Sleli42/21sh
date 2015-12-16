@@ -46,6 +46,7 @@ void	new_line(t_all *all)
 
 	if (i == 0 && all->current != NULL)
 		i = ft_strlen(all->current);
+	//printf("nbchar 2 del: %d\n", i);
 	while (i--)
 	{
 		tputs_termcap("dc"); // efface 1 char sous le curseur
@@ -62,6 +63,7 @@ void	goto_latest_commands(t_all *all, char buff[3])
 		if (all->nav->prev != NULL)
 			all->nav = all->nav->prev;
 		all->current = ft_strdup(all->cmd);
+		all->already_in_history = 1;
 		ft_putstr(all->cmd);
 	}
 	if (K_DOWN && all->cmd_history->lenght > 0 && all->nav != NULL)
@@ -71,6 +73,7 @@ void	goto_latest_commands(t_all *all, char buff[3])
 			all->nav = all->nav->next;
 		all->cmd = all->nav->s;
 		all->current = ft_strdup(all->cmd);
+		all->already_in_history = 1;
 		ft_putstr(all->cmd);
 	}
 }

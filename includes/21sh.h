@@ -96,6 +96,7 @@ typedef struct			s_all
 	t_termios			restore;
 	// HISTORY
 	t_dlist				*cmd_history;
+	int					already_in_history;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
@@ -136,6 +137,8 @@ typedef	struct			s_builtins
 /*
 *** ============================================================ main.c
 */
+void	display_dlst2(t_dlist2 *lst);
+
 void		create_cmd(t_all *all);
 void		display_prompt(t_all *all);
 void		loop(t_all *all);
@@ -170,6 +173,7 @@ void		del_dlist(t_dlist *lst);
 t_dlist2	*create_cmd_dlst(void);
 t_cmd		*dlst_cmd_new(char c, size_t pos);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
+int			len_lst_cmd(t_cmd *lst);
 t_dlist2	*dlst_del_one2(t_dlist2 *lst, char arg2del);
 int			update_list2(t_dlist2 *lst, t_cmd *elem);
 void		del_dlist2(t_dlist2 *lst);

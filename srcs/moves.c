@@ -58,21 +58,28 @@ void	make_moves(t_all *all, char buff[3])
 	}
 	if (K_DELETE)
 	{
+		//display_dlst2(all->cmd_termcaps);
+		tputs_termcap("me");
+		tputs_termcap("dm");
 		// printf("\nlenght list[fct]: %zu\n", all->cmd_termcaps->lenght);
-		// printf("------>|%c|\n", all->cmd_termcaps->tail->c);
+		//printf("------>|%c|\n", all->cmd_termcaps->head->c);
 		//printf("%c && %c\n", all->cmd_termcaps->tail->c, buff[0]);
-		if (all->cmd_termcaps->lenght == 1)
-		{
-			del_dlist2(all->cmd_termcaps);
-			tputs_termcap("le");
-			tputs_termcap("dc");
-		}
 		if (all->cmd_termcaps->lenght > 0)
 		{
+			//printf("------>|%c|\n", all->cmd_termcaps->head->c);
 			dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
+			//printf("lenght list[add]: %zu\n", all->cmd_termcaps->lenght);
+			// del_dlist2(all->cmd_termcaps);
 			tputs_termcap("le");
 			tputs_termcap("dc");
 		}
+		tputs_termcap("ed");
+		// if (all->cmd_termcaps->lenght > 0)
+		// {
+		// 	dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
+		// 	tputs_termcap("le");
+		// 	tputs_termcap("dc");
+		// }
 		all->stop = 0;
 	}
 	// if (K_LEFT)
