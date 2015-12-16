@@ -16,8 +16,9 @@ t_dlist2		*create_cmd_dlst(void)
 {
 	t_dlist2	*new;
 
-	new = (t_dlist2 *)malloc(sizeof(t_dlist2));
-	if (new != NULL)
+	if (!(new = (t_dlist2 *)malloc(sizeof(t_dlist2))))
+		return (NULL);
+	else
 	{
 		new->lenght = 0;
 		new->tail = NULL;
@@ -76,7 +77,10 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
 			{
 			
 				if (!tmp->next && !tmp->prev)
+				{
 					free(lst);
+					return (lst);
+				}
 				else
 					found = update_list2(lst, tmp);
 				lst->lenght--;
@@ -105,6 +109,29 @@ int			update_list2(t_dlist2 *lst, t_cmd *elem)
 		elem->prev->next = elem->next;
 		elem->next->prev = elem->prev;
 	}
-	lst->lenght--;
 	return (1);
+}
+
+void			del_dlist2(t_dlist2 *lst)
+{
+	t_cmd	*next_elem;
+	t_cmd	*tmp;
+
+	tmp = lst->head;
+	next_elem = NULL;
+	if (tmp)
+	{
+		while (tmp)
+		{
+			next_elem = tmp->next;
+			if (tmp->c)
+				tmp->c = 0;
+			if (tmp)
+				free(tmp);
+			tmp = next_elem;
+			lst->lenght = 0;
+			if (tmp == lst->tail)
+				return ;
+		}
+	}
 }

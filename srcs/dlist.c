@@ -125,7 +125,7 @@ int				update_list(t_dlist *lst, t_node *elem)
 		elem->next->prev = elem->prev;
 		ft_strdel(&elem->s);
 	}
-	lst->lenght--;
+	// lst->lenght--;
 	return (1);
 }
 

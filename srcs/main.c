@@ -130,13 +130,15 @@ void	loop(t_all *all)
 	}
 	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
 	(!all->stop) ? write(1, "\n", 1) : write(1, "\0", 1);
-	printf("cmd: %s\n", all->cmd);
+	printf("cmd: |%s|\n", all->cmd);
+	printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}
+	// del_dlist2(all->cmd_termcaps);
 	loop(all);
 }
 

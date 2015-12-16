@@ -172,6 +172,7 @@ t_cmd		*dlst_cmd_new(char c, size_t pos);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
 t_dlist2	*dlst_del_one2(t_dlist2 *lst, char arg2del);
 int			update_list2(t_dlist2 *lst, t_cmd *elem);
+void		del_dlist2(t_dlist2 *lst);
 /*
 *** ============================================================ clist.c
 */
