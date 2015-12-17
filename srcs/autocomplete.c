@@ -180,10 +180,14 @@ void	select_arg(t_all *all)
 
 void	new_line_autocomplet(t_all *all)
 {
-	while (all->nb_char_write--)
+	//printf("nbcharwrite: %d\n", all->nb_char_write);
+	if (all->nb_char_write > 0)
 	{
-		tputs_termcap("dc");
-		tputs_termcap("le");
+		while (all->nb_char_write--)
+		{
+			tputs_termcap("dc");
+			tputs_termcap("le");
+		}
 	}
 }
 

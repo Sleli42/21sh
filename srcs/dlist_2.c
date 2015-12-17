@@ -42,6 +42,39 @@ t_cmd			*dlst_cmd_new(char c, size_t pos)
 	return (new);
 }
 
+t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
+{
+	t_cmd	*tmp;
+	int		ct;
+
+	tmp = lst->head;
+	ct = 0;
+	//write(1, "here\n", 5);
+	while (ct++ < pos)
+		tmp = tmp->next;
+	/* !tmp->next a faire */
+	// if (!tmp->next)
+	// {
+	// 	// printf("curr: |%c|\n", tmp->c);
+	// 	// printf("prev: |%c|\n", tmp->prev->c);
+	// 	// printf("next: |%c|\n", tmp->c);
+	// }
+	if (!tmp->prev)
+	{
+		lst->head->prev = NULL;
+		node->next = lst->head;
+		lst->head = node;
+	}
+	else
+	{
+		tmp->prev->next = node;
+		node->prev = tmp->prev;
+		node->next = tmp;
+	}
+	lst->lenght++;
+	return (lst);
+}
+
 t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 {
 	//printf("--->|%c|\n", node->c);

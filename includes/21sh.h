@@ -110,6 +110,9 @@ typedef struct			s_all
 	int					already_open;
 	int					nb_char_write;
 	int					ct_select;
+		// --HORIZONTAL MOVES
+	int					cursor_pos;
+	int					history_moves;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -175,6 +178,7 @@ void		del_dlist(t_dlist *lst);
 */
 t_dlist2	*create_cmd_dlst(void);
 t_cmd		*dlst_cmd_new(char c, size_t pos);
+t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
 int			len_lst_cmd(t_cmd *lst);
 t_dlist2	*dlst_del_one2(t_dlist2 *lst, char arg2del);
@@ -202,6 +206,8 @@ void		update_oldpwd(t_all *all);
 void		add_missing_char_to_cmd(t_all *all, char *s);
 void		add_to_cmd(t_all *all, char *s);
 int			find_maxlen_elem(t_clist *lst);
+int			all_is_spaces(t_cmd *cmd);
+char		goto_elem(t_cmd *cmd, int pos);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -260,7 +266,7 @@ void		goto_latest_commands(t_all *all, char buff[3]);
 /*
 *** ============================================================ moves.c
 */
-int			check_keys_arrows(char buff[3]);
+int			check_keys_arrows(t_all *all, char buff[3]);
 void		make_moves(t_all *all, char buff[3]);
 /*
 *** ============================================================ autocomplete.c

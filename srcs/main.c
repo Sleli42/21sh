@@ -60,6 +60,8 @@ void	create_cmd(t_all *all)
 
 	nav = all->cmd_termcaps->head;
 	i = 0;
+	if (all->cmd)
+		ft_strdel(&all->cmd);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * len_lst_cmd(all->cmd_termcaps->head) + 1)))
 		error("MALLOC");
 	if (nav)
@@ -86,16 +88,16 @@ void	display_current_arg(t_all *all)
 	}
 }
 
-// void	update_cmd_line(t_all *all, char *char2add)
-// {
-// 	all->cmd = ft_strjoin(all->cmd, char2add);
-// }
-
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 {
 	int		ct;
 
 	ct = 0;
+	if (all->cmd_termcaps)
+	{
+		del_dlist2(all->cmd_termcaps);
+		all->cmd_termcaps = create_cmd_dlst();
+	}
 	while (cmd2realloc[ct])
 	{
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct], ct));
@@ -106,6 +108,59 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	// if (all->cmd_termcaps == NULL)
 
 	// 	printf("NULLLLLLLL %s\n", cmd2realloc);
+}
+/*
+	l* -l
+	char2add: s
+	current char pos->|*|
+	prev char ->|l|
+	next char ->|-|
+*/
+
+void	display_line(t_dlist2 *cmd_termcaps)
+{
+	t_cmd	*nav;
+
+	nav = cmd_termcaps->head;
+	while (nav)
+	{
+		write(1, &nav->c, 1);
+		nav = nav->next;
+	}
+}
+
+void	update_cmd_line(t_all *all, char char2add)
+{
+	size_t	ct;
+	//display_dlst2(all->cmd_termcaps);
+	//display_dlst2(all->cmd_termcaps);
+	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
+		dlst_cmd_new(char2add, 1), all->cursor_pos);
+	create_cmd(all);
+	//display_dlst2(all->cmd_termcaps);
+	ct = (size_t)all->cursor_pos;
+	while (++ct < all->cmd_termcaps->lenght)
+		tputs_termcap("nd");
+	while (--ct > 0)
+	{
+		tputs_termcap("le");
+		tputs_termcap("dc");
+	}
+	ft_putstr(all->cmd);
+	ct = (size_t)all->cmd_termcaps->lenght;
+	while (--ct > (size_t)all->cursor_pos)
+		tputs_termcap("le");
+	//printf("cursor: %d\n", all->cursor_pos);
+	// while (++ct < (size_t)all->cursor_pos)
+		//tputs_termcap("nd");
+	// while (++ct < (size_t)all->cursor_pos)
+	// 	tputs_termcap("nd");
+	// while (all->cmd[ct++])
+	// {
+	// 	write(1, &all->cmdm[ct], 1);
+	// }
+	all->stop = 0;
+	// 	tputs_termcap("nd");
 }
 
 void	loop(t_all *all)
@@ -118,6 +173,8 @@ void	loop(t_all *all)
 	all->already_in_history = 0;
 	all->is_history = 0;
 	all->ct_select = 0;
+	all->cursor_pos = 0;
+	all->history_moves = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -129,7 +186,7 @@ void	loop(t_all *all)
 		read(0, buff, (MAXLEN - 1));
 		// if (all->already_open)
 		// 	display_current_arg(all);
-		if ((key = check_keys_arrows(buff)) < 0)
+		if ((key = check_keys_arrows(all, buff)) < 0)
 		{
 			if (all->already_open)
 				add_to_cmd(all, all->nav_dir->prev->arg);
@@ -143,13 +200,10 @@ void	loop(t_all *all)
 		}
 		else
 		{
-			// printf("|%s|\n", buff);
-			// printf("|%d|\n", buff[0]);
-			// printf("|%d|\n", buff[1]);
-			// printf("|%d|\n", buff[2]);
 			if (*buff == '/')
 			{
-				add_to_cmd(all, all->nav_dir->prev->arg/*ft_strjoin(all->nav_dir->prev->arg, "/")*/);
+				if (all->nav_dir)
+					add_to_cmd(all, (all->nav_dir->prev) ? all->nav_dir->prev->arg : all->nav_dir->arg);
 				all->already_open = 0;
 			}
 			if (all->already_in_history)
@@ -160,15 +214,22 @@ void	loop(t_all *all)
 				all->is_history = 1;
 				all->stop = 0;
 			}
-			ft_putchar(*buff);
-			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght));
+			if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght && *buff != '\n')
+			{
+				update_cmd_line(all, *buff);
+			}
+			else
+			{
+				ft_putchar(*buff);
+				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght + 1));
+			}
+			all->cursor_pos++;
 		}
 	}
 	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
 	(!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
 		: write(1, "\0", 1);
-	//printf("stop == %d\n", all->stop);
 	printf("cmd: |%s|\n", all->cmd);
 	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
