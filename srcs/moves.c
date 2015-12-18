@@ -14,6 +14,7 @@
 
 int		check_keys_arrows(t_all *all, char buff[3])
 {
+	//write(1, "here\n", 5);
 	if (K_ENTER)
 	{
 		tputs_termcap("me");
@@ -34,7 +35,7 @@ int		check_keys_arrows(t_all *all, char buff[3])
 			return (0);
 		return (3);
 	}
-	if (K_DELETE || K_DELETE2)
+	if (K_DELETE || K_DELETE2 || buff[0] == 127)
 	{
 		return (4);
 	}
@@ -64,7 +65,27 @@ void	horizontal_moves(t_all *all, char buff[3])
 		all->cursor_pos++;
 		tputs_termcap("nd");
 	}
+	all->already_in_moves = 1;
 	all->stop = 0;
+}
+
+void	update_cmd_line_del(t_all *all)
+{
+	int		ct;
+
+	ct = all->cursor_pos;
+	while ((size_t)ct++ <= all->cmd_termcaps->lenght)
+		tputs_termcap("nd");
+	while (--ct)
+	{
+		tputs_termcap("le");
+		tputs_termcap("dc");
+	}
+	create_cmd(all);
+	ft_putstr(all->cmd);
+	ct = (int)all->cmd_termcaps->lenght;
+	while (ct-- >= all->cursor_pos)
+		tputs_termcap("le");
 }
 
 void	make_moves(t_all *all, char buff[3])
@@ -87,12 +108,17 @@ void	make_moves(t_all *all, char buff[3])
 		else
 			open_directory(all);
 	}
-	if (K_DELETE || K_DELETE2)
+	if (K_DELETE || K_DELETE2 || buff[0] == 127)
 	{
+		// write(1, "here\n", 5);
+		// if (all->cmd_termcaps->head)
+		// 	printf("head: |%c|\n", all->cmd_termcaps->head->c);
 		if (all->already_in_history)
 			realloc_termcaps_cmd(all, all->cmd);
 		tputs_termcap("me");
 		tputs_termcap("dm");
+		// printf("%d\n", all->cursor_pos);
+		// printf("%zu\n", all->cmd_termcaps->lenght);
 	//	display_dlst2(all->cmd_termcaps);
 		if (all->cmd_termcaps->lenght > 0)
 		{
@@ -112,12 +138,16 @@ void	make_moves(t_all *all, char buff[3])
 			{
 				/* no working */
 				
-				write(1, "here\n", 5);
+				//write(1, "here\n", 5);
+				// printf("%d\n", all->cursor_pos);
+				// printf("%zu\n", all->cmd_termcaps->lenght);
 				if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght)
 				{
-					write(1, "here\n", 5);
+					//write(1, "here2\n", 6);
 					dlst_del_one2(all->cmd_termcaps, 
-						goto_elem(all->cmd_termcaps->head, all->cursor_pos));
+						goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1));
+					update_cmd_line_del(all);
+					// update_cmd_line(all);
 				}
 				else
 				{

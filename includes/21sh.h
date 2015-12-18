@@ -113,6 +113,7 @@ typedef struct			s_all
 		// --HORIZONTAL MOVES
 	int					cursor_pos;
 	int					history_moves;
+	int					already_in_moves;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -144,6 +145,7 @@ typedef	struct			s_builtins
 */
 void	display_dlst2(t_dlist2 *lst);
 
+void	update_cmd_line_insert(t_all *all, char char2add);
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
 void		create_cmd(t_all *all);
 void		display_prompt(t_all *all);

@@ -123,7 +123,7 @@ char	goto_elem(t_cmd *cmd, int pos)
 
 	while (ct++ < pos)
 		tmp = tmp->next;
-	printf("-> |%c|\n", tmp->c);
+	//printf("-> |%c|\n", tmp->c);
 	return (tmp->c);
 }
 

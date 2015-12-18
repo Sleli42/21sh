@@ -129,15 +129,21 @@ void	display_line(t_dlist2 *cmd_termcaps)
 	}
 }
 
-void	update_cmd_line(t_all *all, char char2add)
+// void	insert_char_cmd(t_all *all, char char2add)
+// {
+// 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
+// 		dlst_cmd_new(char2add, 1), all->cursor_pos);
+// 	create_cmd(all);
+// 	all->stop = 0;
+// }
+
+void	update_cmd_line_insert(t_all *all, char char2add)
 {
 	size_t	ct;
-	//display_dlst2(all->cmd_termcaps);
-	//display_dlst2(all->cmd_termcaps);
+	
 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
 		dlst_cmd_new(char2add, 1), all->cursor_pos);
 	create_cmd(all);
-	//display_dlst2(all->cmd_termcaps);
 	ct = (size_t)all->cursor_pos;
 	while (++ct < all->cmd_termcaps->lenght)
 		tputs_termcap("nd");
@@ -150,6 +156,7 @@ void	update_cmd_line(t_all *all, char char2add)
 	ct = (size_t)all->cmd_termcaps->lenght;
 	while (--ct > (size_t)all->cursor_pos)
 		tputs_termcap("le");
+	all->stop = 0;
 	//printf("cursor: %d\n", all->cursor_pos);
 	// while (++ct < (size_t)all->cursor_pos)
 		//tputs_termcap("nd");
@@ -159,7 +166,6 @@ void	update_cmd_line(t_all *all, char char2add)
 	// {
 	// 	write(1, &all->cmdm[ct], 1);
 	// }
-	all->stop = 0;
 	// 	tputs_termcap("nd");
 }
 
@@ -184,6 +190,7 @@ void	loop(t_all *all)
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
+		//printf("buff: |%d|\n", buff[0]);
 		// if (all->already_open)
 		// 	display_current_arg(all);
 		if ((key = check_keys_arrows(all, buff)) < 0)
@@ -216,7 +223,8 @@ void	loop(t_all *all)
 			}
 			if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght && *buff != '\n')
 			{
-				update_cmd_line(all, *buff);
+				//insert_char_cmd(all, *buff);
+				update_cmd_line_insert(all, *buff);
 			}
 			else
 			{
