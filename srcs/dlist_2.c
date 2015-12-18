@@ -48,17 +48,21 @@ t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
 	int		ct;
 
 	tmp = lst->head;
-	ct = 0;
+	ct = -1;
 	//write(1, "here\n", 5);
-	while (ct++ < pos)
+	printf("pos: %d\n", pos);
+	while (tmp && ++ct < pos)
 		tmp = tmp->next;
 	/* !tmp->next a faire */
-	// if (!tmp->next)
-	// {
-	// 	// printf("curr: |%c|\n", tmp->c);
-	// 	// printf("prev: |%c|\n", tmp->prev->c);
-	// 	// printf("next: |%c|\n", tmp->c);
-	// }
+	if (!tmp->next)
+	{
+		write(1, "here\n", 5);
+		// printf("curr: |%c|\n", tmp->c);
+		// printf("prev: |%c|\n", tmp->prev->c);
+		// printf("next: |%c|\n", tmp->c);
+	}
+	printf("curr: |%c|\n", tmp->c);
+	printf("prev: |%c|\n", tmp->prev->c);
 	if (!tmp->prev)
 	{
 		lst->head->prev = NULL;
@@ -68,9 +72,11 @@ t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
 	else
 	{
 		tmp->prev->next = node;
+		// tmp->next->prev = node;
 		node->prev = tmp->prev;
 		node->next = tmp;
 	}
+	printf("prev: |%c|\n", node->prev->c);
 	lst->lenght++;
 	return (lst);
 }
