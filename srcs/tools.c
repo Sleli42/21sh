@@ -62,7 +62,7 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 	while (s[ct++])
 	{
 		write(1, &s[ct], 1);
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct], all->cmd_termcaps->lenght));
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct]));
 	}
 }
 
@@ -80,7 +80,7 @@ void	add_to_cmd(t_all *all, char *s)
 	while (s[ct])
 	{
 		write(1, &s[ct], 1);
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++], all->cmd_termcaps->lenght));	
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++]));	
 	}
 }
 

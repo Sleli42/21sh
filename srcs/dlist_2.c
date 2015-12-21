@@ -27,7 +27,7 @@ t_dlist2		*create_cmd_dlst(void)
 	return (new);
 }
 
-t_cmd			*dlst_cmd_new(char c, size_t pos)
+t_cmd			*dlst_cmd_new(char c)
 {
 	t_cmd	*new;
 
@@ -35,7 +35,6 @@ t_cmd			*dlst_cmd_new(char c, size_t pos)
 	if (new)
 	{
 		new->c = c;
-		new->pos = pos;
 		new->next = NULL;
 		new->prev = NULL;
 	}
@@ -57,36 +56,51 @@ t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
 	int		ct;
 
 	tmp = lst->head;
-	ct = 0;
+	ct = 1;
 	//pos = (pos == 0) ? 1 : pos;
-	printf("cursor on node : %d\n", pos);
-	while (tmp && ct < pos)
+	//display_dlst(lst);
+	//printf("cursor on node : %d\n", pos);
+	while (tmp && ct <= pos)
 	{
 		if (pos == ct)
 		{
-			printf("node: %c\n", tmp->c);
+			//printf("node: %c\n", tmp->c);
 			if (tmp->next == NULL)
 			{
 				//printf("tail: %c && tmp: %c\n", lst->tail->c, tmp->c);
 				lst = dlst_add_back_2(lst, node);
 				swap_elems_cmd(lst->tail, lst->tail->prev);
+				return (lst);
 
 			}
 			else if (tmp->prev == NULL)
 			{
 				//write(1, "begin\n", 6);
 				lst = dlist_add_front_2(lst, node);
+				return (lst);
 			}
 			else
 			{
 				if (node)
-				{
-					//printf("tmp: %c\n", tmp->c);
-					//printf("tmp prev: %c\n", tmp->prev->c);
-					tmp->next->prev = node;
-					tmp->prev->next = node;
+				{			/* probleme here */
 					node->prev = tmp->prev;
 					node->next = tmp;
+					//printf("tmp->prev->next :%c\n", tmp->prev->next->c);
+					tmp->prev->next = node;
+					// printf("tmp->prev->next :%c\n", tmp->prev->next->c);
+					// node->prev = tmp->prev;
+					// node->next = tmp;
+					tmp->prev = node;
+					// printf("node->prev: %c\n", node->prev->c);
+					// printf("node->next: %c\n", node->next->c);
+					// printf("tmp: %c\n", tmp->c);
+					// printf("tmp prev: %c\n", tmp->prev->c);
+					// printf("tmp next: %c\n", tmp->next->c);
+					// tmp->next->prev = node;
+					// tmp->prev->next = node;
+					// node->prev = tmp->prev;
+					// tmp->prev = node;
+					// node->next = tmp;
 					lst->lenght++;
 				}
 			}

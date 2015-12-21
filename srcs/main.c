@@ -98,10 +98,12 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	}
 	while (cmd2realloc[ct])
 	{
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct], ct));
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct]));
 		ct++;
 	}
-	//display_dlst2(all->cmd_termcaps);
+	all->cursor_pos += (int)all->cmd_termcaps->lenght;
+	// display_dlst(all->cmd_termcaps);
+	// printf("pos: %d", all->cursor_pos);
 	all->already_in_history = 0;
 	// if (all->cmd_termcaps == NULL)
 
@@ -152,15 +154,14 @@ void	update_cmd_line_insert(t_all *all, char char2add)
 	//size_t	ct;
 	
 	// printf("pos: %d\n", all->cursor_pos);
-	// printf("size: %zu\n", all->cmd_termcaps->lenght);
-	// display_dlst2(all->cmd_termcaps);
+	//printf("size: %zu\n", all->cmd_termcaps->lenght);
+	//display_dlst(all->cmd_termcaps);
 	// display_cursor(all->cmd_termcaps, all->cursor_pos);
-	printf("pos: %d\n", all->cursor_pos);
+	//printf("pos: %d\n", all->cursor_pos);
 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
-		dlst_cmd_new(char2add, 1), all->cursor_pos);
-	//all->cursor_pos++;
-	// display_dlst2(all->cmd_termcaps);
-	// display_cursor(all->cmd_termcaps, all->cursor_pos);
+		dlst_cmd_new(char2add), all->cursor_pos);
+	all->cursor_pos++;
+	//display_cursor(all->cmd_termcaps, all->cursor_pos);
 	//display_dlst2(all->cmd_termcaps);
 	// create_cmd(all);
 	// ct = (size_t)all->cursor_pos;
@@ -199,7 +200,7 @@ void	loop(t_all *all)
 	all->already_in_history = 0;
 	all->is_history = 0;
 	all->ct_select = 0;
-	all->cursor_pos = 0;
+	all->cursor_pos = 1;
 	all->history_moves = 0;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
@@ -241,20 +242,21 @@ void	loop(t_all *all)
 				all->is_history = 1;
 				all->stop = 0;
 			}
-			if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght && *buff != '\n')
+			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
-				// tputs_termcap("im");
+				tputs_termcap("im");
 				ft_putchar(*buff);
 				//insert_char_cmd(all, *buff);
 				update_cmd_line_insert(all, *buff);
-				// tputs_termcap("ei");
+				tputs_termcap("ei");
 			}
 			else
 			{
 				all->cursor_pos++;
 				ft_putchar(*buff);
-				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght + 1));
+				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff));
 			}
+			// all->cursor_pos++;
 		}
 	}
 	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);

@@ -63,7 +63,6 @@ typedef struct			s_dlist
 typedef struct			s_cmd
 {
 	char				c;
-	size_t				pos;
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
 }						t_cmd;
@@ -143,7 +142,7 @@ typedef	struct			s_builtins
 /*
 *** ============================================================ main.c
 */
-void	display_dlst2(t_dlist2 *lst);
+void	display_dlst(t_dlist2 *lst);
 
 void	update_cmd_line_insert(t_all *all, char char2add);
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
@@ -179,7 +178,7 @@ void		del_dlist(t_dlist *lst);
 *** ============================================================ dlist_2.c
 */
 t_dlist2	*create_cmd_dlst(void);
-t_cmd		*dlst_cmd_new(char c, size_t pos);
+t_cmd		*dlst_cmd_new(char c);
 void		swap_elems_cmd(t_cmd *a, t_cmd *b);
 t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
 t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);

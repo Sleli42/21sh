@@ -52,7 +52,7 @@ void	horizontal_moves(t_all *all, char buff[3])
 		all->stop = 1;
 		//ft_strdel(&all->current);
 	}
-	if (K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 0)
+	if (K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		//printf("%zu\n", all->cmd_termcaps->lenght);
 		//printf("curosr: %d\n", all->cursor_pos);
@@ -60,7 +60,7 @@ void	horizontal_moves(t_all *all, char buff[3])
 		tputs_termcap("le");
 	}
 	if (K_RIGHT && all->cmd_termcaps->lenght > 0
-		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght)
+		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
 		all->cursor_pos++;
 		tputs_termcap("nd");
@@ -158,6 +158,7 @@ void	make_moves(t_all *all, char buff[3])
 					dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
 				}
 			}
+			all->cursor_pos--;
 		}
 		tputs_termcap("ed");
 		all->stop = 0;
