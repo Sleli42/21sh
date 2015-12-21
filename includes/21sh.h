@@ -94,10 +94,6 @@ typedef struct			s_all
 	// TERM 2 USE && TERM 2 RESTORE
 	t_termios			term;
 	t_termios			restore;
-	// HISTORY
-	t_dlist				*cmd_history;
-	int					already_in_history;
-	int					is_history;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
@@ -113,6 +109,13 @@ typedef struct			s_all
 	int					cursor_pos;
 	int					history_moves;
 	int					already_in_moves;
+		// --HISTORY
+	int					fd_history;
+	int					index_history;
+
+	t_dlist				*cmd_history;
+	int					already_in_history;
+	int					is_history;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -211,6 +214,7 @@ void		add_to_cmd(t_all *all, char *s);
 int			find_maxlen_elem(t_clist *lst);
 int			all_is_spaces(t_cmd *cmd);
 char		goto_elem(t_cmd *cmd, int pos);
+int			check_history_file(void);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -262,6 +266,7 @@ void		restore_term(t_termios restore);
 /*
 *** ============================================================ history.c
 */
+void	add_to_history(t_all *all);
 void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 void		new_line(t_all *all);

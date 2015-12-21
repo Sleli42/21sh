@@ -57,6 +57,7 @@ void	free_all(t_all *all, char *cmd)
 	// 	ft_strdel(&all->cmd);
 	// if (all->redirect_cmd)
 	// 	ft_strdel(&all->redirect_cmd);
+	close(all->fd_history);
 	free(all);
 	all = NULL;
 	ft_putendl("exit");

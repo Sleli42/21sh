@@ -50,12 +50,9 @@ void	horizontal_moves(t_all *all, char buff[3])
 		realloc_termcaps_cmd(all, all->current);
 		all->cursor_pos = (int)all->cmd_termcaps->lenght;
 		all->stop = 1;
-		//ft_strdel(&all->current);
 	}
 	if (K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
-		//printf("%zu\n", all->cmd_termcaps->lenght);
-		//printf("curosr: %d\n", all->cursor_pos);
 		all->cursor_pos--;
 		tputs_termcap("le");
 	}
@@ -66,7 +63,7 @@ void	horizontal_moves(t_all *all, char buff[3])
 		tputs_termcap("nd");
 	}
 	all->already_in_moves = 1;
-	all->stop = 0;
+	// all->stop = 0;
 }
 
 void	update_cmd_line_del(t_all *all)
@@ -90,7 +87,7 @@ void	update_cmd_line_del(t_all *all)
 
 void	make_moves(t_all *all, char buff[3])
 {
-	int			deltab = 0;
+	//int			deltab = 0;
 	//write(1, "here\n", 5);
 	//printf("|%c|\n", all->cmd_termcaps->tail->c);
 	if (K_RIGHT || K_LEFT)
@@ -128,12 +125,16 @@ void	make_moves(t_all *all, char buff[3])
 			//display_dlst2(all->cmd_termcaps);
 			if (all->cmd_termcaps->tail->c == '\t')
 			{		/* no working */
-				while (deltab < 6)
-				{
-					tputs_termcap("le");
-					tputs_termcap("dc");
-					deltab++;
-				}
+					/* "ct"      Effacer les tabulations */
+				//write(1, "here\n", 5);
+				tputs_termcap("ct");
+				//tputs_termcap("bt");
+				// while (deltab < 6)
+				// {
+				// 	tputs_termcap("le");
+				// 	tputs_termcap("dc");
+				// 	deltab++;
+				// }
 				dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
 			}
 			else
@@ -141,9 +142,9 @@ void	make_moves(t_all *all, char buff[3])
 				/* no working */
 				
 				//write(1, "here\n", 5);
-				// printf("%d\n", all->cursor_pos);
+				//printf("%d\n", all->cursor_pos);
 				// printf("%zu\n", all->cmd_termcaps->lenght);
-				if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght)
+				if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght)
 				{
 					//write(1, "here2\n", 6);
 					dlst_del_one2(all->cmd_termcaps, 

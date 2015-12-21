@@ -119,7 +119,7 @@ int		all_is_spaces(t_cmd *cmd)
 char	goto_elem(t_cmd *cmd, int pos)
 {
 	t_cmd	*tmp = cmd;
-	int		ct = 0;
+	int		ct = 1;
 
 	while (ct++ < pos)
 		tmp = tmp->next;
@@ -127,7 +127,39 @@ char	goto_elem(t_cmd *cmd, int pos)
 	return (tmp->c);
 }
 
+int		check_history_file(void)
+{
+	int		r;
+	int		fd;
+	char	buff[MAXLEN];
 
+	r = 0;
+	fd = open(".21sh_history", O_RDONLY);
+	r = read(fd, buff, MAXLEN - 1);
+	buff[r] = 0;
+	printf("%s\n", buff);
+//printf("last c :|%c|\n", buff[r - 1]);
+	// while ()
+	// // printf("fd: %d\n", fd);
+	// // printf("fd2: %d\n", fd2);
+	// //mbuff = NULL;
+	// r = 0;
+	// i = 0;
+	// while ((r = read(fd, buff, MAXLEN - 1)) > 0)
+	// 	buff[r] = '\0';
+	// ret = malloc(sizeof(char*));
+	// if (r > 0)
+	// {
+	// 	while (buff[r--] != ':')
+	// 	{
+	// 		printf("|%c|\n", buff[r]);
+	// 		// ret[i++] = buff[r--];
+	// 	}
+	// 	ret[i] = 0;
+	// }
+	// printf("ret: %s\n", ret);
+	return (1);
+}
 
 
 

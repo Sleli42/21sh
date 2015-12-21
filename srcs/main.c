@@ -109,13 +109,7 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 
 	// 	printf("NULLLLLLLL %s\n", cmd2realloc);
 }
-/*
-	l* -l
-	char2add: s
-	current char pos->|*|
-	prev char ->|l|
-	next char ->|-|
-*/
+
 
 void	display_line(t_dlist2 *cmd_termcaps)
 {
@@ -208,12 +202,10 @@ void	loop(t_all *all)
 		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
 	all->nav = all->cmd_history->tail_node;
+	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
-		//printf("buff: |%d|\n", buff[0]);
-		// if (all->already_open)
-		// 	display_current_arg(all);
 		if ((key = check_keys_arrows(all, buff)) < 0)
 		{
 			if (all->already_open)
@@ -223,7 +215,7 @@ void	loop(t_all *all)
 		}
 		else if (key > 0)
 		{
-			all->stop = 1;
+			//all->stop = 1;
 			make_moves(all, buff);
 		}
 		else
@@ -259,6 +251,7 @@ void	loop(t_all *all)
 			// all->cursor_pos++;
 		}
 	}
+	//printf("last: %c\n", all->cmd_termcaps->tail->c);
 	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
 	(!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
@@ -267,11 +260,13 @@ void	loop(t_all *all)
 	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
-		dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
+		add_to_history(all);
+		//dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}
 	// del_dlist2(all->cmd_termcaps);
+	//tputs_termcap("te");
 	loop(all);
 }
 

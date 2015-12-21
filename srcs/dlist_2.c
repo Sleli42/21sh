@@ -183,6 +183,7 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
 		{
 			if (tmp->c == arg2del)
 			{
+				//printf("arg found: |%c|\n", tmp->c);
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;
