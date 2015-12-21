@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dlist_2.c                                          :+:      :+:    :+:   */
+/*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/03 16:13:46 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/11/03 16:13:47 by lubaujar         ###   ########.fr       */
+/*   Created: 2015/12/21 02:16:53 by lubaujar          #+#    #+#             */
+/*   Updated: 2015/12/21 02:16:54 by lubaujar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "termcaps.h"
 
 t_dlist2		*create_cmd_dlst(void)
 {
@@ -27,7 +27,7 @@ t_dlist2		*create_cmd_dlst(void)
 	return (new);
 }
 
-t_cmd			*dlst_cmd_new(char c, size_t pos)
+t_cmd			*dlst_cmd_new(char c)
 {
 	t_cmd	*new;
 
@@ -35,11 +35,22 @@ t_cmd			*dlst_cmd_new(char c, size_t pos)
 	if (new)
 	{
 		new->c = c;
-		new->pos = pos;
 		new->next = NULL;
 		new->prev = NULL;
 	}
 	return (new);
+}
+
+void	display_dlst(t_dlist2 *lst)
+{
+	t_cmd *tmp = lst->head;
+
+	printf("\n");
+	while (tmp) {
+		printf("[ %c ]", tmp->c);
+		tmp = tmp->next;
+	}
+	printf("\nlenght: %zu\n", lst->lenght);
 }
 
 void		swap_elems_cmd(t_cmd *a, t_cmd *b)
@@ -59,17 +70,17 @@ t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
 	tmp = lst->head;
 	ct = 0;
 	//pos = (pos == 0) ? 1 : pos;
-	printf("cursor on node : %d\n", pos);
+	//printf("cursor on node : %d\n", pos);
 	while (tmp && ct < pos)
 	{
 		if (pos == ct)
 		{
-			printf("node: %c\n", tmp->c);
+		//	printf("node: %c\n", tmp->c);
 			if (tmp->next == NULL)
 			{
 				//printf("tail: %c && tmp: %c\n", lst->tail->c, tmp->c);
 				lst = dlst_add_back_2(lst, node);
-				swap_elems_cmd(lst->tail, lst->tail->prev);
+			//	swap_elems_cmd(lst->tail, lst->tail->prev);
 
 			}
 			else if (tmp->prev == NULL)

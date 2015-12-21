@@ -40,19 +40,17 @@ void	display_prompt(t_all *all) {
 	write(1, "$: ", 3);
 }
 
-void	display_dlst2(t_dlist2 *lst) {
-	t_cmd	*tmp = lst->head;
+void	display_dlst(t_dlist2 *lst)
+{
+	t_cmd *tmp = lst->head;
 
 	printf("\n");
-	printf("[ ");
 	while (tmp) {
-		printf("[ %c ] ", tmp->c);
+		printf("[ %c ]", tmp->c);
 		tmp = tmp->next;
 	}
-	printf(" ]");
-	printf("\n");
+	printf("\nlenght: %zu\n", lst->lenght);
 }
-
 void	create_cmd(t_all *all)
 {
 	t_cmd	*nav;
@@ -137,15 +135,32 @@ void	display_line(t_dlist2 *cmd_termcaps)
 // 	all->stop = 0;
 // }
 
+void	display_cursor(t_dlist2 *lst, int pos)
+{
+	t_cmd *tmp = lst->head;
+	int		ct = 0;
+
+	while (ct < pos) {
+		tmp = tmp->next;
+		ct++;
+	}
+	printf("cursor: |%c|\n", tmp->c);
+}
+
 void	update_cmd_line_insert(t_all *all, char char2add)
 {
 	//size_t	ct;
 	
-	display_dlst2(all->cmd_termcaps);
+	// printf("pos: %d\n", all->cursor_pos);
+	// printf("size: %zu\n", all->cmd_termcaps->lenght);
+	// display_dlst2(all->cmd_termcaps);
+	// display_cursor(all->cmd_termcaps, all->cursor_pos);
+	printf("pos: %d\n", all->cursor_pos);
 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
 		dlst_cmd_new(char2add, 1), all->cursor_pos);
-	all->cursor_pos++;
-	display_dlst2(all->cmd_termcaps);
+	//all->cursor_pos++;
+	// display_dlst2(all->cmd_termcaps);
+	// display_cursor(all->cmd_termcaps, all->cursor_pos);
 	//display_dlst2(all->cmd_termcaps);
 	// create_cmd(all);
 	// ct = (size_t)all->cursor_pos;
@@ -228,14 +243,17 @@ void	loop(t_all *all)
 			}
 			if ((size_t)all->cursor_pos < all->cmd_termcaps->lenght && *buff != '\n')
 			{
+				// tputs_termcap("im");
+				ft_putchar(*buff);
 				//insert_char_cmd(all, *buff);
 				update_cmd_line_insert(all, *buff);
+				// tputs_termcap("ei");
 			}
 			else
 			{
+				all->cursor_pos++;
 				ft_putchar(*buff);
 				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff, all->cmd_termcaps->lenght + 1));
-				all->cursor_pos++;
 			}
 		}
 	}

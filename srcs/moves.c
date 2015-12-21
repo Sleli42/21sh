@@ -94,7 +94,9 @@ void	make_moves(t_all *all, char buff[3])
 	//write(1, "here\n", 5);
 	//printf("|%c|\n", all->cmd_termcaps->tail->c);
 	if (K_RIGHT || K_LEFT)
+	{
 		horizontal_moves(all, buff);
+	}
 	if (K_UP || K_DOWN)
 		goto_latest_commands(all, buff);
 	if (K_TAB)
