@@ -79,15 +79,58 @@ void	add_to_history(t_all *all)
 	ft_strdel(&history_line);
 }
 
+char	**parse_history(void)
+{
+	char	**ret;
+	char	*buff;
+	int		r;
+	int		fd;
+
+	fd = open(".21sh_history", O_RDONLY);
+	buff = (char*)malloc(sizeof(char) * MAXLEN);
+	while ((r = read(fd, buff, MAXLEN - 1)) > 0)
+		buff[r] = 0;
+	ret = ft_strsplit(buff, '\n');
+	close(fd);
+	return (ret);
+}
+
+void	display_index_cmd(t_all *all)
+{
+	int		ct = 0;
+	int		i = 0;
+	char	*tmp;
+
+	if (all->history_buff)
+	{
+		del_array(&all->history_buff);
+		all->history_buff = parse_history();
+	}
+	tmp = (char*)malloc(sizeof(char) * ct);
+	while (all->history_buff[all->index_history - 1][ct] != ':')
+		ct++;
+	ct++;
+	while (all->history_buff[all->index_history - 1][ct])
+		tmp[i++] = all->history_buff[all->index_history - 1][ct++];
+	tmp[i] = 0;
+//	printf("%s\n", all->history_buff[all->index_history - 1]);
+}
+
 void	goto_latest_commands(t_all *all, char buff[3])
 {
-	if (K_UP && all->pos_history >= 1)
+	if (K_UP && all->index_history > 1)
 	{
 			/* jooooobbbbb .....*/
+		//printf("%d\n", all->index_history);
+		all->index_history--;
+		display_index_cmd(all);
 
 	}
-	if (K_DOWN && all->index_history < all->pos_history)
+	if (K_DOWN && all->index_history < all->pos_history - 1)
 	{
+		//printf("%d\n", all->index_history);
+		all->index_history++;
+		display_index_cmd(all);
 			/* jooooobbbbb .....*/
 	}
 	// if (K_UP && all->cmd_history->lenght > 0 && all->nav != NULL)

@@ -12,7 +12,8 @@
 
 NAME = 21sh
 RM = rm -rf
-FLAGS = -g -gmodules -fexceptions -ftrapv -fcommon -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
+DEBUG = -g -gmodules -fexceptions -ftrapv -fcommon
 LDFLAGS = -I./includes/ -I./libft/include/
 
 SRC = binary_tools.c \

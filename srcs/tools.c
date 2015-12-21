@@ -127,32 +127,14 @@ char	goto_elem(t_cmd *cmd, int pos)
 	return (tmp->c);
 }
 
-int		check_history_file(void)
+int		check_history_file(char **histo)
 {
-	int		r;
-	int		i;
-	int		fd;
-	char	buff[MAXLEN];
-	char	*tmp;
-	
-	i = 0;
-	tmp = NULL;
-	fd = open(".21sh_history", O_RDONLY);
-	r = read(fd, buff, MAXLEN - 1);
-	if (r == 0)
+	int		ret;
+
+	ret = ft_tablen(histo);
+	if (ret == 0)
 		return (1);
-	else
-	{
-		r -= 2;
-		while (buff[r] != ':')
-			r--;
-		r--;
-		tmp = (char *)malloc(sizeof(char*));
-		while (buff[r] != '\n')
-			tmp[i++] = buff[r--];
-		tmp[i] = 0;
-	}
-	return (ft_atoi(tmp) + 1);
+	return (ret + 1);
 }
 
 

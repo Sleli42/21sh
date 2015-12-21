@@ -196,6 +196,7 @@ void	loop(t_all *all)
 	all->ct_select = 0;
 	all->cursor_pos = 1;
 	all->history_moves = 0;
+	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))

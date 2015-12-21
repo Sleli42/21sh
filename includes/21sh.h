@@ -110,6 +110,7 @@ typedef struct			s_all
 	int					history_moves;
 	int					already_in_moves;
 		// --HISTORY
+	char				**history_buff;
 	int					fd_history;
 	int					pos_history;
 	int					index_history;
@@ -215,7 +216,7 @@ void		add_to_cmd(t_all *all, char *s);
 int			find_maxlen_elem(t_clist *lst);
 int			all_is_spaces(t_cmd *cmd);
 char		goto_elem(t_cmd *cmd, int pos);
-int			check_history_file(void);
+int			check_history_file(char **histo);
 /*
 *** ============================================================ binary_tools.c
 */
@@ -267,7 +268,9 @@ void		restore_term(t_termios restore);
 /*
 *** ============================================================ history.c
 */
+char	**parse_history(void);
 void	add_to_history(t_all *all);
+void	display_index_cmd(t_all *all);
 void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 void		new_line(t_all *all);
