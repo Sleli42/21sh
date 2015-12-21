@@ -121,7 +121,8 @@ t_all		*init_all(char **env)
 	// if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
 	if ((all->fd_history = open(".21sh_history", O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
 		write(1, "open error\n", 11);
-	all->index_history = check_history_file();
+	all->pos_history = check_history_file();
+	all->index_history = 1;
 	// all->file_history = ft_strdup(".21sh_history");
 	return (all);
 }

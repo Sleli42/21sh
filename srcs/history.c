@@ -63,7 +63,7 @@ void	add_to_history(t_all *all)
 
 	if (!(history_line = (char *)malloc(sizeof(char) * (int)all->cmd_termcaps->lenght + 1)))
 		return ;
-	tmp = ft_itoa(all->index_history++);
+	tmp = ft_itoa(all->pos_history++);
 	ct = 0;
 	i = 0;
 	while (tmp[i])
@@ -73,7 +73,7 @@ void	add_to_history(t_all *all)
 	i = 0;
 	while (all->cmd[i])
 		history_line[ct++] = all->cmd[i++];
-	history_line[ct] = 0;
+	history_line[ct] = '\0';
 	write(all->fd_history, history_line, ft_strlen(history_line));
 	write(all->fd_history, "\n", 1);
 	ft_strdel(&history_line);
@@ -81,26 +81,34 @@ void	add_to_history(t_all *all)
 
 void	goto_latest_commands(t_all *all, char buff[3])
 {
-	
-	if (K_UP && all->cmd_history->lenght > 0 && all->nav != NULL)
+	if (K_UP && all->pos_history >= 1)
 	{
-		new_line(all);
-		all->cmd = all->nav->s;
-		if (all->nav->prev != NULL)
-			all->nav = all->nav->prev;
-		all->current = ft_strdup(all->cmd);
-		all->already_in_history = 1;
-		ft_putstr(all->cmd);
+			/* jooooobbbbb .....*/
+
 	}
-	if (K_DOWN && all->cmd_history->lenght > 0 && all->nav != NULL)
+	if (K_DOWN && all->index_history < all->pos_history)
 	{
-		new_line(all);
-		if (all->nav->next != NULL)
-			all->nav = all->nav->next;
-		all->cmd = all->nav->s;
-		all->current = ft_strdup(all->cmd);
-		all->already_in_history = 1;
-		ft_putstr(all->cmd);
+			/* jooooobbbbb .....*/
 	}
+	// if (K_UP && all->cmd_history->lenght > 0 && all->nav != NULL)
+	// {
+	// 	new_line(all);
+	// 	all->cmd = all->nav->s;
+	// 	if (all->nav->prev != NULL)
+	// 		all->nav = all->nav->prev;
+	// 	all->current = ft_strdup(all->cmd);
+	// 	all->already_in_history = 1;
+	// 	ft_putstr(all->cmd);
+	// }
+	// if (K_DOWN && all->cmd_history->lenght > 0 && all->nav != NULL)
+	// {
+	// 	new_line(all);
+	// 	if (all->nav->next != NULL)
+	// 		all->nav = all->nav->next;
+	// 	all->cmd = all->nav->s;
+	// 	all->current = ft_strdup(all->cmd);
+	// 	all->already_in_history = 1;
+	// 	ft_putstr(all->cmd);
+	// }
 	
 }

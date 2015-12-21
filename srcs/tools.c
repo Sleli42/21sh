@@ -130,35 +130,29 @@ char	goto_elem(t_cmd *cmd, int pos)
 int		check_history_file(void)
 {
 	int		r;
+	int		i;
 	int		fd;
 	char	buff[MAXLEN];
-
-	r = 0;
+	char	*tmp;
+	
+	i = 0;
+	tmp = NULL;
 	fd = open(".21sh_history", O_RDONLY);
 	r = read(fd, buff, MAXLEN - 1);
-	buff[r] = 0;
-	printf("%s\n", buff);
-//printf("last c :|%c|\n", buff[r - 1]);
-	// while ()
-	// // printf("fd: %d\n", fd);
-	// // printf("fd2: %d\n", fd2);
-	// //mbuff = NULL;
-	// r = 0;
-	// i = 0;
-	// while ((r = read(fd, buff, MAXLEN - 1)) > 0)
-	// 	buff[r] = '\0';
-	// ret = malloc(sizeof(char*));
-	// if (r > 0)
-	// {
-	// 	while (buff[r--] != ':')
-	// 	{
-	// 		printf("|%c|\n", buff[r]);
-	// 		// ret[i++] = buff[r--];
-	// 	}
-	// 	ret[i] = 0;
-	// }
-	// printf("ret: %s\n", ret);
-	return (1);
+	if (r == 0)
+		return (1);
+	else
+	{
+		r -= 2;
+		while (buff[r] != ':')
+			r--;
+		r--;
+		tmp = (char *)malloc(sizeof(char*));
+		while (buff[r] != '\n')
+			tmp[i++] = buff[r--];
+		tmp[i] = 0;
+	}
+	return (ft_atoi(tmp) + 1);
 }
 
 

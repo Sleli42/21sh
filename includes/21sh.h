@@ -111,6 +111,7 @@ typedef struct			s_all
 	int					already_in_moves;
 		// --HISTORY
 	int					fd_history;
+	int					pos_history;
 	int					index_history;
 
 	t_dlist				*cmd_history;
