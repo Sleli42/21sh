@@ -27,10 +27,10 @@ char	*find_path(char *cmd)
 	while (cmd[ct++])
 		path[i++] = cmd[ct];
 	path[i] = 0;
-	if (path[0] == 0 && ft_strlen(cmd) > 1)
-		path = ft_strdup(".");
-	if (path[ft_strlen(path) - 1] != '/')
-		path = ft_strjoin(path, "/");
+	// if (path[0] == 0 && ft_strlen(cmd) > 1)
+	// 	path = ft_strdup(".");
+	// if (path[ft_strlen(path) - 1] != '/')
+	// 	path = ft_strjoin(path, "/");
 	return (path);
 }
 
@@ -42,6 +42,8 @@ char	*search_equ(char *dir)
 	int			ct;
 
 	ct = -1;
+	if (!dir)
+		return (NULL);
 	if (!(tofind = (char *)malloc(sizeof(char) * ft_strlen(dir))))
 		error("MALLOC");
 	while (++ct < (int)ft_strlen(dir) - 1)
@@ -197,8 +199,41 @@ void	display_current(t_all *all, t_select *nav)
 	all->nb_char_write = ft_strlen(nav->arg);
 }
 
+int		no_spaces(t_cmd *lst)
+{
+	t_cmd	*tmp = lst;
+
+	while (tmp)
+	{
+		if (tmp->c == ' ')
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
+}
+
 void	open_directory(t_all *all)
 {
+	// DIR		*entry;
+	// char	*dir;
+
+	// dir = NULL;
+	if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
+	{
+		if (no_spaces(all->cmd_termcaps->head))
+			search_bin_path();
+			//printf("Search path bin\n");
+		else
+			printf("Search equ\n");
+	}
+	else
+		printf("open './'\n");
+
+
+
+
+
+	/*
 	DIR			*entry;
 	char		*dir;
 	
@@ -241,7 +276,6 @@ void	open_directory(t_all *all)
 		//	all->already_open = 0;
 			//printf("go sous directory autocomplet\n");
 		//}
-		/* SIMPLE DISPLAY */
 		//simple_display();
 		// tputs_termcap("dm");
 		// tputs_termcap("cb");
@@ -250,4 +284,5 @@ void	open_directory(t_all *all)
 		//display_elems(all, all->list_dir);
 		//tputs_termcap("ve");
 	}
+	*/
 }
