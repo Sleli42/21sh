@@ -189,7 +189,7 @@ t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
 t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);
 t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
 int			len_lst_cmd(t_cmd *lst);
-t_dlist2	*dlst_del_one2(t_dlist2 *lst, char arg2del);
+t_dlist2	*dlst_del_one2(t_dlist2 *lst, int pos);
 int			update_list2(t_dlist2 *lst, t_cmd *elem);
 void		del_dlist2(t_dlist2 *lst);
 /*

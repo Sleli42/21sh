@@ -120,49 +120,38 @@ void	make_moves(t_all *all, char buff[3])
 		// printf("%d\n", all->cursor_pos);
 		// printf("%zu\n", all->cmd_termcaps->lenght);
 	//	display_dlst2(all->cmd_termcaps);
-		if (all->cmd_termcaps->lenght > 0)
+		if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 		{
+			//printf("cursor_pos: %d\n", all->cursor_pos);
 			//printf("%d\n", deltab);
 			//display_dlst2(all->cmd_termcaps);
-			if (all->cmd_termcaps->tail->c == '\t')
-			{		/* no working */
-					/* "ct"      Effacer les tabulations */
-				//write(1, "here\n", 5);
-				tputs_termcap("ct");
-				//tputs_termcap("bt");
-				// while (deltab < 6)
-				// {
-				// 	tputs_termcap("le");
-				// 	tputs_termcap("dc");
-				// 	deltab++;
-				// }
-				dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
-			}
-			else
-			{
-				/* no working */
-				
-				//write(1, "here\n", 5);
-				//printf("%d\n", all->cursor_pos);
-				// printf("%zu\n", all->cmd_termcaps->lenght);
+			// if (all->cmd_termcaps->tail->c == '\t')
+			// {		/* no working */
+			// 		/* "ct"      Effacer les tabulations */
+			// 	//write(1, "here\n", 5);
+			// 	tputs_termcap("ct");
+			// 	int	deltab = 0;
+			// 	while (deltab++ < 6)
+			// 		tputs_termcap("le");
+			// 	//tputs_termcap("bc");
+			// 	// while (deltab < 6)
+			// 	// {
+			// 	// 	tputs_termcap("le");
+			// 	// 	tputs_termcap("dc");
+			// 	// 	deltab++;
+			// 	// }
+			// 	dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
+			// }
+			// else
+			// {
 				if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght)
-				{
-					//write(1, "here2\n", 6);
-					dlst_del_one2(all->cmd_termcaps, 
-						goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1));
-					update_cmd_line_del(all);
-					// update_cmd_line(all);
-				}
+					dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
 				else
-				{
-					tputs_termcap("le");
-					tputs_termcap("dc");
-					dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
-				}
-			}
-			all->cursor_pos--;
+					dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
+				tputs_termcap("le");
+				tputs_termcap("dc");
+				all->cursor_pos--;
+				tputs_termcap("ed");
 		}
-		tputs_termcap("ed");
-		all->stop = 0;
 	}
 }

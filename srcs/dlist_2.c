@@ -169,21 +169,24 @@ int				len_lst_cmd(t_cmd *lst)
 	return (ret);
 }
 
-t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
+t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 {
 	t_cmd	*tmp;
 	int		found;
+	int 	ct = 1;
 
-	tmp = lst->tail;
+	tmp = lst->head;
 	found = 0;
+	//printf("pos: %d\n", pos);
 	if (lst)
 	{
 		// display_dlst2(lst);
 		while (tmp && !found)
 		{
-			if (tmp->c == arg2del)
+			if (ct == pos)
 			{
-				//printf("arg found: |%c|\n", tmp->c);
+				// printf("ct: %d\n", ct);
+				// printf("arg found: |%c|\n", tmp->c);
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;
@@ -198,8 +201,10 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, char arg2del)
 				lst->lenght--;
 				free(tmp);
 			}
-			tmp = tmp->prev;
+			ct++;
+			tmp = tmp->next;
 		}
+		//printf("ct: %d\n", ct);
 	}
 	return (lst);
 }

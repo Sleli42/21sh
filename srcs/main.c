@@ -230,8 +230,10 @@ void	loop(t_all *all)
 			// 	all->is_history = 1;
 			// 	all->stop = 0;
 			// }
+			//printf("pos cursor: %d\n", all->cursor_pos);
 			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
+				//write(1, "here\n", 5);
 				tputs_termcap("im");
 				ft_putchar(*buff);
 				//insert_char_cmd(all, *buff);
