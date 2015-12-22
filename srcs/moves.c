@@ -44,13 +44,15 @@ int		check_keys_arrows(t_all *all, char buff[3])
 
 void	horizontal_moves(t_all *all, char buff[3])
 {
-	if (all->current && !all->history_moves)
-	{
-		all->history_moves = 1;
-		realloc_termcaps_cmd(all, all->current);
-		all->cursor_pos = (int)all->cmd_termcaps->lenght;
-		all->stop = 1;
-	}
+	// if (all->current && !all->history_moves)
+	// {
+	// 	all->history_moves = 1;
+	// 	realloc_termcaps_cmd(all, all->current);
+	// 	all->cursor_pos = (int)all->cmd_termcaps->lenght;
+	// 	all->stop = 1;
+	// }
+	// printf("all->cmd: %s\n", all->cmd);
+	// printf("cursor pos: %d\n", all->cursor_pos);
 	if (K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		all->cursor_pos--;
@@ -62,7 +64,6 @@ void	horizontal_moves(t_all *all, char buff[3])
 		all->cursor_pos++;
 		tputs_termcap("nd");
 	}
-	all->already_in_moves = 1;
 	// all->stop = 0;
 }
 

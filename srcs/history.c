@@ -101,36 +101,72 @@ void	display_index_cmd(t_all *all)
 	int		i = 0;
 	char	*tmp;
 
-	if (all->history_buff)
+	if (all->history_buff != NULL)
 	{
 		del_array(&all->history_buff);
 		all->history_buff = parse_history();
 	}
-	tmp = (char*)malloc(sizeof(char) * ct);
+	if (!(tmp = (char*)malloc(sizeof(char) * ct)))
+		return ;
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
 	ct++;
 	while (all->history_buff[all->index_history - 1][ct])
 		tmp[i++] = all->history_buff[all->index_history - 1][ct++];
 	tmp[i] = 0;
+	all->cursor_pos = i;
+	ft_putstr(tmp);
+	realloc_termcaps_cmd(all, tmp);
+	if (tmp)
+		ft_strdel(&tmp);
+	// tputs_termcap("cb");
+	// tputs_termcap("rc");
 //	printf("%s\n", all->history_buff[all->index_history - 1]);
 }
 
+/*
+sc      Sauvegarder la position du curseur
+rc      Restaurer la position enregistrée du curseur
+cb      Effacer depuis le début de la ligne jusqu'au curseur
+*/
+
+
+
 void	goto_latest_commands(t_all *all, char buff[3])
 {
+	//printf("cursor pos: %d\n", all->cursor_pos);
+	if (all->cursor_pos == 1)
+		tputs_termcap("sc");
+	//printf("%d\n", all->index_history);
 	if (K_UP && all->index_history > 1)
 	{
 			/* jooooobbbbb .....*/
-		//printf("%d\n", all->index_history);
+	//	printf("%d\n", all->index_history);
+		if (all->cursor_pos > 1)
+		{
+			tputs_termcap("rc");
+			tputs_termcap("ce");
+			all->cursor_pos = 1;
+		}
 		all->index_history--;
 		display_index_cmd(all);
 
 	}
-	if (K_DOWN && all->index_history < all->pos_history - 1)
+	if (K_DOWN && all->index_history <= all->pos_history - 1)
 	{
-		//printf("%d\n", all->index_history);
 		all->index_history++;
-		display_index_cmd(all);
+		if (all->cursor_pos > 1 || all->index_history == all->pos_history)
+		{
+			tputs_termcap("rc");
+			tputs_termcap("ce");
+			all->cursor_pos = 1;
+		}
+		//printf("index: %d\n", all->index_history);
+		//printf("pos: %d\n", all->pos_history);
+		if (all->index_history == all->pos_history)
+			return;
+		else
+			display_index_cmd(all);
 			/* jooooobbbbb .....*/
 	}
 	// if (K_UP && all->cmd_history->lenght > 0 && all->nav != NULL)

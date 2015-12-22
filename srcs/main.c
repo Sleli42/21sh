@@ -97,14 +97,11 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 		all->cmd_termcaps = create_cmd_dlst();
 	}
 	while (cmd2realloc[ct])
-	{
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct]));
-		ct++;
-	}
-	all->cursor_pos += (int)all->cmd_termcaps->lenght;
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
+	all->cursor_pos = (int)all->cmd_termcaps->lenght + 1;
 	// display_dlst(all->cmd_termcaps);
 	// printf("pos: %d", all->cursor_pos);
-	all->already_in_history = 0;
+	//all->already_in_history = 0;
 	// if (all->cmd_termcaps == NULL)
 
 	// 	printf("NULLLLLLLL %s\n", cmd2realloc);
@@ -192,10 +189,7 @@ void	loop(t_all *all)
 	all->stop = 0;
 	all->already_open = 0;
 	all->already_in_history = 0;
-	all->is_history = 0;
-	all->ct_select = 0;
 	all->cursor_pos = 1;
-	all->history_moves = 0;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
@@ -218,6 +212,7 @@ void	loop(t_all *all)
 		{
 			//all->stop = 1;
 			make_moves(all, buff);
+			all->stop = 0;
 		}
 		else
 		{
@@ -227,14 +222,14 @@ void	loop(t_all *all)
 					add_to_cmd(all, (all->nav_dir->prev) ? all->nav_dir->prev->arg : all->nav_dir->arg);
 				all->already_open = 0;
 			}
-			if (all->already_in_history)
-			{
-				realloc_termcaps_cmd(all, all->cmd);
-				//create_cmd(all);
-				ft_strdel(&all->current);
-				all->is_history = 1;
-				all->stop = 0;
-			}
+			// if (all->already_in_history)
+			// {
+			// 	realloc_termcaps_cmd(all, all->cmd);
+			// 	//create_cmd(all);
+			// 	ft_strdel(&all->current);
+			// 	all->is_history = 1;
+			// 	all->stop = 0;
+			// }
 			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
 				tputs_termcap("im");
