@@ -35,7 +35,7 @@ int		check_keys_arrows(t_all *all, char buff[3])
 			return (0);
 		return (3);
 	}
-	if (K_DELETE || K_DELETE2 || buff[0] == 127)
+	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
 	{
 		return (4);
 	}
@@ -108,50 +108,24 @@ void	make_moves(t_all *all, char buff[3])
 		else
 			open_directory(all);
 	}
-	if (K_DELETE || K_DELETE2 || buff[0] == 127)
+	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
 	{
-		// write(1, "here\n", 5);
-		// if (all->cmd_termcaps->head)
-		// 	printf("head: |%c|\n", all->cmd_termcaps->head->c);
 		if (all->already_in_history)
 			realloc_termcaps_cmd(all, all->cmd);
 		tputs_termcap("me");
 		tputs_termcap("dm");
-		// printf("%d\n", all->cursor_pos);
-		// printf("%zu\n", all->cmd_termcaps->lenght);
-	//	display_dlst2(all->cmd_termcaps);
 		if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 		{
-			//printf("cursor_pos: %d\n", all->cursor_pos);
-			//printf("%d\n", deltab);
-			//display_dlst2(all->cmd_termcaps);
-			// if (all->cmd_termcaps->tail->c == '\t')
-			// {		/* no working */
-			// 		/* "ct"      Effacer les tabulations */
-			// 	//write(1, "here\n", 5);
-			// 	tputs_termcap("ct");
-			// 	int	deltab = 0;
-			// 	while (deltab++ < 6)
-			// 		tputs_termcap("le");
-			// 	//tputs_termcap("bc");
-			// 	// while (deltab < 6)
-			// 	// {
-			// 	// 	tputs_termcap("le");
-			// 	// 	tputs_termcap("dc");
-			// 	// 	deltab++;
-			// 	// }
-			// 	dlst_del_one2(all->cmd_termcaps, all->cmd_termcaps->tail->c);
-			// }
-			// else
-			// {
-				if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght)
-					dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
-				else
-					dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
-				tputs_termcap("le");
-				tputs_termcap("dc");
+			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght)
+			{
+				(K_BACKSPACE) ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
+					: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
+			}
+			(!K_BACKSPACE) ? tputs_termcap("le") : NULL;
+			tputs_termcap("dc");
+			if (!K_BACKSPACE)
 				all->cursor_pos--;
-				tputs_termcap("ed");
+			tputs_termcap("ed");
 		}
 	}
 }

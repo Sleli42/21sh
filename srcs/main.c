@@ -203,8 +203,8 @@ void	loop(t_all *all)
 		read(0, buff, (MAXLEN - 1));
 		if ((key = check_keys_arrows(all, buff)) < 0)
 		{
-			if (all->already_open)
-				add_to_cmd(all, all->nav_dir->prev->arg);
+			// if (all->already_open)
+			// 	add_to_cmd(all, all->nav_dir->prev->arg);
 				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
 			break ;
 		}
@@ -216,12 +216,12 @@ void	loop(t_all *all)
 		}
 		else
 		{
-			if (*buff == '/')
-			{
-				if (all->nav_dir)
-					add_to_cmd(all, (all->nav_dir->prev) ? all->nav_dir->prev->arg : all->nav_dir->arg);
-				all->already_open = 0;
-			}
+			// if (*buff == '/')
+			// {
+			// 	if (all->nav_dir)
+			// 		add_to_cmd(all, (all->nav_dir->prev) ? all->nav_dir->prev->arg : all->nav_dir->arg);
+			// 	all->already_open = 0;
+			// }
 			// if (all->already_in_history)
 			// {
 			// 	realloc_termcaps_cmd(all, all->cmd);
@@ -242,6 +242,7 @@ void	loop(t_all *all)
 			}
 			else
 			{
+				//printf("|%d| && |%d|\n", buff[0], buff[1]);
 				all->cursor_pos++;
 				ft_putchar(*buff);
 				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff));
@@ -250,7 +251,7 @@ void	loop(t_all *all)
 		}
 	}
 	//printf("last: %c\n", all->cmd_termcaps->tail->c);
-	(!all->stop) ? create_cmd(all) : ft_strdel(&all->current);
+	create_cmd(all);
 	(!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
 		: write(1, "\0", 1);

@@ -66,23 +66,23 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 	}
 }
 
-void	add_to_cmd(t_all *all, char *s)
-{
-	int		ct;
+// void	add_to_cmd(t_all *all, char *s)
+// {
+// 	int		ct;
 
-	ct = 0;
-	//printf("allnbchar: %d\n", all->nb_char_write);
-	// if (all->current)
-	// 	mprintf("current: %s\n", all->current);
-	if (!all->nb_char_write && all->current)
-		all->nb_char_write = ft_strlen(all->current) - 1;
-	new_line_autocomplet(all);
-	while (s[ct])
-	{
-		write(1, &s[ct], 1);
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++]));	
-	}
-}
+// 	ct = 0;
+// 	//printf("allnbchar: %d\n", all->nb_char_write);
+// 	// if (all->current)
+// 	// 	mprintf("current: %s\n", all->current);
+// 	if (!all->nb_char_write && all->current)
+// 		all->nb_char_write = ft_strlen(all->current) - 1;
+// 	new_line_autocomplet(all);
+// 	while (s[ct])
+// 	{
+// 		write(1, &s[ct], 1);
+// 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++]));	
+// 	}
+// }
 
 int		find_maxlen_elem(t_clist *lst)
 {

@@ -116,7 +116,6 @@ t_all		*init_all(char **env)
 	all->parsecmd = NULL;
 	all->pipe = NULL;
 	all->nav = NULL;
-	all->current = NULL;
 		// --HISTORY
 	// if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
 	if ((all->fd_history = open(".21sh_history", O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)

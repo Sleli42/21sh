@@ -127,7 +127,6 @@ typedef struct			s_all
 	char				**pipe;
 	char				*oldpwd;
 	char				*cmd;
-	char				*current;
 	int					fd2open;
 	int					stop;
 }						t_all;
