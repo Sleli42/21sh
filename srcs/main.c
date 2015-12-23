@@ -195,6 +195,32 @@ void	loop(t_all *all)
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
+	if (all->already_autocomplete)
+	{
+		if (all->list_dir->lenght == 1)
+		{
+			if (all->already_equ)
+			{
+				// printf("cmd: |%s|\n", all->tmp_cmd);
+				// printf("find: %s\n", all->list_dir->head->arg);
+				realloc_termcaps_cmd(all, ft_strjoin(all->tmp_cmd, all->list_dir->head->arg));
+				create_cmd(all);
+				ft_putstr(all->cmd);
+			}
+			else
+			{
+				realloc_termcaps_cmd(all, all->list_dir->head->arg);
+				ft_putstr(all->list_dir->head->arg);
+			}
+		}
+		else
+		{
+			realloc_termcaps_cmd(all, all->tmp_cmd);
+			ft_putstr(all->tmp_cmd);
+			ft_strdel(&all->tmp_cmd);
+		}
+		del_clist(&all->list_dir);
+	}
 	ft_memset(buff, 0, MAXLEN - 1);
 	//tputs_termcap("ti");
 	while (*buff != '\n')
@@ -205,6 +231,7 @@ void	loop(t_all *all)
 			// if (all->already_open)
 			// 	add_to_cmd(all, all->nav_dir->prev->arg);
 				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
+			all->already_autocomplete = 0;
 			break ;
 		}
 		else if (key > 0)
@@ -259,7 +286,6 @@ void	loop(t_all *all)
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		add_to_history(all);
-		//dlst_add_back(all->cmd_history, dlst_node_new(all->cmd, all->cmd_history->lenght + 1));
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}

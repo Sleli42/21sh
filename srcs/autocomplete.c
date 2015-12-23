@@ -12,55 +12,6 @@
 
 #include "21sh.h"
 
-char	*find_path(char *cmd)
-{
-	char	*path;
-	int		ct;
-	int		i;
-
-	ct = ft_strlen(cmd) - 1;
-	i = 0;
-	if (!(path = (char *)malloc(sizeof(char *))))
-		error("MALLOC");
-	while (cmd[ct] != ' ')
-		ct--;
-	while (cmd[ct++])
-		path[i++] = cmd[ct];
-	path[i] = 0;
-	// if (path[0] == 0 && ft_strlen(cmd) > 1)
-	// 	path = ft_strdup(".");
-	// if (path[ft_strlen(path) - 1] != '/')
-	// 	path = ft_strjoin(path, "/");
-	return (path);
-}
-
-char	*search_equ(char *dir)
-{
-	t_dirent	*dirp;
-	DIR			*entry;
-	char		*tofind;
-	int			ct;
-
-	ct = -1;
-	if (!dir)
-		return (NULL);
-	if (!(tofind = (char *)malloc(sizeof(char) * ft_strlen(dir))))
-		error("MALLOC");
-	while (++ct < (int)ft_strlen(dir) - 1)
-		tofind[ct] = dir[ct];
-	tofind[++ct] = 0;
-	if (!(entry = opendir("./")))
-		error("OPENDIR");
-	while ((dirp = readdir(entry)) != NULL)
-	{
-		if (ft_strncmp(tofind, dirp->d_name, ft_strlen(tofind)) == 0)
-			return (ft_strdup(dirp->d_name));
-	}
-	if (closedir(entry) == -1)
-		error("CLOSEDIR");
-	return (NULL);
-}
-
 void	swap_elems(t_select *a, t_select *b)
 {
 	char	*tmp_s;
@@ -103,13 +54,14 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 {
 	int		ret;
 
+	init_windows_size(all);
 	all->maxlen_arg = find_maxlen_elem(lst);
 	ret = 0;
 	// printf("largeur: %d\n", all->ws.ws_col);
 	// printf("maxlen: %d\n", all->maxlen_arg);
-	while (all->ws.ws_col > (all->maxlen_arg + 9))
+	while (all->ws.ws_col > (all->maxlen_arg + 5))
 	{
-		all->ws.ws_col -= (all->maxlen_arg + 9);
+		all->ws.ws_col -= (all->maxlen_arg + 5);
 		ret++;
 	}
 	// printf("ret = %d\n", ret);
@@ -135,7 +87,7 @@ void	select_arg(t_all *all)
 	all->ct_select++;
 	// printf("selected arg-> %s\n", nav->arg);
 }
-
+/*
 void	new_line_autocomplet(t_all *all)
 {
 	//printf("nbcharwrite: %d\n", all->nb_char_write);
@@ -147,12 +99,6 @@ void	new_line_autocomplet(t_all *all)
 			tputs_termcap("le");
 		}
 	}
-}
-
-void	display_current(t_all *all, t_select *nav)
-{
-	ft_putstr(nav->arg);
-	all->nb_char_write = ft_strlen(nav->arg);
 }
 
 void	list_elems(t_all *all, DIR *entry)
@@ -171,12 +117,37 @@ void	list_elems(t_all *all, DIR *entry)
 	//init_windows_size(all);
 	//write(1, "\n", 1);
 }
-
+*/
 void	display_elems(t_all *all, t_clist *lst)
 {
 	t_select	*nav;
+	int			ct;
+	int			tmp_len;
 
-
+	nav = lst->head;
+	ct = 0;
+	all->files_by_row = define_nb_files_by_row(all, lst);
+	write(1, "\n", 1);
+	while (nav && ct < all->files_by_row)
+	{
+		tmp_len = ft_strlen(nav->arg) - 1;
+		if (ct == all->files_by_row - 1)
+		{
+			ct = 0;
+			write(1, "\n", 1);
+		}
+		ft_putstr(nav->arg);
+		if (tmp_len < all->maxlen_arg && nav->next)
+		{
+			write(1, " ", 1);
+			while (tmp_len++ < all->maxlen_arg + 5)
+				write(1, " ", 1);
+		}
+		nav = nav->next;
+		ct++;
+	}
+	write(1, "\n", 1);
+	//printf("nb files by rows: %d\n", all->files_by_row);
 }
 
 int		no_spaces(t_cmd *lst)
@@ -192,6 +163,11 @@ int		no_spaces(t_cmd *lst)
 	return (1);
 }
 
+// void	display_current(t_all *all, t_select *nav)
+// {
+
+// }
+
 void	search_bin_path(t_all *all)
 {
 	int			ct;
@@ -200,13 +176,14 @@ void	search_bin_path(t_all *all)
 	t_dirent	*dirp;
 
 	ct = 0;
-	create_cmd(all);
+	//printf("[autocomplete] cmd: %s\n", all->cmd);
+	all->tmp_cmd = ft_strdup(all->cmd);
 	all->list_dir = create_clst();
 	while (all->path2exec[ct])
 	{
 		tmp = ft_strjoin(all->path2exec[ct++], "/");
 		if (!(entry = opendir(tmp)))
-			write(1, "error\n", 6);
+			error("OPENDIR");
 		while ((dirp = readdir(entry)))
 			if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
 				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
@@ -214,26 +191,117 @@ void	search_bin_path(t_all *all)
 		ft_strdel(&tmp);
 	}
 	display_elems(all, all->list_dir);
-	del_clist(&all->nav_dir);
+	all->already_autocomplete = 1;
+	loop(all);
 }
 
-void	open_directory(t_all *all)
+void	search_current_dir(t_all *all)
+{
+	DIR			*entry;
+	t_dirent	*dirp;
+
+	// tmp_path = ft_strdup("./");
+	//printf("tmpPath: %s\n", tmp_path);
+	all->tmp_cmd = ft_strdup(all->cmd);
+	// tmp = cut_cmd(all->cmd);
+	all->list_dir = create_clst();
+	if (!(entry = opendir("./")))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)))
+		if (dirp->d_name[0] != '.')
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	sort_name(&all->list_dir->head);
+	display_elems(all, all->list_dir);
+	closedir(entry);
+	all->already_autocomplete = 1;
+	loop(all);
+}
+
+char	*cut_cmd(char *cmd)
+{
+	int 	ct = ft_strlen(cmd) - 1;
+	int		i = 0;
+	char	*ret;
+
+	ret = (char *)malloc(sizeof(char *));
+	while (cmd[ct] != ' ')
+		ct--;
+	ct--;;
+	while (cmd[ct] != ' ')
+	{
+		if (ct == 0)
+			break ;
+		ct--;
+	}
+	while (cmd[ct] != ' ')
+		ret[i++] = cmd[ct++];
+	ret[i++] = ' ';
+	ret[i] = 0;
+	return (ret);
+}
+
+void	search_equ(t_all *all, char *dir)
+{
+	t_dirent	*dirp;
+	DIR			*entry;
+	char		*tofind;
+
+	if (!dir)
+		return ;
+	all->list_dir = create_clst();
+	all->tmp_cmd = cut_cmd(all->cmd);
+	if (!(tofind = (char *)malloc(sizeof(char) * ft_strlen(dir))))
+		error("MALLOC");
+	tofind = ft_strdup(dir);
+	if (!(entry = opendir("./")))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)) != NULL)
+	{
+		if (!ft_strncmp(tofind, dirp->d_name, ft_strlen(tofind)))
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	}
+	if (closedir(entry) == -1)
+		error("CLOSEDIR");
+	ft_strdel(&tofind);
+	display_elems(all, all->list_dir);
+	all->already_autocomplete = 1;
+	all->already_equ = 1;
+	loop(all);
+}
+
+char	*find_path(char *s)
+{
+	int		ct;
+	int		i;
+	char	*ret;
+
+	ct = ft_strlen(s) - 1;
+	i = 0;
+	while (s[ct] != ' ')
+		ct--;
+	ret = (char *)malloc(sizeof(char*));
+	while (s[ct++])
+		ret[i++] = s[ct];
+	ret[i] = 0;
+	return (ret);
+}
+
+void	open_directories(t_all *all)
 {
 	// DIR		*entry;
 	// char	*dir;
 
 	// dir = NULL;
+	create_cmd(all);
 	if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
 	{
 		if (no_spaces(all->cmd_termcaps->head))
 			search_bin_path(all);
-			//printf("Search path bin\n");
 		else
-			printf("Search equ\n");
+			search_equ(all, find_path(all->cmd));
 	}
 	else
-		printf("open './'\n");
-
+		search_current_dir(all);
 
 
 

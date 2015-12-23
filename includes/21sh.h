@@ -98,7 +98,10 @@ typedef struct			s_all
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
-	// t_select			*nav_dir;
+	t_select			*nav_dir;
+	char				*tmp_cmd;
+	int					already_autocomplete;
+	int					already_equ;
 	t_winsize			ws;
 	int					maxlen_arg;
 	int					files_by_row;
@@ -284,14 +287,15 @@ void		make_moves(t_all *all, char buff[3]);
 */
 int			define_nb_files_by_row(t_all *all, t_clist *lst);
 char		*find_path(char *cmd);
-char		*search_equ(char *dir);
 void		swap_elems(t_select *a, t_select *b);
 void		sort_name(t_select **lst);
 void		list_elems(t_all *all, DIR *entry);
 void		new_line_autocomplet(t_all *all);
 void		display_current(t_all *all, t_select *nav);
 
+void		search_equ(t_all *all, char *dir);
+void		search_current_dir(t_all *all);
 void		search_bin_path(t_all *all);
-void		open_directory(t_all *all);
+void		open_directories(t_all *all);
 
 #endif

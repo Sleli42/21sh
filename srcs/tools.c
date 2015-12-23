@@ -84,14 +84,21 @@ void	add_missing_char_to_cmd(t_all *all, char *s)
 // 	}
 // }
 
+// char	*cut_cmd(char *s)
+// {
+
+// }
+
 int		find_maxlen_elem(t_clist *lst)
 {
 	t_select	*nav = lst->head;
 	int			ret = 0;
 
-	while (nav && nav->next)
+	ret = ft_strlen(nav->arg);
+	while (nav->next)
 	{
-		if (ft_strlen(nav->arg) > ft_strlen(nav->next->arg))
+		//ret = ft_strlen(nav->arg);
+		if (ft_strlen(nav->arg) > (size_t)ret)
 			ret = ft_strlen(nav->arg);
 		nav = nav->next;
 	}

@@ -122,6 +122,7 @@ t_all		*init_all(char **env)
 		write(1, "open error\n", 11);
 	all->history_buff = parse_history();
 	all->pos_history = check_history_file(all->history_buff);
+	all->tmp_cmd = NULL;
 	// all->file_history = ft_strdup(".21sh_history");
 	return (all);
 }

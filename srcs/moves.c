@@ -106,18 +106,25 @@ void	make_moves(t_all *all, char buff[3])
 			all->stop = 0;
 		}
 		else
-			open_directory(all);
+			open_directories(all);
 	}
 	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
 	{
 		if (all->already_in_history)
 			realloc_termcaps_cmd(all, all->cmd);
+		// if (all->already_autocomplete)
+		// {
+		// 	//printf("tail: %c\n", all->cmd_termcaps->tail->c);
+		// 	printf("cursor_ pos: %d\n", all->cursor_pos);
+		// 	printf("lenght list: %zu\n", all->cmd_termcaps->lenght);
+		// }
 		tputs_termcap("me");
 		tputs_termcap("dm");
 		if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 		{
-			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght)
+			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght + 1)
 			{
+			//	write(1, "HEERE\n", 6);
 				(K_BACKSPACE) ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
 					: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
 			}
