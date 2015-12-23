@@ -55,8 +55,8 @@ typedef struct			s_node
 
 typedef struct			s_dlist
 {
-	struct s_node		*head_node;
-	struct s_node		*tail_node;
+	struct s_node		*head;
+	struct s_node		*tail;
 	size_t				lenght;
 }						t_dlist;
 
@@ -98,7 +98,7 @@ typedef struct			s_all
 	t_dlist2			*cmd_termcaps;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
-	t_select			*nav_dir;
+	// t_select			*nav_dir;
 	t_winsize			ws;
 	int					maxlen_arg;
 	int					files_by_row;
@@ -290,6 +290,8 @@ void		sort_name(t_select **lst);
 void		list_elems(t_all *all, DIR *entry);
 void		new_line_autocomplet(t_all *all);
 void		display_current(t_all *all, t_select *nav);
+
+void		search_bin_path(t_all *all);
 void		open_directory(t_all *all);
 
 #endif

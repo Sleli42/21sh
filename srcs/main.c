@@ -196,7 +196,6 @@ void	loop(t_all *all)
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
 	ft_memset(buff, 0, MAXLEN - 1);
-	all->nav = all->cmd_history->tail_node;
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{

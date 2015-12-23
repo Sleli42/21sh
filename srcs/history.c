@@ -13,7 +13,7 @@
 #include "21sh.h"
 
 void	display_dlst_history(t_dlist *lst) {
-	t_node	*tmp = lst->tail_node;
+	t_node	*tmp = lst->tail;
 
 	while (tmp != NULL) {
 		printf("i: %zu -> %s\n", tmp->index, tmp->s);
@@ -28,7 +28,7 @@ char	*display_last_cmd(t_dlist *lst, size_t pos)
 	t_node	*tmp;
 	size_t	ct;
 
-	tmp = lst->head_node;
+	tmp = lst->head;
 	ct = 0;
 	while (ct < pos)
 	{

@@ -116,50 +116,6 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 	return (ret);
 }
 
-void	display_elems(t_all *all, t_clist *lst)
-{
-	t_select	*nav;
-	int			ct;
-	int			len;
-
-	nav = lst->head;
-	ct = 0;
-	all->files_by_row = define_nb_files_by_row(all, lst);
-	while (nav)
-	{
-		len = ft_strlen(nav->arg);
-		if (ct == all->files_by_row - 1)
-		{
-			write(1, "\n", 1);
-			ct = 0;
-		}
-		//(nav->onArg == 1) ? tputs_termcap("mr") : tputs_termcap("me");
-		ft_putstr(nav->arg);
-		while (len++ < (all->maxlen_arg + 11))
-			write(1, " ", 1);
-		ct++;
-		nav = nav->next;
-	}
-	all->nb_char_write = (all->maxlen_arg + 11) * (int)lst->lenght;
-}
-
-void	list_elems(t_all *all, DIR *entry)
-{
-	t_dirent	*dirp;
-
-	all->list_dir = create_clst();
-	while ((dirp = readdir(entry)))
-	{
-		if (dirp->d_name[0] != '.')
-		{
-			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-		}
-	}
-	//sort_name(&all->list_dir->head);
-	//init_windows_size(all);
-	//write(1, "\n", 1);
-}
-
 void	select_arg(t_all *all)
 {
 	t_select	*nav = all->list_dir->head;
@@ -199,6 +155,30 @@ void	display_current(t_all *all, t_select *nav)
 	all->nb_char_write = ft_strlen(nav->arg);
 }
 
+void	list_elems(t_all *all, DIR *entry)
+{
+	t_dirent	*dirp;
+
+	all->list_dir = create_clst();
+	while ((dirp = readdir(entry)))
+	{
+		if (dirp->d_name[0] != '.')
+		{
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+		}
+	}
+	//sort_name(&all->list_dir->head);
+	//init_windows_size(all);
+	//write(1, "\n", 1);
+}
+
+void	display_elems(t_all *all, t_clist *lst)
+{
+	t_select	*nav;
+
+
+}
+
 int		no_spaces(t_cmd *lst)
 {
 	t_cmd	*tmp = lst;
@@ -212,6 +192,31 @@ int		no_spaces(t_cmd *lst)
 	return (1);
 }
 
+void	search_bin_path(t_all *all)
+{
+	int			ct;
+	char		*tmp;
+	DIR			*entry;
+	t_dirent	*dirp;
+
+	ct = 0;
+	create_cmd(all);
+	all->list_dir = create_clst();
+	while (all->path2exec[ct])
+	{
+		tmp = ft_strjoin(all->path2exec[ct++], "/");
+		if (!(entry = opendir(tmp)))
+			write(1, "error\n", 6);
+		while ((dirp = readdir(entry)))
+			if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
+				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+		closedir(entry);
+		ft_strdel(&tmp);
+	}
+	display_elems(all, all->list_dir);
+	del_clist(&all->nav_dir);
+}
+
 void	open_directory(t_all *all)
 {
 	// DIR		*entry;
@@ -221,7 +226,7 @@ void	open_directory(t_all *all)
 	if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
 	{
 		if (no_spaces(all->cmd_termcaps->head))
-			search_bin_path();
+			search_bin_path(all);
 			//printf("Search path bin\n");
 		else
 			printf("Search equ\n");

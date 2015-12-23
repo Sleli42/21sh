@@ -20,8 +20,8 @@ t_dlist			*create_dlst(void)
 	if (new != NULL)
 	{
 		new->lenght = 0;
-		new->head_node = NULL;
-		new->tail_node = NULL;
+		new->head = NULL;
+		new->tail = NULL;
 	}
 	return (new);
 }
@@ -45,16 +45,16 @@ t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
 {
 	if (lst && node)
 	{
-		if (lst->tail_node == NULL)
+		if (lst->tail == NULL)
 		{
-			lst->head_node = node;
-			lst->tail_node = node;
+			lst->head = node;
+			lst->tail = node;
 		}
 		else
 		{
-			lst->tail_node->next = node;
-			node->prev = lst->tail_node;
-			lst->tail_node = node;
+			lst->tail->next = node;
+			node->prev = lst->tail;
+			lst->tail = node;
 		}
 		lst->lenght++;
 	}
@@ -66,7 +66,7 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 	t_node	*tmp;
 	int		found;
 
-	tmp = lst->head_node;
+	tmp = lst->head;
 	found = 0;
 	if (lst)
 	{
@@ -76,7 +76,7 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 			{
 				if (!tmp->next && !tmp->prev)
 				{
-					ft_strdel(&lst->head_node->s);
+					ft_strdel(&lst->head->s);
 					free(lst);
 				}
 				else
@@ -109,14 +109,14 @@ int				update_list(t_dlist *lst, t_node *elem)
 {
 	if (!elem->next && elem->prev)
 	{
-		lst->tail_node = elem->prev;
-		lst->tail_node->next = NULL;
+		lst->tail = elem->prev;
+		lst->tail->next = NULL;
 		ft_strdel(&elem->s);
 	}
 	else if (!elem->prev && elem->next)
 	{
-		lst->head_node = elem->next;
-		lst->head_node->prev = NULL;
+		lst->head = elem->next;
+		lst->head->prev = NULL;
 		ft_strdel(&elem->s);
 	}
 	else
@@ -134,7 +134,7 @@ void			del_dlist(t_dlist *lst)
 	t_node	*next_elem;
 	t_node	*tmp;
 
-	tmp = lst->head_node;
+	tmp = lst->head;
 	next_elem = NULL;
 	if (tmp)
 	{
@@ -146,7 +146,7 @@ void			del_dlist(t_dlist *lst)
 			if (tmp)
 				free(tmp);
 			tmp = next_elem;
-			if (tmp == lst->tail_node)
+			if (tmp == lst->tail)
 				return ;
 		}
 	}

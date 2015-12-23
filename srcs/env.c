@@ -17,7 +17,7 @@ void	env_display(t_all *all, char *cmd)
 	t_node	*nav;
 
 	(void)cmd;
-	nav = all->env->head_node;
+	nav = all->env->head;
 	if (nav)
 	{
 		while (nav)
