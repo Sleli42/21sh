@@ -102,6 +102,7 @@ typedef struct			s_all
 	char				*tmp_cmd;
 	int					already_autocomplete;
 	int					already_equ;
+	int					hidden_file;
 	t_winsize			ws;
 	int					maxlen_arg;
 	int					files_by_row;

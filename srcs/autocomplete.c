@@ -154,6 +154,8 @@ int		no_spaces(t_cmd *lst)
 {
 	t_cmd	*tmp = lst;
 
+	if (tmp->c == '.' && tmp->next->c == '/')
+		return (0);
 	while (tmp)
 	{
 		if (tmp->c == ' ')
@@ -208,7 +210,7 @@ void	search_current_dir(t_all *all)
 	if (!(entry = opendir("./")))
 		error("OPENDIR");
 	while ((dirp = readdir(entry)))
-		if (dirp->d_name[0] != '.')
+		//if (dirp->d_name[0] != '.')
 			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
 	sort_name(&all->list_dir->head);
 	display_elems(all, all->list_dir);
@@ -249,10 +251,29 @@ void	search_equ(t_all *all, char *dir)
 	if (!dir)
 		return ;
 	all->list_dir = create_clst();
-	all->tmp_cmd = cut_cmd(all->cmd);
+	//all->tmp_cmd = ft_strdup(dir);
+//	printf("dir |%s|\n", dir);
+	if (dir[0] != '.')
+		all->tmp_cmd = cut_cmd(all->cmd);
+	else
+	{/*
+		if (dir[0] == '.' && dir[1] == '/')
+			all->tmp_cmd = ft_strdup("./");
+		else*/
+			all->tmp_cmd = ft_strdup(dir);
+			if (!all->hidden_file || ft_strlen(all->cmd) > 2)
+				dir = dir + 2;
+		//printf("dir |%s|\n", dir);
+	}
 	if (!(tofind = (char *)malloc(sizeof(char) * ft_strlen(dir))))
 		error("MALLOC");
+
 	tofind = ft_strdup(dir);
+	printf("|%c|\n", tofind[ft_strlen(tofind) - 1]);
+	if (tofind[ft_strlen(tofind) - 1] == '.')
+		all->hidden_file = 1;
+	else
+		all->hidden_file = 0;
 	if (!(entry = opendir("./")))
 		error("OPENDIR");
 	while ((dirp = readdir(entry)) != NULL)
@@ -293,69 +314,29 @@ void	open_directories(t_all *all)
 
 	// dir = NULL;
 	create_cmd(all);
+	if (all->cmd[0] == '.' && !all->cmd[1] && !all->hidden_file)
+	{
+		ft_strdel(&all->cmd);
+		all->cmd = ft_strdup("./");
+	}
+	//printf("cmd : %s\n", all->cmd);
 	if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
 	{
-		if (no_spaces(all->cmd_termcaps->head))
+		if (all->cmd[0] == '.')
+		{
+			//printf("|%c|\n", all->cmd[2]);
+			if (all->already_autocomplete && ft_strlen(all->cmd) > 2)
+			{
+				search_equ(all, all->cmd);
+			}
+			else
+				search_current_dir(all);
+		}
+		else if (no_spaces(all->cmd_termcaps->head))
 			search_bin_path(all);
 		else
 			search_equ(all, find_path(all->cmd));
 	}
 	else
 		search_current_dir(all);
-
-
-
-
-	/*
-	DIR			*entry;
-	char		*dir;
-	
-	all->stop = 0;
-	//tputs_termcap("sc");
-	if (!all->already_open)
-	{
-		//write(1, "\n", 1); ---> to select autocomplete
-		create_cmd(all);
-		dir = find_path(all->cmd);
-		if (!(entry = opendir(dir)))
-		{
-			if ((dir = search_equ(dir)) == NULL)
-			{
-				write(1, "\n", 1);
-				loop(all);
-			}
-			else
-			{
-				add_missing_char_to_cmd(all, dir);
-				entry = opendir(dir);
-			}
-		}	
-		list_elems(all, entry);
-		all->nav_dir = all->list_dir->head;
-		//display_elems(all, all->list_dir);
-		all->already_open = 1;
-		if (closedir(entry) == -1)
-			error("CLOSEDIR");
-		ft_strdel(&dir);
-	}
-	else
-	{
-		new_line_autocomplet(all);
-		display_current(all, all->nav_dir);
-		all->nav_dir = (all->nav_dir->next) ? all->nav_dir->next : all->list_dir->head;
-		//if (all->cmd_termcaps->tail->c == '/')
-		//{
-		//	add_to_cmd(all, ft_strjoin(all->nav_dir->prev->arg, "/"));
-		//	all->already_open = 0;
-			//printf("go sous directory autocomplet\n");
-		//}
-		//simple_display();
-		// tputs_termcap("dm");
-		// tputs_termcap("cb");
-		// tputs_termcap("ed");
-		//select_arg(all);
-		//display_elems(all, all->list_dir);
-		//tputs_termcap("ve");
-	}
-	*/
 }

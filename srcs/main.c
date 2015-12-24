@@ -199,9 +199,11 @@ void	loop(t_all *all)
 	{
 		if (all->list_dir->lenght == 1)
 		{
+			//write(1, "here\n", 5);
 			if (all->already_equ)
 			{
 				// printf("cmd: |%s|\n", all->tmp_cmd);
+				all->tmp_cmd = (all->tmp_cmd[0] == '.') ? "./" : NULL;
 				// printf("find: %s\n", all->list_dir->head->arg);
 				realloc_termcaps_cmd(all, ft_strjoin(all->tmp_cmd, all->list_dir->head->arg));
 				create_cmd(all);
@@ -215,6 +217,8 @@ void	loop(t_all *all)
 		}
 		else
 		{
+			//if (all->hidden_file)
+			//	all->tmp_cmd = ft_strjoin(all->tmp_cmd, ".");
 			realloc_termcaps_cmd(all, all->tmp_cmd);
 			ft_putstr(all->tmp_cmd);
 			ft_strdel(&all->tmp_cmd);
@@ -232,6 +236,7 @@ void	loop(t_all *all)
 			// 	add_to_cmd(all, all->nav_dir->prev->arg);
 				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
 			all->already_autocomplete = 0;
+			all->hidden_file = 0;
 			break ;
 		}
 		else if (key > 0)
