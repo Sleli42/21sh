@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <sys/types.h> 
 # include <sys/wait.h>
+# include <sys/stat.h>
 // termcaps
 # include <term.h>
 # include <termios.h>
@@ -44,6 +45,7 @@
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
 typedef struct winsize	t_winsize;
+typedef struct stat		t_stat;
 
 typedef struct			s_node
 {
@@ -99,11 +101,14 @@ typedef struct			s_all
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
 	t_select			*nav_dir;
+	t_winsize			ws;
+	t_stat				stat;
 	char				*tmp_cmd;
+	char				*tmp_dir;
 	int					already_autocomplete;
 	int					already_equ;
 	int					hidden_file;
-	t_winsize			ws;
+
 	int					maxlen_arg;
 	int					files_by_row;
 	int					already_open;

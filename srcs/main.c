@@ -195,6 +195,8 @@ void	loop(t_all *all)
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
+	/* a REFAIRE */
+	/*
 	if (all->already_autocomplete)
 	{
 		if (all->list_dir->lenght == 1)
@@ -202,8 +204,13 @@ void	loop(t_all *all)
 			//write(1, "here\n", 5);
 			if (all->already_equ)
 			{
-				// printf("cmd: |%s|\n", all->tmp_cmd);
-				all->tmp_cmd = (all->tmp_cmd[0] == '.') ? "./" : NULL;
+				printf("cmd: |%s|\n", all->tmp_cmd);
+				all->tmp_cmd = (all->tmp_cmd[0] == '.') ? "./" : all->tmp_cmd;
+				if (stat(all->list_dir->head->arg, &all->stat) != -1)
+				{
+					if (S_ISDIR(all->stat.st_mode))
+						all->list_dir->head->arg = ft_strjoin(all->list_dir->head->arg, "/");
+				}
 				// printf("find: %s\n", all->list_dir->head->arg);
 				realloc_termcaps_cmd(all, ft_strjoin(all->tmp_cmd, all->list_dir->head->arg));
 				create_cmd(all);
@@ -217,14 +224,26 @@ void	loop(t_all *all)
 		}
 		else
 		{
-			//if (all->hidden_file)
-			//	all->tmp_cmd = ft_strjoin(all->tmp_cmd, ".");
-			realloc_termcaps_cmd(all, all->tmp_cmd);
-			ft_putstr(all->tmp_cmd);
-			ft_strdel(&all->tmp_cmd);
+			if (all->already_equ)
+			{
+				// printf("all->cmd : %s\n", all->cmd);
+				//printf("all->tmp_cmd : |%s|\n", all->tmp_cmd);
+				// printf("all->tmp_dir : %s\n", all->tmp_dir);
+				all->tmp_dir = ft_strjoin(all->tmp_cmd, all->tmp_dir);
+				realloc_termcaps_cmd(all, all->tmp_dir);
+				ft_putstr(all->tmp_dir);
+				ft_strdel(&all->tmp_dir);
+			}
+			else
+			{
+				realloc_termcaps_cmd(all, all->tmp_cmd);
+				ft_putstr(all->tmp_cmd);
+				ft_strdel(&all->tmp_cmd);
+			}
 		}
 		del_clist(&all->list_dir);
 	}
+	*/
 	ft_memset(buff, 0, MAXLEN - 1);
 	//tputs_termcap("ti");
 	while (*buff != '\n')

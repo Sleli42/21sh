@@ -254,7 +254,9 @@ void	search_equ(t_all *all, char *dir)
 	//all->tmp_cmd = ft_strdup(dir);
 //	printf("dir |%s|\n", dir);
 	if (dir[0] != '.')
+	{
 		all->tmp_cmd = cut_cmd(all->cmd);
+	}
 	else
 	{/*
 		if (dir[0] == '.' && dir[1] == '/')
@@ -269,7 +271,8 @@ void	search_equ(t_all *all, char *dir)
 		error("MALLOC");
 
 	tofind = ft_strdup(dir);
-	printf("|%c|\n", tofind[ft_strlen(tofind) - 1]);
+	//printf("tofind : %s\n", tofind);
+	//printf("|%c|\n", tofind[ft_strlen(tofind) - 1]);
 	if (tofind[ft_strlen(tofind) - 1] == '.')
 		all->hidden_file = 1;
 	else
@@ -307,6 +310,138 @@ char	*find_path(char *s)
 	return (ret);
 }
 
+char	*cut_dir_path(char *s)
+{
+	char	*ret;
+	int		ct;
+	int		i;
+
+	//printf("s fct: %s\n", s);
+	if (!(ret = (char*)malloc(sizeof(char *))))
+		return (NULL);
+	ct = ft_strlen(s) - 1;
+	i = 0;
+//	printf("-> |%c|\n", s[ct]);
+	if (s[ct] != '/')
+	{
+		while (s[ct])
+		{
+			ct--;
+			if (s[ct] == 47)
+				break ;
+		}
+	}
+	//printf("s[ct] : |%c|\n", s[ct]);
+	if (s[ct] == '/')
+	{
+		while (s[ct])
+		{
+			ct--;
+			if (s[ct] == 32)
+				break ;
+		}
+	}
+	ct++;
+//	printf("-> |%c|\n", s[ct]);
+	while (s[ct] && s[ct - 1] != '/')
+		ret[i++] = s[ct++];
+	ret[i] = 0;
+	//printf("ret: |%s|\n", ret);
+	return (ret);
+}
+
+char	*cut_equ_path(char *s)
+{
+	char	*ret;
+	int		ct;
+	int		i;
+
+	ct = ft_strlen(s) - 1;
+	i = 0;
+	if (!(ret = (char *)malloc(sizeof(char*))))
+		return (NULL);
+	while (s[ct])
+	{
+		if (s[ct] == 47)
+			break;
+		ct--;
+	}
+	ct++;
+	while (s[ct])
+		ret[i++] = s[ct++];
+	ret[i] = 0;
+	return (ret);
+}
+
+/**
+***		autocomplete bad dir -> segfault **
+**/
+
+
+void	search_path_directory(t_all *all, char *dir2open)
+{
+	t_dirent	*dirp;
+	DIR			*entry;
+
+	all->list_dir = create_clst();
+	if (!(entry = opendir(dir2open)))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)))
+		clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	sort_name(&all->list_dir->head);
+	display_elems(all, all->list_dir);
+	closedir(entry);
+	all->tmp_dir = ft_strdup(dir2open);
+	all->already_equ = 1;
+	loop(all);
+}
+
+char	*update_tmp_cmd(char *s)
+{
+	int 	ct;
+	int		i;
+	char	*ret;
+
+	ct = ft_strlen(s) - 1;
+	i = 0;
+	if (!(ret = (char *)malloc(sizeof(char *))))
+		return (NULL);
+	while (s[ct])
+	{
+		if (s[ct] == 47)
+			break;
+		ct--;
+	}
+	ct++;
+	while (i < ct)
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i] = 0;
+	printf("ret: %s\n", ret);
+	return (ret);
+}
+
+void	list_dir_equ(t_all *all, char *dir2open, char *equ2find)
+{
+	DIR			*entry;
+	t_dirent	*dirp;
+
+	all->list_dir = create_clst();
+	if (!(entry = opendir(dir2open)))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)))
+	{
+		if (!ft_strncmp(dirp->d_name, equ2find, ft_strlen(equ2find)))
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	}
+	closedir(entry);
+	all->tmp_cmd  = update_tmp_cmd(all->cmd);
+	display_elems(all, all->list_dir);
+	loop(all);
+}
+
 void	open_directories(t_all *all)
 {
 	// DIR		*entry;
@@ -314,13 +449,29 @@ void	open_directories(t_all *all)
 
 	// dir = NULL;
 	create_cmd(all);
+	//printf("cursor: %d\n", all->cursor_pos);
+	//printf("all->cmd : %s\n", all->cmd);
 	if (all->cmd[0] == '.' && !all->cmd[1] && !all->hidden_file)
 	{
 		ft_strdel(&all->cmd);
 		all->cmd = ft_strdup("./");
 	}
 	//printf("cmd : %s\n", all->cmd);
-	if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
+	if (all->cmd[ft_strlen(all->cmd) - 1] == '/')
+	{
+		//printf("all->cmd : %s\n", all->cmd);
+		search_path_directory(all, cut_dir_path(all->cmd));
+		// if (all->already_autocomplete)
+		// 	printf("already_autocomplete\n");
+		// if (all->already_equ)
+		// 	printf("already_equ\n");
+
+	}
+	else if (all->already_equ)
+	{
+		list_dir_equ(all, cut_dir_path(all->cmd), cut_equ_path(all->cmd));
+	}
+	else if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
 	{
 		if (all->cmd[0] == '.')
 		{
@@ -337,6 +488,8 @@ void	open_directories(t_all *all)
 		else
 			search_equ(all, find_path(all->cmd));
 	}
-	else
+	else{
+		write(1, "prob\n", 5);
 		search_current_dir(all);
+	}
 }
