@@ -163,6 +163,7 @@ void	loop(t_all *all)
 			ft_putstr(all->tmp_cmd);
 			ft_strdel(&all->tmp_cmd);
 		}
+		del_clist(&all->list_dir);
 	}
 	ft_memset(buff, 0, MAXLEN - 1);
 	//tputs_termcap("ti");
