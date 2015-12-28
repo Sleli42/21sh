@@ -15,6 +15,7 @@
 int		check_keys_arrows(t_all *all, char buff[3])
 {
 	//write(1, "here\n", 5);
+	(void)all;
 	if (K_ENTER)
 	{
 		tputs_termcap("me");
@@ -31,8 +32,7 @@ int		check_keys_arrows(t_all *all, char buff[3])
 	if (K_TAB)
 	{
 		//printf("-> %d\n", all_is_spaces(all->cmd_termcaps->head));
-		if (!all->cmd_termcaps->head || all_is_spaces(all->cmd_termcaps->head))
-			return (0);
+		
 		return (3);
 	}
 	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
@@ -101,9 +101,7 @@ void	make_moves(t_all *all, char buff[3])
 	{
 		if (!all->cmd_termcaps->head)
 		{
-			write(1, "\t", 1);
-			//dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new('\t', all->cmd_termcaps->lenght += 1));
-			all->stop = 0;
+			return ;
 		}
 		else
 			open_directories(all);

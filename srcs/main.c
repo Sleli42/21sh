@@ -99,12 +99,6 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	while (cmd2realloc[ct])
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
 	all->cursor_pos = (int)all->cmd_termcaps->lenght + 1;
-	// display_dlst(all->cmd_termcaps);
-	// printf("pos: %d", all->cursor_pos);
-	//all->already_in_history = 0;
-	// if (all->cmd_termcaps == NULL)
-
-	// 	printf("NULLLLLLLL %s\n", cmd2realloc);
 }
 
 
@@ -142,43 +136,9 @@ void	display_cursor(t_dlist2 *lst, int pos)
 
 void	update_cmd_line_insert(t_all *all, char char2add)
 {
-	//size_t	ct;
-	
-	// printf("pos: %d\n", all->cursor_pos);
-	//printf("size: %zu\n", all->cmd_termcaps->lenght);
-	//display_dlst(all->cmd_termcaps);
-	// display_cursor(all->cmd_termcaps, all->cursor_pos);
-	//printf("pos: %d\n", all->cursor_pos);
 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
 		dlst_cmd_new(char2add), all->cursor_pos);
 	all->cursor_pos++;
-	//display_cursor(all->cmd_termcaps, all->cursor_pos);
-	//display_dlst2(all->cmd_termcaps);
-	// create_cmd(all);
-	// ct = (size_t)all->cursor_pos;
-	// // while (ct++ < all->cmd_termcaps->lenght)
-	// // 	tputs_termcap("nd");
-	// // while (ct-- > 0)
-	// // {
-	// // 	tputs_termcap("le");
-	// // 	tputs_termcap("dc");
-	// // }
-	// ft_putstr(all->cmd);
-	// // ct = (size_t)all->cmd_termcaps->lenght;
-	// // while (ct-- > (size_t)all->cursor_pos)
-	// // 	tputs_termcap("le");
-	// // all->cursor_pos++;
-	// all->stop = 0;
-	//printf("cursor: %d\n", all->cursor_pos);
-	// while (++ct < (size_t)all->cursor_pos)
-		//tputs_termcap("nd");
-	// while (++ct < (size_t)all->cursor_pos)
-	// 	tputs_termcap("nd");
-	// while (all->cmd[ct++])
-	// {
-	// 	write(1, &all->cmdm[ct], 1);
-	// }
-	// 	tputs_termcap("nd");
 }
 
 void	loop(t_all *all)
@@ -195,55 +155,15 @@ void	loop(t_all *all)
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
-	/* a REFAIRE */
-	/*
 	if (all->already_autocomplete)
 	{
-		if (all->list_dir->lenght == 1)
+		if (all->tmp_cmd != NULL)
 		{
-			//write(1, "here\n", 5);
-			if (all->already_equ)
-			{
-				printf("cmd: |%s|\n", all->tmp_cmd);
-				all->tmp_cmd = (all->tmp_cmd[0] == '.') ? "./" : all->tmp_cmd;
-				if (stat(all->list_dir->head->arg, &all->stat) != -1)
-				{
-					if (S_ISDIR(all->stat.st_mode))
-						all->list_dir->head->arg = ft_strjoin(all->list_dir->head->arg, "/");
-				}
-				// printf("find: %s\n", all->list_dir->head->arg);
-				realloc_termcaps_cmd(all, ft_strjoin(all->tmp_cmd, all->list_dir->head->arg));
-				create_cmd(all);
-				ft_putstr(all->cmd);
-			}
-			else
-			{
-				realloc_termcaps_cmd(all, all->list_dir->head->arg);
-				ft_putstr(all->list_dir->head->arg);
-			}
+			realloc_termcaps_cmd(all, all->tmp_cmd);
+			ft_putstr(all->tmp_cmd);
+			ft_strdel(&all->tmp_cmd);
 		}
-		else
-		{
-			if (all->already_equ)
-			{
-				// printf("all->cmd : %s\n", all->cmd);
-				//printf("all->tmp_cmd : |%s|\n", all->tmp_cmd);
-				// printf("all->tmp_dir : %s\n", all->tmp_dir);
-				all->tmp_dir = ft_strjoin(all->tmp_cmd, all->tmp_dir);
-				realloc_termcaps_cmd(all, all->tmp_dir);
-				ft_putstr(all->tmp_dir);
-				ft_strdel(&all->tmp_dir);
-			}
-			else
-			{
-				realloc_termcaps_cmd(all, all->tmp_cmd);
-				ft_putstr(all->tmp_cmd);
-				ft_strdel(&all->tmp_cmd);
-			}
-		}
-		del_clist(&all->list_dir);
 	}
-	*/
 	ft_memset(buff, 0, MAXLEN - 1);
 	//tputs_termcap("ti");
 	while (*buff != '\n')
@@ -254,8 +174,6 @@ void	loop(t_all *all)
 			// if (all->already_open)
 			// 	add_to_cmd(all, all->nav_dir->prev->arg);
 				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
-			all->already_autocomplete = 0;
-			all->hidden_file = 0;
 			break ;
 		}
 		else if (key > 0)

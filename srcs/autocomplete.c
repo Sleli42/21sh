@@ -170,55 +170,6 @@ int		no_spaces(t_cmd *lst)
 
 // }
 
-void	search_bin_path(t_all *all)
-{
-	int			ct;
-	char		*tmp;
-	DIR			*entry;
-	t_dirent	*dirp;
-
-	ct = 0;
-	//printf("[autocomplete] cmd: %s\n", all->cmd);
-	all->tmp_cmd = ft_strdup(all->cmd);
-	all->list_dir = create_clst();
-	while (all->path2exec[ct])
-	{
-		tmp = ft_strjoin(all->path2exec[ct++], "/");
-		if (!(entry = opendir(tmp)))
-			error("OPENDIR");
-		while ((dirp = readdir(entry)))
-			if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
-				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-		closedir(entry);
-		ft_strdel(&tmp);
-	}
-	display_elems(all, all->list_dir);
-	all->already_autocomplete = 1;
-	loop(all);
-}
-
-void	search_current_dir(t_all *all)
-{
-	DIR			*entry;
-	t_dirent	*dirp;
-
-	// tmp_path = ft_strdup("./");
-	//printf("tmpPath: %s\n", tmp_path);
-	all->tmp_cmd = ft_strdup(all->cmd);
-	// tmp = cut_cmd(all->cmd);
-	all->list_dir = create_clst();
-	if (!(entry = opendir("./")))
-		error("OPENDIR");
-	while ((dirp = readdir(entry)))
-		//if (dirp->d_name[0] != '.')
-			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-	sort_name(&all->list_dir->head);
-	display_elems(all, all->list_dir);
-	closedir(entry);
-	all->already_autocomplete = 1;
-	loop(all);
-}
-
 char	*cut_cmd(char *cmd)
 {
 	int 	ct = ft_strlen(cmd) - 1;
@@ -241,7 +192,7 @@ char	*cut_cmd(char *cmd)
 	ret[i] = 0;
 	return (ret);
 }
-
+/*
 void	search_equ(t_all *all, char *dir)
 {
 	t_dirent	*dirp;
@@ -258,10 +209,10 @@ void	search_equ(t_all *all, char *dir)
 		all->tmp_cmd = cut_cmd(all->cmd);
 	}
 	else
-	{/*
+	{
 		if (dir[0] == '.' && dir[1] == '/')
 			all->tmp_cmd = ft_strdup("./");
-		else*/
+		else
 			all->tmp_cmd = ft_strdup(dir);
 			if (!all->hidden_file || ft_strlen(all->cmd) > 2)
 				dir = dir + 2;
@@ -292,7 +243,7 @@ void	search_equ(t_all *all, char *dir)
 	all->already_equ = 1;
 	loop(all);
 }
-
+*/
 char	*find_path(char *s)
 {
 	int		ct;
@@ -442,6 +393,77 @@ void	list_dir_equ(t_all *all, char *dir2open, char *equ2find)
 	loop(all);
 }
 
+void	search_bin_path(t_all *all)
+{
+	int			ct;
+	char		*tmp;
+	DIR			*entry;
+	t_dirent	*dirp;
+
+	ct = 0;
+	//printf("[autocomplete] cmd: %s\n", all->cmd);
+	all->tmp_cmd = ft_strdup(all->cmd);
+	all->list_dir = create_clst();
+	while (all->path2exec[ct])
+	{
+		tmp = ft_strjoin(all->path2exec[ct++], "/");
+		if (!(entry = opendir(tmp)))
+			error("OPENDIR");
+		while ((dirp = readdir(entry)))
+			if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
+				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+		closedir(entry);
+		ft_strdel(&tmp);
+	}
+	if (all->list_dir->lenght == 1)
+	{
+		ft_strdel(&all->tmp_cmd);
+		all->tmp_cmd = ft_strdup(all->list_dir->head->arg);
+	}
+	display_elems(all, all->list_dir);
+	all->already_autocomplete = 1;
+	loop(all);
+}
+
+void	open_current_dir(t_all *all)
+{
+	DIR			*entry;
+	t_dirent	*dirp;
+
+	// tmp_path = ft_strdup("./");
+	//printf("tmpPath: %s\n", tmp_path);
+	all->tmp_cmd = ft_strdup(all->cmd);
+	// tmp = cut_cmd(all->cmd);
+	all->list_dir = create_clst();
+	if (!(entry = opendir("./")))
+		error("OPENDIR");
+	while ((dirp = readdir(entry)))
+		//if (dirp->d_name[0] != '.')
+			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	sort_name(&all->list_dir->head);
+	display_elems(all, all->list_dir);
+	closedir(entry);
+	all->already_autocomplete = 1;
+	loop(all);
+}
+
+void	open_directories(t_all *all)
+{
+	create_cmd(all);
+	//printf("|%c|\n", all->cmd[ft_strlen(all->cmd) - 1]);
+	if (ft_strlen(all->cmd) >= 1 && no_spaces(all->cmd_termcaps->head))
+		search_bin_path(all);
+	else if (all->cmd[ft_strlen(all->cmd) - 1] == ' ')
+		open_current_dir(all);
+	else
+		NULL;
+/*	else if (all->cmd[ft_strlen(all->cmd) - 1] == '/')
+		open_current_path(all);
+	else
+		search_equ(all);*/
+}
+
+/*
 void	open_directories(t_all *all)
 {
 	// DIR		*entry;
@@ -493,3 +515,4 @@ void	open_directories(t_all *all)
 		search_current_dir(all);
 	}
 }
+*/
