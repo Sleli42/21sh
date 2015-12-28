@@ -416,8 +416,10 @@ char	*update_tmp_cmd(t_all *all, char *str2add)
 
 	ct = ft_strlen(all->tmp_cmd) - 1;
 	i = 0;
-	printf("-> |%s|\n", all->tmp_cmd);
-	printf("-> |%s|\n", str2add);
+	while (all->tmp_cmd[ct] != ' ')
+		ct--;
+	// printf("-> |%s|\n", all->tmp_cmd);
+	// printf("-> |%s|\n", str2add);
 	return (NULL);
 }
 
@@ -468,7 +470,7 @@ void	open_directories(t_all *all)
 	else
 		list_dir_equ(all, all->tmp_dir, cut_cmd_equ(all->cmd));
 /*	else if (all->cmd[ft_strlen(all->cmd) - 1] == '/')
-		open_current_path(all);
+	;	open_current_path(all)
 	else
 		search_equ(all);*/
 }

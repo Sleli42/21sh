@@ -141,9 +141,38 @@ void	update_cmd_line_insert(t_all *all, char char2add)
 	all->cursor_pos++;
 }
 
+int		ft_getkey(char *str)
+{
+	int			result;
+	int			i;
+	int			mult;
+	int			value;
+
+	result = 0;
+	i = 0;
+	while (i < 6)
+	{
+		mult = 10;
+		value = str[i];
+		while (value > 10)
+		{
+			mult *= 10;
+			value /= 10;
+		}
+		result = result * mult + str[i];
+		i++;
+	}
+	return (result);
+}
+
+void	read_key(char *buff)
+{
+	printf("|%d|\n", ft_getkey(buff));
+}
+
 void	loop(t_all *all)
 {
-	char	buff[MAXLEN];
+	char	*buff;
 	int		key;
 
 	all->stop = 0;
@@ -155,21 +184,23 @@ void	loop(t_all *all)
 	display_prompt(all);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 		error("MALLOC");
-	if (all->already_autocomplete)
-	{
-		if (all->tmp_cmd != NULL)
-		{
-			realloc_termcaps_cmd(all, all->tmp_cmd);
-			ft_putstr(all->tmp_cmd);
-			ft_strdel(&all->tmp_cmd);
-		}
-		del_clist(&all->list_dir);
-	}
+	// if (all->already_autocomplete)
+	// {
+	// 	if (all->tmp_cmd != NULL)
+	// 	{
+	// 		realloc_termcaps_cmd(all, all->tmp_cmd);
+	// 		ft_putstr(all->tmp_cmd);
+	// 		ft_strdel(&all->tmp_cmd);
+	// 	}
+	// 	del_clist(&all->list_dir);
+	// }
+	buff = (char *)malloc(sizeof(char *));
 	ft_memset(buff, 0, MAXLEN - 1);
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
 		read(0, buff, (MAXLEN - 1));
+		read_key(buff);
 		if ((key = check_keys_arrows(all, buff)) < 0)
 		{
 			// if (all->already_open)
@@ -177,12 +208,12 @@ void	loop(t_all *all)
 				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
 			break ;
 		}
-		else if (key > 0)
-		{
-			//all->stop = 1;
-			make_moves(all, buff);
-			all->stop = 0;
-		}
+		// else if (key > 0)
+		// {
+		// 	//all->stop = 1;
+		// 	make_moves(all, buff);
+		// 	all->stop = 0;
+		// }
 		else
 		{
 			// if (*buff == '/')
@@ -224,7 +255,7 @@ void	loop(t_all *all)
 	(!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
 		: write(1, "\0", 1);
-	printf("cmd: |%s|\n", all->cmd);
+	//printf("cmd: |%s|\n", all->cmd);
 	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{

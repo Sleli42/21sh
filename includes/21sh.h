@@ -28,17 +28,29 @@
 # include <dirent.h>
 
 # define	MAXLEN		4096
-# define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
-# define 	K_DOWN		(buff[0] == 27 && buff[1] == 91 && buff[2] == 66)
-# define 	K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
-# define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
-# define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
-# define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
-# define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
-# define 	K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
-# define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
-# define 	K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
-# define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
+# define	K_UP		279165000
+// # define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
+// # define	K_UP		"\x1b\x5b\x41\x3b\x39\x44\x30"
+// # define K_DOWN		(buff[0] == 27 && buff[1] == 91 && buff[2] == 66)
+// # define 	K_DOWN		"\x1b\x5b\x42\x3b\x39\x44\x30"
+// // # define K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
+// # define 	K_RIGHT		"\x1b\x5b\x43\x3b\x39\x44\x30"
+// // # define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
+// # define	K_LEFT		"\x1b\x5b\x44\x3b\x39\x44\x30"
+// # define	K_CTRL_LEFT	"\x1b\x5b\x31\x3b\x39\x44\x30"
+// // # define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
+// # define	K_SPACE		"\x20\x5b\x42\x3b\x39\x44\x30"
+// // # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
+// # define	K_ECHAP		"\x1b\x5b\x42\x3b\x39\x44\x30"
+// // # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
+// # define	K_BACKSPACE	"\x7f\x5b\x42\x3b\x39\x44\x30"
+// // # define K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
+// # define 	K_DELETE	"\x1b\x5b\x33\x7e\x39\x44\x30"
+// // # define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
+// // # define K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
+// # define 	K_ENTER		"\xa\x5b\x30\x6d\x1b\x28\x30"
+// // # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
+// # define	K_TAB		"\x9\x5b\x30\x6d\x1b\x28\x30"
 
 # define 	NOTATTY 	1
 
@@ -152,10 +164,18 @@ typedef	struct			s_builtins
 	void				(*f)(t_all *, char *);
 }						t_builtins;
 
+typedef	struct			s_keys
+{
+	int					action_name;
+	void				(*f)(t_all *, char *);
+}						t_keys;
+
 /*
 *** ============================================================ main.c
 */
 void	display_dlst(t_dlist2 *lst);
+int		ft_getkey(char *str);
+
 
 void	update_cmd_line_insert(t_all *all, char char2add);
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
@@ -282,12 +302,14 @@ void	display_index_cmd(t_all *all);
 void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 void		new_line(t_all *all);
-void		goto_latest_commands(t_all *all, char buff[3]);
+void		goto_latest_commands(t_all *all, char *buff);
 /*
 *** ============================================================ moves.c
 */
-int			check_keys_arrows(t_all *all, char buff[3]);
+int			check_keys_arrows(t_all *all, char *buff);
 void		make_moves(t_all *all, char buff[3]);
+void		horizontal_moves(t_all *all, char *buff);
+void		del_char(t_all *all, char *buff);
 /*
 *** ============================================================ autocomplete.c
 */
