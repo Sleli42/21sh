@@ -178,6 +178,7 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 	tmp = lst->head;
 	found = 0;
 	//printf("pos: %d\n", pos);
+	//printf("cursor after: %d\n", pos);
 	if (lst)
 	{
 		// display_dlst2(lst);
@@ -186,7 +187,8 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 			if (ct == pos)
 			{
 				// printf("ct: %d\n", ct);
-				// printf("arg found: |%c|\n", tmp->c);
+				
+
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;

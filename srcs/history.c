@@ -12,17 +12,6 @@
 
 #include "21sh.h"
 
-void	display_dlst_history(t_dlist *lst) {
-	t_node	*tmp = lst->tail;
-
-	while (tmp != NULL) {
-		printf("i: %zu -> %s\n", tmp->index, tmp->s);
-		// printf("-> %zu\n", tmp->index);
-		// printf("-> %zu\n", lst->lenght);
-		tmp = tmp->prev;
-	}
-}
-
 char	*display_last_cmd(t_dlist *lst, size_t pos)
 {
 	t_node	*tmp;
@@ -87,14 +76,22 @@ char	**parse_history(void)
 	int		fd;
 
 	fd = open(".21sh_history", O_RDONLY);
-	if (!(buff = (char*)malloc(sizeof(char *))))
-		error("MALLOC");
-	while ((r = read(fd, buff, MAXLEN - 1)) > 0)
+	buff = ft_strnew(MAXLEN - 1);
+	ft_memset(buff, 0, MAXLEN - 1);
+	while ((r = read(fd, buff, (MAXLEN - 1))) > 0)
 		buff[r] = 0;
 	ret = ft_strsplit(buff, '\n');
 	ft_strdel(&buff);
 	close(fd);
 	return (ret);
+}
+
+void	display_tab_history(char **tabl) 
+{
+	int		ct = 0;
+
+	while (tabl[ct])
+		printf("%s\n", tabl[ct++]);
 }
 
 void	display_index_cmd(t_all *all)
@@ -105,11 +102,15 @@ void	display_index_cmd(t_all *all)
 
 	if (all->history_buff != NULL)
 	{
-		del_array(&all->history_buff);
+		if (ft_tablen(all->history_buff) > 0)
+			del_array(&all->history_buff);
 		all->history_buff = parse_history();
+		//printf("[0]:c %s\n", all->history_buff[0]);
 	}
-	if (!(tmp = (char*)malloc(sizeof(char) * ct)))
-		return ;
+	if (!(tmp = (char*)malloc(sizeof(char) * ft_strlen(all->history_buff[all->index_history - 1]))))
+		error("MALLOC");
+	//write(1, "bug\n", 4);
+	//display_tab_history(all->history_buff);
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
 	ct++;
@@ -151,7 +152,7 @@ void	goto_latest_commands(t_all *all)
 		}
 		all->index_history--;
 		display_index_cmd(all);
-	}/*
+	}
 	if (all->current_key == K_DOWN && all->index_history <= all->pos_history - 1)
 	{
 		all->index_history++;
@@ -167,5 +168,5 @@ void	goto_latest_commands(t_all *all)
 			return;
 		else
 			display_index_cmd(all);
-	}*/
+	}
 }

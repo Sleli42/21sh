@@ -52,6 +52,7 @@
 // # define	K_ECHAP		"\x1b\x5b\x42\x3b\x39\x44\x30"
 # define	K_BACKSPACE		12700000
 # define	K_BACKSPACE2	1279168000
+# define	K_BACKSPACE3	1279167000
 // # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
 // # define	K_BACKSPACE	"\x7f\x5b\x42\x3b\x39\x44\x30"
 # define	K_DELETE		2145308824
@@ -310,10 +311,10 @@ void		restore_term(t_termios restore);
 /*
 *** ============================================================ history.c
 */
-char	**parse_history(void);
-void	add_to_history(t_all *all);
-void	display_index_cmd(t_all *all);
-void		display_dlst_history(t_dlist *lst);
+char		**parse_history(void);
+void		add_to_history(t_all *all);
+void		display_index_cmd(t_all *all);
+void		display_tab_history(char **array);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 void		new_line(t_all *all);
 void		goto_latest_commands(t_all *all);

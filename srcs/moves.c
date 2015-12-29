@@ -23,6 +23,7 @@ int		check_keys_arrows(t_all *all, char *buff)
 	{K_LEFT, horizontal_moves},
 	{K_BACKSPACE, del_char},
 	{K_BACKSPACE2, del_char},
+	{K_BACKSPACE3, del_char},
 	{K_DELETE, del_char}};
 
 	i = 0;
@@ -36,7 +37,7 @@ int		check_keys_arrows(t_all *all, char *buff)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 7)
+	while (i < 8)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
@@ -127,19 +128,24 @@ void	del_char(t_all *all)
 		realloc_termcaps_cmd(all, all->cmd);
 	//tputs_termcap("me");
 	tputs_termcap("dm");
+	//printf("cursor_pos: %d\n", all->cursor_pos);
 	if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
+		// printf("lenght: %zu\n", all->cmd_termcaps->lenght);
 		if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght + 1)
 		{
 		//	write(1, "HEERE\n", 6);
-			(all->current_key != K_BACKSPACE || all->current_key != K_BACKSPACE2)
+		//	printf("cursor before: %d\n", all->cursor_pos);
+			(all->current_key != K_BACKSPACE2 && all->current_key != K_BACKSPACE3)
 			 ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
 				: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
 		}
-		(all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2)
+		(all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2
+			|| all->current_key == K_BACKSPACE3)
 			? tputs_termcap("le") : NULL;
 		tputs_termcap("dc");
-		if (all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2)
+		if (all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2
+			|| all->current_key == K_BACKSPACE3)
 			all->cursor_pos--;
 		tputs_termcap("ed");
 	}

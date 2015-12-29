@@ -175,8 +175,9 @@ void	create_and_exec_command(t_all *all)
 	create_cmd(all);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
-	if (all->cmd)
-		printf("cmd: |%s|\n", all->cmd);
+	write(1, "\n", 1);
+	// if (all->cmd)
+	// 	printf("cmd: |%s|\n", all->cmd);
 	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
 	{
 		add_to_history(all);
@@ -224,13 +225,11 @@ void	loop(t_all *all)
 	while (*buff != '\n')
 	{
 		read(0, buff, 6);
-	//	read_key(buff);
+		//read_key(buff);
 		if ((key = check_keys_arrows(all, buff)) < 0)
 			create_and_exec_command(all);
 		else if (key > 0)
-		{
 			continue ;
-		}
 		else
 		{
 			tputs_termcap("im");
