@@ -57,7 +57,7 @@ void	add_to_history(t_all *all)
 	i = 0;
 	while (tmp[i])
 		history_line[ct++] = tmp[i++];
-	ft_strdel(&tmp);
+	(tmp) ? ft_strdel(&tmp) : NULL;
 	history_line[ct++] = ':';
 	i = 0;
 	while (all->cmd[i])
@@ -65,7 +65,7 @@ void	add_to_history(t_all *all)
 	history_line[ct] = '\0';
 	write(all->fd_history, history_line, ft_strlen(history_line));
 	write(all->fd_history, "\n", 1);
-	ft_strdel(&history_line);
+	(history_line) ? ft_strdel(&history_line) : NULL;
 }
 
 char	**parse_history(void)
@@ -75,14 +75,19 @@ char	**parse_history(void)
 	int		r;
 	int		fd;
 
-	fd = open(".21sh_history", O_RDONLY);
+	if ((fd = open(".21sh_history", O_RDONLY)) == -1)
+		error("OPEN");
+	buff = NULL;
+	ret = NULL;
 	buff = ft_strnew(MAXLEN - 1);
-	ft_memset(buff, 0, MAXLEN - 1);
+	//ft_memset(buff, 0, MAXLEN - 1);
 	while ((r = read(fd, buff, (MAXLEN - 1))) > 0)
 		buff[r] = 0;
+	//write(1, "bug\n", 4);
 	ret = ft_strsplit(buff, '\n');
-	ft_strdel(&buff);
+	//write(1, "bug\n", 4);
 	close(fd);
+
 	return (ret);
 }
 
@@ -100,28 +105,35 @@ void	display_index_cmd(t_all *all)
 	int		i = 0;
 	char	*tmp;
 
+	tmp = NULL;
+	//printf("test |%s|\n", all->history_buff[all->index_history - 1]);
 	if (all->history_buff != NULL)
 	{
-		if (ft_tablen(all->history_buff) > 0)
+	//	write(1, "bug\n", 4);
+		if (all->history_buff[0] != NULL)
+		{
 			del_array(&all->history_buff);
-		all->history_buff = parse_history();
+			all->history_buff = parse_history();
+		}
 		//printf("[0]:c %s\n", all->history_buff[0]);
 	}
-	if (!(tmp = (char*)malloc(sizeof(char) * ft_strlen(all->history_buff[all->index_history - 1]))))
-		error("MALLOC");
+	//if (!(tmp = (char*)malloc(sizeof(char) * ft_strlen(all->history_buff[all->index_history - 1]) + 1)))
+	//	error("MALLOC");
+	// tmp = ft_strnew(ft_strlen(all->history_buff[all->index_history - 1]));
 	//write(1, "bug\n", 4);
 	//display_tab_history(all->history_buff);
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
-	ct++;
-	while (all->history_buff[all->index_history - 1][ct])
-		tmp[i++] = all->history_buff[all->index_history - 1][ct++];
-	tmp[i] = 0;
+	tmp = ft_strdup(all->history_buff[all->index_history - 1] + (ct + 1));
+	// printf("tmp: %s\n", tmp);
+	// ct++;
+	// while (all->history_buff[all->index_history - 1][ct])
+	// 	tmp[i++] = all->history_buff[all->index_history - 1][ct++];
+	// tmp[i] = 0;
 	all->cursor_pos = i;
 	ft_putstr(tmp);
 	realloc_termcaps_cmd(all, tmp);
-	if (tmp)
-		ft_strdel(&tmp);
+	//ft_strdel(&tmp);
 	// tputs_termcap("cb");
 	// tputs_termcap("rc");
 //	printf("%s\n", all->history_buff[all->index_history - 1]);
@@ -141,7 +153,7 @@ void	goto_latest_commands(t_all *all)
 	//printf("cursor pos: %d\n", all->cursor_pos);
 	if (all->cursor_pos == 1)
 		tputs_termcap("sc");
-	//printf("%d\n", all->index_history);
+	// printf("%d\n", all->index_history);
 	if (all->current_key == K_UP && all->index_history > 1)
 	{
 		if (all->cursor_pos > 1)

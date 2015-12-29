@@ -184,7 +184,7 @@ void	create_and_exec_command(t_all *all)
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}
-	del_dlist2(all->cmd_termcaps);
+	(all->cmd_termcaps) ? del_dlist2(all->cmd_termcaps) : NULL;
 	//reset_term();
 	loop(all);
 }
@@ -219,12 +219,12 @@ void	loop(t_all *all)
 	// 	del_clist(&all->list_dir);
 	// }
 	///buff = (char *)malloc(sizeof(char *));
-	buff = ft_strnew(6);
-	ft_memset(buff, 0, 6);
+	buff = ft_strnew(MAXLEN - 1);
+	ft_memset(buff, 0, (MAXLEN - 1));
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
-		read(0, buff, 6);
+		read(0, buff, (MAXLEN - 1));
 		//read_key(buff);
 		if ((key = check_keys_arrows(all, buff)) < 0)
 			create_and_exec_command(all);
@@ -270,6 +270,7 @@ void	loop(t_all *all)
 			// all->cursor_pos++;
 		}
 	}
+	ft_strdel(&buff);
 	create_and_exec_command(all);
 	// reset_term();
 	// loop(all);

@@ -27,7 +27,7 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 
-# define	MAXLEN			512
+# define	MAXLEN			2048
 # define	K_UP			279165000
 # define	K_CTRL_UP		-23278475
 // # define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
@@ -322,6 +322,7 @@ void		goto_latest_commands(t_all *all);
 *** ============================================================ moves.c
 */
 int			check_keys_arrows(t_all *all, char *buff);
+void		horizontal_moves_by_words(t_all *all);
 void		horizontal_moves(t_all *all);
 void		del_char(t_all *all);
 /*

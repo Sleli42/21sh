@@ -24,7 +24,8 @@ int		check_keys_arrows(t_all *all, char *buff)
 	{K_BACKSPACE, del_char},
 	{K_BACKSPACE2, del_char},
 	{K_BACKSPACE3, del_char},
-	{K_DELETE, del_char}};
+	{K_DELETE, del_char},
+	{K_CTRL_LEFT, horizontal_moves_by_words}};
 
 	i = 0;
 	all->current_key = ft_getkey(buff);
@@ -37,7 +38,7 @@ int		check_keys_arrows(t_all *all, char *buff)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 8)
+	while (i < 9)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
@@ -46,34 +47,15 @@ int		check_keys_arrows(t_all *all, char *buff)
 		}
 		i++;
 	}
-	//write(1, "here\n", 5);
-	/*(void)all;
-	if (K_CTRL_LEFT)
-		printf("OPT LEFT OK\n");
-	if (K_ENTER)
-	{
-		tputs_termcap("me");
-		return (-1);
-	}
-	if (K_UP || K_DOWN)
-	{
-		return (1);
-	}
-	else if (K_RIGHT || K_LEFT)
-	{
-		return (2);
-	}
-	// if (K_TAB)
-	// {
-	// 	//printf("-> %d\n", all_is_spaces(all->cmd_termcaps->head));
-		
-	// 	return (3);
-	// }
-	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
-	{
-		return (4);
-	}*/
 	return (0);
+}
+
+void	horizontal_moves_by_words(t_all *all)
+{
+	if (all->current_key == K_CTRL_LEFT)
+	{
+		write(1, "ok\n", 3);
+	}
 }
 
 void	horizontal_moves(t_all *all)
