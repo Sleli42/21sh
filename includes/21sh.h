@@ -50,9 +50,8 @@
 # define	K_ECHAP			2700000
 // # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
 // # define	K_ECHAP		"\x1b\x5b\x42\x3b\x39\x44\x30"
+// # define	K_BACKSPACE		{12700000, 1279165000, 1279166000, 1279167000, 1279168000}
 # define	K_BACKSPACE		12700000
-# define	K_BACKSPACE2	1279168000
-# define	K_BACKSPACE3	1279167000
 // # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
 // # define	K_BACKSPACE	"\x7f\x5b\x42\x3b\x39\x44\x30"
 # define	K_DELETE		2145308824
@@ -322,6 +321,7 @@ void		goto_latest_commands(t_all *all);
 *** ============================================================ moves.c
 */
 int			check_keys_arrows(t_all *all, char *buff);
+void		parse_keys(t_all *all);
 void		horizontal_moves_by_words(t_all *all);
 void		horizontal_moves(t_all *all);
 void		del_char(t_all *all);

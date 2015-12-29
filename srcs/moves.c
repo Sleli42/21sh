@@ -12,7 +12,24 @@
 
 #include "21sh.h"
 
-int		check_keys_arrows(t_all *all, char *buff)
+int			check_keys_arrows(t_all *all, char *buff)
+{
+	int		ct;
+
+	ct = 0;
+	all->current_key = ft_getkey(buff);
+	//printf("all curr: %d\n", all->current_key);
+	if (all->current_key == K_ENTER)
+		return (-1);
+	if ((all->current_key == K_RIGHT || all->current_key == K_LEFT
+		|| all->current_key == K_UP || all->current_key == K_DOWN
+		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT)
+		|| all->current_key == K_DELETE || all->current_key == K_BACKSPACE)
+		return (1);
+	return (0);
+}
+
+void		parse_keys(t_all *all)
 {
 	int		i;
 	static const	t_keys	keys[] =
@@ -22,32 +39,27 @@ int		check_keys_arrows(t_all *all, char *buff)
 	{K_RIGHT, horizontal_moves},
 	{K_LEFT, horizontal_moves},
 	{K_BACKSPACE, del_char},
-	{K_BACKSPACE2, del_char},
-	{K_BACKSPACE3, del_char},
 	{K_DELETE, del_char},
 	{K_CTRL_LEFT, horizontal_moves_by_words}};
 
 	i = 0;
-	all->current_key = ft_getkey(buff);
-	if (all->current_key == K_ENTER)
-		return (-1);
-	// printf("-> |%d|\n", test);
+	//all->current_key = ft_getkey(buff);
 	// printf("->> |%d|\n", keys[4].action_name);
-	// printf("->> |%d|\n", all->current_key);
+	//printf("->> |%d|\n", all->current_key);
 //	// int j = 0;
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 9)
+	while (i < 6)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
+			 //printf("->> |%d|\n", keys[i].action_name);
 			keys[i].f(all);
-			return (1);
+			return ;
 		}
 		i++;
 	}
-	return (0);
 }
 
 void	horizontal_moves_by_words(t_all *all)
@@ -106,28 +118,31 @@ void	update_cmd_line_del(t_all *all)
 void	del_char(t_all *all)
 {
 //	write(1, "here\n", 5);
+	init_windows_size(all);
+	// printf("col: %d\n", all->ws.ws_col);
+	//printf("%d\n", all->cursor_pos);
 	if (all->already_in_history)
 		realloc_termcaps_cmd(all, all->cmd);
 	//tputs_termcap("me");
 	tputs_termcap("dm");
-	//printf("cursor_pos: %d\n", all->cursor_pos);
+	// printf("cursor_pos: %d\n", all->cursor_pos);
+	// // printf("lenght: %zu\n", all->cmd_termcaps->lenght);
 	if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
-		// printf("lenght: %zu\n", all->cmd_termcaps->lenght);
 		if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght + 1)
 		{
 		//	write(1, "HEERE\n", 6);
 		//	printf("cursor before: %d\n", all->cursor_pos);
-			(all->current_key != K_BACKSPACE2 && all->current_key != K_BACKSPACE3)
+			(all->current_key != K_BACKSPACE) /*&& all->current_key != K_BACKSPACE3*/
 			 ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
 				: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
 		}
-		(all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2
-			|| all->current_key == K_BACKSPACE3)
+		(all->current_key == K_BACKSPACE) /*|| all->current_key == K_BACKSPACE2
+			|| all->current_key == K_BACKSPACE3*/
 			? tputs_termcap("le") : NULL;
 		tputs_termcap("dc");
-		if (all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2
-			|| all->current_key == K_BACKSPACE3)
+		if (all->current_key == K_BACKSPACE) /*|| all->current_key == K_BACKSPACE2
+			|| all->current_key == K_BACKSPACE3*/
 			all->cursor_pos--;
 		tputs_termcap("ed");
 	}

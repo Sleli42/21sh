@@ -51,7 +51,11 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 		ct++;
 	}
 	if (!stop)
-		ft_putstr("Command not found\n");
+	{
+		printf("Command: '%s' not found\n", argv_bin[0]);
+		// ft_putstr("")
+		// ft_putstr("Command not found\n");
+	}
 }
 
 void	exec_binary(char *bin, char **argv_bin, char **env)

@@ -167,6 +167,8 @@ int		ft_getkey(char *s)
 
 void	read_key(char *buff)
 {
+	printf("buff: |%s|\n", buff);
+	printf("buff[0]: |%c|\n", buff[0]);
 	printf("|%d|\n", ft_getkey(buff));
 }
 
@@ -224,12 +226,21 @@ void	loop(t_all *all)
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
+		if (buff)
+		{
+			ft_strdel(&buff);
+			buff = ft_strnew(MAXLEN - 1);
+			ft_memset(buff, 0, (MAXLEN - 1));
+		}
 		read(0, buff, (MAXLEN - 1));
-		//read_key(buff);
+		// read_key(buff);
+		// break ;
 		if ((key = check_keys_arrows(all, buff)) < 0)
-			create_and_exec_command(all);
+			break ;
 		else if (key > 0)
-			continue ;
+		{
+			parse_keys(all);
+		}
 		else
 		{
 			tputs_termcap("im");
@@ -250,27 +261,25 @@ void	loop(t_all *all)
 			//printf("pos cursor: %d\n", all->cursor_pos);
 			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
-				//write(1, "here\n", 5);
-				//tputs_termcap("im");
 				if (*buff != '\n')
 					ft_putchar(*buff);
-				//insert_char_cmd(all, *buff);
 				update_cmd_line_insert(all, *buff);
-				//tputs_termcap("ei");
 			}
 			else
 			{
 				//printf("|%d| && |%d|\n", buff[0], buff[1]);
-				all->cursor_pos++;
 				if (*buff != '\n')
+				{
 					ft_putchar(*buff);
-				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff));
+					dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff));
+					all->cursor_pos++;
+				}
 			}
 			tputs_termcap("ei");
 			// all->cursor_pos++;
 		}
+
 	}
-	ft_strdel(&buff);
 	create_and_exec_command(all);
 	// reset_term();
 	// loop(all);
