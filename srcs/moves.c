@@ -15,24 +15,33 @@
 int		check_keys_arrows(t_all *all, char *buff)
 {
 	int		i;
-	int		test;
 	static const	t_keys	keys[] =
 
-	{{K_UP, goto_latest_commands}};
+	{{K_UP, goto_latest_commands},
+	{K_DOWN, goto_latest_commands},
+	{K_RIGHT, horizontal_moves},
+	{K_LEFT, horizontal_moves},
+	{K_BACKSPACE, del_char},
+	{K_BACKSPACE2, del_char},
+	{K_DELETE, del_char}};
 
 	i = 0;
-	test = ft_getkey(buff);
-	printf("-> |%d|\n", test);
-	printf("->> |%d|\n", keys[i].action_name);
+	all->current_key = ft_getkey(buff);
+	if (all->current_key == K_ENTER)
+		return (-1);
+	// printf("-> |%d|\n", test);
+	// printf("->> |%d|\n", keys[4].action_name);
+	// printf("->> |%d|\n", all->current_key);
 //	// int j = 0;
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 1)
+	while (i < 7)
 	{
-		if (test ==  keys[i].action_name)
+		if (all->current_key ==  keys[i].action_name)
 		{
-			keys[i].f(all, buff);
+			keys[i].f(all);
+			return (1);
 		}
 		i++;
 	}
@@ -65,8 +74,8 @@ int		check_keys_arrows(t_all *all, char *buff)
 	}*/
 	return (0);
 }
-/*
-void	horizontal_moves(t_all *all, char *buff)
+
+void	horizontal_moves(t_all *all)
 {
 	// if (all->current && !all->history_moves)
 	// {
@@ -76,13 +85,14 @@ void	horizontal_moves(t_all *all, char *buff)
 	// 	all->stop = 1;
 	// }
 	// printf("all->cmd: %s\n", all->cmd);
-	// printf("cursor pos: %d\n", all->cursor_pos);
-	if (!ft_strcmp(buff, K_LEFT) && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
+//	printf("lenght: %zu\n", all->cmd_termcaps->lenght);
+//	printf("cursor pos: %d\n", all->cursor_pos);
+	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		all->cursor_pos--;
 		tputs_termcap("le");
 	}
-	if (!ft_strcmp(buff, K_RIGHT) && all->cmd_termcaps->lenght > 0
+	if (all->current_key == K_RIGHT && all->cmd_termcaps->lenght > 0
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
 		all->cursor_pos++;
@@ -90,7 +100,7 @@ void	horizontal_moves(t_all *all, char *buff)
 	}
 	// all->stop = 0;
 }
-
+/*
 void	update_cmd_line_del(t_all *all)
 {
 	int		ct;
@@ -108,30 +118,33 @@ void	update_cmd_line_del(t_all *all)
 	ct = (int)all->cmd_termcaps->lenght;
 	while (ct-- >= all->cursor_pos)
 		tputs_termcap("le");
-}
+}*/
 
-void	del_char(t_all *all, char *buff)
+void	del_char(t_all *all)
 {
+//	write(1, "here\n", 5);
 	if (all->already_in_history)
 		realloc_termcaps_cmd(all, all->cmd);
-	tputs_termcap("me");
+	//tputs_termcap("me");
 	tputs_termcap("dm");
 	if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght + 1)
 		{
 		//	write(1, "HEERE\n", 6);
-			(!ft_strcmp(buff, K_BACKSPACE)) ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
+			(all->current_key != K_BACKSPACE || all->current_key != K_BACKSPACE2)
+			 ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
 				: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
 		}
-		(ft_strcmp(buff, K_BACKSPACE)) ? tputs_termcap("le") : NULL;
+		(all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2)
+			? tputs_termcap("le") : NULL;
 		tputs_termcap("dc");
-		if (ft_strcmp(buff, K_BACKSPACE))
+		if (all->current_key == K_BACKSPACE || all->current_key == K_BACKSPACE2)
 			all->cursor_pos--;
 		tputs_termcap("ed");
 	}
 }
-
+/*
 void	make_moves(t_all *all, char buff[3])
 {
 	//int			deltab = 0;
@@ -179,5 +192,4 @@ void	make_moves(t_all *all, char buff[3])
 			tputs_termcap("ed");
 		}
 	}
-}
-*/
+}*/

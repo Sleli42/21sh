@@ -87,10 +87,12 @@ char	**parse_history(void)
 	int		fd;
 
 	fd = open(".21sh_history", O_RDONLY);
-	buff = (char*)malloc(sizeof(char) * MAXLEN);
+	if (!(buff = (char*)malloc(sizeof(char *))))
+		error("MALLOC");
 	while ((r = read(fd, buff, MAXLEN - 1)) > 0)
 		buff[r] = 0;
 	ret = ft_strsplit(buff, '\n');
+	ft_strdel(&buff);
 	close(fd);
 	return (ret);
 }
@@ -132,17 +134,15 @@ cb      Effacer depuis le début de la ligne jusqu'au curseur
 
 
 
-void	goto_latest_commands(t_all *all, char *buff)
+void	goto_latest_commands(t_all *all)
 {
-	int test = ft_getkey(buff);
+	//write(1, "here\n", 5);
 	//printf("cursor pos: %d\n", all->cursor_pos);
 	if (all->cursor_pos == 1)
 		tputs_termcap("sc");
 	//printf("%d\n", all->index_history);
-	if (test == K_UP && all->index_history > 1)
+	if (all->current_key == K_UP && all->index_history > 1)
 	{
-			/* jooooobbbbb .....*/
-	//	printf("%d\n", all->index_history);
 		if (all->cursor_pos > 1)
 		{
 			tputs_termcap("rc");
@@ -151,10 +151,8 @@ void	goto_latest_commands(t_all *all, char *buff)
 		}
 		all->index_history--;
 		display_index_cmd(all);
-
-	}
-	/*
-	if (K_DOWN && all->index_history <= all->pos_history - 1)
+	}/*
+	if (all->current_key == K_DOWN && all->index_history <= all->pos_history - 1)
 	{
 		all->index_history++;
 		if (all->cursor_pos > 1 || all->index_history == all->pos_history)
@@ -169,6 +167,5 @@ void	goto_latest_commands(t_all *all, char *buff)
 			return;
 		else
 			display_index_cmd(all);
-	}
-	*/
+	}*/
 }

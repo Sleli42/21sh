@@ -35,7 +35,7 @@ void	display_tab(char **tab) {
 
 void	display_prompt(t_all *all) {
 	(void)all;
-	tputs_termcap("me");
+	//tputs_termcap("me");
 	tputs_termcap("ve");
 	write(1, "$: ", 3);
 }
@@ -69,8 +69,8 @@ void	create_cmd(t_all *all)
 			all->cmd[i++] = nav->c;
 			nav = nav->next;
 		}
-		all->cmd[i] = '\0';
 	}
+	all->cmd[i] = '\0';
 }
 
 void	display_current_arg(t_all *all)
@@ -141,7 +141,7 @@ void	update_cmd_line_insert(t_all *all, char char2add)
 	all->cursor_pos++;
 }
 
-int		ft_getkey(char *str)
+int		ft_getkey(char *s)
 {
 	int			result;
 	int			i;
@@ -153,13 +153,13 @@ int		ft_getkey(char *str)
 	while (i < 6)
 	{
 		mult = 10;
-		value = str[i];
+		value = s[i];
 		while (value > 10)
 		{
 			mult *= 10;
 			value /= 10;
 		}
-		result = result * mult + str[i];
+		result = result * mult + s[i];
 		i++;
 	}
 	return (result);
@@ -168,6 +168,24 @@ int		ft_getkey(char *str)
 void	read_key(char *buff)
 {
 	printf("|%d|\n", ft_getkey(buff));
+}
+
+void	create_and_exec_command(t_all *all)
+{
+	create_cmd(all);
+	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
+		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
+	if (all->cmd)
+		printf("cmd: |%s|\n", all->cmd);
+	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
+	{
+		add_to_history(all);
+		parse_command(all, all->cmd);
+		exec_command(all);
+	}
+	del_dlist2(all->cmd_termcaps);
+	//reset_term();
+	loop(all);
 }
 
 void	loop(t_all *all)
@@ -181,9 +199,14 @@ void	loop(t_all *all)
 	all->cursor_pos = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
+	// init_term();
+	//tputs_termcap("mm");
 	display_prompt(all);
-	if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
-		error("MALLOC");
+	if (!all->cmd)
+	{
+		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+			error("MALLOC");
+	}
 	// if (all->already_autocomplete)
 	// {
 	// 	if (all->tmp_cmd != NULL)
@@ -194,28 +217,23 @@ void	loop(t_all *all)
 	// 	}
 	// 	del_clist(&all->list_dir);
 	// }
-	buff = (char *)malloc(sizeof(char *));
-	ft_memset(buff, 0, MAXLEN - 1);
+	///buff = (char *)malloc(sizeof(char *));
+	buff = ft_strnew(6);
+	ft_memset(buff, 0, 6);
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
-		read(0, buff, (MAXLEN - 1));
-		read_key(buff);
+		read(0, buff, 6);
+	//	read_key(buff);
 		if ((key = check_keys_arrows(all, buff)) < 0)
+			create_and_exec_command(all);
+		else if (key > 0)
 		{
-			// if (all->already_open)
-			// 	add_to_cmd(all, all->nav_dir->prev->arg);
-				//printf("curr dir: %s\n", all->nav_dir->prev->arg);
-			break ;
+			continue ;
 		}
-		// else if (key > 0)
-		// {
-		// 	//all->stop = 1;
-		// 	make_moves(all, buff);
-		// 	all->stop = 0;
-		// }
 		else
 		{
+			tputs_termcap("im");
 			// if (*buff == '/')
 			// {
 			// 	if (all->nav_dir)
@@ -234,38 +252,48 @@ void	loop(t_all *all)
 			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
 				//write(1, "here\n", 5);
-				tputs_termcap("im");
-				ft_putchar(*buff);
+				//tputs_termcap("im");
+				if (*buff != '\n')
+					ft_putchar(*buff);
 				//insert_char_cmd(all, *buff);
 				update_cmd_line_insert(all, *buff);
-				tputs_termcap("ei");
+				//tputs_termcap("ei");
 			}
 			else
 			{
 				//printf("|%d| && |%d|\n", buff[0], buff[1]);
 				all->cursor_pos++;
-				ft_putchar(*buff);
+				if (*buff != '\n')
+					ft_putchar(*buff);
 				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*buff));
 			}
+			tputs_termcap("ei");
 			// all->cursor_pos++;
 		}
 	}
+	create_and_exec_command(all);
+	// reset_term();
+	// loop(all);
 	//printf("last: %c\n", all->cmd_termcaps->tail->c);
-	create_cmd(all);
-	(!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
-	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
-		: write(1, "\0", 1);
-	//printf("cmd: |%s|\n", all->cmd);
+	//create_cmd(all);
+	// (!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
+	// (all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
+	// 	: write(1, "\0", 1);
+	// if (all->cmd)
+	// 	printf("cmd: |%s|\n", all->cmd);
 	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
-	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
-	{
-		add_to_history(all);
-		parse_command(all, all->cmd);
-		exec_command(all);
-	}
+	// if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
+	// {
+	// 	//write(1, "NO\b", 3);
+	// 	add_to_history(all);
+	// 	parse_command(all, all->cmd);
+	// 	exec_command(all);
+	// }
+	//reset_term();
 	// del_dlist2(all->cmd_termcaps);
 	//tputs_termcap("te");
-	loop(all);
+	//tputs_termcap("mo");
+	//loop(all);
 }
 
 int		main(int ac, char **av, char **env)
@@ -279,7 +307,8 @@ int		main(int ac, char **av, char **env)
 	loop(all);
 	del_dlist(all->env);
 	del_dlist(all->cmd_history);
-	restore_term(all->restore);
+	reset_term();
+	//restore_term(all->restore);
 	write(1, "\n", 1);
 	exit(1);
 	return (0);

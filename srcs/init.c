@@ -95,7 +95,7 @@ void 	reset_term(void)
 
 	if (tcgetattr(0, &term) == -1)
 		term_error("TCGETATTR");
-	term.c_lflag &= ~(ECHO | ICANON);
+	term.c_lflag |= ~(ECHO | ICANON);
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		term_error("TCSETATTR");
 }

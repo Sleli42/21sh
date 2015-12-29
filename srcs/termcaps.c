@@ -39,6 +39,7 @@ void	tputs_termcap(char *tc)
 void	restore_term(t_termios restore)
 {
 	tputs_termcap("ve");
+	tputs_termcap("me");
 	if (tcgetattr(0, &restore) == -1)
 		term_error("TCGETATTR");
 	if (tcsetattr(0, 0, &restore) == -1)

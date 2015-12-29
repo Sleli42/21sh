@@ -27,29 +27,42 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 
-# define	MAXLEN		4096
-# define	K_UP		279165000
+# define	MAXLEN			512
+# define	K_UP			279165000
+# define	K_CTRL_UP		-23278475
 // # define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
 // # define	K_UP		"\x1b\x5b\x41\x3b\x39\x44\x30"
+# define	K_DOWN			279166000
+# define	K_CTRL_DOWN		-23278474
 // # define K_DOWN		(buff[0] == 27 && buff[1] == 91 && buff[2] == 66)
-// # define 	K_DOWN		"\x1b\x5b\x42\x3b\x39\x44\x30"
-// // # define K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
-// # define 	K_RIGHT		"\x1b\x5b\x43\x3b\x39\x44\x30"
-// // # define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
+// # define K_DOWN		"\x1b\x5b\x42\x3b\x39\x44\x30"
+# define	K_RIGHT			279167000
+# define	K_CTRL_RIGHT	-23278473
+// # define K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
+// # define K_RIGHT		"\x1b\x5b\x43\x3b\x39\x44\x30"
+# define	K_LEFT			279168000
+// # define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
 // # define	K_LEFT		"\x1b\x5b\x44\x3b\x39\x44\x30"
+# define	K_CTRL_LEFT		-23278472
 // # define	K_CTRL_LEFT	"\x1b\x5b\x31\x3b\x39\x44\x30"
-// // # define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
+// # define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
 // # define	K_SPACE		"\x20\x5b\x42\x3b\x39\x44\x30"
-// // # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
+# define	K_ECHAP			2700000
+// # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
 // # define	K_ECHAP		"\x1b\x5b\x42\x3b\x39\x44\x30"
-// // # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
+# define	K_BACKSPACE		12700000
+# define	K_BACKSPACE2	1279168000
+// # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
 // # define	K_BACKSPACE	"\x7f\x5b\x42\x3b\x39\x44\x30"
-// // # define K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
-// # define 	K_DELETE	"\x1b\x5b\x33\x7e\x39\x44\x30"
-// // # define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
-// // # define K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
-// # define 	K_ENTER		"\xa\x5b\x30\x6d\x1b\x28\x30"
-// // # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
+# define	K_DELETE		2145308824
+// # define K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
+// # define K_DELETE	"\x1b\x5b\x33\x7e\x39\x44\x30"
+// # define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
+# define	K_ENTER			1000000
+// # define K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
+// # define K_ENTER		"\xa\x5b\x30\x6d\x1b\x28\x30"
+# define	K_TAB			900000
+// # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 // # define	K_TAB		"\x9\x5b\x30\x6d\x1b\x28\x30"
 
 # define 	NOTATTY 	1
@@ -110,6 +123,7 @@ typedef struct			s_all
 	t_termios			restore;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
+	int					current_key;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
 	t_select			*nav_dir;
@@ -167,7 +181,7 @@ typedef	struct			s_builtins
 typedef	struct			s_keys
 {
 	int					action_name;
-	void				(*f)(t_all *, char *);
+	void				(*f)(t_all *);
 }						t_keys;
 
 /*
@@ -175,7 +189,7 @@ typedef	struct			s_keys
 */
 void	display_dlst(t_dlist2 *lst);
 int		ft_getkey(char *str);
-
+void	create_and_exec_command(t_all *all);
 
 void	update_cmd_line_insert(t_all *all, char char2add);
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
@@ -302,14 +316,13 @@ void	display_index_cmd(t_all *all);
 void		display_dlst_history(t_dlist *lst);
 char		*display_last_cmd(t_dlist *lst, size_t pos);
 void		new_line(t_all *all);
-void		goto_latest_commands(t_all *all, char *buff);
+void		goto_latest_commands(t_all *all);
 /*
 *** ============================================================ moves.c
 */
 int			check_keys_arrows(t_all *all, char *buff);
-void		make_moves(t_all *all, char buff[3]);
-void		horizontal_moves(t_all *all, char *buff);
-void		del_char(t_all *all, char *buff);
+void		horizontal_moves(t_all *all);
+void		del_char(t_all *all);
 /*
 *** ============================================================ autocomplete.c
 */
