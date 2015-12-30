@@ -64,6 +64,8 @@
 # define	K_TAB			900000
 // # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
 // # define	K_TAB		"\x9\x5b\x30\x6d\x1b\x28\x30"
+# define	K_HOME			279172000
+# define	K_END			279170000
 
 # define 	NOTATTY 	1
 
@@ -322,7 +324,11 @@ void		goto_latest_commands(t_all *all);
 */
 int			check_keys_arrows(t_all *all, char *buff);
 void		parse_keys(t_all *all);
-void		horizontal_moves_by_words(t_all *all);
+t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+
+void		goto_end(t_all *all);
+void		goto_begin(t_all *all);
+void		opt_left_move(t_all *all);
 void		horizontal_moves(t_all *all);
 void		del_char(t_all *all);
 /*

@@ -178,8 +178,8 @@ void	create_and_exec_command(t_all *all)
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
-	// if (all->cmd)
-	// 	printf("cmd: |%s|\n", all->cmd);
+	if (all->cmd)
+		printf("cmd: |%s|\n", all->cmd);
 	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
 	{
 		add_to_history(all);
@@ -233,14 +233,12 @@ void	loop(t_all *all)
 			ft_memset(buff, 0, (MAXLEN - 1));
 		}
 		read(0, buff, (MAXLEN - 1));
-		// read_key(buff);
+		//read_key(buff);
 		// break ;
 		if ((key = check_keys_arrows(all, buff)) < 0)
 			break ;
 		else if (key > 0)
-		{
 			parse_keys(all);
-		}
 		else
 		{
 			tputs_termcap("im");
@@ -276,33 +274,9 @@ void	loop(t_all *all)
 				}
 			}
 			tputs_termcap("ei");
-			// all->cursor_pos++;
 		}
-
 	}
 	create_and_exec_command(all);
-	// reset_term();
-	// loop(all);
-	//printf("last: %c\n", all->cmd_termcaps->tail->c);
-	//create_cmd(all);
-	// (!all->stop && !all->is_history) ? write(1, "\n", 1) : write(1, "\0", 1);
-	// (all->cmd[ft_strlen(all->cmd) - 1] == '\n') ? all->cmd[ft_strlen(all->cmd) - 1] = '\0'
-	// 	: write(1, "\0", 1);
-	// if (all->cmd)
-	// 	printf("cmd: |%s|\n", all->cmd);
-	// printf("lenght list[main]: %zu\n", all->cmd_termcaps->lenght);
-	// if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
-	// {
-	// 	//write(1, "NO\b", 3);
-	// 	add_to_history(all);
-	// 	parse_command(all, all->cmd);
-	// 	exec_command(all);
-	// }
-	//reset_term();
-	// del_dlist2(all->cmd_termcaps);
-	//tputs_termcap("te");
-	//tputs_termcap("mo");
-	//loop(all);
 }
 
 int		main(int ac, char **av, char **env)

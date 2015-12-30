@@ -18,13 +18,15 @@ int			check_keys_arrows(t_all *all, char *buff)
 
 	ct = 0;
 	all->current_key = ft_getkey(buff);
-	//printf("all curr: %d\n", all->current_key);
+	// printf("all curr: %d\n", all->current_key);
+	// printf("K_END: %d\n", K_END);
 	if (all->current_key == K_ENTER)
 		return (-1);
-	if ((all->current_key == K_RIGHT || all->current_key == K_LEFT
+	if (all->current_key == K_RIGHT || all->current_key == K_LEFT
 		|| all->current_key == K_UP || all->current_key == K_DOWN
-		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT)
-		|| all->current_key == K_DELETE || all->current_key == K_BACKSPACE)
+		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT
+		|| all->current_key == K_DELETE || all->current_key == K_BACKSPACE
+		|| all->current_key == K_HOME || all->current_key == K_END)
 		return (1);
 	return (0);
 }
@@ -40,7 +42,9 @@ void		parse_keys(t_all *all)
 	{K_LEFT, horizontal_moves},
 	{K_BACKSPACE, del_char},
 	{K_DELETE, del_char},
-	{K_CTRL_LEFT, horizontal_moves_by_words}};
+	{K_CTRL_LEFT, opt_left_move},
+	{K_HOME, goto_begin},
+	{K_END, goto_end}};
 
 	i = 0;
 	//all->current_key = ft_getkey(buff);
@@ -50,7 +54,7 @@ void		parse_keys(t_all *all)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 6)
+	while (i < 9)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
@@ -62,26 +66,66 @@ void		parse_keys(t_all *all)
 	}
 }
 
-void	horizontal_moves_by_words(t_all *all)
+int		check_if_spaces(t_dlist2 *lst, int pos)
 {
-	if (all->current_key == K_CTRL_LEFT)
+	t_cmd	*tmp;
+	int		ct;
+
+	tmp = lst->head;
+	ct = 0;
+	if (tmp)
 	{
-		write(1, "ok\n", 3);
+		while (ct++ < pos)
+		{
+			if (tmp->c == ' ')
+				return (1);
+			tmp = tmp->next;
+		}
+	}
+	return (0);
+}
+
+t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
+{
+	t_cmd	*tmp;
+	int		ct;
+
+	tmp = lst;
+	ct = -1;
+	if (tmp)
+	{
+		while (tmp && ++ct < pos - 1)
+			tmp = tmp->next;
+	}
+	return (tmp);
+}
+
+void	opt_left_move(t_all *all)
+{
+	t_cmd	*nav;
+
+	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
+	if (all->current_key == K_CTRL_LEFT 
+		&& check_if_spaces(all->cmd_termcaps, all->cursor_pos - 1))
+	{
+		while (nav)
+		{
+			if (nav->c == ' ' && nav->prev->c != ' ')
+			{
+				tputs_termcap("le");
+				all->cursor_pos--;
+				nav = nav->prev;
+				break ;
+			}
+			tputs_termcap("le");
+			all->cursor_pos--;
+			nav = nav->prev;
+		}
 	}
 }
 
 void	horizontal_moves(t_all *all)
 {
-	// if (all->current && !all->history_moves)
-	// {
-	// 	all->history_moves = 1;
-	// 	realloc_termcaps_cmd(all, all->current);
-	// 	all->cursor_pos = (int)all->cmd_termcaps->lenght;
-	// 	all->stop = 1;
-	// }
-	// printf("all->cmd: %s\n", all->cmd);
-//	printf("lenght: %zu\n", all->cmd_termcaps->lenght);
-//	printf("cursor pos: %d\n", all->cursor_pos);
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		all->cursor_pos--;
@@ -93,7 +137,30 @@ void	horizontal_moves(t_all *all)
 		all->cursor_pos++;
 		tputs_termcap("nd");
 	}
-	// all->stop = 0;
+}
+
+void	goto_begin(t_all *all)
+{
+	if (all->cursor_pos > 1)
+	{
+		while (all->cursor_pos > 1)
+		{
+			tputs_termcap("le");
+			all->cursor_pos--;
+		}
+	}
+}
+
+void	goto_end(t_all *all)
+{
+	if (all->cursor_pos >= 1 && all->cursor_pos < (int)all->cmd_termcaps->lenght + 1)
+	{
+		while (all->cursor_pos < (int)all->cmd_termcaps->lenght + 1)
+		{
+			tputs_termcap("nd");
+			all->cursor_pos++;
+		}
+	}
 }
 /*
 void	update_cmd_line_del(t_all *all)
