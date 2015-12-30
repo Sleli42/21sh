@@ -43,6 +43,7 @@ void		parse_keys(t_all *all)
 	{K_BACKSPACE, del_char},
 	{K_DELETE, del_char},
 	{K_CTRL_LEFT, opt_left_move},
+	{K_CTRL_RIGHT, opt_right_move},
 	{K_HOME, goto_begin},
 	{K_END, goto_end}};
 
@@ -54,7 +55,7 @@ void		parse_keys(t_all *all)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 9)
+	while (i < 10)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
@@ -66,7 +67,7 @@ void		parse_keys(t_all *all)
 	}
 }
 
-int		check_if_spaces(t_dlist2 *lst, int pos)
+int		check_if_spaces_before(t_dlist2 *lst, int pos)
 {
 	t_cmd	*tmp;
 	int		ct;
@@ -76,6 +77,29 @@ int		check_if_spaces(t_dlist2 *lst, int pos)
 	if (tmp)
 	{
 		while (ct++ < pos)
+		{
+			if (tmp->c == ' ')
+				return (1);
+			tmp = tmp->next;
+		}
+	}
+	return (0);
+}
+
+int		check_if_spaces_after(t_dlist2 *lst, int pos)
+{
+	t_cmd	*tmp;
+	int		ct;
+
+	tmp = lst->head;
+	ct = -1;
+	if (tmp)
+	{
+		while (tmp && ++ct < pos)
+			tmp = tmp->next;
+		if (tmp->c == ' ')
+			tmp = tmp->next;
+		while (tmp)
 		{
 			if (tmp->c == ' ')
 				return (1);
@@ -100,13 +124,42 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 	return (tmp);
 }
 
+void	opt_right_move(t_all *all)
+{
+	t_cmd	*nav;
+
+	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
+	if (check_if_spaces_after(all->cmd_termcaps, all->cursor_pos - 1))
+	{
+		if (nav->next->c == ' ' && nav->next->next->c != ' ')
+			nav = nav->next->next;
+		/* FAUX SI ON PART DU DEBUT DE CHAINE */
+		// printf("nav->|%c|\n", nav->c);
+		// 	printf("nav->next |%c|\n", nav->next->c);
+		while (nav)
+		{
+			if (nav->c == ' ' && nav->prev->c != ' ')
+			{
+				tputs_termcap("nd");
+				all->cursor_pos++;
+				nav = nav->next;
+				break ;
+			}
+			tputs_termcap("nd");
+			all->cursor_pos++;
+			nav = nav->next;
+		}
+	}
+	else
+		goto_end(all);
+}
+
 void	opt_left_move(t_all *all)
 {
 	t_cmd	*nav;
 
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
-	if (all->current_key == K_CTRL_LEFT 
-		&& check_if_spaces(all->cmd_termcaps, all->cursor_pos - 1))
+	if (check_if_spaces_before(all->cmd_termcaps, all->cursor_pos - 1))
 	{
 		while (nav)
 		{
@@ -122,6 +175,8 @@ void	opt_left_move(t_all *all)
 			nav = nav->prev;
 		}
 	}
+	else
+		goto_begin(all);
 }
 
 void	horizontal_moves(t_all *all)

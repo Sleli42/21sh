@@ -329,6 +329,8 @@ t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
 void		goto_end(t_all *all);
 void		goto_begin(t_all *all);
 void		opt_left_move(t_all *all);
+void		opt_right_move(t_all *all);
+
 void		horizontal_moves(t_all *all);
 void		del_char(t_all *all);
 /*
