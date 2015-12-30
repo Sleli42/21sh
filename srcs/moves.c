@@ -97,6 +97,8 @@ int		check_if_spaces_after(t_dlist2 *lst, int pos)
 	{
 		while (tmp && ++ct < pos)
 			tmp = tmp->next;
+		if (!tmp)
+			return (0);
 		if (tmp->c == ' ')
 			tmp = tmp->next;
 		while (tmp)
@@ -127,22 +129,22 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 void	opt_right_move(t_all *all)
 {
 	t_cmd	*nav;
+	t_cmd	*save_pos;
 
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
+	save_pos = nav;
 	if (check_if_spaces_after(all->cmd_termcaps, all->cursor_pos - 1))
 	{
-		if (nav->next->c == ' ' && nav->next->next->c != ' ')
-			nav = nav->next->next;
-		/* FAUX SI ON PART DU DEBUT DE CHAINE */
-		// printf("nav->|%c|\n", nav->c);
-		// 	printf("nav->next |%c|\n", nav->next->c);
-		while (nav)
+		while (nav && nav->next)
 		{
-			if (nav->c == ' ' && nav->prev->c != ' ')
+			if (nav->prev != save_pos && nav->c == ' ' && nav->next->c != ' ')
 			{
-				tputs_termcap("nd");
-				all->cursor_pos++;
-				nav = nav->next;
+				if (save_pos != all->cmd_termcaps->head)
+				{
+					tputs_termcap("le");
+					all->cursor_pos--;
+					nav = nav->prev;
+				}
 				break ;
 			}
 			tputs_termcap("nd");
@@ -217,32 +219,12 @@ void	goto_end(t_all *all)
 		}
 	}
 }
-/*
-void	update_cmd_line_del(t_all *all)
-{
-	int		ct;
-
-	ct = all->cursor_pos;
-	while ((size_t)ct++ <= all->cmd_termcaps->lenght)
-		tputs_termcap("nd");
-	while (--ct)
-	{
-		tputs_termcap("le");
-		tputs_termcap("dc");
-	}
-	create_cmd(all);
-	ft_putstr(all->cmd);
-	ct = (int)all->cmd_termcaps->lenght;
-	while (ct-- >= all->cursor_pos)
-		tputs_termcap("le");
-}*/
 
 void	del_char(t_all *all)
 {
 //	write(1, "here\n", 5);
-	init_windows_size(all);
 	// printf("col: %d\n", all->ws.ws_col);
-	//printf("%d\n", all->cursor_pos);
+	printf("%d\n", all->cursor_pos);
 	if (all->already_in_history)
 		realloc_termcaps_cmd(all, all->cmd);
 	//tputs_termcap("me");
@@ -269,52 +251,3 @@ void	del_char(t_all *all)
 		tputs_termcap("ed");
 	}
 }
-/*
-void	make_moves(t_all *all, char buff[3])
-{
-	//int			deltab = 0;
-	//write(1, "here\n", 5);
-	//printf("|%c|\n", all->cmd_termcaps->tail->c);
-	if (K_RIGHT || K_LEFT)
-	{
-		horizontal_moves(all, buff);
-	}
-	if (K_UP || K_DOWN)
-		goto_latest_commands(all, buff);
-	// if (K_TAB)
-	// {
-	// 	if (!all->cmd_termcaps->head)
-	// 	{
-	// 		return ;
-	// 	}
-	// 	else
-	// 		open_directories(all);
-	// }
-	if (K_DELETE || K_DELETE2 || buff[0] == 127 || K_BACKSPACE)
-	{
-		if (all->already_in_history)
-			realloc_termcaps_cmd(all, all->cmd);
-		// if (all->already_autocomplete)
-		// {
-		// 	//printf("tail: %c\n", all->cmd_termcaps->tail->c);
-		// 	printf("cursor_ pos: %d\n", all->cursor_pos);
-		// 	printf("lenght list: %zu\n", all->cmd_termcaps->lenght);
-		// }
-		tputs_termcap("me");
-		tputs_termcap("dm");
-		if (all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
-		{
-			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght + 1)
-			{
-			//	write(1, "HEERE\n", 6);
-				(K_BACKSPACE) ? dlst_del_one2(all->cmd_termcaps, all->cursor_pos)
-					: dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
-			}
-			(!K_BACKSPACE) ? tputs_termcap("le") : NULL;
-			tputs_termcap("dc");
-			if (!K_BACKSPACE)
-				all->cursor_pos--;
-			tputs_termcap("ed");
-		}
-	}
-}*/

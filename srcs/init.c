@@ -108,6 +108,7 @@ t_all		*init_all(char **env)
 		error("MALLOC");
 	//catch_sig();
 	//init_termios(all->term);
+	init_windows_size(all);
 	all->env = init_env(env);
 	all->dupenv = ft_dupenv(env);
 	all->cmd_history = create_dlst();

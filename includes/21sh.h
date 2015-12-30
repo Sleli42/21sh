@@ -146,6 +146,8 @@ typedef struct			s_all
 	int					cursor_pos;
 	int					history_moves;
 	int					already_in_moves;
+		// --VERTICAL MOVES
+	int					curr_line;
 		// --HISTORY
 	char				**history_buff;
 	int					fd_history;

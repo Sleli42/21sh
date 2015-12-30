@@ -200,6 +200,7 @@ void	loop(t_all *all)
 	all->already_open = 0;
 	all->already_in_history = 0;
 	all->cursor_pos = 1;
+	all->curr_line = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
 	// init_term();
@@ -226,6 +227,13 @@ void	loop(t_all *all)
 	//tputs_termcap("ti");
 	while (*buff != '\n')
 	{
+		if ((all->curr_line == 1 && all->cursor_pos + 2 == all->ws.ws_col)
+			|| (all->curr_line > 1 
+				&& (all->cursor_pos / all->curr_line) == all->ws.ws_col))
+		{
+			all->curr_line++;
+			printf("line: %d\n", all->curr_line);
+		}
 		if (buff)
 		{
 			ft_strdel(&buff);
