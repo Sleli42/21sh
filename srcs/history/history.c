@@ -143,3 +143,13 @@ void	goto_latest_commands(t_all *all)
 			display_index_cmd(all);
 	}
 }
+
+int		check_history_file(char **histo)
+{
+	int		ret;
+
+	ret = ft_tablen(histo);
+	if (ret == 0)
+		return (1);
+	return (ret + 1);
+}

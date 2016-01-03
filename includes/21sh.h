@@ -204,16 +204,51 @@ void		loop(t_all *all);
 */
 char		**ft_dupenv(char **env);
 t_dlist		*init_env(char **env);
-int			init_tty(void);
-void		init_windows_size(t_all *all);
-void		init_term(void);
-void 		reset_term(void);
 t_all		*init_all(char **env);
 /*
 *** ============================================================ error.c
 */
 void		error(char *err);
 void		term_error(char *err);
+/*
+*** ============================================================= env.c
+*/
+void		env_display(t_all *all, char *cmd);
+void		env_set(t_all *all, char *cmd);
+void		env_unset(t_all *all, char *cmd);
+/*
+*** ============================================================ tools.c
+*/
+char		*find_env_arg(t_all *all, char *arg2find);
+void		update_oldpwd(t_all *all);
+int			find_maxlen_elem(t_clist *lst);
+char		goto_elem(t_cmd *cmd, int pos);
+/*
+*** ============================================================ autocomplete.c
+*/
+int			define_nb_files_by_row(t_all *all, t_clist *lst);
+char		*find_path(char *cmd);
+void		swap_elems(t_select *a, t_select *b);
+void		sort_name(t_select **lst);
+void		list_elems(t_all *all, DIR *entry);
+void		new_line_autocomplet(t_all *all);
+void		display_current(t_all *all, t_select *nav);
+
+void		search_equ(t_all *all, char *dir);
+void		search_current_dir(t_all *all);
+void		search_bin_path(t_all *all);
+void		open_directories(t_all *all);
+/*
+*** ============================================================ builtins.c
+*/
+void		pwd_display(t_all *all, char *cmd);
+void		goto_dir(t_all *all, char *cmd);
+void		free_all(t_all *all, char *cmd);
+
+
+
+
+
 /*
 *** ============================================================ LISTS
 */
@@ -246,31 +281,14 @@ void		term_error(char *err);
 	void		swap_elems_cmd(t_cmd *a, t_cmd *b);
 	int			len_lst_cmd(t_cmd *lst);
 	int			update_list2(t_dlist2 *lst, t_cmd *elem);
-/*
-*** ============================================================ clist.c
-*/
-t_clist		*create_clst(void);
-t_select	*clst_create_elem(char *s);
-t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
-int			len_clst(t_select *lst);
-void		del_clist(t_clist **lst);
-/*
-*** ============================================================= env.c
-*/
-void		env_display(t_all *all, char *cmd);
-void		env_set(t_all *all, char *cmd);
-void		env_unset(t_all *all, char *cmd);
-/*
-*** ============================================================ tools.c
-*/
-char		*find_env_arg(t_all *all, char *arg2find);
-void		update_oldpwd(t_all *all);
-void		add_missing_char_to_cmd(t_all *all, char *s);
-void		add_to_cmd(t_all *all, char *s);
-int			find_maxlen_elem(t_clist *lst);
-int			all_is_spaces(t_cmd *cmd);
-char		goto_elem(t_cmd *cmd, int pos);
-int			check_history_file(char **histo);
+	/*
+	*** ======================= clist.c
+	*/
+	t_clist		*create_clst(void);
+	t_select	*clst_create_elem(char *s);
+	t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
+	int			len_clst(t_select *lst);
+	void		del_clist(t_clist **lst);
 /*
 *** ============================================================ EXEC_BINARY
 */
@@ -293,35 +311,32 @@ int			check_history_file(char **histo);
 	void		exec_redirection_cmd(t_all *all, char *cmd);
 	void		exec_command(t_all *all);
 /*
-*** ============================================================ builtins.c
+*** ============================================================ REDIRECTS
 */
-void		pwd_display(t_all *all, char *cmd);
-void		goto_dir(t_all *all, char *cmd);
-void		free_all(t_all *all, char *cmd);
-/*
-*** ============================================================ redirection.c
-*/
-void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
-void		erase_and_replace(t_all *all, char *cmd);
-void		add_to_end(t_all *all, char *cmd);
-void		read_file(t_all *all, char *cmd);
-void		read_stdin(t_all *all, char *cmd);
-/*
-*** ============================================================ pipe.c
-*/
-char		*create_good_path(t_all *all, char *cmd);
-void		create_pipe(t_all *all, char *cmd);
-void		exec_pipe_process(t_all *all, char *cmd, char **args);
-int			open_file(char *file, int redir);
-void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
-/*
-*** ============================================================ termcaps.c
-*/
-t_all		*f_cpy(t_all *all);
-int			lu_putchar(int c);
-void		tputs_termcap(char *tc);
-void		move_cursor(char *buff, char *cmd, int *i);
-void		restore_term(t_termios restore);
+	/*
+	*** ======================= pipe.c
+	*/
+	void		create_pipe(t_all *all, char *cmd);
+	void		exec_pipe_process(t_all *all, char *cmd, char **args);
+	/*
+	*** ======================= pipe_tools.c
+	*/
+	char		*create_good_path(t_all *all, char *cmd);
+	int			check_redirect(char *s);
+	int			open_file(char *file, int redir);
+	char		*redirected_in_args(char **args, int *redir_type);
+	/*
+	*** ======================= redirection.c
+	*/
+	void		erase_and_replace(t_all *all, char *cmd);
+	void		add_to_end(t_all *all, char *cmd);
+	void		read_file(t_all *all, char *cmd);
+	void		read_stdin(t_all *all, char *cmd);
+	void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
+	/*
+	*** ======================= redirection_tools.c
+	*/
+	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
 /*
 *** ============================================================ HISTORY
 */
@@ -332,6 +347,7 @@ void		restore_term(t_termios restore);
 	void		add_to_history(t_all *all);
 	void		display_index_cmd(t_all *all);
 	void		goto_latest_commands(t_all *all);
+	int			check_history_file(char **histo);
 /*
 *** ============================================================ ARROWS_AND_MOVEMENTS
 */
@@ -360,19 +376,21 @@ void		restore_term(t_termios restore);
 	void		goto_begin(t_all *all);
 	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
 /*
-*** ============================================================ autocomplete.c
+*** ============================================================ TERMCAPS
 */
-int			define_nb_files_by_row(t_all *all, t_clist *lst);
-char		*find_path(char *cmd);
-void		swap_elems(t_select *a, t_select *b);
-void		sort_name(t_select **lst);
-void		list_elems(t_all *all, DIR *entry);
-void		new_line_autocomplet(t_all *all);
-void		display_current(t_all *all, t_select *nav);
-
-void		search_equ(t_all *all, char *dir);
-void		search_current_dir(t_all *all);
-void		search_bin_path(t_all *all);
-void		open_directories(t_all *all);
+	/*
+	*** ======================= termcaps_init.c
+	*/
+	void		init_term(void);
+	void		init_windows_size(t_all *all);
+	int			init_tty(void);
+	/*
+	*** ======================= termcaps_tools.c
+	*/
+	t_all		*f_cpy(t_all *all);
+	int			lu_putchar(int c);
+	void		tputs_termcap(char *tc);
+	void		restore_term(t_termios restore);
+	void 		reset_term(void);
 
 #endif

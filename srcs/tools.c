@@ -49,45 +49,6 @@ void	update_oldpwd(t_all *all)
 	}
 }
 
-void	add_missing_char_to_cmd(t_all *all, char *s)
-{
-	t_cmd	*nav;
-	int		ct;
-
-	nav = all->cmd_termcaps->tail;
-	ct = ft_strlen(s) - 1;
-	while (nav->c != s[ct])
-		ct--;
-	//printf("ct: %d\n", ct);
-	while (s[ct++])
-	{
-		write(1, &s[ct], 1);
-		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct]));
-	}
-}
-
-// void	add_to_cmd(t_all *all, char *s)
-// {
-// 	int		ct;
-
-// 	ct = 0;
-// 	//printf("allnbchar: %d\n", all->nb_char_write);
-// 	// if (all->current)
-// 	// 	mprintf("current: %s\n", all->current);
-// 	if (!all->nb_char_write && all->current)
-// 		all->nb_char_write = ft_strlen(all->current) - 1;
-// 	new_line_autocomplet(all);
-// 	while (s[ct])
-// 	{
-// 		write(1, &s[ct], 1);
-// 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(s[ct++]));	
-// 	}
-// }
-
-// char	*cut_cmd(char *s)
-// {
-
-// }
 
 int		find_maxlen_elem(t_clist *lst)
 {
@@ -105,24 +66,6 @@ int		find_maxlen_elem(t_clist *lst)
 	return (ret);
 }
 
-int		all_is_spaces(t_cmd *cmd)
-{
-	t_cmd *tmp;
-
-	tmp = cmd;
-	if (tmp)
-	{
-		while (tmp)
-		{
-			if (tmp->c == ' ' || tmp->c == '\t')
-				tmp = tmp->next;
-			else
-				return (0);
-		}
-	}
-	return (1);
-}
-
 char	goto_elem(t_cmd *cmd, int pos)
 {
 	t_cmd	*tmp = cmd;
@@ -132,16 +75,6 @@ char	goto_elem(t_cmd *cmd, int pos)
 		tmp = tmp->next;
 	//printf("-> |%c|\n", tmp->c);
 	return (tmp->c);
-}
-
-int		check_history_file(char **histo)
-{
-	int		ret;
-
-	ret = ft_tablen(histo);
-	if (ret == 0)
-		return (1);
-	return (ret + 1);
 }
 
 

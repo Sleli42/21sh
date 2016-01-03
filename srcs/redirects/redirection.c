@@ -25,16 +25,6 @@ dup2() transforme newfd en une copie de oldfd, fermant auparavant newfd
           valeur que oldfd, alors dup2() ne fait rien et renvoie newfd.
 */
 
-void	dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup)
-{
-	dup2(all->fd2open, fd2dup);
-	close(all->fd2open);
-	exec_right_binary(all, argv);
-	dup2(fd2back, fd2dup);
-	close(fd2back);
-	del_array(&argv);
-}
-
 void	erase_and_replace(t_all *all, char *cmd)
 {
 	char	**redirect;
@@ -118,4 +108,28 @@ void	read_stdin(t_all *all, char *cmd)
 				ft_strdel(&buff);
 	}
 	del_array(&redirect);
+}
+
+void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
+{
+	pid_t	child;
+	int		fd;
+
+	fd = open_file(file, redir);
+	if (cmd == NULL)
+		return ;
+	if ((child = fork()) == -1)
+		write(1, "fork  error\n", 11);
+	if (child == 0)
+	{
+		if (file != NULL)
+		{
+			dup2(fd, 1);
+			close(fd);
+		}
+		if (execve(cmd, args, all->dupenv) == -1)
+			write(1, "execve error\n", 13);
+	}
+	else
+		wait(NULL);
 }

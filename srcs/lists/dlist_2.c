@@ -116,21 +116,6 @@ t_dlist2		*dlst_add_back_2(t_dlist2 *lst, t_cmd *node)
 	return (lst);
 }
 
-int				len_lst_cmd(t_cmd *lst)
-{
-	t_cmd		*nav;
-	int			ret;
-
-	nav = lst;
-	ret = 0;
-	while (nav)
-	{
-		ret++;
-		nav = nav->next;
-	}
-	return (ret);
-}
-
 t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 {
 	t_cmd	*tmp;
@@ -173,28 +158,6 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 	return (lst);
 }
 
-int			update_list2(t_dlist2 *lst, t_cmd *elem)
-{
-	if (!elem->next && elem->prev)
-	{
-		elem->c = 0;
-		lst->tail = elem->prev;
-		lst->tail->next = NULL;
-	}
-	else if (!elem->prev && elem->next)
-	{
-		elem->c = 0;
-		lst->head = elem->next;
-		lst->head->prev = NULL;;
-	}
-	else
-	{
-		elem->c = 0;
-		elem->prev->next = elem->next;
-		elem->next->prev = elem->prev;
-	}
-	return (1);
-}
 
 void			del_dlist2(t_dlist2 *lst)
 {
