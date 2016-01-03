@@ -141,30 +141,6 @@ void	update_cmd_line_insert(t_all *all, char char2add)
 	all->cursor_pos++;
 }
 
-int		ft_getkey(char *s)
-{
-	int			result;
-	int			i;
-	int			mult;
-	int			value;
-
-	result = 0;
-	i = 0;
-	while (i < 6)
-	{
-		mult = 10;
-		value = s[i];
-		while (value > 10)
-		{
-			mult *= 10;
-			value /= 10;
-		}
-		result = result * mult + s[i];
-		i++;
-	}
-	return (result);
-}
-
 void	read_key(char *buff)
 {
 	printf("buff: |%s|\n", buff);

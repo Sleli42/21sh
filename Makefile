@@ -16,23 +16,23 @@ FLAGS = -Wall -Wextra -Werror
 DEBUG = -g -gmodules -fexceptions -ftrapv -fcommon
 LDFLAGS = -I./includes/ -I./libft/include/
 
-SRC = binary_tools.c \
+SRC = 	exec_binary/binary_tools.c \
+		exec_binary/cmd_exec.c \
+		exec_binary/cmd_parse.c \
+		lists/dlist.c \
+		lists/dlist_2.c \
+		lists/clist.c \
 		builtins.c \
-		cmd_exec.c \
-		cmd_parse.c \
-		dlist.c \
-		dlist_2.c \
-		clist.c \
 		env.c \
 		error.c \
 		init.c \
 		main.c \
-		pipe.c \
-		redirection.c \
+		redirects/pipe.c \
+		redirects/redirection.c \
 		tools.c \
-		termcaps.c \
-		history.c \
-		moves.c \
+		termcaps/termcaps_tools.c \
+		history/history.c \
+		arrows_and_movements/moves.c \
 		
 
 

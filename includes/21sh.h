@@ -192,7 +192,6 @@ typedef	struct			s_keys
 *** ============================================================ main.c
 */
 void	display_dlst(t_dlist2 *lst);
-int		ft_getkey(char *str);
 void	create_and_exec_command(t_all *all);
 
 void	update_cmd_line_insert(t_all *all, char char2add);
@@ -216,28 +215,37 @@ t_all		*init_all(char **env);
 void		error(char *err);
 void		term_error(char *err);
 /*
-*** ============================================================ dlist.c
+*** ============================================================ LISTS
 */
-t_dlist		*create_dlst(void);
-t_node		*dlst_node_new(char *data, size_t index);
-t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
-t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
-int			len_lst_node(t_node *lst);
-int			update_list(t_dlist *lst, t_node *elem);
-void		del_dlist(t_dlist *lst);
-/*
-*** ============================================================ dlist_2.c
-*/
-t_dlist2	*create_cmd_dlst(void);
-t_cmd		*dlst_cmd_new(char c);
-void		swap_elems_cmd(t_cmd *a, t_cmd *b);
-t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
-t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);
-t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
-int			len_lst_cmd(t_cmd *lst);
-t_dlist2	*dlst_del_one2(t_dlist2 *lst, int pos);
-int			update_list2(t_dlist2 *lst, t_cmd *elem);
-void		del_dlist2(t_dlist2 *lst);
+	/*
+	*** ======================= dlist.c
+	*/
+	t_node		*dlst_node_new(char *data, size_t index);
+	t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
+	t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
+	void		del_dlist(t_dlist *lst);
+	/*
+	*** ======================= dlist_tools.c
+	*/
+	t_dlist		*create_dlst(void);
+	int			len_lst_node(t_node *lst);
+	int			update_list(t_dlist *lst, t_node *elem);
+	/*
+	*** ======================= dlist_2.c
+	*/
+	t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
+	t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);
+	t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
+	t_dlist2	*dlst_del_one2(t_dlist2 *lst, int pos);
+	void		del_dlist2(t_dlist2 *lst);
+	/*
+	*** ======================= dlist_2_tools.c
+	*/
+	t_cmd		*dlst_cmd_new(char c);
+	t_dlist2	*create_cmd_dlst(void);
+	void		swap_elems_cmd(t_cmd *a, t_cmd *b);
+	int			len_lst_cmd(t_cmd *lst);
+	int			update_list2(t_dlist2 *lst, t_cmd *elem);
 /*
 *** ============================================================ clist.c
 */
@@ -264,23 +272,26 @@ int			all_is_spaces(t_cmd *cmd);
 char		goto_elem(t_cmd *cmd, int pos);
 int			check_history_file(char **histo);
 /*
-*** ============================================================ binary_tools.c
+*** ============================================================ EXEC_BINARY
 */
-int			good_access(char *bin);
-char		*create_path(char *path, char *bin);
-void		exec_right_binary(t_all *all, char **argv_bin);
-void		exec_binary(char *bin, char **argv_bin, char **env);
-/*
-*** ============================================================ cmd_parse.c
-*/
-void		parse_command(t_all *all, char *buff);
-int			check_redirection(char *s);
-/*
-*** ============================================================ cmd_exec.c
-*/
-void		exec_simple_cmd(t_all *all, char *cmd);
-void		exec_redirection_cmd(t_all *all, char *cmd);
-void		exec_command(t_all *all);
+	/*
+	*** ======================= binary_tools.c
+	*/
+	int			good_access(char *bin);
+	char		*create_path(char *path, char *bin);
+	void		exec_right_binary(t_all *all, char **argv_bin);
+	void		exec_binary(char *bin, char **argv_bin, char **env);
+	/*
+	*** ======================= cmd_parse.c
+	*/
+	void		parse_command(t_all *all, char *buff);
+	int			check_redirection(char *s);
+	/*
+	*** ======================= cmd_exec.c
+	*/
+	void		exec_simple_cmd(t_all *all, char *cmd);
+	void		exec_redirection_cmd(t_all *all, char *cmd);
+	void		exec_command(t_all *all);
 /*
 *** ============================================================ builtins.c
 */
@@ -312,29 +323,42 @@ void		tputs_termcap(char *tc);
 void		move_cursor(char *buff, char *cmd, int *i);
 void		restore_term(t_termios restore);
 /*
-*** ============================================================ history.c
+*** ============================================================ HISTORY
 */
-char		**parse_history(void);
-void		add_to_history(t_all *all);
-void		display_index_cmd(t_all *all);
-void		display_tab_history(char **array);
-char		*display_last_cmd(t_dlist *lst, size_t pos);
-void		new_line(t_all *all);
-void		goto_latest_commands(t_all *all);
+	/*
+	*** ======================= history.c
+	*/
+	char		**parse_history(void);
+	void		add_to_history(t_all *all);
+	void		display_index_cmd(t_all *all);
+	void		goto_latest_commands(t_all *all);
 /*
-*** ============================================================ moves.c
+*** ============================================================ ARROWS_AND_MOVEMENTS
 */
-int			check_keys_arrows(t_all *all, char *buff);
-void		parse_keys(t_all *all);
-t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
-
-void		goto_end(t_all *all);
-void		goto_begin(t_all *all);
-void		opt_left_move(t_all *all);
-void		opt_right_move(t_all *all);
-
-void		horizontal_moves(t_all *all);
-void		del_char(t_all *all);
+	/*
+	*** ======================= horizontal_movements_tools.c
+	*/
+	int			ft_getkey(char *s);
+	int			check_keys_arrows(t_all *all, char *buff);
+	void		parse_keys(t_all *all);
+	/*
+	*** ======================= delete_char.c
+	*/
+	void		del_char(t_all *all);
+	/*
+	*** ======================= horizontal_movements.c
+	*/
+	void		horizontal_moves(t_all *all);
+	void		opt_left_move(t_all *all);
+	void		opt_right_move(t_all *all);
+	/*
+	*** ======================= horizontal_movements_tools.c
+	*/
+	int			check_if_spaces_before(t_dlist2 *lst, int pos);
+	int			check_if_spaces_after(t_dlist2 *lst, int pos);
+	void		goto_end(t_all *all);
+	void		goto_begin(t_all *all);
+	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
 /*
 *** ============================================================ autocomplete.c
 */
