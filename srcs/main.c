@@ -232,7 +232,7 @@ void	loop(t_all *all)
 				&& (all->cursor_pos / all->curr_line) == all->ws.ws_col))
 		{
 			all->curr_line++;
-			printf("line: %d\n", all->curr_line);
+			//printf("line: %d\n", all->curr_line);
 		}
 		if (buff)
 		{
