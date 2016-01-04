@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   shell_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/03 16:12:58 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/11/03 16:12:59 by lubaujar         ###   ########.fr       */
+/*   Created: 2016/01/04 10:40:48 by lubaujar          #+#    #+#             */
+/*   Updated: 2016/01/04 10:40:49 by lubaujar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
-
-t_dlist		*init_env(char **env)
-{
-	t_dlist	*list_env;
-	int		i;
-
-	list_env = NULL;
-	i = -1;
-	list_env = create_dlst();
-	while (env[++i])
-		dlst_add_back(list_env, dlst_node_new(env[i], (size_t)i));
-	return (list_env);
-}
-
-// void		fct_sig(int sig)
-// {
-// 	if (sig == SIGINT || sig == SIGCONT)
-// 		display_prompt(f_cpy(NULL));
-// 	else
-// 		exit(0);
-// }
-
-// static void		catch_sig(void)
-// {
-// 	signal(SIGINT, fct_sig);
-// 	signal(SIGCONT, fct_sig);
-// }
 
 t_all		*init_all(char **env)
 {
@@ -66,3 +39,17 @@ t_all		*init_all(char **env)
 	// all->file_history = ft_strdup(".21sh_history");
 	return (all);
 }
+
+// void		fct_sig(int sig)
+// {
+// 	if (sig == SIGINT || sig == SIGCONT)
+// 		display_prompt(f_cpy(NULL));
+// 	else
+// 		exit(0);
+// }
+
+// static void		catch_sig(void)
+// {
+// 	signal(SIGINT, fct_sig);
+// 	signal(SIGCONT, fct_sig);
+// }

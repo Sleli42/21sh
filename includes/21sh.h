@@ -30,40 +30,17 @@
 # define	MAXLEN			2048
 # define	K_UP			279165000
 # define	K_CTRL_UP		-23278475
-// # define	K_UP		(buff[0] == 27 && buff[1] == 91 && buff[2] == 65)
-// # define	K_UP		"\x1b\x5b\x41\x3b\x39\x44\x30"
 # define	K_DOWN			279166000
 # define	K_CTRL_DOWN		-23278474
-// # define K_DOWN		(buff[0] == 27 && buff[1] == 91 && buff[2] == 66)
-// # define K_DOWN		"\x1b\x5b\x42\x3b\x39\x44\x30"
 # define	K_RIGHT			279167000
 # define	K_CTRL_RIGHT	-23278473
-// # define K_RIGHT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 67)
-// # define K_RIGHT		"\x1b\x5b\x43\x3b\x39\x44\x30"
 # define	K_LEFT			279168000
-// # define	K_LEFT		(buff[0] == 27 && buff[1] == 91 && buff[2] == 68)
-// # define	K_LEFT		"\x1b\x5b\x44\x3b\x39\x44\x30"
 # define	K_CTRL_LEFT		-23278472
-// # define	K_CTRL_LEFT	"\x1b\x5b\x31\x3b\x39\x44\x30"
-// # define	K_SPACE		(buff[0] == 32 && !buff[1] && !buff[2])
-// # define	K_SPACE		"\x20\x5b\x42\x3b\x39\x44\x30"
 # define	K_ECHAP			2700000
-// # define	K_ECHAP		(buff[0] == 27 && !buff[1] && !buff[2])
-// # define	K_ECHAP		"\x1b\x5b\x42\x3b\x39\x44\x30"
-// # define	K_BACKSPACE		{12700000, 1279165000, 1279166000, 1279167000, 1279168000}
 # define	K_BACKSPACE		12700000
-// # define	K_BACKSPACE	(buff[0] == 27 && buff[1] == 91 && buff[2] == 51)
-// # define	K_BACKSPACE	"\x7f\x5b\x42\x3b\x39\x44\x30"
 # define	K_DELETE		2145308824
-// # define K_DELETE	(buff[0] == 127 && !buff[1] && !buff[2])
-// # define K_DELETE	"\x1b\x5b\x33\x7e\x39\x44\x30"
-// # define	K_DELETE2	(buff[0] == 127 && buff[1] == 91 && buff[2] == 65)
 # define	K_ENTER			1000000
-// # define K_ENTER		(buff[0] == 10 && !buff[1] && !buff[2])
-// # define K_ENTER		"\xa\x5b\x30\x6d\x1b\x28\x30"
 # define	K_TAB			900000
-// # define	K_TAB		(buff[0] == 9 && !buff[1] && !buff[2])
-// # define	K_TAB		"\x9\x5b\x30\x6d\x1b\x28\x30"
 # define	K_HOME			279172000
 # define	K_END			279170000
 
@@ -188,68 +165,83 @@ typedef	struct			s_keys
 	void				(*f)(t_all *);
 }						t_keys;
 
-/*
-*** ============================================================ main.c
-*/
-void	display_dlst(t_dlist2 *lst);
-void	create_and_exec_command(t_all *all);
 
-void	update_cmd_line_insert(t_all *all, char char2add);
-void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
-void		create_cmd(t_all *all);
-void		display_prompt(t_all *all);
-void		loop(t_all *all);
-/*
-*** ============================================================ init.c
+/* -------------------------------------------------------------
+*** ============================================================ ARROWS_AND_MOVEMENTS
 */
-char		**ft_dupenv(char **env);
-t_dlist		*init_env(char **env);
-t_all		*init_all(char **env);
-/*
-*** ============================================================ error.c
+	/*
+	*** ======================= horizontal_movements_tools.c
+	*/
+	int			ft_getkey(char *s);
+	int			check_keys_arrows(t_all *all, char *buff);
+	void		parse_keys(t_all *all);
+	/*
+	*** ======================= delete_char.c
+	*/
+	void		del_char(t_all *all);
+	/*
+	*** ======================= horizontal_movements.c
+	*/
+	void		horizontal_moves(t_all *all);
+	void		opt_left_move(t_all *all);
+	void		opt_right_move(t_all *all);
+	/*
+	*** ======================= horizontal_movements_tools.c
+	*/
+	int			check_if_spaces_before(t_dlist2 *lst, int pos);
+	int			check_if_spaces_after(t_dlist2 *lst, int pos);
+	void		goto_end(t_all *all);
+	void		goto_begin(t_all *all);
+	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+/* -------------------------------------------------------------
+*** ============================================================ AUTOCOMPLETE
 */
-void		error(char *err);
-void		term_error(char *err);
-/*
-*** ============================================================= env.c
+	/*
+	*** ======================= autocomplete.c
+	*/
+	int			define_nb_files_by_row(t_all *all, t_clist *lst);
+	char		*find_path(char *cmd);
+	void		swap_elems(t_select *a, t_select *b);
+	void		sort_name(t_select **lst);
+	void		list_elems(t_all *all, DIR *entry);
+	void		new_line_autocomplet(t_all *all);
+	void		display_current(t_all *all, t_select *nav);
+	void		search_equ(t_all *all, char *dir);
+	void		search_current_dir(t_all *all);
+	void		search_bin_path(t_all *all);
+	void		open_directories(t_all *all);
+/* -------------------------------------------------------------
+*** ============================================================ BUILTINS
 */
-void		env_display(t_all *all, char *cmd);
-void		env_set(t_all *all, char *cmd);
-void		env_unset(t_all *all, char *cmd);
-/*
-*** ============================================================ tools.c
+	/*
+	*** ======================= builtins.c
+	*/
+	void		pwd_display(t_all *all, char *cmd);
+	void		goto_dir(t_all *all, char *cmd);
+	void		free_all(t_all *all, char *cmd);
+	/*
+	*** ======================= builtins_tools.c
+	*/
+	void		update_oldpwd(t_all *all);
+/* -------------------------------------------------------------
+*** ============================================================ ENV
 */
-char		*find_env_arg(t_all *all, char *arg2find);
-void		update_oldpwd(t_all *all);
-int			find_maxlen_elem(t_clist *lst);
-char		goto_elem(t_cmd *cmd, int pos);
-/*
-*** ============================================================ autocomplete.c
-*/
-int			define_nb_files_by_row(t_all *all, t_clist *lst);
-char		*find_path(char *cmd);
-void		swap_elems(t_select *a, t_select *b);
-void		sort_name(t_select **lst);
-void		list_elems(t_all *all, DIR *entry);
-void		new_line_autocomplet(t_all *all);
-void		display_current(t_all *all, t_select *nav);
-
-void		search_equ(t_all *all, char *dir);
-void		search_current_dir(t_all *all);
-void		search_bin_path(t_all *all);
-void		open_directories(t_all *all);
-/*
-*** ============================================================ builtins.c
-*/
-void		pwd_display(t_all *all, char *cmd);
-void		goto_dir(t_all *all, char *cmd);
-void		free_all(t_all *all, char *cmd);
-
-
-
-
-
-/*
+	/*
+	*** ======================= env.c
+	*/
+	void		env_display(t_all *all, char *cmd);
+	void		env_set(t_all *all, char *cmd);
+	void		env_unset(t_all *all, char *cmd);
+	/*
+	*** ======================= env_init.c
+	*/
+	t_dlist		*init_env(char **env);
+	/*
+	*** ======================= env_tools.c
+	*/
+	char		*find_env_arg(t_all *all, char *arg2find);
+	char		**ft_dupenv(char **env);
+/* -------------------------------------------------------------
 *** ============================================================ LISTS
 */
 	/*
@@ -289,7 +281,7 @@ void		free_all(t_all *all, char *cmd);
 	t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
 	int			len_clst(t_select *lst);
 	void		del_clist(t_clist **lst);
-/*
+/* -------------------------------------------------------------
 *** ============================================================ EXEC_BINARY
 */
 	/*
@@ -310,7 +302,45 @@ void		free_all(t_all *all, char *cmd);
 	void		exec_simple_cmd(t_all *all, char *cmd);
 	void		exec_redirection_cmd(t_all *all, char *cmd);
 	void		exec_command(t_all *all);
-/*
+/* -------------------------------------------------------------
+*** ============================================================ SHELL
+*/
+	/*
+	*** ======================= main.c
+	*/
+	int			main(int ac, char **av, char **env);
+	/*
+	*** ======================= shell_init.c
+	*/
+	t_all		*init_all(char **env);
+	/*
+	*** ======================= shell_loop.c
+	*/
+	void		display_prompt(t_all *all);
+	void		create_and_exec_command(t_all *all);
+	void		loop(t_all *all);
+	/*
+	*** ======================= shell_tools.c
+	*/
+	int			find_maxlen_elem(t_clist *lst);
+	char		goto_elem(t_cmd *cmd, int pos);
+	void		update_cmd_line_insert(t_all *all, char char2add);
+	void		realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
+	void		create_cmd(t_all *all);
+	/*
+	*** ======================= debug.c
+	*/
+	void		display_dlst(t_dlist2 *lst);
+	void		display_current_arg(t_all *all);
+	void		display_line(t_dlist2 *cmd_termcaps);
+	void		display_cursor(t_dlist2 *lst, int pos);
+	void		read_key(char *buff);
+	/*
+	*** ======================= error.c
+	*/
+	void		error(char *err);
+	void		term_error(char *err);
+/* -------------------------------------------------------------
 *** ============================================================ REDIRECTS
 */
 	/*
@@ -337,7 +367,7 @@ void		free_all(t_all *all, char *cmd);
 	*** ======================= redirection_tools.c
 	*/
 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
-/*
+/* -------------------------------------------------------------
 *** ============================================================ HISTORY
 */
 	/*
@@ -348,34 +378,7 @@ void		free_all(t_all *all, char *cmd);
 	void		display_index_cmd(t_all *all);
 	void		goto_latest_commands(t_all *all);
 	int			check_history_file(char **histo);
-/*
-*** ============================================================ ARROWS_AND_MOVEMENTS
-*/
-	/*
-	*** ======================= horizontal_movements_tools.c
-	*/
-	int			ft_getkey(char *s);
-	int			check_keys_arrows(t_all *all, char *buff);
-	void		parse_keys(t_all *all);
-	/*
-	*** ======================= delete_char.c
-	*/
-	void		del_char(t_all *all);
-	/*
-	*** ======================= horizontal_movements.c
-	*/
-	void		horizontal_moves(t_all *all);
-	void		opt_left_move(t_all *all);
-	void		opt_right_move(t_all *all);
-	/*
-	*** ======================= horizontal_movements_tools.c
-	*/
-	int			check_if_spaces_before(t_dlist2 *lst, int pos);
-	int			check_if_spaces_after(t_dlist2 *lst, int pos);
-	void		goto_end(t_all *all);
-	void		goto_begin(t_all *all);
-	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
-/*
+/* -------------------------------------------------------------
 *** ============================================================ TERMCAPS
 */
 	/*

@@ -67,4 +67,4 @@ void	read_key(char *buff)
 	printf("buff: |%s|\n", buff);
 	printf("buff[0]: |%c|\n", buff[0]);
 	printf("|%d|\n", ft_getkey(buff));
-}ß
+}
