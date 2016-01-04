@@ -99,21 +99,16 @@ $(NAME):
 	@ranlib $(NAME)
 
 clean:
-	@echo "\nRM *.o.. \t\033[35m[ DELETE ]\033[0m"
 	@$(RM) $(OBJ)
 	@$(RM) *.o
 
 fclean: clean
-	@echo "\nRM libft.a.. \t\033[35m[ DELETE ]\033[0m"
 	@$(RM) $(NAME)
 
 re: fclean all
 
 exec:
-	@echo "\033[37mgcc *.c -I./includes/ ..\033[0m"
-	@echo "  \033[37m..exec ./a.out\033[0m\n"
 	@gcc *.c -g $(FLAGS) -I./includes/
-	@echo "\033[31m./a.out\033[m\n"
 	@./a.out
 
 .PHONY: all clean fclean re exec

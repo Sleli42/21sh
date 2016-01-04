@@ -414,6 +414,7 @@ char	*update_tmp_cmd(t_all *all, char *str2add)
 	int		ct;
 	int 	i;
 
+	(void)str2add;
 	ct = ft_strlen(all->tmp_cmd) - 1;
 	i = 0;
 	while (all->tmp_cmd[ct] != ' ')
