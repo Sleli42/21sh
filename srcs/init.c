@@ -12,20 +12,6 @@
 
 #include "21sh.h"
 
-char		**ft_dupenv(char **env)
-{
-	char	**dup;
-	int		i;
-
-	i = -1;
-	if (!(dup = (char **)malloc(sizeof(char *) * ft_tablen(env) + 1)))
-		return (NULL);
-	while (++i < (int)ft_tablen(env))
-		dup[i] = ft_strdup(env[i]);
-	dup[++i] = NULL;
-	return (dup);
-}
-
 t_dlist		*init_env(char **env)
 {
 	t_dlist	*list_env;
