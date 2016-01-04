@@ -50,7 +50,8 @@ int			check_keys_arrows(t_all *all, char *buff)
 		|| all->current_key == K_UP || all->current_key == K_DOWN
 		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT
 		|| all->current_key == K_DELETE || all->current_key == K_BACKSPACE
-		|| all->current_key == K_HOME || all->current_key == K_END)
+		|| all->current_key == K_HOME || all->current_key == K_END
+		|| all->current_key == K_CTRL_CLEAR)
 		return (1);
 	return (0);
 }
@@ -69,8 +70,8 @@ void		parse_keys(t_all *all)
 	{K_CTRL_LEFT, opt_left_move},
 	{K_CTRL_RIGHT, opt_right_move},
 	{K_HOME, goto_begin},
-	{K_END, goto_end}};
-
+	{K_END, goto_end},
+	{K_CTRL_CLEAR, ft_clear_screen}};
 	i = 0;
 	//all->current_key = ft_getkey(buff);
 	// printf("->> |%d|\n", keys[4].action_name);
@@ -79,7 +80,7 @@ void		parse_keys(t_all *all)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 10)
+	while (i < 11)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{

@@ -26,6 +26,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)horizontal_movements_tools.c \
 			$(SRCS_ARROWS)delete_char.c \
 			$(SRCS_ARROWS)parse_keys.c \
+			$(SRCS_ARROWS)clear_screen.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_ENV)env.c \
@@ -64,7 +65,7 @@ OBJ = $(SRCS:.c=.o)
 all:		$(NAME)
 
 $(LIB):
-			make -C libft/
+			@make -C libft/
 
 $(NAME):	$(LIB) $(OBJ)
 	@gcc -o $(NAME) $(FLAGS) *.o -L./libft/ -lft -ltermcap

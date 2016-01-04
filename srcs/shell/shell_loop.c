@@ -53,6 +53,10 @@ void	loop(t_all *all)
 	// init_term();
 	//tputs_termcap("mm");
 	display_prompt(all);
+	// int auto_wrap;
+	// if ((auto_wrap = tgetflag("HC")) == 0)
+	// 	ft_putstr("FAIL TGETFLAG\n");
+	// printf("wrap: %d\n", auto_wrap);
 	if (!all->cmd)
 	{
 		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -72,6 +76,7 @@ void	loop(t_all *all)
 	buff = ft_strnew(MAXLEN - 1);
 	ft_memset(buff, 0, (MAXLEN - 1));
 	//tputs_termcap("ti");
+	//tputs_termcap("mi");
 	while (*buff != '\n')
 	{
 		if ((all->curr_line == 1 && all->cursor_pos + 2 == all->ws.ws_col)
@@ -88,7 +93,7 @@ void	loop(t_all *all)
 			ft_memset(buff, 0, (MAXLEN - 1));
 		}
 		read(0, buff, (MAXLEN - 1));
-		//read_key(buff);
+		// read_key(buff);
 		// break ;
 		if ((key = check_keys_arrows(all, buff)) < 0)
 			break ;
@@ -96,6 +101,7 @@ void	loop(t_all *all)
 			parse_keys(all);
 		else
 		{
+			//tputs_termcap("am");
 			tputs_termcap("im");
 			// if (*buff == '/')
 			// {

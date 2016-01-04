@@ -71,12 +71,14 @@ void	horizontal_moves(t_all *all)
 {
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
+		// tputs_termcap("sr");
 		all->cursor_pos--;
 		tputs_termcap("le");
 	}
 	if (all->current_key == K_RIGHT && all->cmd_termcaps->lenght > 0
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
+		// tputs_termcap("sf");
 		all->cursor_pos++;
 		tputs_termcap("nd");
 	}

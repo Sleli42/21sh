@@ -43,6 +43,10 @@
 # define	K_TAB			900000
 # define	K_HOME			279172000
 # define	K_END			279170000
+# define	K_CTRL_CLEAR	-7040000
+# define	K_CTRL_COPY		-6990000
+# define	K_CTRL_PASTE	-4302000
+# define	K_CTRL_CUT		-4310000
 
 # define 	NOTATTY 	1
 
@@ -193,6 +197,10 @@ typedef	struct			s_keys
 	void		goto_end(t_all *all);
 	void		goto_begin(t_all *all);
 	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+	/*
+	*** ======================= clear_screen.c
+	*/
+	void		ft_clear_screen(t_all *all);
 /* -------------------------------------------------------------
 *** ============================================================ AUTOCOMPLETE
 */
