@@ -52,11 +52,6 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_TERMCAPS)termcaps_init.c \
 			$(SRCS_TERMCAPS)termcaps_tools.c \
 		
-OBJ = $(SRCS:.c=.o)
-
-# INCDIR	= ./include/
-# INCS	= $(addprefix $(INCDIR), $(INC))
-
 NAME = 21sh
 RM = rm -rf
 FLAGS = -Wall -Wextra -Werror
@@ -64,22 +59,23 @@ DEBUG = -g -gmodules -fexceptions -ftrapv -fcommon
 LDFLAGS = -I./includes/ -I./libft/include/
 LIB = libft/libft.a
 
+OBJ = $(SRCS:.c=.o)
+
 all:		$(NAME)
 
 $(LIB):
 			make -C libft/
-# all:
-# 	gcc -c -Wall -Wextra -Werror srcs/*/*.c -I./includes/ -I./libft/include/
-# 	make -C libft/
-# 	gcc -o 21sh -Wall -Wextra -Werror *.o -L./libft/ -lft -ltermcap
+
 $(NAME):	$(LIB) $(OBJ)
 	@gcc -o $(NAME) $(FLAGS) *.o -L./libft/ -lft -ltermcap
 	@mkdir -p ./objs/
 	@mv *.o ./objs/
 	@echo "\n\t\t\033[35mexec \033[0m./$(NAME)"
+
 %.o: %.c
 	@echo "\033[35m[ GCC ] \033[0m$^"
 	@gcc -c $^ -I./includes/ -I./libft/include $(FLAGS)
+
 clean:
 	@echo "\033[35m[ DELETE ]\033[0m *.o"
 	@$(RM) *.o
@@ -91,52 +87,4 @@ fclean: clean
 
 re: fclean all
 
-
-
-
-
-# all:		$(NAME)
-
-# $(NAME):	$(LIB) $(OBJ)
-# 		gcc $(FLAGS) $(OBJ) -L./libft -lft -ltermcap -o $(NAME)
-
-# $(LIB):	./libft
-# 		Make -C ./libft
-
-# $(OBJ):
-# 		gcc $(FLAGS) -I./includes -c -o $(SRC)
-
-
-
-
-
-
-# $(NAME):	$(OBJ)
-# 			@gcc $(OBJ) -o $(NAME) $(LDFLAGS) -I includes -L./libft/ -lft -ltermcap
-
-# all: 		$(NAME)
-
-# clean:
-# 			rm -rf $(OBJ)
-# fclean:		clean
-# 			rm -f $(NAME)
-# re:			fclean all
-
-# $(NAME): $(OBJS) $(INCS)
-# 	@gcc $(FLAGS) -o $@ $^ -L./libft/ -lft -ltermcap
-# 	@echo "\\033[1;34m\tPlease wait ...\\033[0;39m"
-# 	@echo "\\033[1;34m\t\texec ./21sh\\033[0;39m"
-
-# clean:
-# 	@echo "\nRM *.o.. \t\033[35m[ DELETE ]\033[0m"
-# 	@$(RM) $(OBJS)
-# 	@$(RM) *.o
-
-# fclean: clean
-# 	@make fclean -C libft/
-# 	@echo "RM ./21sh..\t\033[35m[ DELETE ]\033[0m"
-# 	@$(RM) $(NAME)
-
-# re: fclean all
-
-# .PHONY: all clean fclean re
+.PHONY: all clean fclean re
