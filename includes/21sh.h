@@ -139,8 +139,12 @@ typedef struct			s_all
 	int					already_in_history;
 	int					is_history;
 		// --COPY & PASTE
-	int					already_in_copy;
+			// --COPY
+	int					already_in_cpy;
 	int					save_cursor_pos;
+	int					cpy_move_right;
+	int					cpy_move_left;
+			// --PASTE
 	char				*copy;
 	// PARSE && EXEC
 	t_dlist				*env;
@@ -211,6 +215,12 @@ typedef	struct			s_keys
 	void		copy_buffer(t_all *all);
 	void		cut_buffer(t_all *all);
 	void		paste_buffer(t_all *all);
+	/*
+	*** ======================= copy_tools.c
+	*/
+	void		copy_right(t_all *all);
+	void		copy_left(t_all *all);
+
 /* -------------------------------------------------------------
 *** ============================================================ AUTOCOMPLETE
 */
@@ -228,6 +238,7 @@ typedef	struct			s_keys
 	void		search_current_dir(t_all *all);
 	void		search_bin_path(t_all *all);
 	void		open_directories(t_all *all);
+
 /* -------------------------------------------------------------
 *** ============================================================ BUILTINS
 */
@@ -241,6 +252,7 @@ typedef	struct			s_keys
 	*** ======================= builtins_tools.c
 	*/
 	void		update_oldpwd(t_all *all);
+
 /* -------------------------------------------------------------
 *** ============================================================ ENV
 */
@@ -259,6 +271,7 @@ typedef	struct			s_keys
 	*/
 	char		*find_env_arg(t_all *all, char *arg2find);
 	char		**ft_dupenv(char **env);
+
 /* -------------------------------------------------------------
 *** ============================================================ LISTS
 */
@@ -299,6 +312,7 @@ typedef	struct			s_keys
 	t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
 	int			len_clst(t_select *lst);
 	void		del_clist(t_clist **lst);
+
 /* -------------------------------------------------------------
 *** ============================================================ EXEC_BINARY
 */
@@ -320,6 +334,7 @@ typedef	struct			s_keys
 	void		exec_simple_cmd(t_all *all, char *cmd);
 	void		exec_redirection_cmd(t_all *all, char *cmd);
 	void		exec_command(t_all *all);
+
 /* -------------------------------------------------------------
 *** ============================================================ SHELL
 */
@@ -358,6 +373,7 @@ typedef	struct			s_keys
 	*/
 	void		error(char *err);
 	void		term_error(char *err);
+
 /* -------------------------------------------------------------
 *** ============================================================ REDIRECTS
 */
@@ -385,6 +401,7 @@ typedef	struct			s_keys
 	*** ======================= redirection_tools.c
 	*/
 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
+
 /* -------------------------------------------------------------
 *** ============================================================ HISTORY
 */
@@ -396,6 +413,7 @@ typedef	struct			s_keys
 	void		display_index_cmd(t_all *all);
 	void		goto_latest_commands(t_all *all);
 	int			check_history_file(char **histo);
+
 /* -------------------------------------------------------------
 *** ============================================================ TERMCAPS
 */

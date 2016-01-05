@@ -14,34 +14,22 @@
 
 void	copy_buffer(t_all *all)
 {
-	//write(1, "here\n", 5);
-	all->save_cursor_pos = all->cursor_pos;
-	if (!all->already_in_copy)
+	if (!all->already_in_cpy)
 	{
-		all->already_in_copy = 1;
-		//tputs_termcap("mr");
+		all->save_cursor_pos = all->cursor_pos;
+		all->already_in_cpy = 1;
+		all->cpy_move_right = 0;
+		all->cpy_move_left = 0;
 	}
 	else
 	{
 		tputs_termcap("me");
-		//write(1, "here\n", 5);
-		// create_cmd(all);
-		// while (all->cursor_pos > 0)
-		// {
-		// 	tputs_termcap("le");
-		// 	all->cursor_pos--;
-		// }
-		// tputs_termcap("ce");
-		// ft_putstr(all->cmd);
-		// while (all->cursor_pos < all->save_cursor_pos)
-		// {
-		// 	tputs_termcap("nd");
-		// 	all->cursor_pos++;
-		// }
-		// tputs_termcap("me");
+		all->already_in_cpy = 0;
+		if (all->cpy_move_right > 0)
+			copy_right(all);
+		else if (all->cpy_move_left > 0)
+			copy_left(all);
 	}
-	// all->copy = NULL;
-	// if (all->cursor_pos < (int)all->cmd_termcaps->lenght)
 }
 
 void	cut_buffer(t_all *all)
@@ -69,6 +57,11 @@ void	cut_buffer(t_all *all)
 
 void	paste_buffer(t_all *all)
 {
-	(void)all;
-	printf("read stdin 2 paste buff\n");
+	if (all->copy)
+	{
+		ft_putstr(all->copy);
+		create_cmd(all);
+		all->cmd = ft_strjoin(all->cmd, all->copy);
+		realloc_termcaps_cmd(all, all->cmd);
+	}
 }
