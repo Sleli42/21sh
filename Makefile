@@ -27,6 +27,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)delete_char.c \
 			$(SRCS_ARROWS)parse_keys.c \
 			$(SRCS_ARROWS)clear_screen.c \
+			$(SRCS_ARROWS)copy_cut_and_paste.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_ENV)env.c \

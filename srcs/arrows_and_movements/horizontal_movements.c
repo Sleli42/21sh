@@ -67,6 +67,12 @@ void	opt_left_move(t_all *all)
 		goto_begin(all);
 }
 
+static void	ft_putgoodchar(t_dlist2 *cmd_termcaps, int pos)
+{
+	/* goto char */
+	tputs_termcap("mr");
+}
+
 void	horizontal_moves(t_all *all)
 {
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
@@ -81,5 +87,10 @@ void	horizontal_moves(t_all *all)
 		// tputs_termcap("sf");
 		all->cursor_pos++;
 		tputs_termcap("nd");
+	}
+	if (all->already_in_copy)
+	{
+		tputs_termcap("dc");
+		ft_putgoodchar(all->cmd_termcaps, all->cursor_pos);
 	}
 }

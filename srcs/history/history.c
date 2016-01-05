@@ -24,7 +24,7 @@ char	**parse_history(void)
 	buff = NULL;
 	ret = NULL;
 	buff = ft_strnew(MAXLEN - 1);
-	//ft_memset(buff, 0, MAXLEN - 1);
+	// ft_memset(buff, 0, MAXLEN - 1);
 	while ((r = read(fd, buff, (MAXLEN - 1))) > 0)
 		buff[r] = 0;
 	//write(1, "bug\n", 4);

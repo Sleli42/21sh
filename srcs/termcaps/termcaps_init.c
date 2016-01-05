@@ -18,10 +18,10 @@ void	init_term(void)
 	struct termios	term;
 
 	term_name = NULL;
-	if (tgetent(NULL, term_name) == -1)
-		term_error("TGETENT");
 	if ((term_name = getenv("TERM=")) == NULL)
 		term_error("GETENV");
+	if (tgetent(NULL, term_name) == -1)
+		term_error("TGETENT");
 	if (tcgetattr(0, &term) == -1)
 		term_error("TCGETATTR");
 	term.c_lflag &= ~(ECHO | ICANON);

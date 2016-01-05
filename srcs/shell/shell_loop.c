@@ -50,6 +50,7 @@ void	loop(t_all *all)
 	all->curr_line = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
+	all->already_in_copy = 0;
 	// init_term();
 	//tputs_termcap("mm");
 	display_prompt(all);

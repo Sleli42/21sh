@@ -138,6 +138,10 @@ typedef struct			s_all
 	t_dlist				*cmd_history;
 	int					already_in_history;
 	int					is_history;
+		// --COPY & PASTE
+	int					already_in_copy;
+	int					save_cursor_pos;
+	char				*copy;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -201,6 +205,12 @@ typedef	struct			s_keys
 	*** ======================= clear_screen.c
 	*/
 	void		ft_clear_screen(t_all *all);
+	/*
+	*** ======================= copy_cut_and_paste.c
+	*/
+	void		copy_buffer(t_all *all);
+	void		cut_buffer(t_all *all);
+	void		paste_buffer(t_all *all);
 /* -------------------------------------------------------------
 *** ============================================================ AUTOCOMPLETE
 */
