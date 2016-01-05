@@ -19,10 +19,12 @@ void	copy_buffer(t_all *all)
 	if (!all->already_in_copy)
 	{
 		all->already_in_copy = 1;
+		//tputs_termcap("mr");
 	}
 	else
 	{
 		tputs_termcap("me");
+		//write(1, "here\n", 5);
 		// create_cmd(all);
 		// while (all->cursor_pos > 0)
 		// {

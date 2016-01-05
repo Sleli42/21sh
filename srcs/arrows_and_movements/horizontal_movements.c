@@ -69,14 +69,30 @@ void	opt_left_move(t_all *all)
 
 static void	ft_putgoodchar(t_dlist2 *cmd_termcaps, int pos)
 {
-	/* goto char */
+	int		ct;
+	t_cmd	*nav;
+	
+	ct = 1;
+	nav = cmd_termcaps->head;
+	while (ct < pos)
+	{
+		nav = nav->next;
+		ct++;
+	}
+	//printf("c: %c\n", nav->c);
 	tputs_termcap("mr");
+	tputs_termcap("im");
+	ft_putchar(nav->c);
+	tputs_termcap("ei");
+	// tputs_termcap("le");
+	tputs_termcap("me");
 }
 
 void	horizontal_moves(t_all *all)
 {
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
+		//write(1, "here\n", 5);
 		// tputs_termcap("sr");
 		all->cursor_pos--;
 		tputs_termcap("le");
@@ -88,9 +104,15 @@ void	horizontal_moves(t_all *all)
 		all->cursor_pos++;
 		tputs_termcap("nd");
 	}
-	if (all->already_in_copy)
+	if (all->already_in_copy
+		&& (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
+		// write(1, "here\n", 5);
 		tputs_termcap("dc");
 		ft_putgoodchar(all->cmd_termcaps, all->cursor_pos);
+		if (all->current_key == K_LEFT)
+			tputs_termcap("le");
+		if (all->current_key == K_RIGHT)
+			tputs_termcap("nd");
 	}
 }
