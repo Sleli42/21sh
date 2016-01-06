@@ -21,7 +21,7 @@ void	display_dlst(t_dlist2 *lst)
 		printf("[ %c ]", tmp->c);
 		tmp = tmp->next;
 	}
-	printf("\nlenght: %zu\n", lst->lenght);
+	//printf("\nlenght: %zu\n", lst->lenght);
 }
 
 void	display_current_arg(t_all *all)

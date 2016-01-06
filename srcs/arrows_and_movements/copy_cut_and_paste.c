@@ -55,13 +55,43 @@ void	cut_buffer(t_all *all)
 	}
 }
 
+static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
+{
+	char	*ret;
+	int		ct;
+	int		i;
+	int		j;
+
+	ct = 0;
+	i = 0;
+	j = 0;
+	if (!(ret = (char *)malloc(sizeof(char) * pos + ft_strlen(cpy) + 1)))
+		return (NULL);
+	while (cmd[i] && i < pos)
+		ret[ct++] = cmd[i++];
+	while (cpy[j])
+		ret[ct++] = cpy[j++];
+	if ((size_t)i < ft_strlen(cmd))
+		while (cmd[i])
+			ret[ct++] = cmd[i++];
+	ret[ct] = 0;
+	return (ret);
+}
+
 void	paste_buffer(t_all *all)
 {
+	int		i;
+	char	*new_str;
+
+	i = 0;
 	if (all->copy)
 	{
-		ft_putstr(all->copy);
 		create_cmd(all);
-		all->cmd = ft_strjoin(all->cmd, all->copy);
-		realloc_termcaps_cmd(all, all->cmd);
+		new_str = insert_str_to_str(all->cmd, all->copy, all->cursor_pos);
+		realloc_termcaps_cmd(all, new_str);
+		ft_strdel(&new_str);
+		tputs_termcap("im");
+		ft_putstr(all->copy);
+		tputs_termcap("ei");
 	}
 }

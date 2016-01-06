@@ -73,7 +73,7 @@ void	loop(t_all *all)
 	// 	}
 	// 	del_clist(&all->list_dir);
 	// }
-	///buff = (char *)malloc(sizeof(char *));
+	/// buff = (char *)malloc(sizeof(char *));
 	buff = ft_strnew(MAXLEN - 1);
 	ft_memset(buff, 0, (MAXLEN - 1));
 	//tputs_termcap("ti");
