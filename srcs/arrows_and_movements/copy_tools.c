@@ -36,21 +36,45 @@ void	reverse_mode(char char2print)
 static void	del_highlighted_right(t_all *all)
 {
 	int		i;
+	int		save;
 	t_cmd	*nav;
 
 	i = all->cursor_pos;
+	save = all->cursor_pos - 1;
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos);
 	while (i-- > all->save_cursor_pos)
 		tputs_termcap("le");
-	while (i++ < all->cursor_pos - 1)
+	printf("cursor 1: %d\n", all->cursor_pos);
+	while (i++ < save)
 	{
 		standard_mode(nav->c);
 		nav = nav->next;
 		tputs_termcap("nd");
+		all->cursor_pos++;
 	}
+	printf("cursor 1: %d\n", all->cursor_pos);
 }
 
-/* DEL LEFT !!!!! */
+static void	del_highlighted_left(t_all *all)
+{
+	int		i;
+	t_cmd	*nav;
+
+	i = all->cursor_pos;
+	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos);
+	//printf("save cursor 0: %d\n", all->save_cursor_pos);
+//	printf("cursor 1: %d\n", all->cursor_pos);
+//	printf("save cursor 1: %d\n", all->save_cursor_pos);
+	while (nav && i++ < all->save_cursor_pos + 1)
+	{
+		standard_mode(nav->c);
+		nav = nav->next;
+		tputs_termcap("nd");
+		all->cursor_pos++;
+	}
+//	printf("cursor 1: %d\n", all->cursor_pos);
+	//tputs_termcap("nd");
+}
 
 void	copy_right(t_all *all)
 {
@@ -61,6 +85,7 @@ void	copy_right(t_all *all)
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos);
 	del_highlighted_right(all);
 	all->copy = ft_strnew(all->cpy_move_right + 1);
+//	printf("save cursor 1: %d\n", all->save_cursor_pos);
 	while (nav && all->cpy_move_right > 0)
 	{
 		all->cpy_move_right--;
@@ -77,6 +102,7 @@ void	copy_left(t_all *all)
 
 	nav = goto_cursor_pos(all->cmd_termcaps->head,
 		all->save_cursor_pos - all->cpy_move_left);
+	del_highlighted_left(all);
 	if (all->save_cursor_pos - all->cpy_move_left != 1)
 		nav = nav->next;
 	all->copy = ft_strnew(all->cpy_move_left + 1);
@@ -87,4 +113,5 @@ void	copy_left(t_all *all)
 		nav = nav->next;
 	}
 	all->copy[i] = 0;
+	printf("cpy: |%s|\n", all->copy);
 }

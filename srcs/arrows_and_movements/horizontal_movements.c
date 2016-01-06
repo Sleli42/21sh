@@ -105,7 +105,8 @@ void	horizontal_moves(t_all *all)
 		// tputs_termcap("sr");
 		all->cursor_pos--;
 		tputs_termcap("le");
-		all->cpy_move_left += (all->already_in_cpy) ? 1 : 0;
+		all->cpy_move_left += 
+			(all->already_in_cpy && all->cpy_move_right == 0) ? 1 : 0;
 		// if (all->cursor_pos == 1 && all->already_in_cpy)
 		// 	all->cpy_move_left += 1;
 	}
@@ -115,6 +116,7 @@ void	horizontal_moves(t_all *all)
 		// tputs_termcap("sf");
 		all->cursor_pos++;
 		tputs_termcap("nd");
-		all->cpy_move_right += (all->already_in_cpy) ? 1 : 0;
+		all->cpy_move_right += 
+			(all->already_in_cpy && all->cpy_move_left == 0) ? 1 : 0;
 	}
 }
