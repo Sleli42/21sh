@@ -218,6 +218,8 @@ typedef	struct			s_keys
 	/*
 	*** ======================= copy_tools.c
 	*/
+	void		standard_mode(char char2print);
+	void		reverse_mode(char char2print);
 	void		copy_right(t_all *all);
 	void		copy_left(t_all *all);
 

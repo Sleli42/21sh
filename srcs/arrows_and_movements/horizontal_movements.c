@@ -67,27 +67,6 @@ void	opt_left_move(t_all *all)
 		goto_begin(all);
 }
 
-static	void	standard_mode(char char2print)
-{
-	tputs_termcap("dc");
-	tputs_termcap("me");
-	tputs_termcap("im");
-	ft_putchar(char2print);
-	tputs_termcap("ei");
-	tputs_termcap("le");
-}
-
-static	void	reverse_mode(char char2print)
-{
-	tputs_termcap("dc");
-	tputs_termcap("mr");
-	tputs_termcap("im");
-	ft_putchar(char2print);
-	tputs_termcap("ei");
-	tputs_termcap("me");
-	tputs_termcap("le");
-}
-
 static	void	reprint_char(t_all *all, t_cmd *nav)
 {
 	// printf("move right: %d\n", all->cpy_move_right);
