@@ -65,9 +65,9 @@ static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
 	ct = 0;
 	i = 0;
 	j = 0;
-	if (!(ret = (char *)malloc(sizeof(char) * pos + ft_strlen(cpy) + 1)))
+	if (!(ret = (char *)malloc(sizeof(char) * ft_strlen(cmd) + ft_strlen(cpy) + 1)))
 		return (NULL);
-	while (cmd[i] && i < pos)
+	while (cmd[i] && i < pos - 1)
 		ret[ct++] = cmd[i++];
 	while (cpy[j])
 		ret[ct++] = cpy[j++];
@@ -86,21 +86,15 @@ void	paste_buffer(t_all *all)
 	save = 0;
 	if (all->copy)
 	{
-		//printf("cursor paste: %d\n", all->cursor_pos);
-		//printf("cursor 0: %d\n", all->cursor_pos);
+		save = all->cursor_pos;
 		all->cursor_pos += ft_strlen(all->copy);
 		create_cmd(all);
-		/* -> fct a revoir !!!
-		new_str = insert_str_to_str(all->cmd, all->copy, all->cursor_pos);
-		// if (all->cpy_move_left > 0 && all->cpy_move_right == 0)
-		// 	save = all->cursor_pos 
-		// else if (all->cpy_move_right > 0 && all->cpy_move_left == 0)
-			save = all->cursor_pos;
-		// printf("cursor 1: %d\n", all->cursor_pos);
-		// printf("len total: %zu\n", ft_strlen(new_str));
+		new_str = insert_str_to_str(all->cmd, all->copy, save);
+		save = all->cursor_pos;
 		realloc_termcaps_cmd(all, new_str);
 		ft_strdel(&new_str);
 		tputs_termcap("im");
+		// tputs_termcap("nd");
 		ft_putstr(all->copy);
 		tputs_termcap("ei");
 		while (save < all->cursor_pos)
@@ -108,10 +102,5 @@ void	paste_buffer(t_all *all)
 			tputs_termcap("nd");
 			save++;
 		}
-		// printf("lenght: %zu\n", all->cmd_termcaps->lenght);
-		// printf("cursor 1: %d\n", all->cursor_pos);
-		// t_cmd *nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos);
-		// printf("|%c|\n", nav->c);
-		// printf("|%c|\n", nav->prev->c);
 	}
 }

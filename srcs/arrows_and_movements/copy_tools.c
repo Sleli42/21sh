@@ -44,7 +44,6 @@ static void	del_highlighted_right(t_all *all)
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos);
 	while (i-- > all->save_cursor_pos)
 		tputs_termcap("le");
-	printf("cursor 1: %d\n", all->cursor_pos);
 	while (i++ < save)
 	{
 		standard_mode(nav->c);
@@ -52,7 +51,6 @@ static void	del_highlighted_right(t_all *all)
 		tputs_termcap("nd");
 		all->cursor_pos++;
 	}
-	printf("cursor 1: %d\n", all->cursor_pos);
 }
 
 static void	del_highlighted_left(t_all *all)
@@ -62,9 +60,6 @@ static void	del_highlighted_left(t_all *all)
 
 	i = all->cursor_pos;
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos);
-	//printf("save cursor 0: %d\n", all->save_cursor_pos);
-//	printf("cursor 1: %d\n", all->cursor_pos);
-//	printf("save cursor 1: %d\n", all->save_cursor_pos);
 	while (nav && i++ < all->save_cursor_pos + 1)
 	{
 		standard_mode(nav->c);
@@ -72,8 +67,6 @@ static void	del_highlighted_left(t_all *all)
 		tputs_termcap("nd");
 		all->cursor_pos++;
 	}
-//	printf("cursor 1: %d\n", all->cursor_pos);
-	//tputs_termcap("nd");
 }
 
 void	copy_right(t_all *all)
@@ -85,7 +78,6 @@ void	copy_right(t_all *all)
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos);
 	del_highlighted_right(all);
 	all->copy = ft_strnew(all->cpy_move_right + 1);
-//	printf("save cursor 1: %d\n", all->save_cursor_pos);
 	while (nav && all->cpy_move_right > 0)
 	{
 		all->cpy_move_right--;
@@ -113,5 +105,4 @@ void	copy_left(t_all *all)
 		nav = nav->next;
 	}
 	all->copy[i] = 0;
-	printf("cpy: |%s|\n", all->copy);
 }
