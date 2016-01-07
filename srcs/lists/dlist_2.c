@@ -124,7 +124,7 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 
 	tmp = lst->head;
 	found = 0;
-	//printf("pos: %d\n", pos);
+	// printf("pos: %d\n", pos);
 	//printf("cursor after: %d\n", pos);
 	if (lst)
 	{
@@ -135,7 +135,7 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 			{
 				// printf("ct: %d\n", ct);
 				
-
+				// printf("nav->c2del : |%c|\n", tmp->c);
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;

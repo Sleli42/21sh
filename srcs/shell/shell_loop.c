@@ -46,7 +46,7 @@ void	loop(t_all *all)
 	all->stop = 0;
 	all->already_open = 0;
 	all->already_in_history = 0;
-	all->already_in_cpy = 0;
+	all->already_in_select = 0;
 	all->cursor_pos = 1;
 	all->curr_line = 1;
 	all->index_history = all->pos_history;

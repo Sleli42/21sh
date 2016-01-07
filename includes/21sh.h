@@ -138,9 +138,9 @@ typedef struct			s_all
 	t_dlist				*cmd_history;
 	int					already_in_history;
 	int					is_history;
-		// --COPY & PASTE
+		// --COPY & PASTE & CUT
+	int					already_in_select;
 			// --COPY
-	int					already_in_cpy;
 	int					save_cursor_pos;
 	int					cpy_move_right;
 	int					cpy_move_left;
@@ -222,6 +222,11 @@ typedef	struct			s_keys
 	void		reverse_mode(char char2print);
 	void		copy_right(t_all *all);
 	void		copy_left(t_all *all);
+	/*
+	*** ======================= cut_tools.c
+	*/
+	void		cut_right(t_all *all);
+	void		cut_left(t_all *all);
 
 /* -------------------------------------------------------------
 *** ============================================================ AUTOCOMPLETE

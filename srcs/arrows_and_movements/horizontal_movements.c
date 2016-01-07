@@ -90,7 +90,7 @@ static	void	reprint_char(t_all *all, t_cmd *nav)
 
 void	horizontal_moves(t_all *all)
 {
-	if (all->already_in_cpy
+	if (all->already_in_select
 		&& (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
 		// write(1, "here\n", 5);
@@ -106,7 +106,7 @@ void	horizontal_moves(t_all *all)
 		all->cursor_pos--;
 		tputs_termcap("le");
 		all->cpy_move_left += 
-			(all->already_in_cpy && all->cpy_move_right == 0) ? 1 : 0;
+			(all->already_in_select && all->cpy_move_right == 0) ? 1 : 0;
 		// if (all->cursor_pos == 1 && all->already_in_cpy)
 		// 	all->cpy_move_left += 1;
 	}
@@ -117,6 +117,6 @@ void	horizontal_moves(t_all *all)
 		all->cursor_pos++;
 		tputs_termcap("nd");
 		all->cpy_move_right += 
-			(all->already_in_cpy && all->cpy_move_left == 0) ? 1 : 0;
+			(all->already_in_select && all->cpy_move_left == 0) ? 1 : 0;
 	}
 }

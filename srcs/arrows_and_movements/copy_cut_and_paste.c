@@ -14,17 +14,17 @@
 
 void	copy_buffer(t_all *all)
 {
-	if (!all->already_in_cpy)
+	if (!all->already_in_select)
 	{
 		all->save_cursor_pos = all->cursor_pos;
-		all->already_in_cpy = 1;
+		all->already_in_select = 1;
 		all->cpy_move_right = 0;
 		all->cpy_move_left = 0;
 	}
 	else
 	{
 		tputs_termcap("me");
-		all->already_in_cpy = 0;
+		all->already_in_select = 0;
 		if (all->cpy_move_right > 0)
 			copy_right(all);
 		else if (all->cpy_move_left > 0)
@@ -34,6 +34,23 @@ void	copy_buffer(t_all *all)
 
 void	cut_buffer(t_all *all)
 {
+	if (!all->already_in_select)
+	{
+		all->save_cursor_pos = all->cursor_pos;
+		all->already_in_select = 1;
+		all->cpy_move_right = 0;
+		all->cpy_move_left = 0;
+	}
+	else
+	{
+		tputs_termcap("me");
+		all->already_in_select = 0;
+		if (all->cpy_move_right > 0)
+			cut_right(all);
+		else if (all->cpy_move_left > 0)
+			cut_left(all);
+	}
+	/*
 	int		ct;
 	char	*ret;
 
@@ -53,6 +70,7 @@ void	cut_buffer(t_all *all)
 		tputs_termcap("ce");
 		tputs_termcap("ed");
 	}
+	*/
 }
 
 static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
