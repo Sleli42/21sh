@@ -92,11 +92,15 @@ void	copy_left(t_all *all)
 	t_cmd	*nav;
 	int		i;
 
+	// if (all->cursor_pos == 1)
+	// 	nav = goto_cursor_pos(all->cmd_termcaps->head, all);
 	nav = goto_cursor_pos(all->cmd_termcaps->head,
 		all->save_cursor_pos - all->cpy_move_left);
 	del_highlighted_left(all);
 	if (all->save_cursor_pos - all->cpy_move_left != 1)
 		nav = nav->next;
+	else
+		all->cpy_move_left += 1;
 	all->copy = ft_strnew(all->cpy_move_left + 1);
 	i = 0;
 	while (nav && i < all->cpy_move_left)

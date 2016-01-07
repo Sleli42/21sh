@@ -110,6 +110,8 @@ void	horizontal_moves(t_all *all)
 		// if (all->cursor_pos == 1 && all->already_in_cpy)
 		// 	all->cpy_move_left += 1;
 	}
+	// else if (all->current_key == K_LEFT && all->cursor_pos == 2)
+	// 	all->cursor_pos--;
 	if (all->current_key == K_RIGHT && all->cmd_termcaps->lenght > 0
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{

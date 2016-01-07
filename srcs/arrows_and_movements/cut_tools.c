@@ -26,8 +26,12 @@ void	cut_right(t_all *all)
 void	cut_left(t_all *all)
 {
 	int 	count;
+	int		stop;
 
 	count = 0;
+	stop = 0;
+	if (all->cursor_pos == 1)
+		stop += 1;
 	while (all->cursor_pos < all->save_cursor_pos)
 	{
 		all->cursor_pos++;
@@ -41,5 +45,10 @@ void	cut_left(t_all *all)
 		tputs_termcap("le");
 		count--;
 		all->cursor_pos--;
+	}
+	if (stop)
+	{
+		dlst_del_one2(all->cmd_termcaps, 1);
+		tputs_termcap("dc");
 	}
 }

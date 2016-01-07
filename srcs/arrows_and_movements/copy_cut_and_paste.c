@@ -23,6 +23,7 @@ void	copy_buffer(t_all *all)
 	}
 	else
 	{
+		//printf("cursor pos : %d\n", all->cursor_pos);
 		tputs_termcap("me");
 		all->already_in_select = 0;
 		if (all->cpy_move_right > 0)
@@ -50,27 +51,6 @@ void	cut_buffer(t_all *all)
 		else if (all->cpy_move_left > 0)
 			cut_left(all);
 	}
-	/*
-	int		ct;
-	char	*ret;
-
-	ct = -1;
-	ret = NULL;
-	if (all->cursor_pos < (int)all->cmd_termcaps->lenght)
-	{
-		create_cmd(all);
-		ret = ft_strnew(all->cursor_pos - 1);
-		while (++ct < all->cursor_pos - 1)
-			ret[ct] = all->cmd[ct];
-		ret[ct] = 0;
-		realloc_termcaps_cmd(all, ret);
-		ft_strdel(&all->cmd);
-		ft_strdel(&ret);
-		tputs_termcap("dm");
-		tputs_termcap("ce");
-		tputs_termcap("ed");
-	}
-	*/
 }
 
 static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
