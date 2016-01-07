@@ -48,44 +48,27 @@ void	loop(t_all *all)
 	all->already_in_history = 0;
 	all->already_in_select = 0;
 	all->cursor_pos = 1;
-	all->curr_line = 1;
+	all->nb_lines = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
-	// init_term();
-	//tputs_termcap("mm");
 	display_prompt(all);
-	// int auto_wrap;
-	// if ((auto_wrap = tgetflag("HC")) == 0)
-	// 	ft_putstr("FAIL TGETFLAG\n");
-	// printf("wrap: %d\n", auto_wrap);
 	if (!all->cmd)
 	{
 		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 			error("MALLOC");
 	}
-	// if (all->already_autocomplete)
-	// {
-	// 	if (all->tmp_cmd != NULL)
-	// 	{
-	// 		realloc_termcaps_cmd(all, all->tmp_cmd);
-	// 		ft_putstr(all->tmp_cmd);
-	// 		ft_strdel(&all->tmp_cmd);
-	// 	}
-	// 	del_clist(&all->list_dir);
-	// }
-	/// buff = (char *)malloc(sizeof(char *));
 	buff = ft_strnew(MAXLEN - 1);
 	ft_memset(buff, 0, (MAXLEN - 1));
 	//tputs_termcap("ti");
 	//tputs_termcap("mi");
 	while (*buff != '\n')
 	{
-		if ((all->curr_line == 1 && all->cursor_pos + 2 == all->ws.ws_col)
-			|| (all->curr_line > 1 
-				&& (all->cursor_pos / all->curr_line) == all->ws.ws_col))
+		if ((all->nb_lines == 1 && all->cursor_pos + 2 == all->ws.ws_col)
+			|| (all->nb_lines > 1 
+				&& (all->cursor_pos / all->nb_lines) == all->ws.ws_col))
 		{
-			all->curr_line++;
-			//printf("line: %d\n", all->curr_line);
+			all->nb_lines++;
+			//printf("line: %d\n", all->nb_lines);
 		}
 		if (buff)
 		{
@@ -104,26 +87,16 @@ void	loop(t_all *all)
 		{
 			//tputs_termcap("am");
 			tputs_termcap("im");
-			// if (*buff == '/')
-			// {
-			// 	if (all->nav_dir)
-			// 		add_to_cmd(all, (all->nav_dir->prev) ? all->nav_dir->prev->arg : all->nav_dir->arg);
-			// 	all->already_open = 0;
-			// }
-			// if (all->already_in_history)
-			// {
-			// 	realloc_termcaps_cmd(all, all->cmd);
-			// 	//create_cmd(all);
-			// 	ft_strdel(&all->current);
-			// 	all->is_history = 1;
-			// 	all->stop = 0;
-			// }
-			//printf("pos cursor: %d\n", all->cursor_pos);
 			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
 			{
 				if (*buff != '\n')
 					ft_putchar(*buff);
 				update_cmd_line_insert(all, *buff);
+				if (all->nb_lines > 1)
+				{
+					shift_char(all);
+				}
+
 			}
 			else
 			{

@@ -30,6 +30,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)copy_cut_and_paste.c \
 			$(SRCS_ARROWS)copy_tools.c \
 			$(SRCS_ARROWS)cut_tools.c \
+			$(SRCS_ARROWS)shift.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_ENV)env.c \

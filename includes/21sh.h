@@ -128,7 +128,7 @@ typedef struct			s_all
 	int					history_moves;
 	int					already_in_moves;
 		// --VERTICAL MOVES
-	int					curr_line;
+	int					nb_lines;
 		// --HISTORY
 	char				**history_buff;
 	int					fd_history;
@@ -227,6 +227,10 @@ typedef	struct			s_keys
 	*/
 	void		cut_right(t_all *all);
 	void		cut_left(t_all *all);
+	/*
+	*** ======================= shift.c
+	*/
+	void		shift_char(t_all *all);
 
 /* -------------------------------------------------------------
 *** ============================================================ AUTOCOMPLETE
