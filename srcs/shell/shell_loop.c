@@ -94,7 +94,7 @@ void	loop(t_all *all)
 				update_cmd_line_insert(all, *buff);
 				if (all->nb_lines > 1)
 				{
-					shift_char(all);
+					shift(all);
 				}
 
 			}

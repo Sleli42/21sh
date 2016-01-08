@@ -22,16 +22,37 @@ int		define_current_line(t_all *all, int pos)
 	// printf("len line: %d\n", all->ws.ws_col);
 	// printf("pos/nbline: %d\n", (pos / nb_lines));
 	// printf("col*curr: %d\n", (all->ws.ws_col * curr));
-	(void)nb_lines;
 	while (pos > all->ws.ws_col * curr)
 		curr++;
 	// printf("curr: %d\n", curr);
 	return (curr);
 }
 
-void	shift_char(t_all *all)
+void	shift_last_char(t_all *all, int curr_line)
+{
+	int		save_pos;
+	int		ct;
+	char	save_char;
+
+	save_pos = all->cursor_pos + 1;
+	ct = 0;
+	//printf("len line: %d\n", all->ws.ws_col);
+	if (curr_line == 1)
+	{
+		create_cmd(all);
+		while (ct < all->ws.ws_col - 3)
+			ct++;
+		save_char = all->cmd[ct];
+		// printf("\nc find: |%c|\n", all->cmd[ct]);
+		// printf("pos: |%d|\n", ct);
+	}
+}
+
+void	shift(t_all *all)
 {
 	int		curr_line;
 	
 	curr_line = define_current_line(all, all->cursor_pos);
+	if (curr_line < all->nb_lines && all->cursor_pos <= all->ws.ws_col)
+		shift_last_char(all, curr_line);
 }
