@@ -129,6 +129,7 @@ typedef struct			s_all
 	int					already_in_moves;
 		// --VERTICAL MOVES
 	int					nb_lines;
+	int					curr_line;
 		// --HISTORY
 	char				**history_buff;
 	int					fd_history;
@@ -230,6 +231,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= shift.c
 	*/
+	int			define_current_line(t_all *all, int pos);
 	void		shift(t_all *all);
 
 /* -------------------------------------------------------------

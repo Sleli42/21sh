@@ -90,34 +90,29 @@ static	void	reprint_char(t_all *all, t_cmd *nav)
 
 void	horizontal_moves(t_all *all)
 {
+	all->curr_line = define_current_line(all, all->cursor_pos);
 	if (all->already_in_select
 		&& (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
-	{
-		// write(1, "here\n", 5);
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos));
-		// if (all->current_key == K_RIGHT || all->current)
-		// if (all->current_key == K_RIGHT)
-		// 	tputs_termcap("nd");
-	}
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
-		//write(1, "here\n", 5);
-		// tputs_termcap("sr");
 		all->cursor_pos--;
 		tputs_termcap("le");
 		all->cpy_move_left += 
 			(all->already_in_select && all->cpy_move_right == 0) ? 1 : 0;
-		// if (all->cursor_pos == 1 && all->already_in_cpy)
-		// 	all->cpy_move_left += 1;
 	}
-	// else if (all->current_key == K_LEFT && all->cursor_pos == 2)
-	// 	all->cursor_pos--;
 	if (all->current_key == K_RIGHT && all->cmd_termcaps->lenght > 0
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
-		// tputs_termcap("sf");
+		if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 3)
+		{
+			// write(1, "here\n", 5);
+			tputs_termcap("do");
+			//tputs_termcap("le");
+		}
+		else
+			tputs_termcap("nd");
 		all->cursor_pos++;
-		tputs_termcap("nd");
 		all->cpy_move_right += 
 			(all->already_in_select && all->cpy_move_left == 0) ? 1 : 0;
 	}
