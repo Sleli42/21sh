@@ -106,7 +106,7 @@ void	horizontal_moves(t_all *all)
 	{
 		if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 3)
 		{
-			// write(1, "here\n", 5);
+			//write(1, "here\n", 5);
 			tputs_termcap("do");
 			//tputs_termcap("le");
 		}

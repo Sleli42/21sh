@@ -92,7 +92,7 @@ void	loop(t_all *all)
 				if (*buff != '\n')
 					ft_putchar(*buff);
 				update_cmd_line_insert(all, *buff);
-				if (all->nb_lines > 1)
+				if (all->nb_lines >= 1)
 				{
 					shift(all);
 				}
