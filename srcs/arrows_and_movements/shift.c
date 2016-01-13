@@ -17,7 +17,9 @@ int		define_current_line(t_all *all, int pos)
 	int 	curr;
 
 	curr = 1;
-	while (pos > (all->ws.ws_col * curr) - 2)
+	// printf("[curr] : %d\n", (all->ws.ws_col * curr));
+	// printf("[curr] pos: %d\n", pos + 3);
+	while (pos + 3 > (all->ws.ws_col * curr))
 		curr++;
 	return (curr);
 }
@@ -25,10 +27,13 @@ int		define_current_line(t_all *all, int pos)
 void	shift_last_char(t_all *all)
 {
 	char	save_char;
+	int		ct;
 
-	while (all->cursor_pos <= (all->ws.ws_col * all->curr_line) - 3)
-		all->cursor_pos++;
-	save_char = all->cmd[all->cursor_pos - 1];
+	ct = all->cursor_pos;
+	while (ct <= (all->ws.ws_col * all->curr_line) - 3)
+		ct++;
+	//printf("char find: |%c|\n", all->cmd[ct - 1]);
+	save_char = all->cmd[ct - 1];
 	tputs_termcap("do");
 	write(1, &save_char, 1);
 }
@@ -43,7 +48,7 @@ void	shift(t_all *all)
 	ct = 0;
 	save = all->cursor_pos;
 	create_cmd(all);
-	if ((int)ft_strlen(all->cmd) == (all->ws.ws_col * all->nb_lines) - 3)
+	if ((int)ft_strlen(all->cmd) == (all->ws.ws_col * all->nb_lines) - 2)
 	{
 		//printf("all->nb_lines - all->curr_line: %d\n", all->nb_lines - all->curr_line);
 		if (all->nb_lines - all->curr_line == 0)
@@ -57,30 +62,42 @@ void	shift(t_all *all)
 		}
 		else
 		{
-			/* error */
-			//write(1, "here\n", 5);
 			ct = all->cursor_pos;
-			save_line = all->curr_line;
+			save_line = 0;
 			tputs_termcap("sc");
 			while (ct++ < (int)ft_strlen(all->cmd))
 			{
 				if (ct == all->curr_line * all->ws.ws_col - 3)
 				{
+					//save_line++;
 					all->curr_line++;
 					tputs_termcap("do");
 				}
-				tputs_termcap("nd");
+				//tputs_termcap("nd");
 			}
-			tputs_termcap("do");
 			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
 			tputs_termcap("rc");
-			while (all->curr_line-- > save_line)
-				tputs_termcap("up");
+			tputs_termcap("up");
 		}
 		all->nb_lines++;
 	}
-	else if (all->curr_line < all->nb_lines)
+	else if (all->cursor_pos + 3 == (all->ws.ws_col * all->curr_line) - 1)
 	{
+		//write(1, "here\n", 5);
+		tputs_termcap("do");
+		write(1, &all->cmd[all->cursor_pos], 1);
+		tputs_termcap("le");
+		//printf("pos : %d\n", all->cursor_pos);
+	}
+	// else if (all->cursor_pos == all->curr_line * all->ws.ws_col - 3)
+	// {
+	// 	tputs_termcap("do");
+	// 	save++;
+	// 	all->curr_line++;
+	// }
+	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line != 0)
+	{
+		// write(1, "here\n", 5);
 		tputs_termcap("sc");
 		while (all->nb_lines - all->curr_line > 0)
 		{
@@ -88,6 +105,10 @@ void	shift(t_all *all)
 			all->curr_line++;
 		}
 		tputs_termcap("rc");
+	}
+	else
+	{
+		return ;
 	}
 	all->cursor_pos = save;
 }

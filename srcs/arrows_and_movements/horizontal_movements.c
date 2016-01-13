@@ -96,15 +96,31 @@ void	horizontal_moves(t_all *all)
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos));
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
+		// tputs_termcap("sr");
+		if (all->nb_lines >= 2)
+		{
+			// printf("res : %d\n", (all->curr_line - 1) * all->ws.ws_col + 1);
+			// printf("allCurs: %d\n", all->cursor_pos + 3);
+			// printf("currLine: %d\n", all->curr_line);
+		}
+		//tputs_termcap("le");
+		if (all->cursor_pos + 3 == (all->curr_line - 1) * all->ws.ws_col + 1)
+		{
+			//write(1, "here\n", 5);
+			//all->cursor_pos--;
+			tputs_termcap("le");
+		}
+		else
+			tputs_termcap("le");
 		all->cursor_pos--;
-		tputs_termcap("le");
 		all->cpy_move_left += 
 			(all->already_in_select && all->cpy_move_right == 0) ? 1 : 0;
 	}
 	if (all->current_key == K_RIGHT && all->cmd_termcaps->lenght > 0
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
-		if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 3)
+		// tputs_termcap("sf");
+		if (all->cursor_pos + 3 == (all->ws.ws_col * all->curr_line))
 		{
 			//write(1, "here\n", 5);
 			tputs_termcap("do");

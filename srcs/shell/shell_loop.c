@@ -63,9 +63,9 @@ void	loop(t_all *all)
 	//tputs_termcap("mi");
 	while (*buff != '\n')
 	{
-		if ((all->nb_lines == 1 && all->cursor_pos + 2 == all->ws.ws_col)
+		if ((all->nb_lines == 1 && all->cursor_pos == all->ws.ws_col - 3)
 			|| (all->nb_lines > 1 
-				&& (all->cursor_pos / all->nb_lines) == all->ws.ws_col))
+				&& (all->cursor_pos / all->nb_lines) + 3 == all->ws.ws_col))
 		{
 			all->nb_lines++;
 			//printf("line: %d\n", all->nb_lines);
@@ -95,6 +95,11 @@ void	loop(t_all *all)
 				if (all->nb_lines >= 1)
 				{
 					shift(all);
+					// if (all->cursor_pos == 74)
+					// {
+					// 	printf("test[]: |%c|\n", all->cmd[66]);
+					// 	printf("len: %d\n", all->ws.ws_col);
+					// }
 				}
 
 			}
