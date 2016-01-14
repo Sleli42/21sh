@@ -130,6 +130,7 @@ typedef struct			s_all
 		// --VERTICAL MOVES
 	int					nb_lines;
 	int					curr_line;
+	int					nl;
 		// --HISTORY
 	char				**history_buff;
 	int					fd_history;

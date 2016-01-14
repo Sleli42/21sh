@@ -38,6 +38,14 @@ void	create_and_exec_command(t_all *all)
 	loop(all);
 }
 
+static void	define_nb_lines(t_all *all)
+{
+	create_cmd(all);
+	///printf("rows: %d\n", all->ws.ws_row);
+	if ((int)ft_strlen(all->cmd) + 2 == all->ws.ws_col * all->nb_lines)
+		all->nb_lines++;
+}
+
 void	loop(t_all *all)
 {
 	char	*buff;
@@ -49,6 +57,8 @@ void	loop(t_all *all)
 	all->already_in_select = 0;
 	all->cursor_pos = 1;
 	all->nb_lines = 1;
+	all->nl = 0;
+	all->curr_line = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
@@ -63,13 +73,7 @@ void	loop(t_all *all)
 	//tputs_termcap("mi");
 	while (*buff != '\n')
 	{
-		if ((all->nb_lines == 1 && all->cursor_pos == all->ws.ws_col - 3)
-			|| (all->nb_lines > 1 
-				&& (all->cursor_pos / all->nb_lines) + 3 == all->ws.ws_col))
-		{
-			all->nb_lines++;
-			//printf("line: %d\n", all->nb_lines);
-		}
+		define_nb_lines(all);
 		if (buff)
 		{
 			ft_strdel(&buff);
@@ -105,6 +109,8 @@ void	loop(t_all *all)
 			}
 			else
 			{
+				if (all->cursor_pos + 2 == all->ws.ws_col * all->curr_line)
+					all->curr_line++;
 				//printf("|%d| && |%d|\n", buff[0], buff[1]);
 				if (*buff != '\n')
 				{

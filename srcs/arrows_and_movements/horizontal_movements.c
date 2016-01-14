@@ -90,25 +90,39 @@ static	void	reprint_char(t_all *all, t_cmd *nav)
 
 void	horizontal_moves(t_all *all)
 {
-	all->curr_line = define_current_line(all, all->cursor_pos);
+	//all->curr_line = define_current_line(all, all->cursor_pos);
 	if (all->already_in_select
 		&& (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos));
 	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
 	{
 		// tputs_termcap("sr");
-		if (all->nb_lines >= 2)
-		{
-			// printf("res : %d\n", (all->curr_line - 1) * all->ws.ws_col + 1);
-			// printf("allCurs: %d\n", all->cursor_pos + 3);
-			// printf("currLine: %d\n", all->curr_line);
-		}
+		// if (all->curr_line == 2)
+		// {
+		// 	// if (all->cursor_pos == all->ws.ws_col)
+		// 	// 	all->curr_line++, all->nl = 0;
+		// 	printf("currLine: %d\n", all->curr_line);
+		// 	printf("res : %d\n", (all->curr_line - 1) * all->ws.ws_col);
+		// 	printf("allCurs: %d\n", all->cursor_pos + 1);
+		// }
 		//tputs_termcap("le");
-		if (all->cursor_pos + 3 == (all->curr_line - 1) * all->ws.ws_col + 1)
+		 // printf("cursor2save: %d\n", all->cursor_pos);
+		 // printf("curr_line: %d\n", all->curr_line);
+		if (all->curr_line > 1 && all->cursor_pos + 2 == all->ws.ws_col * (all->curr_line - 1))
 		{
-			//write(1, "here\n", 5);
+			// printf("allCurs: %d\n", all->cursor_pos);
+			// printf("lenLine: %d\n", all->ws.ws_col);
 			//all->cursor_pos--;
-			tputs_termcap("le");
+			tputs_termcap("up");
+			all->cursor_pos = 1;
+			while (all->cursor_pos < all->ws.ws_col * (all->curr_line - 1))
+			{
+				all->cursor_pos++;
+				tputs_termcap("nd");
+			}
+			all->cursor_pos -= 2;
+			all->curr_line--;
+			//printf("allCurs: %d\n", all->cursor_pos);
 		}
 		else
 			tputs_termcap("le");
@@ -120,6 +134,9 @@ void	horizontal_moves(t_all *all)
 		&&  (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 	{
 		// tputs_termcap("sf");
+		// printf("currLine: %d\n", all->curr_line);
+		// printf("res : %d\n", all->curr_line * all->ws.ws_col);
+		// printf("allCurs: %d\n", all->cursor_pos + 2);
 		if (all->cursor_pos + 3 == (all->ws.ws_col * all->curr_line))
 		{
 			//write(1, "here\n", 5);
