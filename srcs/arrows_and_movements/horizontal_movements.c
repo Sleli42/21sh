@@ -111,18 +111,20 @@ void	horizontal_moves(t_all *all)
 		if (all->curr_line > 1 && all->cursor_pos + 2 == all->ws.ws_col * (all->curr_line - 1))
 		{
 			// printf("allCurs: %d\n", all->cursor_pos);
-			// printf("lenLine: %d\n", all->ws.ws_col);
 			//all->cursor_pos--;
 			tputs_termcap("up");
-			all->cursor_pos = 1;
-			while (all->cursor_pos < all->ws.ws_col * (all->curr_line - 1))
+			all->curr_line--;
+		//	printf("lenLine: %d\n", all->ws.ws_col);
+		//	printf("currLine: %d\n", all->curr_line);
+			all->cursor_pos = (all->curr_line > 1) ? 
+				(all->ws.ws_col * (all->curr_line - 1)) + 1 : 1;
+		//	printf("allCurs: %d\n", all->cursor_pos);
+			while (all->cursor_pos < all->ws.ws_col * all->curr_line)
 			{
 				all->cursor_pos++;
 				tputs_termcap("nd");
 			}
 			all->cursor_pos -= 2;
-			all->curr_line--;
-			//printf("allCurs: %d\n", all->cursor_pos);
 		}
 		else
 			tputs_termcap("le");
@@ -136,16 +138,18 @@ void	horizontal_moves(t_all *all)
 		// tputs_termcap("sf");
 		// printf("currLine: %d\n", all->curr_line);
 		// printf("res : %d\n", all->curr_line * all->ws.ws_col);
-		// printf("allCurs: %d\n", all->cursor_pos + 2);
+		//printf("allCurs: %d\n", all->cursor_pos);
 		if (all->cursor_pos + 3 == (all->ws.ws_col * all->curr_line))
 		{
-			//write(1, "here\n", 5);
+		//	write(1, "here\n", 5);
 			tputs_termcap("do");
+			all->curr_line++;
 			//tputs_termcap("le");
 		}
 		else
 			tputs_termcap("nd");
 		all->cursor_pos++;
+	//	printf("allCurs: %d\n", all->cursor_pos);
 		all->cpy_move_right += 
 			(all->already_in_select && all->cpy_move_left == 0) ? 1 : 0;
 	}
