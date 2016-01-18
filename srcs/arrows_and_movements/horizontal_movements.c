@@ -69,12 +69,9 @@ void	opt_left_move(t_all *all)
 
 static	void	reprint_char(t_all *all, t_cmd *nav)
 {
-	// printf("move right: %d\n", all->cpy_move_right);
 	if (all->current_key == K_LEFT && all->cpy_move_right >= 0
 		&& all->cursor_pos > all->save_cursor_pos)
 	{
-		//printf("move right: %d\n", all->cpy_move_right);
-		//printf("char2change: |%c|\n", nav->c);
 		standard_mode(nav->c);
 		all->cpy_move_right--;
 	}

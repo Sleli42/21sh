@@ -12,26 +12,6 @@
 
 #include "21sh.h"
 
-// int		define_current_line(t_all *all, int pos)
-// {
-// 	int 	curr;
-
-// 	curr = 1;
-// 	// printf("[curr] pos: %d\n", pos + 3);
-// 	// printf("winLen: %d\n", all->ws.ws_col);
-// 	// printf("cursPos: %d\n", all->cursor_pos);
-// 	while (pos + 2 > (all->ws.ws_col * curr))
-// 		curr++;
-// 	// if (all->nl == 1)
-// 	// {
-// 	// 	if (all->cursor_pos == all->ws.ws_col)
-// 	// 		all->curr_line++, all->nl = 0;
-// 	// }
-// 	// if (curr > 1)
-// 	// 	write(1, "2 lines\n", 7);
-// 	return (curr);
-// }
-
 void	shift_last_char(t_all *all, int curr_line)
 {
 	char	save_char;
@@ -47,9 +27,10 @@ void	shift_last_char(t_all *all, int curr_line)
 
 void	shift(t_all *all)
 {
-	int		save = all->curr_line;
+	int		save;
 	int		ct;
 
+	save = all->curr_line;
 	ct = 0;
 	create_cmd(all);
 	if ((int)ft_strlen(all->cmd) + 2 == all->ws.ws_col * all->nb_lines)
@@ -57,20 +38,14 @@ void	shift(t_all *all)
 		tputs_termcap("sc");
 		if (all->nb_lines - all->curr_line == 0)
 		{		/* if 1st Line */
-		//	tputs_termcap("sc");
 			tputs_termcap("do");
 			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
-			// tputs_termcap("rc");
-			// tputs_termcap("up");
 		}
 		else
 		{
-		//	tputs_termcap("sc");
 			while (all->nb_lines - save >= 0)
 				shift_last_char(all, save++);
-			//tputs_termcap("rc");
-			//tputs_termcap("up");
-		}
+		}	
 		tputs_termcap("rc");
 		tputs_termcap("up");
 	}
@@ -90,7 +65,7 @@ void	shift(t_all *all)
 	}
 	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line != 0)
 	{		/* shift last char -> 1st char */
-		int		ct = all->curr_line;
+		ct = all->curr_line;
 		tputs_termcap("sc");
 		while (all->nb_lines - ct > 0)
 			shift_last_char(all, ct++);

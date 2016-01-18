@@ -208,6 +208,11 @@ typedef	struct			s_keys
 	void		goto_begin(t_all *all);
 	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
 	/*
+	*** ======================= vertical_movements.c
+	*/
+	void		goto_up_line(t_all *all);
+	void		goto_down_line(t_all *all);
+	/*
 	*** ======================= clear_screen.c
 	*/
 	void		ft_clear_screen(t_all *all);
