@@ -10,16 +10,17 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC				= srcs/
-SRCS_ARROWS		= $(SRC)arrows_and_movements/
-SRCS_BUILTINS	= $(SRC)builtins/
-SRCS_ENV		= $(SRC)env/
-SRCS_EXEC		= $(SRC)exec_binary/
-SRCS_HISTORY 	= $(SRC)history/
-SRCS_LISTS 		= $(SRC)lists/
-SRCS_REDIRECTS 	= $(SRC)redirects/
-SRCS_SHELL 		= $(SRC)shell/
-SRCS_TERMCAPS 	= $(SRC)termcaps/
+SRC					= srcs/
+SRCS_ARROWS			= $(SRC)arrows_and_movements/
+SRCS_AUTOCOMPLETE	= $(SRC)autocomplete/
+SRCS_BUILTINS		= $(SRC)builtins/
+SRCS_ENV			= $(SRC)env/
+SRCS_EXEC			= $(SRC)exec_binary/
+SRCS_HISTORY 		= $(SRC)history/
+SRCS_LISTS 			= $(SRC)lists/
+SRCS_REDIRECTS 		= $(SRC)redirects/
+SRCS_SHELL 			= $(SRC)shell/
+SRCS_TERMCAPS 		= $(SRC)termcaps/
 
 SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)horizontal_movements.c \
@@ -32,6 +33,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)copy_tools.c \
 			$(SRCS_ARROWS)cut_tools.c \
 			$(SRCS_ARROWS)shift.c \
+			$(SRCS_AUTOCOMPLETE)autocomplete.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_ENV)env.c \

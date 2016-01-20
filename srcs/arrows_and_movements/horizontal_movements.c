@@ -33,7 +33,13 @@ void	opt_right_move(t_all *all)
 				}
 				break ;
 			}
-			tputs_termcap("nd");
+			if (all->cursor_pos == (all->curr_line * all->ws.ws_col) - 3)
+			{
+				tputs_termcap("do");
+				all->curr_line++;
+			}
+			else
+				tputs_termcap("nd");
 			all->cursor_pos++;
 			nav = nav->next;
 		}
@@ -58,6 +64,8 @@ void	opt_left_move(t_all *all)
 				nav = nav->prev;
 				break ;
 			}
+			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col + 1))
+				all->curr_line--;
 			tputs_termcap("le");
 			all->cursor_pos--;
 			nav = nav->prev;

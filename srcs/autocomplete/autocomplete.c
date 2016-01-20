@@ -64,7 +64,7 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 		all->ws.ws_col -= (all->maxlen_arg + 5);
 		ret++;
 	}
-	// printf("ret = %d\n", ret);
+	//printf("ret = %d\n", ret);
 	return (ret);
 }
 
@@ -87,37 +87,7 @@ void	select_arg(t_all *all)
 	all->ct_select++;
 	// printf("selected arg-> %s\n", nav->arg);
 }
-/*
-void	new_line_autocomplet(t_all *all)
-{
-	//printf("nbcharwrite: %d\n", all->nb_char_write);
-	if (all->nb_char_write > 0)
-	{
-		while (all->nb_char_write--)
-		{
-			tputs_termcap("dc");
-			tputs_termcap("le");
-		}
-	}
-}
 
-void	list_elems(t_all *all, DIR *entry)
-{
-	t_dirent	*dirp;
-
-	all->list_dir = create_clst();
-	while ((dirp = readdir(entry)))
-	{
-		if (dirp->d_name[0] != '.')
-		{
-			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-		}
-	}
-	//sort_name(&all->list_dir->head);
-	//init_windows_size(all);
-	//write(1, "\n", 1);
-}
-*/
 void	display_elems(t_all *all, t_clist *lst)
 {
 	t_select	*nav;
@@ -164,34 +134,6 @@ int		no_spaces(t_cmd *lst)
 	}
 	return (1);
 }
-
-// void	display_current(t_all *all, t_select *nav)
-// {
-
-// }
-
-// char	*cut_cmd(char *cmd)
-// {
-// 	int 	ct = ft_strlen(cmd) - 1;
-// 	int		i = 0;
-// 	char	*ret;
-
-// 	ret = (char *)malloc(sizeof(char *));
-// 	while (cmd[ct] != ' ')
-// 		ct--;
-// 	ct--;;
-// 	while (cmd[ct] != ' ')
-// 	{
-// 		if (ct == 0)
-// 			break ;
-// 		ct--;
-// 	}
-// 	while (cmd[ct] != ' ')
-// 		ret[i++] = cmd[ct++];
-// 	ret[i++] = ' ';
-// 	ret[i] = 0;
-// 	return (ret);
-// }
 
 char	*find_path(char *s)
 {
@@ -360,7 +302,14 @@ void	search_bin_path(t_all *all)
 			ft_strdel(&all->tmp_cmd);
 		all->tmp_cmd = ft_strdup(all->list_dir->head->arg);
 	}
-	display_elems(all, all->list_dir);
+	if (all->list_dir->lenght > 100)
+	{
+		char	buff[1];
+		printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
+		read(0, buff, 1);
+		if (*buff == 'y')
+			display_elems(all, all->list_dir);
+	}
 	all->already_autocomplete = 1;
 	loop(all);
 }
@@ -450,7 +399,14 @@ void	list_dir_equ(t_all *all, char *dir2open, char *equ2find)
 	//printf("all->tmp_cmd :|%s|\n", all->tmp_cmd);
 	//all->tmp_cmd  = update_tmp_cmd(all->cmd);
 	//printf("all->tmp_cmd :|%s|\n", all->tmp_cmd);
-	display_elems(all, all->list_dir);
+	if (all->list_dir->lenght > 100)
+	{
+		char	buff[1];
+		printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
+		read(0, buff, 1);
+		if (*buff == 'y')
+			display_elems(all, all->list_dir);
+	}
 	if (all->list_dir->lenght == 1)
 	{
 		all->tmp_cmd = update_tmp_cmd(all, all->list_dir->head->arg);
@@ -464,7 +420,7 @@ void	open_directories(t_all *all)
 {
 	create_cmd(all);
 	//printf("|%c|\n", all->cmd[ft_strlen(all->cmd) - 1]);
-	if (ft_strlen(all->cmd) >= 1 && no_spaces(all->cmd_termcaps->head))
+	if (all->cmd[0] == 0 || (ft_strlen(all->cmd) >= 1 && no_spaces(all->cmd_termcaps->head)))
 		search_bin_path(all);
 	else if (all->cmd[ft_strlen(all->cmd) - 1] == ' ')
 		open_current_dir(all);
@@ -475,57 +431,3 @@ void	open_directories(t_all *all)
 	else
 		search_equ(all);*/
 }
-
-/*
-void	open_directories(t_all *all)
-{
-	// DIR		*entry;
-	// char	*dir;
-
-	// dir = NULL;
-	create_cmd(all);
-	//printf("cursor: %d\n", all->cursor_pos);
-	//printf("all->cmd : %s\n", all->cmd);
-	if (all->cmd[0] == '.' && !all->cmd[1] && !all->hidden_file)
-	{
-		ft_strdel(&all->cmd);
-		all->cmd = ft_strdup("./");
-	}
-	//printf("cmd : %s\n", all->cmd);
-	if (all->cmd[ft_strlen(all->cmd) - 1] == '/')
-	{
-		//printf("all->cmd : %s\n", all->cmd);
-		search_path_directory(all, cut_dir_path(all->cmd));
-		// if (all->already_autocomplete)
-		// 	printf("already_autocomplete\n");
-		// if (all->already_equ)
-		// 	printf("already_equ\n");
-
-	}
-	else if (all->already_equ)
-	{
-		list_dir_equ(all, cut_dir_path(all->cmd), cut_equ_path(all->cmd));
-	}
-	else if (goto_elem(all->cmd_termcaps->head, all->cursor_pos - 1) != ' ')
-	{
-		if (all->cmd[0] == '.')
-		{
-			//printf("|%c|\n", all->cmd[2]);
-			if (all->already_autocomplete && ft_strlen(all->cmd) > 2)
-			{
-				search_equ(all, all->cmd);
-			}
-			else
-				search_current_dir(all);
-		}
-		else if (no_spaces(all->cmd_termcaps->head))
-			search_bin_path(all);
-		else
-			search_equ(all, find_path(all->cmd));
-	}
-	else{
-		write(1, "prob\n", 5);
-		search_current_dir(all);
-	}
-}
-*/

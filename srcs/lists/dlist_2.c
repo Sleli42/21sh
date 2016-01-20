@@ -124,18 +124,12 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 
 	tmp = lst->head;
 	found = 0;
-	//printf("pos: %d\n", pos);
-	//printf("cursor after: %d\n", pos);
 	if (lst)
 	{
-		// display_dlst2(lst);
 		while (tmp && !found)
 		{
 			if (ct == pos)
 			{
-				// printf("ct: %d\n", ct);
-				
-				// printf("nav->c2del : |%c|\n", tmp->c);
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;
@@ -143,7 +137,6 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 					lst->lenght--;
 					lst->tail = NULL;
 					return (lst);
-					// return (lst);
 				}
 				else
 					found = update_list2(lst, tmp);
@@ -153,7 +146,6 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 			ct++;
 			tmp = tmp->next;
 		}
-		//printf("ct: %d\n", ct);
 	}
 	return (lst);
 }

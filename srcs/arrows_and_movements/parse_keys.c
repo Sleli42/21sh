@@ -53,7 +53,8 @@ int			check_keys_arrows(t_all *all, char *buff)
 		|| all->current_key == K_DELETE || all->current_key == K_BACKSPACE
 		|| all->current_key == K_HOME || all->current_key == K_END
 		|| all->current_key == K_CTRL_CLEAR || all->current_key == K_CTRL_CUT
-		|| all->current_key == K_CTRL_COPY || all->current_key == K_CTRL_PASTE)
+		|| all->current_key == K_CTRL_COPY || all->current_key == K_CTRL_PASTE
+		|| all->current_key == K_TAB)
 		return (1);
 	return (0);
 }
@@ -78,7 +79,8 @@ void		parse_keys(t_all *all)
 	{K_CTRL_CLEAR, ft_clear_screen},
 	{K_CTRL_CUT, cut_buffer},
 	{K_CTRL_COPY, copy_buffer},
-	{K_CTRL_PASTE, paste_buffer}};
+	{K_CTRL_PASTE, paste_buffer},
+	{K_TAB, open_directories}};
 	i = 0;
 	//all->current_key = ft_getkey(buff);
 	// printf("->> |%d|\n", keys[4].action_name);
@@ -87,7 +89,7 @@ void		parse_keys(t_all *all)
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);
 	// printf("\n");
-	while (i < 16)
+	while (i < 17)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{

@@ -12,6 +12,30 @@
 
 #include "21sh.h"
 
+void	shift_first_char(t_all *all, int curr_line)
+{
+	int		ct;
+	char	save_char;
+
+	ct = all->cursor_pos;
+	//printf("curr : %d\n", curr_line);
+	while (ct < (curr_line * all->ws.ws_col) - 2 + 1)
+		ct++;
+	// printf("|%c|\n", all->cmd[ct]);
+	save_char = all->cmd[ct - 3];
+	// tputs_termcap("sc");
+	tputs_termcap("do");
+	tputs_termcap("dc");
+	tputs_termcap("le");
+	// tputs_termcap("rc");
+	ct = all->cursor_pos;
+	while (ct++ < (all->curr_line * all->ws.ws_col) - 2)
+		tputs_termcap("nd");
+	write(1, &save_char, 1);
+		// tputs_termcap("do");
+	//printf("char2shift: |%c|\n", all->cmd[all->cursor_pos - 3]);
+}
+
 void	shift_last_char(t_all *all, int curr_line)
 {
 	char	save_char;

@@ -48,7 +48,7 @@
 # define	K_CTRL_PASTE	-4302000
 # define	K_CTRL_CUT		-4310000
 
-# define 	NOTATTY 	1
+# define 	NOTATTY 		1
 
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
@@ -237,7 +237,8 @@ typedef	struct			s_keys
 	/*
 	*** ======================= shift.c
 	*/
-	int			define_current_line(t_all *all, int pos);
+	void		shift_first_char(t_all *all, int curr_line);
+	void		shift_last_char(t_all *all, int curr_line);
 	void		shift(t_all *all);
 
 /* -------------------------------------------------------------
