@@ -42,6 +42,7 @@ void	shift(t_all *all)
 	save = all->curr_line;
 	ct = 0;
 	create_cmd(all);
+	// init_windows_size(all);
 	if ((int)ft_strlen(all->cmd) + 2 == all->ws.ws_col * all->nb_lines)
 	{		/* if char -> EOL */
 		tputs_termcap("sc");
@@ -56,6 +57,10 @@ void	shift(t_all *all)
 				shift_last_char(all, save++);
 		}	
 		tputs_termcap("rc");
+		printf("row: %d\n", all->ws.ws_row);
+		printf("max rows: %d\n", tgetnum("co") - 9);
+		if (all->ws.ws_row == all->max_rows - 9)
+			printf("OK\n");
 		tputs_termcap("up");
 	}
 	else if (all->cursor_pos + 2 == (all->ws.ws_col * all->curr_line))

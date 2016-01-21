@@ -57,11 +57,13 @@ void	loop(t_all *all)
 	all->already_in_select = 0;
 	all->cursor_pos = 1;
 	all->nb_lines = 1;
-	all->nl = 0;
 	all->curr_line = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
 	display_prompt(all);
+	// printf("yPixel: %d\n", all->ws.ws_ypixel);
+	init_windows_size(all);
+	printf("rows: %d\n", all->ws.ws_row);
 	if (!all->cmd)
 	{
 		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
