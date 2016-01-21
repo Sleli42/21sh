@@ -34,6 +34,12 @@ void	goto_up_line(t_all *all)
 		all->curr_line -= 1;
 		all->cursor_pos = (all->curr_line == 1) ? (ct - 2)
 			: ((all->ws.ws_col * (all->curr_line - 1)) - 2 + ct);
+		if (all->cursor_pos < 0)
+		{
+			while (all->cursor_pos++ < 0)
+				tputs_termcap("nd");
+			tputs_termcap("nd");
+		}
 		tputs_termcap("up");
 	}
 }
@@ -50,8 +56,17 @@ void	goto_down_line(t_all *all)
 		all->cursor_pos = (all->ws.ws_col * (all->curr_line)) - 2 + ct;
 		all->curr_line += 1;
 		tputs_termcap("do");
-		while (ct-- > 0)
-		 	tputs_termcap("nd");
+		if (all->cursor_pos > (int)ft_strlen(all->cmd))
+		{
+			all->cursor_pos = (all->ws.ws_col * (all->curr_line - 1) - 3);
+			while (all->cursor_pos++ < (int)ft_strlen(all->cmd))
+				tputs_termcap("nd");
+		}
+		else
+		{
+			while (ct-- > 0)
+		 		tputs_termcap("nd");
+		}
 	}
 }
 
