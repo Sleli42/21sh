@@ -26,7 +26,11 @@ void	create_and_exec_command(t_all *all)
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
 	if (all->cmd)
+	{
 		printf("cmd: |%s|\n", all->cmd);
+		all->line2write += all->nb_lines;
+		//printf("--> %d\n", all->line2write);
+	}
 	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
 	{
 		add_to_history(all);
@@ -35,6 +39,7 @@ void	create_and_exec_command(t_all *all)
 	}
 	(all->cmd_termcaps) ? del_dlist2(all->cmd_termcaps) : NULL;
 	//reset_term();
+	all->line2write += all->nb_lines;
 	loop(all);
 }
 
@@ -63,7 +68,6 @@ void	loop(t_all *all)
 	display_prompt(all);
 	// printf("yPixel: %d\n", all->ws.ws_ypixel);
 	init_windows_size(all);
-	printf("rows: %d\n", all->ws.ws_row);
 	if (!all->cmd)
 	{
 		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
@@ -101,13 +105,7 @@ void	loop(t_all *all)
 				if (all->nb_lines >= 1)
 				{
 					shift(all);
-					// if (all->cursor_pos == 74)
-					// {
-					// 	printf("test[]: |%c|\n", all->cmd[66]);
-					// 	printf("len: %d\n", all->ws.ws_col);
-					// }
 				}
-
 			}
 			else
 			{

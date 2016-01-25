@@ -24,6 +24,8 @@ int		main(int ac, char **av, char **env)
 	(void)av;
 	all = init_all(env);
 	init_term();
+	tputs_termcap("cl");
+	printf("\t\t%s---- Welcome to my 42sheu ----%s\n\n", BOLD_MAGENTA, END);
 	loop(all);
 	del_dlist(all->env);
 	del_dlist(all->cmd_history);

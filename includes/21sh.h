@@ -26,6 +26,8 @@
 # include <curses.h>
 # include <sys/ioctl.h>
 # include <dirent.h>
+// others
+# include "colors.h"
 
 # define	MAXLEN			2048
 # define	K_UP			279165000
@@ -130,6 +132,7 @@ typedef struct			s_all
 		// --VERTICAL MOVES
 	int					nb_lines;
 	int					curr_line;
+	int					line2write;
 	int					max_rows;
 		// --HISTORY
 	char				**history_buff;

@@ -125,7 +125,7 @@ void	horizontal_moves(t_all *all)
 		if (all->cursor_pos + 3 == (all->ws.ws_col * all->curr_line))
 		{
 			tputs_termcap("do");
-			all->curr_line++;
+			all->curr_line += 1;
 		}
 		else
 			tputs_termcap("nd");

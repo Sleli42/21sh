@@ -48,6 +48,7 @@ void	shift(t_all *all)
 		tputs_termcap("sc");
 		if (all->nb_lines - all->curr_line == 0)
 		{		/* if 1st Line */
+			all->line2write += 1;
 			tputs_termcap("do");
 			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
 		}
@@ -55,13 +56,16 @@ void	shift(t_all *all)
 		{
 			while (all->nb_lines - save >= 0)
 				shift_last_char(all, save++);
-		}	
+		}
 		tputs_termcap("rc");
-		printf("row: %d\n", all->ws.ws_row);
-		printf("max rows: %d\n", tgetnum("co") - 9);
-		if (all->ws.ws_row == all->max_rows - 9)
-			printf("OK\n");
-		tputs_termcap("up");
+		if (all->line2write >= all->ws.ws_row + 2)
+		{
+			tputs_termcap("up");
+			// printf("PAS MAL LA DOUILLE\n\n\n\n");
+			// printf("line--> %d\n", all->line2write);
+			// printf("rows--> %d\n", all->ws.ws_row);
+		}
+		//tputs_termcap("up");
 	}
 	else if (all->cursor_pos + 2 == (all->ws.ws_col * all->curr_line))
  	{	/* if cursor -> EOL */

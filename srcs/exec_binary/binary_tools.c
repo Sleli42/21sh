@@ -53,6 +53,7 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 	if (!stop)
 	{
 		printf("Command: '%s' not found\n", argv_bin[0]);
+		all->line2write += all->nb_lines;
 		// ft_putstr("")
 		// ft_putstr("Command not found\n");
 	}
