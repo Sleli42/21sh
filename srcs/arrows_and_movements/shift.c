@@ -59,13 +59,7 @@ void	shift(t_all *all)
 		}
 		tputs_termcap("rc");
 		if (all->line2write >= all->ws.ws_row + 2)
-		{
 			tputs_termcap("up");
-			// printf("PAS MAL LA DOUILLE\n\n\n\n");
-			// printf("line--> %d\n", all->line2write);
-			// printf("rows--> %d\n", all->ws.ws_row);
-		}
-		//tputs_termcap("up");
 	}
 	else if (all->cursor_pos + 2 == (all->ws.ws_col * all->curr_line))
  	{	/* if cursor -> EOL */

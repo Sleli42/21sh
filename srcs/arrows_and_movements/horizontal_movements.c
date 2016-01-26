@@ -50,6 +50,39 @@ void	opt_right_move(t_all *all)
 
 void	opt_left_move(t_all *all)
 {
+// 	create_cmd(all);
+
+// 	/* check space before */
+// 	int		tmp;
+// 	int		ok;
+
+// 	tmp = all->cursor_pos;
+// 	ok = 0;
+// 	while (!ok && tmp-- > 0)
+// 	{
+// 		if (all->cmd[tmp] == ' ')
+// 		{
+// 			// write(1, "ok\n", 3);
+// 			ok = 1;
+// 		}
+// 	}
+// 	if (ok)
+// 	{
+// 		while (all->cursor_pos-- > 0)
+// 		{
+// 			tputs_termcap("le");
+// 			if (all->cmd[all->cursor_pos] == ' ')
+// 				break ;
+// 			// all->cursor_pos--;
+// 		}
+
+// 		tputs_termcap("nd");
+// 	}
+// 	else if (!ok && all->cursor_pos > 1)
+// 		goto_begin(all);
+
+
+
 	t_cmd	*nav;
 
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
@@ -64,8 +97,14 @@ void	opt_left_move(t_all *all)
 				nav = nav->prev;
 				break ;
 			}
-			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col + 1))
+			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col + 1)
+				&& all->curr_line > 1)
+			{
+				// tputs_termcap("ku");
 				all->curr_line--;
+				//while ()
+			}
+			// if (all->cursor_pos == (all->curr_line - 1) * all->ws.ws_col)
 			tputs_termcap("le");
 			all->cursor_pos--;
 			nav = nav->prev;
