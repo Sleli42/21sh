@@ -114,7 +114,7 @@ void	opt_left_move(t_all *all)
 		goto_begin(all);
 }
 
-static	void	reprint_char(t_all *all, t_cmd *nav)
+void	reprint_char(t_all *all, t_cmd *nav)
 {
 	if (all->current_key == K_LEFT && all->cpy_move_right >= 0
 		&& all->cursor_pos > all->save_cursor_pos)
@@ -134,10 +134,41 @@ static	void	reprint_char(t_all *all, t_cmd *nav)
 
 void	horizontal_moves(t_all *all)
 {
+	// tputs_termcap("mi");
+	if (all->current_key == K_LEFT && all->cursor_pos > PROMPT_LEN)
+	{
+		if (all->curr_line > 1
+			&& all->cursor_pos == ((all->curr_line - 1) * all->ws.ws_col))
+		{
+			// write(1, "stop\n", 5);
+			all->curr_line--;
+		}
+		tputs_termcap("le");
+		all->cursor_pos--;
+	}
+	if (all->current_key == K_RIGHT
+		&& (all->cursor_pos - PROMPT_LEN) < (int)all->cmd_termcaps->lenght)
+	{
+		if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 1)
+		{
+			tputs_termcap("do");
+			all->curr_line++;
+		}
+		else
+		{
+			tputs_termcap("nd");
+			all->cursor_pos++;
+		}
+	}
+}
+
+/*
+void	horizontal_moves(t_all *all)
+{
 	if (all->already_in_select
 		&& (size_t)all->cursor_pos < all->cmd_termcaps->lenght + 1)
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos));
-	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > 1)
+	if (all->current_key == K_LEFT && all->cmd_termcaps->lenght > 0 && all->cursor_pos > LEN_PROMPT)
 	{
 		if (all->curr_line > 1 && all->cursor_pos + 2 == all->ws.ws_col * (all->curr_line - 1))
 		{
@@ -173,3 +204,4 @@ void	horizontal_moves(t_all *all)
 			(all->already_in_select && all->cpy_move_left == 0) ? 1 : 0;
 	}
 }
+*/

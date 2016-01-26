@@ -51,6 +51,7 @@
 # define	K_CTRL_CUT		-4310000
 
 # define 	NOTATTY 		1
+# define	PROMPT_LEN		3
 
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
@@ -181,6 +182,8 @@ typedef	struct			s_keys
 	int					action_name;
 	void				(*f)(t_all *);
 }						t_keys;
+
+// void	line_edition(t_all *all, char *buff);
 
 
 /* -------------------------------------------------------------

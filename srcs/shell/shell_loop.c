@@ -17,6 +17,7 @@ void	display_prompt(t_all *all) {
 	//tputs_termcap("me");
 	tputs_termcap("ve");
 	write(1, "$: ", 3);
+	all->cursor_pos += PROMPT_LEN;
 }
 
 void	create_and_exec_command(t_all *all)
@@ -47,20 +48,20 @@ static void	define_nb_lines(t_all *all)
 {
 	create_cmd(all);
 	///printf("rows: %d\n", all->ws.ws_row);
-	if ((int)ft_strlen(all->cmd) + 2 == all->ws.ws_col * all->nb_lines)
+	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == all->ws.ws_col * all->nb_lines)
 		all->nb_lines++;
 }
 
 void	loop(t_all *all)
 {
 	char	*buff;
-	int		key;
+	int		key = 0;
 
 	all->stop = 0;
 	all->already_open = 0;
 	all->already_in_history = 0;
 	all->already_in_select = 0;
-	all->cursor_pos = 1;
+	all->cursor_pos = 0;
 	all->nb_lines = 1;
 	all->curr_line = 1;
 	all->index_history = all->pos_history;
@@ -68,11 +69,8 @@ void	loop(t_all *all)
 	display_prompt(all);
 	// printf("yPixel: %d\n", all->ws.ws_ypixel);
 	init_windows_size(all);
-	if (!all->cmd)
-	{
-		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
-			error("MALLOC");
-	}
+	if (!all->cmd && !(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
+		error("MALLOC");
 	buff = ft_strnew(MAXLEN - 1);
 	ft_memset(buff, 0, (MAXLEN - 1));
 	//tputs_termcap("ti");
@@ -87,6 +85,7 @@ void	loop(t_all *all)
 			ft_memset(buff, 0, (MAXLEN - 1));
 		}
 		read(0, buff, (MAXLEN - 1));
+		//line_edition(all, buff);
 		// read_key(buff);
 		// break ;
 		if ((key = check_keys_arrows(all, buff)) < 0)
@@ -95,12 +94,12 @@ void	loop(t_all *all)
 			parse_keys(all);
 		else
 		{
-			//tputs_termcap("am");
 			tputs_termcap("im");
-			if ((size_t)all->cursor_pos <= all->cmd_termcaps->lenght && *buff != '\n')
+			if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght && *buff != '\n')
 			{
 				if (*buff != '\n')
 					ft_putchar(*buff);
+				//write(1, "here\n", 5);
 				update_cmd_line_insert(all, *buff);
 				if (all->nb_lines >= 1)
 				{
@@ -109,9 +108,8 @@ void	loop(t_all *all)
 			}
 			else
 			{
-				if (all->cursor_pos + 2 == all->ws.ws_col * all->curr_line)
+				if (all->cursor_pos == all->ws.ws_col * all->curr_line)
 					all->curr_line++;
-				//printf("|%d| && |%d|\n", buff[0], buff[1]);
 				if (*buff != '\n')
 				{
 					ft_putchar(*buff);
@@ -119,7 +117,7 @@ void	loop(t_all *all)
 					all->cursor_pos++;
 				}
 			}
-			tputs_termcap("ei");
+			tputs_termcap("ei");	
 		}
 	}
 	create_and_exec_command(all);

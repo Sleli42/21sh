@@ -36,7 +36,7 @@ t_all		*init_all(char **env)
 	all->history_buff = parse_history();
 	all->pos_history = check_history_file(all->history_buff);
 	all->tmp_cmd = NULL;
-	all->line2write = 3;
+	all->line2write = 1;
 	// all->file_history = ft_strdup(".21sh_history");
 	return (all);
 }
