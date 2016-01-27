@@ -142,8 +142,20 @@ void	horizontal_moves(t_all *all)
 		{
 			// write(1, "stop\n", 5);
 			all->curr_line--;
+			tputs_termcap("up");
+			// printf("cuurLine: %d\n", all->curr_line);
+			// printf("all->cursor_pos: %d\n", all->cursor_pos);
+			all->cursor_pos = (all->curr_line > 1)
+				? (all->curr_line - 1) * all->ws.ws_col : 1;
+			while (all->cursor_pos < (all->curr_line * all->ws.ws_col))
+			{
+				tputs_termcap("nd");
+				all->cursor_pos++;
+			}
+	//		printf("all->cursor_pos: %d\n", all->cursor_pos);
 		}
-		tputs_termcap("le");
+		else
+			tputs_termcap("le");
 		all->cursor_pos--;
 	}
 	if (all->current_key == K_RIGHT
@@ -151,14 +163,13 @@ void	horizontal_moves(t_all *all)
 	{
 		if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 1)
 		{
+	//		write(1, "here\n", 5);
 			tputs_termcap("do");
 			all->curr_line++;
 		}
 		else
-		{
 			tputs_termcap("nd");
-			all->cursor_pos++;
-		}
+		all->cursor_pos++;
 	}
 }
 
