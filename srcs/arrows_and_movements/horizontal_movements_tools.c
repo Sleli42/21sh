@@ -44,13 +44,13 @@ int		check_if_spaces_after(t_dlist2 *lst, int pos)
 			tmp = tmp->next;
 		if (!tmp)
 			return (0);
-		if (tmp->c == ' ')
+		while (tmp->c == ' ')
 			tmp = tmp->next;
 		while (tmp)
 		{
+			tmp = tmp->next;
 			if (tmp->c == ' ')
 				return (1);
-			tmp = tmp->next;
 		}
 	}
 	return (0);
@@ -73,9 +73,9 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 
 void	goto_begin(t_all *all)
 {
-	if (all->cursor_pos > 1)
+	if (all->cursor_pos > PROMPT_LEN)
 	{
-		while (all->cursor_pos > 1)
+		while (all->cursor_pos > PROMPT_LEN)
 		{
 			tputs_termcap("le");
 			all->cursor_pos--;

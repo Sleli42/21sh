@@ -124,12 +124,16 @@ t_dlist2			*dlst_del_one2(t_dlist2 *lst, int pos)
 
 	tmp = lst->head;
 	found = 0;
+		// printf("cmp: %d && %zu\n", pos, lst->lenght);
 	if (lst)
 	{
 		while (tmp && !found)
 		{
 			if (ct == pos)
 			{
+			//	printf("found2del: [ %c ]\n", tmp->c);
+				// printf("found2del - 1: [ %c ]\n", tmp->prev->c);
+				// printf("found2del + 1: [ %c ]\n", tmp->next->c);
 				if (!tmp->next && !tmp->prev)
 				{
 					tmp->c = 0;

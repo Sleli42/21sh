@@ -17,13 +17,17 @@ void	opt_right_move(t_all *all)
 	t_cmd	*nav;
 	t_cmd	*save_pos;
 
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - (PROMPT_LEN - 1));
 	save_pos = nav;
-	if (check_if_spaces_after(all->cmd_termcaps, all->cursor_pos - 1))
+	printf("NAV FOUND: [ %c ]\n", nav->c);
+	printf("NAV prev FOUND: [ %c ]\n", nav->prev->c);
+	// printf("NAV next FOUND: [ %c ]\n", nav->next->c);
+	if (check_if_spaces_after(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN))
 	{
+		// write(1, "ok\n", 3);
 		while (nav && nav->next)
 		{
-			if (nav->prev != save_pos && nav->c == ' ' && nav->next->c != ' ')
+			if (nav->c == ' ' && nav->prev->c != ' ')
 			{
 				if (save_pos != all->cmd_termcaps->head)
 				{
@@ -33,7 +37,7 @@ void	opt_right_move(t_all *all)
 				}
 				break ;
 			}
-			if (all->cursor_pos == (all->curr_line * all->ws.ws_col) - 3)
+			if (all->cursor_pos == (all->curr_line * all->ws.ws_col))
 			{
 				tputs_termcap("do");
 				all->curr_line++;
@@ -50,43 +54,10 @@ void	opt_right_move(t_all *all)
 
 void	opt_left_move(t_all *all)
 {
-// 	create_cmd(all);
-
-// 	/* check space before */
-// 	int		tmp;
-// 	int		ok;
-
-// 	tmp = all->cursor_pos;
-// 	ok = 0;
-// 	while (!ok && tmp-- > 0)
-// 	{
-// 		if (all->cmd[tmp] == ' ')
-// 		{
-// 			// write(1, "ok\n", 3);
-// 			ok = 1;
-// 		}
-// 	}
-// 	if (ok)
-// 	{
-// 		while (all->cursor_pos-- > 0)
-// 		{
-// 			tputs_termcap("le");
-// 			if (all->cmd[all->cursor_pos] == ' ')
-// 				break ;
-// 			// all->cursor_pos--;
-// 		}
-
-// 		tputs_termcap("nd");
-// 	}
-// 	else if (!ok && all->cursor_pos > 1)
-// 		goto_begin(all);
-
-
-
 	t_cmd	*nav;
 
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - 1);
-	if (check_if_spaces_before(all->cmd_termcaps, all->cursor_pos - 1))
+	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - PROMPT_LEN);
+	if (check_if_spaces_before(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN))
 	{
 		while (nav)
 		{
@@ -97,7 +68,7 @@ void	opt_left_move(t_all *all)
 				nav = nav->prev;
 				break ;
 			}
-			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col + 1)
+			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col)
 				&& all->curr_line > 1)
 			{
 				// tputs_termcap("ku");
@@ -135,6 +106,7 @@ void	reprint_char(t_all *all, t_cmd *nav)
 void	horizontal_moves(t_all *all)
 {
 	// tputs_termcap("mi");
+	// printf("cursor: %d\n", all->cursor_pos);m
 	if (all->current_key == K_LEFT && all->cursor_pos > PROMPT_LEN)
 	{
 		if (all->curr_line > 1
