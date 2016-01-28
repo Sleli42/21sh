@@ -12,46 +12,24 @@
 
 #include "21sh.h"
 
-int		check_if_spaces_before(t_dlist2 *lst, int pos)
+int		check_if_spaces_before(t_all *all, int pos)
 {
-	t_cmd	*tmp;
-	int		ct;
-
-	tmp = lst->head;
-	ct = 0;
-	if (tmp)
+	while (all->cmd[pos])
 	{
-		while (ct++ < pos)
-		{
-			if (tmp->c == ' ')
-				return (1);
-			tmp = tmp->next;
-		}
+		if (all->cmd[pos] == ' ' && all->cmd[pos - 1] != ' ')
+			return (1);
+		pos--;
 	}
 	return (0);
 }
 
-int		check_if_spaces_after(t_dlist2 *lst, int pos)
+int		check_if_spaces_after(t_all *all, int pos)
 {
-	t_cmd	*tmp;
-	int		ct;
-
-	tmp = lst->head;
-	ct = -1;
-	if (tmp)
+	while (all->cmd[pos])
 	{
-		while (tmp && ++ct < pos)
-			tmp = tmp->next;
-		if (!tmp)
-			return (0);
-		while (tmp->c == ' ')
-			tmp = tmp->next;
-		while (tmp)
-		{
-			tmp = tmp->next;
-			if (tmp->c == ' ')
-				return (1);
-		}
+		if (all->cmd[pos] == ' ' && all->cmd[pos - 1] != ' ')
+			return (1);
+		pos++;
 	}
 	return (0);
 }
@@ -85,9 +63,9 @@ void	goto_begin(t_all *all)
 
 void	goto_end(t_all *all)
 {
-	if (all->cursor_pos >= 1 && all->cursor_pos < (int)all->cmd_termcaps->lenght + 1)
+	if (all->cursor_pos >= 1 && all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
 	{
-		while (all->cursor_pos < (int)all->cmd_termcaps->lenght + 1)
+		while (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
 		{
 			tputs_termcap("nd");
 			all->cursor_pos++;

@@ -208,8 +208,8 @@ typedef	struct			s_keys
 	/*
 	*** ======================= horizontal_movements_tools.c
 	*/
-	int			check_if_spaces_before(t_dlist2 *lst, int pos);
-	int			check_if_spaces_after(t_dlist2 *lst, int pos);
+	int			check_if_spaces_before(t_all *all, int pos);
+	int			check_if_spaces_after(t_all *all, int pos);
 	void		goto_end(t_all *all);
 	void		goto_begin(t_all *all);
 	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);

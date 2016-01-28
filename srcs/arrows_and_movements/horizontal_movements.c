@@ -14,75 +14,63 @@
 
 void	opt_right_move(t_all *all)
 {
-	t_cmd	*nav;
-	t_cmd	*save_pos;
-
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - (PROMPT_LEN - 1));
-	save_pos = nav;
-	printf("NAV FOUND: [ %c ]\n", nav->c);
-	printf("NAV prev FOUND: [ %c ]\n", nav->prev->c);
-	// printf("NAV next FOUND: [ %c ]\n", nav->next->c);
-	if (check_if_spaces_after(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN))
+	create_cmd(all);
+	if (check_if_spaces_after(all, (all->cursor_pos - PROMPT_LEN) + 1))
 	{
-		// write(1, "ok\n", 3);
-		while (nav && nav->next)
+		all->cursor_pos++;
+		tputs_termcap("nd");
+		// printf("len_max : %d\n", (all->ws.ws_col * all->curr_line) - 1);
+		while (all->cmd[all->cursor_pos - PROMPT_LEN] != ' ')
 		{
-			if (nav->c == ' ' && nav->prev->c != ' ')
+			// printf("curs: %d\n", all->cursor_pos);
+			if (all->cursor_pos == (all->ws.ws_col * all->curr_line) - 1)
 			{
-				if (save_pos != all->cmd_termcaps->head)
-				{
-					tputs_termcap("le");
-					all->cursor_pos--;
-					nav = nav->prev;
-				}
-				break ;
-			}
-			if (all->cursor_pos == (all->curr_line * all->ws.ws_col))
-			{
+				// write(1, "*", 1);
 				tputs_termcap("do");
 				all->curr_line++;
 			}
 			else
 				tputs_termcap("nd");
 			all->cursor_pos++;
-			nav = nav->next;
 		}
 	}
 	else
-		goto_end(all);
+	{
+		while (all->cmd[all->cursor_pos - PROMPT_LEN])
+		{
+			tputs_termcap("nd");
+			all->cursor_pos++;
+		}
+	}
 }
 
 void	opt_left_move(t_all *all)
 {
-	t_cmd	*nav;
-
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - PROMPT_LEN);
-	if (check_if_spaces_before(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN))
+	create_cmd(all);
+	if (check_if_spaces_before(all, (all->cursor_pos - PROMPT_LEN) - 1))
 	{
-		while (nav)
+		all->cursor_pos--;
+		tputs_termcap("le");
+		while (all->cmd[all->cursor_pos - PROMPT_LEN] != ' ')
 		{
-			if (nav->c == ' ' && nav->prev->c != ' ')
-			{
-				tputs_termcap("le");
-				all->cursor_pos--;
-				nav = nav->prev;
-				break ;
-			}
-			if (all->cursor_pos < ((all->curr_line - 1) * all->ws.ws_col)
-				&& all->curr_line > 1)
-			{
-				// tputs_termcap("ku");
+			if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
 				all->curr_line--;
-				//while ()
-			}
-			// if (all->cursor_pos == (all->curr_line - 1) * all->ws.ws_col)
 			tputs_termcap("le");
 			all->cursor_pos--;
-			nav = nav->prev;
 		}
 	}
 	else
-		goto_begin(all);
+	{
+		while (all->cmd[all->cursor_pos - PROMPT_LEN])
+		{
+			if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
+				all->curr_line--;
+			tputs_termcap("le");
+			all->cursor_pos--;
+		}
+		tputs_termcap("nd");
+		all->cursor_pos++;
+	}
 }
 
 void	reprint_char(t_all *all, t_cmd *nav)
