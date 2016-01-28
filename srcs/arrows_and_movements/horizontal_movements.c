@@ -49,13 +49,18 @@ void	opt_left_move(t_all *all)
 	create_cmd(all);
 	if (check_if_spaces_before(all, (all->cursor_pos - PROMPT_LEN) - 1))
 	{
+		//printf("curr_line : %d\n", all->curr_line);
 		all->cursor_pos--;
 		tputs_termcap("le");
 		while (all->cmd[all->cursor_pos - PROMPT_LEN] != ' ')
 		{
-			if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
-				all->curr_line--;
-			tputs_termcap("le");
+			// if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
+			// 	all->curr_line--;
+			if (all->curr_line > 1
+				&& all->cursor_pos == ((all->curr_line - 1) * all->ws.ws_col))
+				goto_up(all);
+			else
+				tputs_termcap("le");
 			all->cursor_pos--;
 		}
 	}
@@ -63,8 +68,11 @@ void	opt_left_move(t_all *all)
 	{
 		while (all->cmd[all->cursor_pos - PROMPT_LEN])
 		{
-			if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
-				all->curr_line--;
+			// if (all->cursor_pos == (all->ws.ws_col * (all->curr_line - 1)) - 1)
+			// 	all->curr_line--;
+			if (all->curr_line > 1
+				&& all->cursor_pos == ((all->curr_line - 1) * all->ws.ws_col))
+				goto_up(all);
 			tputs_termcap("le");
 			all->cursor_pos--;
 		}
@@ -91,28 +99,44 @@ void	reprint_char(t_all *all, t_cmd *nav)
 		reverse_mode(nav->c);
 }
 
+void	goto_up(t_all *all)
+{
+	all->curr_line--;
+	tputs_termcap("up");
+			// printf("cuurLine: %d\n", all->curr_line);
+			// printf("all->cursor_pos: %d\n", all->cursor_pos);
+	all->cursor_pos = (all->curr_line > 1)
+	? (all->curr_line - 1) * all->ws.ws_col : 1;
+	while (all->cursor_pos < (all->curr_line * all->ws.ws_col))
+	{
+		tputs_termcap("nd");
+		all->cursor_pos++;
+	}
+}
+
 void	horizontal_moves(t_all *all)
 {
-	// tputs_termcap("mi");
-	// printf("cursor: %d\n", all->cursor_pos);m
+		// tputs_termcap("mi");
+		// printf("cursor: %d\n", all->cursor_pos);m
 	if (all->current_key == K_LEFT && all->cursor_pos > PROMPT_LEN)
 	{
 		if (all->curr_line > 1
 			&& all->cursor_pos == ((all->curr_line - 1) * all->ws.ws_col))
 		{
-			// write(1, "stop\n", 5);
-			all->curr_line--;
-			tputs_termcap("up");
-			// printf("cuurLine: %d\n", all->curr_line);
-			// printf("all->cursor_pos: %d\n", all->cursor_pos);
-			all->cursor_pos = (all->curr_line > 1)
-				? (all->curr_line - 1) * all->ws.ws_col : 1;
-			while (all->cursor_pos < (all->curr_line * all->ws.ws_col))
-			{
-				tputs_termcap("nd");
-				all->cursor_pos++;
-			}
-	//		printf("all->cursor_pos: %d\n", all->cursor_pos);
+			goto_up(all);
+				// write(1, "stop\n", 5);
+				// all->curr_line--;
+				// tputs_termcap("up");
+				// 	// printf("cuurLine: %d\n", all->curr_line);
+				// 	// printf("all->cursor_pos: %d\n", all->cursor_pos);
+				// all->cursor_pos = (all->curr_line > 1)
+				// 	? (all->curr_line - 1) * all->ws.ws_col : 1;
+				// while (all->cursor_pos < (all->curr_line * all->ws.ws_col))
+				// {
+				// 	tputs_termcap("nd");
+				// 	all->cursor_pos++;
+				// }
+				//printf("all->cursor_pos: %d\n", all->cursor_pos);
 		}
 		else
 			tputs_termcap("le");

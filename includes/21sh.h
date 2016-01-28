@@ -205,6 +205,8 @@ typedef	struct			s_keys
 	void		horizontal_moves(t_all *all);
 	void		opt_left_move(t_all *all);
 	void		opt_right_move(t_all *all);
+	void		reprint_char(t_all *all, t_cmd *nav);
+	void		goto_up(t_all *all);
 	/*
 	*** ======================= horizontal_movements_tools.c
 	*/
