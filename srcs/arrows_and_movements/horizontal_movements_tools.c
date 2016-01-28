@@ -14,6 +14,8 @@
 
 int		check_if_spaces_before(t_all *all, int pos)
 {
+	if (pos <= PROMPT_LEN)
+		return (0);
 	while (all->cmd[pos])
 	{
 		if (all->cmd[pos] == ' ' && all->cmd[pos - 1] != ' ')
@@ -25,6 +27,9 @@ int		check_if_spaces_before(t_all *all, int pos)
 
 int		check_if_spaces_after(t_all *all, int pos)
 {
+	// printf("cmp: %d && %zu\n", all->cursor_pos, ft_strlen(all->cmd));
+	if (pos + PROMPT_LEN == (int)ft_strlen(all->cmd))
+		return (0);
 	while (all->cmd[pos])
 	{
 		if (all->cmd[pos] == ' ' && all->cmd[pos - 1] != ' ')
