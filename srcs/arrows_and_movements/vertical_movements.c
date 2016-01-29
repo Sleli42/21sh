@@ -17,9 +17,13 @@ static int	count_char_to_shift(t_all *all, int start_pos)
 	int		ret;
 
 	ret = 0;
-	while (start_pos++ < all->cursor_pos)
+	// printf("start_pos: %d\n", start_pos);
+	// printf("CURSOR: %d\n", CURSOR);
+	// if (start_pos <= CURSOR + PROMPT_LEN)
+	// 	ft_putstr("case 0\n\n");
+	while (start_pos++ < CURSOR)
 		ret++;
-	ret += (all->curr_line == 1) ? 2 : 0;
+	// ret += (all->curr_line == 1) ? PROMPT_LEN : 0;
 	return (ret);
 }
 
@@ -30,17 +34,18 @@ void	goto_up_line(t_all *all)
 	ct = 0;
 	if (all->current_key == K_CTRL_UP && all->curr_line > 1)
 	{
-		ct = count_char_to_shift(all, (all->curr_line - 1) * all->ws.ws_col - 2);
+		ct = count_char_to_shift(all, ((all->curr_line - 1) * LINE_LEN));
 		all->curr_line -= 1;
-		all->cursor_pos = (all->curr_line == 1) ? (ct - 2)
-			: ((all->ws.ws_col * (all->curr_line - 1)) - 2 + ct);
-		if (all->cursor_pos < 0)
+		CURSOR = (all->curr_line == 1) ? (ct)
+			: ((LINE_LEN * (all->curr_line - 1)) + ct);
+		// printf("ct: %d\n", ct);
+		tputs_termcap("up");
+		if (CURSOR < PROMPT_LEN)
 		{
-			while (all->cursor_pos++ < 0)
+			while (CURSOR++ < PROMPT_LEN - 1)
 				tputs_termcap("nd");
 			tputs_termcap("nd");
 		}
-		tputs_termcap("up");
 	}
 }
 
@@ -52,14 +57,14 @@ void	goto_down_line(t_all *all)
 	if (all->current_key == K_CTRL_DOWN && all->curr_line < all->nb_lines)
 	{
 		ct = (all->curr_line == 1) ? count_char_to_shift(all, 0)
-			: count_char_to_shift(all, (all->curr_line - 1) * all->ws.ws_col - 2);
-		all->cursor_pos = (all->ws.ws_col * (all->curr_line)) - 2 + ct;
+			: count_char_to_shift(all, (all->curr_line - 1) * LINE_LEN);
+		CURSOR = (LINE_LEN * (all->curr_line)) + ct;
 		all->curr_line += 1;
 		tputs_termcap("do");
-		if (all->cursor_pos > (int)ft_strlen(all->cmd))
+		if (CURSOR > (int)ft_strlen(all->cmd))
 		{
-			all->cursor_pos = (all->ws.ws_col * (all->curr_line - 1) - 3);
-			while (all->cursor_pos++ < (int)ft_strlen(all->cmd))
+			ct = (LINE_LEN * (all->curr_line - 1) - PROMPT_LEN);
+			while (ct++ < (int)ft_strlen(all->cmd))
 				tputs_termcap("nd");
 		}
 		else

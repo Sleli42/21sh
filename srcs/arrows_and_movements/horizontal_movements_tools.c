@@ -27,7 +27,7 @@ int		check_if_spaces_before(t_all *all, int pos)
 
 int		check_if_spaces_after(t_all *all, int pos)
 {
-	// printf("cmp: %d && %zu\n", all->cursor_pos, ft_strlen(all->cmd));
+	// printf("cmp: %d && %zu\n", CURSOR, ft_strlen(all->cmd));
 	if (pos + PROMPT_LEN == (int)ft_strlen(all->cmd))
 		return (0);
 	while (all->cmd[pos])
@@ -56,24 +56,24 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 
 void	goto_begin(t_all *all)
 {
-	if (all->cursor_pos > PROMPT_LEN)
+	if (CURSOR > PROMPT_LEN)
 	{
-		while (all->cursor_pos > PROMPT_LEN)
+		while (CURSOR > PROMPT_LEN)
 		{
 			tputs_termcap("le");
-			all->cursor_pos--;
+			CURSOR--;
 		}
 	}
 }
 
 void	goto_end(t_all *all)
 {
-	if (all->cursor_pos >= 1 && all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+	if (CURSOR >= 1 && CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
 	{
-		while (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+		while (CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
 		{
 			tputs_termcap("nd");
-			all->cursor_pos++;
+			CURSOR++;
 		}
 	}
 }

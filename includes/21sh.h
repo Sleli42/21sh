@@ -52,6 +52,8 @@
 
 # define 	NOTATTY 		1
 # define	PROMPT_LEN		3
+# define	LINE_LEN		all->ws.ws_col
+# define	CURSOR			all->cursor_pos
 
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
