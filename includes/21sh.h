@@ -200,6 +200,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= delete_char.c
 	*/
+	void		del_char_multi_lines(t_all *all);
 	void		del_char(t_all *all);
 	/*
 	*** ======================= horizontal_movements.c

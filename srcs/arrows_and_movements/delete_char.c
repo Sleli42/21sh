@@ -20,7 +20,7 @@ void	del_char_multi_lines(t_all *all)
 	ct = all->curr_line;
 	save = CURSOR;
 	create_cmd(all);
-	if ((int)ft_strlen(all->cmd) < ((all->nb_lines - 1) * LINE_LEN) - 3)
+	if ((int)ft_strlen(all->cmd) < ((all->nb_lines - 1) * LINE_LEN) - PROMPT_LEN)
 		all->nb_lines--;
 	tputs_termcap("sc");
 	while (ct < all->nb_lines)

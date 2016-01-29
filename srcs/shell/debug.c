@@ -64,7 +64,7 @@ void	display_cursor(t_dlist2 *lst, int pos)
 
 void	read_key(char *buff)
 {
-	printf("buff: |%s|\n", buff);
+	printf("\nbuff: |%s|\n", buff);
 	printf("buff[0]: |%c|\n", buff[0]);
 	printf("|%d|\n", ft_getkey(buff));
 }
