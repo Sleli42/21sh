@@ -51,6 +51,7 @@ void	shift_last_char(t_all *all, int curr_line)
 	int		ct;
 
 	ct = CURSOR;
+	ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
 	// printf("currLine + ws.col: %d\n", (LINE_LEN * curr_line));
 	while (ct < (LINE_LEN * curr_line))
 		ct++;
@@ -83,7 +84,10 @@ void	shift(t_all *all)
 		{
 			save = all->curr_line;
 			while (all->nb_lines - save > 0)
+			{
+				write(1, "here\n\n", 6);
 				shift_last_char(all, save++);
+			}
 			/* shift last char of line */
 		}
 		tputs_termcap("rc");
