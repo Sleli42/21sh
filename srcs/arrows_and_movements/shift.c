@@ -55,17 +55,17 @@ void	shift_last_char(t_all *all, int curr_line)
 	// printf("currLine + ws.col: %d\n", (LINE_LEN * curr_line));
 	while (ct < (LINE_LEN * curr_line))
 		ct++;
-	ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
-	save_char = all->cmd[(ct - PROMPT_LEN)];
-	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines)
-		&& all->nb_lines == 2)
-	{
-		printf("len + PROMPT: %d\n" (int)ft_strlen(all->cmd) + PROMPT_LEN));
-		printf("ct - PROMPT: %d\n", ct - PROMPT_LEN);
-		printf("line*maxLine: %d\n", (LINE_LEN * all->nb_lines));
-		printf("save: [ %c ]\n", save_char);
-		printf("pther : [ %c ]\n", all->cmd[ct - PROMPT_LEN]);
-	}
+	// ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
+	save_char = all->cmd[(ct - PROMPT_LEN) - 1];
+	// if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines)
+	// 	&& all->nb_lines == 2)
+	// {
+	// 	printf("len + PROMPT: %d\n", (int)ft_strlen(all->cmd) + PROMPT_LEN);
+	// 	printf("ct - PROMPT: %d\n", ct - PROMPT_LEN);
+	// 	printf("line*maxLine: %d\n", (LINE_LEN * all->nb_lines));
+	// 	printf("save: [ %c ]\n", save_char);
+	// 	printf("pther : [ %c ]\n", all->cmd[ct - PROMPT_LEN]);
+	// }
 	tputs_termcap("do");
 	write(1, &save_char, 1);
 }
