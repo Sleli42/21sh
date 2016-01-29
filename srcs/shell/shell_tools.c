@@ -58,7 +58,7 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	}
 	while (cmd2realloc[ct])
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
-	all->cursor_pos = (int)all->cmd_termcaps->lenght + 1;
+	all->cursor_pos = (int)all->cmd_termcaps->lenght + PROMPT_LEN;
 }
 
 void	create_cmd(t_all *all)

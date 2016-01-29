@@ -56,24 +56,28 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 
 void	goto_begin(t_all *all)
 {
-	if (CURSOR > PROMPT_LEN)
+	while (CURSOR > PROMPT_LEN)
 	{
-		while (CURSOR > PROMPT_LEN)
-		{
+		if (all->curr_line > 1
+			&& CURSOR == ((all->curr_line - 1) * LINE_LEN))
+			goto_up(all);
+		else
 			tputs_termcap("le");
-			CURSOR--;
-		}
+		CURSOR--;
 	}
 }
 
 void	goto_end(t_all *all)
 {
-	if (CURSOR >= 1 && CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+	while (all->cmd[CURSOR - PROMPT_LEN])
 	{
-		while (CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+		if (CURSOR == (LINE_LEN * all->curr_line) - 1)
 		{
-			tputs_termcap("nd");
-			CURSOR++;
+			tputs_termcap("do");
+			all->curr_line++;
 		}
+		else
+			tputs_termcap("nd");
+		CURSOR++;
 	}
 }

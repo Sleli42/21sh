@@ -17,13 +17,8 @@ static int	count_char_to_shift(t_all *all, int start_pos)
 	int		ret;
 
 	ret = 0;
-	// printf("start_pos: %d\n", start_pos);
-	// printf("CURSOR: %d\n", CURSOR);
-	// if (start_pos <= CURSOR + PROMPT_LEN)
-	// 	ft_putstr("case 0\n\n");
 	while (start_pos++ < CURSOR)
 		ret++;
-	// ret += (all->curr_line == 1) ? PROMPT_LEN : 0;
 	return (ret);
 }
 
@@ -81,7 +76,7 @@ void	goto_down_line(t_all *all)
 0123456789 . . .
 $: ......9..|	0
   <------> startPos + decalage
-  					+ 6 + 3 (prompt) 
+  					+ 6 + (prompt) 
 .........21..|	1
 .........33..|	2					cursPos : 7 -> 19 -> 31;
 .......		|	3					TermPos : 9 -> 21 -> 33;

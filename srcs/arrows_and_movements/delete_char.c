@@ -16,7 +16,7 @@ void	del_char_multi_lines(t_all *all)
 {
 	int	ct;
 	int	save;
-
+	
 	ct = all->curr_line;
 	save = CURSOR;
 	create_cmd(all);

@@ -23,6 +23,7 @@ void	copy_buffer(t_all *all)
 	}
 	else
 	{
+		// printf("nbMOvesRIght: %d\n", all->cpy_move_right);
 		//printf("cursor pos : %d\n", all->cursor_pos);
 		tputs_termcap("me");
 		all->already_in_select = 0;
@@ -92,7 +93,6 @@ void	paste_buffer(t_all *all)
 		realloc_termcaps_cmd(all, new_str);
 		ft_strdel(&new_str);
 		tputs_termcap("im");
-		// tputs_termcap("nd");
 		ft_putstr(all->copy);
 		tputs_termcap("ei");
 		while (save < all->cursor_pos)

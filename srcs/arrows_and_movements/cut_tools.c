@@ -16,7 +16,9 @@ void	cut_right(t_all *all)
 {
 	while (all->cursor_pos > all->save_cursor_pos)
 	{
-		dlst_del_one2(all->cmd_termcaps, all->cursor_pos - 1);
+		if (all->nb_lines > 1)
+			del_char_multi_lines(all);
+		dlst_del_one2(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN);
 		all->cursor_pos--;
 		tputs_termcap("le");
 		tputs_termcap("dc");
@@ -40,7 +42,7 @@ void	cut_left(t_all *all)
 	}
 	while (count > 0)
 	{
-		dlst_del_one2(all->cmd_termcaps, all->cursor_pos);
+		dlst_del_one2(all->cmd_termcaps, (all->cursor_pos - PROMPT_LEN) + 1);
 		tputs_termcap("dc");
 		tputs_termcap("le");
 		count--;
