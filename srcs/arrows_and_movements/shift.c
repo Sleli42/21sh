@@ -54,7 +54,9 @@ void	shift_last_char(t_all *all, int curr_line)
 	// printf("currLine + ws.col: %d\n", (LINE_LEN * curr_line));
 	while (ct < (LINE_LEN * curr_line))
 		ct++;
-	save_char = all->cmd[ct - PROMPT_LEN];
+	//ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
+	save_char = all->cmd[(ct - PROMPT_LEN)];
+	// printf("save: [ %c ]\n", save_char);
 	tputs_termcap("do");
 	write(1, &save_char, 1);
 }
@@ -69,7 +71,7 @@ void	shift(t_all *all)
 	/* char == EOL */
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines))
 	{
-		// debnug(all);
+		// write(1, "ok\n", 3);
 		tputs_termcap("sc");
 		if (all->nb_lines - all->curr_line == 0)
 		{	/* shift last char */
