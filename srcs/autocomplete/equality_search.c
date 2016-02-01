@@ -12,44 +12,45 @@
 
 #include "21sh.h"
 
-void	list_dir_equ(t_all *all, char *dir2open, char *equ2find)
+char	*update_tmp_cmd(t_all *all, char *str2add)
+{
+	printf("all->cmd: |%s|\n", all->cmd);
+	printf("str2add: |%s|\n", str2add);
+	return (NULL);
+}
+
+void	list_dir_equ(t_all *all, char *equ2find)
 {
 	DIR			*entry;
 	t_dirent	*dirp;
+	char		*dir2open;
 
 	all->list_dir = create_clst();
 	all->tmp_cmd = ft_strdup(all->cmd);
-	//printf("tmpcmd: |%s|\n", all->tmp_cmd);
-	if (!dir2open)
-		dir2open = ft_strdup("./");
-	// if (dir2open[ft_strlen(dir2open) - 1] == '/')
-	// 	dir2open[ft_strlen(dir2open) - 1] = '\0';
-	// printf("dir2open : |%s|\n", dir2open);
-	// printf("equ2find : |%s|\n", equ2find);
-	if (!(entry = opendir(dir2open)))
-		error("OPENDIR");
-	while ((dirp = readdir(entry)))
+	dir2open = (equ2find[ft_strlen(equ2find) - 1] == '/')
+		? ft_strdup(equ2find) : ft_strdup("./");
+	if (equ2find[ft_strlen(equ2find) - 1] == '/')
+		open_path_directory(all, equ2find);
+	else
 	{
-		if (!ft_strncmp(dirp->d_name, equ2find, ft_strlen(equ2find)))
-			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-	}
-	closedir(entry);
-	//printf("all->tmp_cmd :|%s|\n", all->tmp_cmd);
-	//all->tmp_cmd  = update_tmp_cmd(all->cmd);
-	//printf("all->tmp_cmd :|%s|\n", all->tmp_cmd);
-	if (all->list_dir->lenght > 100)
-	{
-		char	buff[1];
-		printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
-		read(0, buff, 1);
-		if (*buff == 'y')
+		if (!(entry = opendir(dir2open)))
+			;
+		else
+		{
+			while ((dirp = readdir(entry)))
+			{
+				if (!ft_strncmp(dirp->d_name, equ2find, ft_strlen(equ2find)))
+					clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+			}
+			closedir(entry);
+		}
+		if (all->list_dir->lenght == 1)
+			all->tmp_cmd = update_tmp_cmd(all, all->list_dir->head->arg);
+		else if (all->list_dir->lenght > 1)
 			display_elems(all, all->list_dir);
+		else
+			tputs_termcap("bl");
 	}
-	if (all->list_dir->lenght == 1)
-	{
-		all->tmp_cmd = update_tmp_cmd(all, all->list_dir->head->arg);
-		//printf("all->cmd: |%s|\n", all->cmd);
-		//printf("all_>tmpcmd: |%s|\n", all->tmp_cmd);
-	}
+	all->already_autocomplete = 1;
 	loop(all);
 }

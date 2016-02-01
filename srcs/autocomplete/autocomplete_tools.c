@@ -45,7 +45,7 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 	}
 	// printf("ret = %d\n", ret);
 	// exit(1);
-	return (ret);
+	return (ret - 1);
 }
 
 int		no_spaces(t_cmd *lst)
@@ -63,37 +63,25 @@ int		no_spaces(t_cmd *lst)
 	return (1);
 }
 
-char	*cut_cmd_equ(char *s)
+char	*cut_cmd_equ(t_all *all)
 {
 	int		ct;
-	int		i;
+	int		tmp;
 	char	*ret;
 
-	ct = ft_strlen(s) - 1;
-	i = 0;
-	ret = (char *)malloc(sizeof(char *));
-	if (s[ct] == '/')
-		ct--;
-	while (s[ct] != ' ')
-		ct--;
-	ct++;
-	while (s[ct])
-		ret[i++] = s[ct++];
-	ret[i] = 0;
+	ct = 0;
+	tmp = (CURSOR - PROMPT_LEN) - 1;
+	if (!(ret = (char *)malloc(sizeof(char *))))
+		error("MALLOC");
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+		tmp--;
+	tmp += 1;
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
+		// printf("tmp: [ %c ]\n", all->cmd[tmp]);
+		ret[ct++] = all->cmd[tmp++];
+	}
+	ret[ct] = '\0';
+	// printf("ret: [ %s ]\n", ret);
 	return (ret);
-}
-
-char	*update_tmp_cmd(t_all *all, char *str2add)
-{
-	int		ct;
-	int 	i;
-
-	(void)str2add;
-	ct = ft_strlen(all->tmp_cmd) - 1;
-	i = 0;
-	while (all->tmp_cmd[ct] != ' ')
-		ct--;
-	// printf("-> |%s|\n", all->tmp_cmd);
-	// printf("-> |%s|\n", str2add);
-	return (NULL);
 }

@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-void	open_path_directory(t_all *all)
+void	open_path_directory(t_all *all, char *dir2open)
 {
 	DIR			*entry;
 	t_dirent	*dirp;
@@ -25,14 +25,17 @@ void	open_path_directory(t_all *all)
 //	all->tmp_cmd = cut_cmd(all->cmd);
 	//printf("tmpcmd: |%s|\n", all->tmp_cmd);
 	all->list_dir = create_clst();
-	if (!(entry = opendir("./")))
-		error("OPENDIR");
-	while ((dirp = readdir(entry)))
+	if (!(entry = opendir(dir2open)))
+		return ;
+	else
 	{
-		if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
-			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+		while ((dirp = readdir(entry)))
+		{
+			if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
+				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+		}
 	}
-	sort_name(&all->list_dir->head);
+	// sort_name(&all->list_dir->head);
 	display_elems(all, all->list_dir);
 	closedir(entry);
 	all->already_autocomplete = 1;

@@ -27,11 +27,14 @@ void	search_bin_path(t_all *all)
 	{
 		tmp = ft_strjoin(all->path2exec[ct++], "/");
 		if (!(entry = opendir(tmp)))
-			error("OPENDIR");
-		while ((dirp = readdir(entry)))
-			if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
-				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-		closedir(entry);
+			return ;
+		else
+		{
+			while ((dirp = readdir(entry)))
+				if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
+					clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+			closedir(entry);
+		}
 		ft_strdel(&tmp);
 	}
 	display_elems(all, all->list_dir);

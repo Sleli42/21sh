@@ -66,6 +66,7 @@ void	loop(t_all *all)
 	all->curr_line = 1;
 	all->index_history = all->pos_history;
 	all->cmd_termcaps = create_cmd_dlst();
+	(all->list_dir) ? del_clist(&all->list_dir) : NULL;
 	display_prompt(all);
 	// printf("yPixel: %d\n", all->ws.ws_ypixel);
 	init_windows_size(all);
@@ -84,12 +85,12 @@ void	loop(t_all *all)
 			buff = ft_strnew(MAXLEN - 1);
 			ft_memset(buff, 0, (MAXLEN - 1));
 		}
-		if (all->already_autocomplete)
+		if (all->already_autocomplete && all->tmp_cmd)
 		{
 			realloc_termcaps_cmd(all, all->tmp_cmd);
 			create_cmd(all);
 			ft_putstr(all->cmd);
-			(all->list_dir) ? del_clist(&all->list_dir) : NULL;
+
 			all->already_autocomplete = 0;
 		}
 		read(0, buff, (MAXLEN - 1));

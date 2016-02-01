@@ -266,7 +266,7 @@ typedef	struct			s_keys
 	int			find_maxlen_elem(t_clist *lst);
 	int			define_nb_files_by_row(t_all *all, t_clist *lst);
 	int			no_spaces(t_cmd *lst);
-	char		*cut_cmd_equ(char *s);
+	char		*cut_cmd_equ(t_all *all);
 	char		*update_tmp_cmd(t_all *all, char *str2add);
 	/*
 	*** ======================= binary_search.c
@@ -275,13 +275,13 @@ typedef	struct			s_keys
 	/*
 	*** ======================= directory_search.c
 	*/
-	void		open_path_directory(t_all *all);
+	void		open_path_directory(t_all *all, char *dir2open);
 	void		swap_elems(t_select *a, t_select *b);
 	void		sort_name(t_select **lst);
 	/*
 	*** ======================= equality_search.c
 	*/
-	void		list_dir_equ(t_all *all, char *dir2open, char *equ2find);
+	void		list_dir_equ(t_all *all, char *equ2find);
 
 /* ----------------------------------------------------------------------
 *** ============================================================ BUILTINS

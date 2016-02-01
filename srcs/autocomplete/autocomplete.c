@@ -56,7 +56,7 @@ void	display_elems(t_all *all, t_clist *lst)
 		if (tmp_len < all->maxlen_arg && nav->next && ct != all->files_by_row - 1)
 		{
 			write(1, " ", 1);
-			while (tmp_len++ < all->maxlen_arg + 2)
+			while (tmp_len++ < all->maxlen_arg)
 				write(1, " ", 1);
 		}
 		nav = nav->next;
@@ -74,9 +74,9 @@ void	search_autocomplete(t_all *all)
 	if (all->cmd[0] == 0 || (ft_strlen(all->cmd) >= 1 && no_spaces(all->cmd_termcaps->head)))
 		search_bin_path(all);
 	else if (all->cmd[CURSOR - PROMPT_LEN - 1] == ' ')
-		open_path_directory(all);
+		open_path_directory(all, "./");
 	else
-		list_dir_equ(all, all->tmp_dir, cut_cmd_equ(all->cmd));
+		list_dir_equ(all, cut_cmd_equ(all));
 /*	else if (all->cmd[ft_strlen(all->cmd) - 1] == '/')
 	;	open_current_path(all)
 	else
