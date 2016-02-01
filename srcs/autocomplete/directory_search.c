@@ -17,6 +17,7 @@ void	open_path_directory(t_all *all)
 	DIR			*entry;
 	t_dirent	*dirp;
 
+	// ft_putstr("HERE\n");
 	// tmp_path = ft_strdup("./");
 	//printf("tmpPath: %s\n", tmp_path);
 	all->tmp_cmd = ft_strdup(all->cmd);
@@ -27,8 +28,10 @@ void	open_path_directory(t_all *all)
 	if (!(entry = opendir("./")))
 		error("OPENDIR");
 	while ((dirp = readdir(entry)))
-		//if (dirp->d_name[0] != '.')
+	{
+		if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
 			clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+	}
 	sort_name(&all->list_dir->head);
 	display_elems(all, all->list_dir);
 	closedir(entry);

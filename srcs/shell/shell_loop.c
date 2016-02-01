@@ -84,6 +84,14 @@ void	loop(t_all *all)
 			buff = ft_strnew(MAXLEN - 1);
 			ft_memset(buff, 0, (MAXLEN - 1));
 		}
+		if (all->already_autocomplete)
+		{
+			realloc_termcaps_cmd(all, all->tmp_cmd);
+			create_cmd(all);
+			ft_putstr(all->cmd);
+			(all->list_dir) ? del_clist(&all->list_dir) : NULL;
+			all->already_autocomplete = 0;
+		}
 		read(0, buff, (MAXLEN - 1));
 		//line_edition(all, buff);
 		// read_key(buff);
@@ -102,9 +110,7 @@ void	loop(t_all *all)
 				//write(1, "here\n", 5);
 				update_cmd_line_insert(all, *buff);
 				if (all->nb_lines >= 1)
-				{
 					shift(all);
-				}
 			}
 			else
 			{

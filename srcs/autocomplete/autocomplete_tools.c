@@ -35,14 +35,16 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 	init_windows_size(all);
 	all->maxlen_arg = find_maxlen_elem(lst);
 	ret = 0;
-	// printf("largeur: %d\n", all->ws.ws_col);
+	// printf("largeur: %d\n", LINE_LEN);
 	// printf("maxlen: %d\n", all->maxlen_arg);
-	while (all->ws.ws_col > (all->maxlen_arg + 5))
+	while (LINE_LEN > (all->maxlen_arg + 2))
 	{
-		all->ws.ws_col -= (all->maxlen_arg + 5);
+		LINE_LEN -= (all->maxlen_arg + 2);
+		// printf("largeur: %d\n", LINE_LEN);
 		ret++;
 	}
-	//printf("ret = %d\n", ret);
+	// printf("ret = %d\n", ret);
+	// exit(1);
 	return (ret);
 }
 

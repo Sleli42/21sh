@@ -34,20 +34,21 @@ void	search_bin_path(t_all *all)
 		closedir(entry);
 		ft_strdel(&tmp);
 	}
+	display_elems(all, all->list_dir);
 	if (all->list_dir->lenght == 1)
 	{
 		if (all->tmp_cmd)
 			ft_strdel(&all->tmp_cmd);
-		all->tmp_cmd = ft_strdup(all->list_dir->head->arg);
+		all->tmp_cmd = ft_strdup(ft_strjoin(all->list_dir->head->arg, " "));
+		// printf("tmp: %s\n", all->tmp_cmd);
 	}
-	if (all->list_dir->lenght > 100)
-	{
-		char	buff[1];
-		printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
-		read(0, buff, 1);
-		if (*buff == 'y')
-			display_elems(all, all->list_dir);
-	}
+	// if (all->list_dir->lenght > 100)
+	// {
+	// 	char	buff[1];
+	// 	printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
+	// 	read(0, buff, 1);
+	// 	if (*buff == 'y')
+	// }
 	all->already_autocomplete = 1;
 	loop(all);
 }
