@@ -12,22 +12,6 @@
 
 #include "21sh.h"
 
-int		find_maxlen_elem(t_clist *lst)
-{
-	t_select	*nav = lst->head;
-	int			ret = 0;
-
-	ret = ft_strlen(nav->arg);
-	while (nav->next)
-	{
-		//ret = ft_strlen(nav->arg);
-		if (ft_strlen(nav->arg) > (size_t)ret)
-			ret = ft_strlen(nav->arg);
-		nav = nav->next;
-	}
-	return (ret);
-}
-
 char	goto_elem(t_cmd *cmd, int pos)
 {
 	t_cmd	*tmp = cmd;

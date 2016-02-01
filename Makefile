@@ -34,6 +34,10 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)cut_tools.c \
 			$(SRCS_ARROWS)shift.c \
 			$(SRCS_AUTOCOMPLETE)autocomplete.c \
+			$(SRCS_AUTOCOMPLETE)autocomplete_tools.c \
+			$(SRCS_AUTOCOMPLETE)binary_search.c \
+			$(SRCS_AUTOCOMPLETE)directory_search.c \
+			$(SRCS_AUTOCOMPLETE)equality_search.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_ENV)env.c \
@@ -86,7 +90,8 @@ $(NAME):	$(LIB) $(OBJ)
 
 clean:
 	@echo "\033[35m[ DELETE ]\033[0m *.o"
-	@$(RM) *.o
+	@$(RM) */*.o
+	@$(RM) objs
 
 fclean: clean
 	@make fclean -C libft/

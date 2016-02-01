@@ -54,10 +54,13 @@ void	goto_down_line(t_all *all)
 		ct = (all->curr_line == 1) ? count_char_to_shift(all, 0)
 			: count_char_to_shift(all, (all->curr_line - 1) * LINE_LEN);
 		CURSOR = (LINE_LEN * (all->curr_line)) + ct;
+		// printf("cursor: |%d|\n", CURSOR);
+		// printf("strLen: [ %zu ]\n", ft_strlen(all->cmd));
 		all->curr_line += 1;
 		tputs_termcap("do");
-		if (CURSOR > (int)ft_strlen(all->cmd))
+		if (CURSOR - PROMPT_LEN > (int)ft_strlen(all->cmd))
 		{
+			// CURSOR += 1;
 			ct = (LINE_LEN * (all->curr_line - 1) - PROMPT_LEN);
 			while (ct++ < (int)ft_strlen(all->cmd))
 				tputs_termcap("nd");

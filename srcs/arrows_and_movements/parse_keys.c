@@ -80,11 +80,11 @@ void		parse_keys(t_all *all)
 	{K_CTRL_CUT, cut_buffer},
 	{K_CTRL_COPY, copy_buffer},
 	{K_CTRL_PASTE, paste_buffer},
-	{K_TAB, open_directories}};
+	{K_TAB, search_autocomplete}};
 	i = 0;
 	//all->current_key = ft_getkey(buff);
-	// printf("->> |%d|\n", keys[4].action_name);
-	//printf("->> |%d|\n", all->current_key);
+	// printf("->> |%d|\n", keys[6].action_name);
+	// printf("->> |%d|\n", all->current_key);
 //	// int j = 0;
 	// while (buff[j])
 	// 	printf("-> [ %d ] ", buff[j++]);

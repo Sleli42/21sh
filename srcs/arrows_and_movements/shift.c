@@ -47,27 +47,17 @@ void	shift_first_char(t_all *all, int curr_line)
 
 void	shift_last_char(t_all *all, int curr_line)
 {
-	char	save_char;
 	int		ct;
 
-	ct = CURSOR;
-	// ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
-	// printf("currLine + ws.col: %d\n", (LINE_LEN * curr_line));
-	while (ct < (LINE_LEN * curr_line))
+	ct = CURSOR - PROMPT_LEN;
+	// printf("cursor: |%d|\n", CURSOR);
+	// printf("endLine: |%d|\n", (LINE_LEN * curr_line) - PROMPT_LEN);
+	while (ct < (LINE_LEN * curr_line) - PROMPT_LEN)
 		ct++;
-	// ct += (all->nb_lines - all->curr_line > 1) ? 1 : 0;
-	save_char = all->cmd[(ct - PROMPT_LEN) - 1];
-	// if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines)
-	// 	&& all->nb_lines == 2)
-	// {
-	// 	printf("len + PROMPT: %d\n", (int)ft_strlen(all->cmd) + PROMPT_LEN);
-	// 	printf("ct - PROMPT: %d\n", ct - PROMPT_LEN);
-	// 	printf("line*maxLine: %d\n", (LINE_LEN * all->nb_lines));
-	// 	printf("save: [ %c ]\n", save_char);
-	// 	printf("pther : [ %c ]\n", all->cmd[ct - PROMPT_LEN]);
-	// }
+	// printf("\nfound: [ %c ]\n", all->cmd[ct]);
+	// printf("\nfound - 1: [ %c ]\n", all->cmd[ct - 1]);
 	tputs_termcap("do");
-	write(1, &save_char, 1);
+	write(1, &all->cmd[ct], 1);
 }
 
 void	shift(t_all *all)
@@ -84,25 +74,23 @@ void	shift(t_all *all)
 		tputs_termcap("sc");
 		if (all->nb_lines - all->curr_line == 0)
 		{	/* shift last char */
-			all->line2write += 1;
 			tputs_termcap("do");
 			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
 		}
 		else
 		{
 			save = all->curr_line;
-			while (all->nb_lines - save > 0)
-			{
-				// write(1, "here\n\n", 6);
+			while (all->nb_lines - save >= 0)
 				shift_last_char(all, save++);
-			}
 			/* shift last char of line */
 		}
 		tputs_termcap("rc");
+		all->line2write += 1;
 	}
 	else if (CURSOR == (LINE_LEN * all->curr_line))
 	{
 		/* cursor == EOL */
+		// ft_putstr("|STOP|\n");
 		save = all->curr_line;
 		while (all->nb_lines - save > 0)
 		{
@@ -118,7 +106,10 @@ void	shift(t_all *all)
 	}
 	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line > 0)
 	{
+		// ft_putstr("here\n");
 		ct = all->curr_line;
+		// printf("nbLine: %d\n", all->nb_lines);
+		// printf("cuurLine: %d\n", all->curr_line);
 		tputs_termcap("sc");
 		while (all->nb_lines - ct > 0)
 			shift_last_char(all, ct++);
