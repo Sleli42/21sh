@@ -62,7 +62,6 @@ void	display_elems(t_all *all, t_clist *lst)
 		nav = nav->next;
 		ct++;
 	}
-	write(1, "\n", 1);
 	//printf("nb files by rows: %d\n", all->files_by_row);
 }
 

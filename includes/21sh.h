@@ -112,6 +112,7 @@ typedef struct			s_all
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 	int					current_key;
+	char				*buff;
 		// --AUTOCOMPLETE
 	t_clist				*list_dir;
 	t_select			*nav_dir;
@@ -120,14 +121,10 @@ typedef struct			s_all
 	char				*tmp_cmd;
 	char				*tmp_dir;
 	int					already_autocomplete;
-	int					already_equ;
-	int					hidden_file;
-
+	int					already_open;
+	int					replace_cursor;
 	int					maxlen_arg;
 	int					files_by_row;
-	int					already_open;
-	int					nb_char_write;
-	int					ct_select;
 		// --HORIZONTAL MOVES
 	int					cursor_pos;
 	int					history_moves;
@@ -267,7 +264,6 @@ typedef	struct			s_keys
 	int			define_nb_files_by_row(t_all *all, t_clist *lst);
 	int			no_spaces(t_cmd *lst);
 	char		*cut_cmd_equ(t_all *all);
-	char		*update_tmp_cmd(t_all *all, char *str2add);
 	/*
 	*** ======================= binary_search.c
 	*/
@@ -281,6 +277,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= equality_search.c
 	*/
+	char		*update_tmp_cmd(t_all *all, char *str2add, int len2skip);
 	void		list_dir_equ(t_all *all, char *equ2find);
 
 /* ----------------------------------------------------------------------
@@ -395,6 +392,7 @@ typedef	struct			s_keys
 	*/
 	void		display_prompt(t_all *all);
 	void		create_and_exec_command(t_all *all);
+	void		read_keys(t_all *all);
 	void		loop(t_all *all);
 	/*
 	*** ======================= shell_tools.c

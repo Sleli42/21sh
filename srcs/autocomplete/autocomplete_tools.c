@@ -73,8 +73,16 @@ char	*cut_cmd_equ(t_all *all)
 	tmp = (CURSOR - PROMPT_LEN) - 1;
 	if (!(ret = (char *)malloc(sizeof(char *))))
 		error("MALLOC");
-	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-		tmp--;
+	if (all->already_open && all->cmd[tmp] != '/')
+	{
+		while (all->cmd[tmp] && all->cmd[tmp] != '/')
+			tmp--;
+	}
+	else
+	{
+		while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+			tmp--;
+	}
 	tmp += 1;
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
 	{

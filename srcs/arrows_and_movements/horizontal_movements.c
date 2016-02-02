@@ -118,6 +118,7 @@ void	goto_up(t_all *all)
 
 void	horizontal_moves(t_all *all)
 {
+	all->already_open = 0;
 	if (all->already_in_select
  		&& ((size_t)all->cursor_pos - PROMPT_LEN) < all->cmd_termcaps->lenght)
 	{
