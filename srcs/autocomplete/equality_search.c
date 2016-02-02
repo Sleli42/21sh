@@ -12,6 +12,29 @@
 
 #include "21sh.h"
 
+int		is_dir(t_all *all, char *s)
+{
+	char		*tmp;
+	struct stat lol;
+
+	if (all->tmp_dir)
+		tmp = ft_strjoin(all->tmp_dir, s);
+	else
+		tmp = ft_strdup(s);
+	if (stat(tmp, &lol) == -1)
+		return (-1);
+	ft_strdel(&tmp);
+	// printf("mode: %d\n", lol.st_mode);
+	// if (all->tmp_dir)
+	// 	printf("tmp_dir: |%s|\n", all->tmp_dir);
+	// printf("test s : |%s|\n", s);
+	if (S_ISDIR(lol.st_mode))
+		return (1);
+	if (S_ISREG(lol.st_mode))
+		return (0);
+	return (0);
+}
+
 char	*update_tmp_cmd(t_all *all, char *str2add, int len2skip)
 {
 	char	*tmp;
@@ -23,6 +46,7 @@ char	*update_tmp_cmd(t_all *all, char *str2add, int len2skip)
 	i = 0;
 	// printf("all->cmd: %s\n", all->cmd);
 	// printf("\nint: %d\n", (CURSOR - PROMPT_LEN) - len2skip);
+	str2add = (is_dir(all, str2add)) ? ft_strjoin(str2add, "/") : str2add;
 	all->replace_cursor = CURSOR + (int)ft_strlen(str2add) - 1;
 	tmp = ft_strnew(ft_strlen(all->cmd) - len2skip + ft_strlen(str2add) + 1);
 	while (all->cmd[i])
@@ -106,8 +130,8 @@ void	list_dir_equ(t_all *all, char *equ2find)
 		}
 		if (all->list_dir->lenght == 1)
 		{
-			all->tmp_cmd = update_tmp_cmd(all,
-				ft_strjoin(all->list_dir->head->arg, "/"), (int)ft_strlen(equ2find));
+			all->tmp_cmd = update_tmp_cmd(all, all->list_dir->head->arg,
+				(int)ft_strlen(equ2find));
 		}
 		else if (all->list_dir->lenght > 1)
 			display_elems(all, all->list_dir);

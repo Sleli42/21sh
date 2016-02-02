@@ -45,7 +45,7 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 	}
 	// printf("ret = %d\n", ret);
 	// exit(1);
-	return (ret - 1);
+	return (ret);
 }
 
 int		no_spaces(t_cmd *lst)

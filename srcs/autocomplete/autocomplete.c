@@ -43,6 +43,7 @@ void	display_elems(t_all *all, t_clist *lst)
 	nav = lst->head;
 	ct = 0;
 	all->files_by_row = define_nb_files_by_row(all, lst);
+	// printf("filebyrow: %d\n", all->files_by_row);
 	write(1, "\n", 1);
 	while (nav)
 	{

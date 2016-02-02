@@ -37,6 +37,7 @@ void	search_bin_path(t_all *all)
 		}
 		ft_strdel(&tmp);
 	}
+	sort_name(&all->list_dir->head);
 	display_elems(all, all->list_dir);
 	if (all->list_dir->lenght == 1)
 	{

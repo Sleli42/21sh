@@ -34,6 +34,7 @@ void	del_char_multi_lines(t_all *all)
 
 void	del_char(t_all *all)
 {
+	all->already_open = 0;
 	if (all->already_in_history)
 		realloc_termcaps_cmd(all, all->cmd);
 	tputs_termcap("dm");
