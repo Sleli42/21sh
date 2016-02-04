@@ -35,14 +35,25 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	int		ct;
 
 	ct = 0;
-	if (all->cmd_termcaps)
+	// if (all->cmd_termcaps)
+	// {
+	// 	del_dlist2(all->cmd_termcaps);
+	// 	all->cmd_termcaps = create_cmd_dlst();
+	// }
+	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
+								((t_cmd *)all->cmd_termcaps->head)->c)
 	{
-		del_dlist2(all->cmd_termcaps);
+		if (!all->pcmd_i)
+			all->pcmd_t = all->cmd_termcaps;
+		all->cmd_termcaps = NULL;
 		all->cmd_termcaps = create_cmd_dlst();
 	}
+	else
+		all->pcmd_t = NULL;
 	while (cmd2realloc[ct])
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
 	all->cursor_pos = (int)all->cmd_termcaps->lenght + PROMPT_LEN;
+	all->pcmd_i = 1;
 }
 
 void	create_cmd(t_all *all)
@@ -50,13 +61,16 @@ void	create_cmd(t_all *all)
 	t_cmd	*nav;
 	int		i;
 
+	if (CMD_NULL)
+		return ;
 	nav = all->cmd_termcaps->head;
-	i = 0;
+	i = 0;	
 	if (all->cmd)
 		ft_strdel(&all->cmd);
-	if (!(all->cmd = (char *)malloc(sizeof(char) * len_lst_cmd(all->cmd_termcaps->head) + 1)))
+	if (!(all->cmd = (char *)malloc(sizeof(char) * 
+				len_lst_cmd(all->cmd_termcaps->head) + 1)))
 		error("MALLOC");
-	if (nav)
+	if (nav && all->cmd)
 	{
 		while (nav)
 		{

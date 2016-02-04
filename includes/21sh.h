@@ -28,6 +28,7 @@
 # include <dirent.h>
 // others
 # include "colors.h"
+# include "read.h"
 
 # define	MAXLEN			2048
 # define	K_UP			279165000
@@ -54,6 +55,9 @@
 # define	PROMPT_LEN		3
 # define	LINE_LEN		all->ws.ws_col
 # define	CURSOR			all->cursor_pos
+# define	CMD_NULL		(!all->cmd_termcaps || !all->cmd_termcaps->head || !all->cmd_termcaps->head->c)
+
+# define	SPLIT_T			" ;&<>()=|*/{}\"\'`\n"
 
 typedef struct dirent	t_dirent;
 typedef struct termios	t_termios;
@@ -104,6 +108,14 @@ typedef struct			s_clist
 	size_t				lenght;
 }						t_clist;
 
+typedef struct			s_var
+{
+	char				*var_name;
+	char				*content;
+	struct s_var		*prev;
+	struct s_var		*next;
+}						t_var;
+
 typedef struct			s_all
 {
 	// TERM 2 USE && TERM 2 RESTORE
@@ -111,9 +123,12 @@ typedef struct			s_all
 	t_termios			restore;
 	// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
+	t_dlist2			*pcmd_t;
+	t_dlist2			*p_mark;
+	int					pcmd_i;
 	int					current_key;
 	char				*buff;
-		// --AUTOCOMPLETE
+			// --AUTOCOMPLETE
 	t_clist				*list_dir;
 	t_select			*nav_dir;
 	t_winsize			ws;
@@ -125,16 +140,16 @@ typedef struct			s_all
 	int					replace_cursor;
 	int					maxlen_arg;
 	int					files_by_row;
-		// --HORIZONTAL MOVES
+			// --HORIZONTAL MOVES
 	int					cursor_pos;
 	int					history_moves;
 	int					already_in_moves;
-		// --VERTICAL MOVES
+			// --VERTICAL MOVES
 	int					nb_lines;
 	int					curr_line;
 	int					line2write;
 	int					max_rows;
-		// --HISTORY
+			// --HISTORY
 	char				**history_buff;
 	int					fd_history;
 	int					pos_history;
@@ -151,6 +166,10 @@ typedef struct			s_all
 	int					cpy_move_left;
 			// --PASTE
 	char				*copy;
+			// --READ
+	t_var				*local_var;
+	int					query;
+	size_t				max_len;
 	// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
@@ -162,6 +181,8 @@ typedef struct			s_all
 	char				*cmd;
 	int					fd2open;
 	int					stop;
+		// --SOSO
+	int					lv;
 }						t_all;
 
 typedef	struct			s_redirect
@@ -289,6 +310,11 @@ typedef	struct			s_keys
 	void		pwd_display(t_all *all, char *cmd);
 	void		goto_dir(t_all *all, char *cmd);
 	void		free_all(t_all *all, char *cmd);
+	void		built_history(t_all *all, char *cmd);
+	void		built_mark(t_all *all, char *cmd);
+	void		read_built(t_all *all, char *cmd);
+	void		find_lv(t_all *all, int lv);
+	void		built_echo(t_all *all, char *cmd);
 	/*
 	*** ======================= builtins_tools.c
 	*/
@@ -454,6 +480,7 @@ typedef	struct			s_keys
 	void		display_index_cmd(t_all *all);
 	void		goto_latest_commands(t_all *all);
 	int			check_history_file(char **histo);
+	void		built_history(t_all *all, char *cmd);
 
 /* ----------------------------------------------------------------------
 *** ============================================================ TERMCAPS

@@ -40,6 +40,9 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_AUTOCOMPLETE)equality_search.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
+			$(SRCS_BUILTINS)read_built.c \
+			$(SRCS_BUILTINS)local_var.c \
+			$(SRCS_BUILTINS)echo.c \
 			$(SRCS_ENV)env.c \
 			$(SRCS_ENV)env_init.c \
 			$(SRCS_ENV)env_tools.c \
@@ -64,7 +67,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_TERMCAPS)termcaps_init.c \
 			$(SRCS_TERMCAPS)termcaps_tools.c \
 		
-NAME = 21sh
+NAME = 42sh
 RM = rm -rf
 FLAGS = -Wall -Wextra -Werror
 DEBUG = -g -gmodules -fexceptions -ftrapv -fcommon

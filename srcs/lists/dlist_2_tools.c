@@ -57,10 +57,13 @@ int				len_lst_cmd(t_cmd *lst)
 
 	nav = lst;
 	ret = 0;
-	while (nav)
+	if (nav)
 	{
-		ret++;
-		nav = nav->next;
+		while (nav)
+		{
+			ret++;
+			nav = nav->next;
+		}
 	}
 	return (ret);
 }

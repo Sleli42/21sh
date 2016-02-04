@@ -49,10 +49,14 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	{"unset env", env_unset},
 	{"pwd", pwd_display},
 	{"cd", goto_dir},
-	{"exit", free_all}};
+	{"exit", free_all},
+	{"!", built_mark},
+	{"history", built_history},
+	{"read", read_built},
+	{"echo", built_echo}};
 	i = 0;
 	stop = 0;
-	while (i < 6)
+	while (i < 9)
 	{
 		if (ft_strncmp(cmd, built[i].action_name,
 			ft_strlen(built[i].action_name)) == 0)

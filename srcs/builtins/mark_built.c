@@ -1,66 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   mark_built.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/04 18:06:54 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/14 10:40:48 by skhatir          ###   ########.fr       */
+/*   Created: 2016/01/14 11:27:36 by skhatir           #+#    #+#             */
+/*   Updated: 2016/01/14 11:38:31 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
-
-void	pwd_display(t_all *all, char *cmd)
-{
-	char	*pwd;
-	char	*buff;
-
-	(void)all;
-	(void)cmd;
-	buff = NULL;
-	pwd = getcwd(buff, 42);
-	ft_putendl(pwd);
-}
-
-void	goto_dir(t_all *all, char *cmd)
-{
-	char	*buff;
-
-	buff = NULL;
-	all->oldpwd = getcwd(buff, 42);
-	all->oldpwd = ft_strjoin(all->oldpwd, "/");
-	cmd = ft_strdup(cmd + 3);
-	if (cmd[0] == '\0')
-		cmd = ft_strdup("/nfs/zfs-student-5/users/2014/lubaujar/");
-	else if (cmd[0] == '-')
-		cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
-	if (access(cmd, F_OK) == 0)
-	{
-		if (chdir(cmd) == -1)
-			error("DIR");
-		update_oldpwd(all);
-	}
-}
-
-void			built_history(t_all *all, char *cmd)
-{
-	int			fd;
-	int			ret;
-	char		buf[MAXLEN];
-
-	(void)all;
-	(void)cmd;
-	if ((fd = open(".21sh_history", O_RDONLY)) == -1)
-		return (error("OPEN"));
-	while ((ret = read(fd, buf, MAXLEN)) > 0)
-	{
-		buf[ret] = 0;
-		ft_putstr(buf);
-	}
-	close(fd) == -1 ? ft_putendl("close ERROR") : ft_putchar(0);
-}
 
 char			*obtain_history_p(char *history)
 {
@@ -172,24 +122,4 @@ void			built_mark(t_all *all, char *cmd)
 		p_index--;
 	}
 	return (ft_putendl("\n\n42sh: event not found\n\n"));
-}
-
-void	free_all(t_all *all, char *cmd)
-{
-	(void)cmd;
-	// while (all->env->lenght-- != 0)
-	// 	dlst_del_one(all->env, all->env->head->s);
-	// if (all->path2exec != NULL)
-	// 	del_array(&all->path2exec);
-	// if (all->dupenv != NULL)
-	// 	del_array(&all->dupenv);
-	// if (all->cmd != NULL)
-	// 	ft_strdel(&all->cmd);
-	// if (all->redirect_cmd)
-	// 	ft_strdel(&all->redirect_cmd);
-	close(all->fd_history);
-	free(all);
-	all = NULL;
-	ft_putendl("exit");
-	exit(21);
 }
