@@ -103,10 +103,8 @@ void	read_keys(t_all *all)
 	}
 }
 
-void	loop(t_all *all)
+void	init_loop(t_all *all)
 {
-	// int		key = 0;
-
 	all->stop = 0;
 	all->already_in_history = 0;
 	all->already_in_select = 0;
@@ -117,11 +115,15 @@ void	loop(t_all *all)
 	all->cmd_termcaps = all->p_mark ? all->p_mark : create_cmd_dlst();
 	all->pcmd_t = NULL;
 	all->pcmd_i = 0;
-	(all->list_dir) ? del_clist(&all->list_dir) : NULL;
-	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
-	display_prompt(all);
-	// printf("yPixel: %d\n", all->ws.ws_ypixel);
+	all->buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
 	init_windows_size(all);
+}
+
+void	already_in_func(t_all *all)
+{
+	if (all->list_dir)
+		del_clist(&all->list_dir);
+	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->p_mark)
 	{
 		ft_putstr(all->cmd);
@@ -134,73 +136,43 @@ void	loop(t_all *all)
 		if (!(all->cmd = (char *)malloc(sizeof(char) * MAXLEN - 1)))
 			error("MALLOC");
 	}
-	// all->buff = ft_strnew(MAXLEN - 1);
-	all->buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
-	//tputs_termcap("ti");
-	//tputs_termcap("mi");
+}
+
+void	already_in_func_extended(t_all *all)
+{
+	if (all->buff)
+	{
+		ft_strdel(&all->buff);
+		all->buff = ft_memset(ft_strnew(MAXLEN - 1),
+			0, (MAXLEN - 1));
+	}
+	if (all->already_autocomplete && all->tmp_cmd)
+	{
+		realloc_termcaps_cmd(all, all->tmp_cmd);
+		create_cmd(all);
+		ft_putstr(all->cmd);
+			// printf("repalce: %d\n", all->replace_cursor);
+		if (all->replace_cursor > 0 && CURSOR > all->replace_cursor)
+		{
+			while (CURSOR-- > all->replace_cursor)
+				tputs_termcap("le");
+			tputs_termcap("le");
+		}
+		all->already_autocomplete = 0;
+		ft_strdel(&all->tmp_cmd);
+	}
+}
+
+void	loop(t_all *all)
+{
+	init_loop(all);
+	already_in_func(all);
+	display_prompt(all);
 	while (*all->buff != '\n')
 	{
-		// ft_putstr("HERE0\n");
-		// if (0)
-			define_nb_lines(all);
-		
-		if (all->buff)
-		{
-			ft_strdel(&all->buff);
-			all->buff = ft_memset(ft_strnew(MAXLEN - 1),
-				0, (MAXLEN - 1));
-		}
-		if (all->already_autocomplete && all->tmp_cmd)
-		{
-			realloc_termcaps_cmd(all, all->tmp_cmd);
-			create_cmd(all);
-			ft_putstr(all->cmd);
-			// printf("repalce: %d\n", all->replace_cursor);
-			if (all->replace_cursor > 0 && CURSOR > all->replace_cursor)
-			{
-				while (CURSOR-- > all->replace_cursor)
-					tputs_termcap("le");
-				tputs_termcap("le");
-			}
-			// all->replace_cursor = 0;
-			/* replace cursor */
-			all->already_autocomplete = 0;
-		}
+		define_nb_lines(all);
+		already_in_func_extended(all);
 		read_keys(all);
-		// ft_putstr("HERE\n");
-		// read(0, all->buff, (MAXLEN - 1));
-		// //line_edition(all, all->buff);
-		// // read_key(all->buff);
-		// // break ;
-		// if ((key = check_keys_arrows(all, all->buff)) < 0)
-		// 	break ;
-		// else if (key > 0)
-		// 	parse_keys(all);
-		// else
-		// {
-		// 	tputs_termcap("im");
-		// 	if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght && *all->buff != '\n')
-		// 	{
-		// 		if (*all->buff != '\n')
-		// 			ft_putchar(*all->buff);
-		// 		//write(1, "here\n", 5);
-		// 		update_cmd_line_insert(all, *all->buff);
-		// 		if (all->nb_lines >= 1)
-		// 			shift(all);
-		// 	}
-		// 	else
-		// 	{
-		// 		if (all->cursor_pos == all->ws.ws_col * all->curr_line)
-		// 			all->curr_line++;
-		// 		if (*all->buff != '\n')
-		// 		{
-		// 			ft_putchar(*all->buff);
-		// 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*all->buff));
-		// 			all->cursor_pos++;
-		// 		}
-		// 	}
-		// 	tputs_termcap("ei");	
-		// }
 	}
 	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
 								((t_cmd *)all->cmd_termcaps->head)->c)
@@ -214,5 +186,4 @@ void	loop(t_all *all)
 		ft_putchar('\n');
 		(loop(all));
 	}
-	// create_and_exec_command(all);
 }

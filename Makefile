@@ -25,6 +25,7 @@ SRCS_TERMCAPS 		= $(SRC)termcaps/
 SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)horizontal_movements.c \
 			$(SRCS_ARROWS)horizontal_movements_tools.c \
+			$(SRCS_ARROWS)goto_funcs.c \
 			$(SRCS_ARROWS)vertical_movements.c \
 			$(SRCS_ARROWS)delete_char.c \
 			$(SRCS_ARROWS)parse_keys.c \

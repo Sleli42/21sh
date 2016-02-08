@@ -12,6 +12,20 @@
 
 #include "21sh.h"
 
+void	cut_delete_char(t_all *all, int count)
+{
+	while (count > 0)
+	{
+		dlst_del_one2(all->cmd_termcaps, (all->cursor_pos - PROMPT_LEN) + 1);
+		tputs_termcap("dc");
+		tputs_termcap("le");
+		count--;
+		all->cursor_pos--;
+		if (all->nb_lines > 1)
+			del_char_multi_lines(all);
+	}
+}
+
 void	cut_right(t_all *all)
 {
 	while (all->cursor_pos > all->save_cursor_pos)
@@ -28,29 +42,19 @@ void	cut_right(t_all *all)
 void	cut_left(t_all *all)
 {
 	int 	count;
-	int		stop;
 
 	count = 0;
-	stop = 0;
+	all->stop = 0;
 	if (all->cursor_pos == 1)
-		stop += 1;
+		all->stop += 1;
 	while (all->cursor_pos < all->save_cursor_pos)
 	{
 		all->cursor_pos++;
 		count++;
 		tputs_termcap("nd");
 	}
-	while (count > 0)
-	{
-		dlst_del_one2(all->cmd_termcaps, (all->cursor_pos - PROMPT_LEN) + 1);
-		tputs_termcap("dc");
-		tputs_termcap("le");
-		count--;
-		all->cursor_pos--;
-		if (all->nb_lines > 1)
-			del_char_multi_lines(all);
-	}
-	if (stop)
+	cut_delete_char(all, count);
+	if (all->stop)
 	{
 		dlst_del_one2(all->cmd_termcaps, 1);
 		tputs_termcap("dc");

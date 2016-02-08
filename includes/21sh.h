@@ -56,6 +56,7 @@
 # define	LINE_LEN		all->ws.ws_col
 # define	CURSOR			all->cursor_pos
 # define	CMD_NULL		(!all->cmd_termcaps || !all->cmd_termcaps->head || !all->cmd_termcaps->head->c)
+// # define	AUTOCOMP_NULL	(!all->list_dir || !all->list_dir->head || !all->list_dir->head->arg)
 
 # define	SPLIT_T			" ;&<>()=|*/{}\"\'`\n"
 
@@ -118,17 +119,17 @@ typedef struct			s_var
 
 typedef struct			s_all
 {
-	// TERM 2 USE && TERM 2 RESTORE
+		// TERM 2 USE && TERM 2 RESTORE
 	t_termios			term;
 	t_termios			restore;
-	// TERMCAPS CMD
+		// TERMCAPS CMD
 	t_dlist2			*cmd_termcaps;
 	t_dlist2			*pcmd_t;
 	t_dlist2			*p_mark;
 	int					pcmd_i;
 	int					current_key;
 	char				*buff;
-			// --AUTOCOMPLETE
+		// AUTOCOMPLETE
 	t_clist				*list_dir;
 	t_select			*nav_dir;
 	t_winsize			ws;
@@ -140,16 +141,16 @@ typedef struct			s_all
 	int					replace_cursor;
 	int					maxlen_arg;
 	int					files_by_row;
-			// --HORIZONTAL MOVES
+		// HORIZONTAL MOVES
 	int					cursor_pos;
 	int					history_moves;
 	int					already_in_moves;
-			// --VERTICAL MOVES
+		// VERTICAL MOVES
 	int					nb_lines;
 	int					curr_line;
 	int					line2write;
 	int					max_rows;
-			// --HISTORY
+		// HISTORY
 	char				**history_buff;
 	int					fd_history;
 	int					pos_history;
@@ -158,7 +159,7 @@ typedef struct			s_all
 	t_dlist				*cmd_history;
 	int					already_in_history;
 	int					is_history;
-		// --COPY & PASTE & CUT
+		// COPY & PASTE & CUT
 	int					already_in_select;
 			// --COPY
 	int					save_cursor_pos;
@@ -170,7 +171,7 @@ typedef struct			s_all
 	t_var				*local_var;
 	int					query;
 	size_t				max_len;
-	// PARSE && EXEC
+		// PARSE && EXEC
 	t_dlist				*env;
 	t_node				*nav;
 	char				**dupenv;
@@ -227,15 +228,20 @@ typedef	struct			s_keys
 	void		opt_left_move(t_all *all);
 	void		opt_right_move(t_all *all);
 	void		reprint_char(t_all *all, t_cmd *nav);
-	void		goto_up(t_all *all);
 	/*
 	*** ======================= horizontal_movements_tools.c
 	*/
 	int			check_if_spaces_before(t_all *all, int pos);
 	int			check_if_spaces_after(t_all *all, int pos);
+	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+	/*
+	*** ======================= goto.c
+	*/
 	void		goto_end(t_all *all);
 	void		goto_begin(t_all *all);
-	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+	void		goto_up(t_all *all);
+	void		goto_right(t_all *all);
+	void		goto_left(t_all *all);
 	/*
 	*** ======================= vertical_movements.c
 	*/

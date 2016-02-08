@@ -50,12 +50,8 @@ void	shift_last_char(t_all *all, int curr_line)
 	int		ct;
 
 	ct = CURSOR - PROMPT_LEN;
-	// printf("cursor: |%d|\n", CURSOR);
-	// printf("endLine: |%d|\n", (LINE_LEN * curr_line) - PROMPT_LEN);
 	while (ct < (LINE_LEN * curr_line) - PROMPT_LEN)
 		ct++;
-	// printf("\nfound: [ %c ]\n", all->cmd[ct]);
-	// printf("\nfound - 1: [ %c ]\n", all->cmd[ct - 1]);
 	tputs_termcap("do");
 	write(1, &all->cmd[ct], 1);
 }
@@ -67,13 +63,11 @@ void	shift(t_all *all)
 
 	create_cmd(all);
 	ct = 0;
-	/* char == EOL */
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines))
 	{
-		// write(1, "ok\n", 3);
 		tputs_termcap("sc");
 		if (all->nb_lines - all->curr_line == 0)
-		{	/* shift last char */
+		{
 			tputs_termcap("do");
 			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
 		}
@@ -82,15 +76,12 @@ void	shift(t_all *all)
 			save = all->curr_line;
 			while (all->nb_lines - save >= 0)
 				shift_last_char(all, save++);
-			/* shift last char of line */
 		}
 		tputs_termcap("rc");
 		all->line2write += 1;
 	}
 	else if (CURSOR == (LINE_LEN * all->curr_line))
 	{
-		/* cursor == EOL */
-		// ft_putstr("|STOP|\n");
 		save = all->curr_line;
 		while (all->nb_lines - save > 0)
 		{
@@ -106,10 +97,7 @@ void	shift(t_all *all)
 	}
 	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line > 0)
 	{
-		// ft_putstr("here\n");
 		ct = all->curr_line;
-		// printf("nbLine: %d\n", all->nb_lines);
-		// printf("cuurLine: %d\n", all->curr_line);
 		tputs_termcap("sc");
 		while (all->nb_lines - ct > 0)
 			shift_last_char(all, ct++);

@@ -42,8 +42,6 @@ int			check_keys_arrows(t_all *all, char *buff)
 
 	ct = 0;
 	all->current_key = ft_getkey(buff);
-	// printf("all curr: %d\n", all->current_key);
-	// printf("K_END: %d\n", K_END);
 	if (all->current_key == K_ENTER)
 		return (-1);
 	if (all->current_key == K_RIGHT || all->current_key == K_LEFT
@@ -82,18 +80,10 @@ void		parse_keys(t_all *all)
 	{K_CTRL_PASTE, paste_buffer},
 	{K_TAB, search_autocomplete}};
 	i = 0;
-	//all->current_key = ft_getkey(buff);
-	// printf("->> |%d|\n", keys[6].action_name);
-	// printf("->> |%d|\n", all->current_key);
-//	// int j = 0;
-	// while (buff[j])
-	// 	printf("-> [ %d ] ", buff[j++]);
-	// printf("\n");
 	while (i < 17)
 	{
 		if (all->current_key ==  keys[i].action_name)
 		{
-			 //printf("->> |%d|\n", keys[i].action_name);
 			keys[i].f(all);
 			return ;
 		}

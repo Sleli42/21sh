@@ -65,7 +65,7 @@ void	create_cmd(t_all *all)
 		return ;
 	nav = all->cmd_termcaps->head;
 	i = 0;	
-	if (all->cmd)
+	if (all->cmd && *all->cmd)
 		ft_strdel(&all->cmd);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * 
 				len_lst_cmd(all->cmd_termcaps->head) + 1)))

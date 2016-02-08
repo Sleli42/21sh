@@ -41,23 +41,15 @@ static void	del_highlighted_right(t_all *all)
 
 	i = all->cursor_pos;
 	save = all->cursor_pos - 1;
-	// printf("cursor : %d\n", all->cursor_pos);
-	// printf("SaveCursor : %d\n", all->save_cursor_pos);
-	// printf("Save : %d\n", save);
 	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos - PROMPT_LEN);
-	// printf("nav->c: [ %c ]\n", nav->c);
 	while (i-- > all->save_cursor_pos)
 		tputs_termcap("le");
 	while (i++ < save)
 	{
 		standard_mode(nav->c);
-		// printf("nav->c: [ %c ]\n", nav->c);
 		nav = nav->next;
 		tputs_termcap("nd");
 	}
-	// ft_putstr("BUG\n");
-	// printf("cursor : %d\n", all->cursor_pos);
-	// printf("lenght : %zu\n", all->cmd_termcaps->lenght);
 }
 
 static void	del_highlighted_left(t_all *all)
@@ -101,12 +93,8 @@ void	copy_left(t_all *all)
 
 	nav = goto_cursor_pos(all->cmd_termcaps->head,
 		(all->save_cursor_pos - PROMPT_LEN) - all->cpy_move_left);
-	// printf("nav->c: [ %c ]\n", nav->c);
 	i = 0;
 	del_highlighted_left(all);
-	// if ((all->save_cursor_pos) - all->cpy_move_left != 1)
-	// 	nav = nav->next;
-	// else
 	all->cpy_move_left += 1;
 	all->copy = ft_strnew(all->cpy_move_left + 1);
 	while (nav && i < all->cpy_move_left)

@@ -38,7 +38,6 @@ void	del_char(t_all *all)
 	if (all->already_in_history)
 		realloc_termcaps_cmd(all, all->cmd);
 	tputs_termcap("dm");
-	//printf("cursor: %d\n", CURSOR);
 	if (all->cmd_termcaps->lenght > 0 && CURSOR >= PROMPT_LEN)
 	{
 		if ((size_t)CURSOR - PROMPT_LEN <= all->cmd_termcaps->lenght + 1)

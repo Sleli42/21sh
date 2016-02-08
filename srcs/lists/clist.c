@@ -87,10 +87,11 @@ void		del_clist(t_clist **lst)
 	next_elem = NULL;
 	if (nav)
 	{
-		while (nav)
+		while (nav && nav->next)
 		{
 			next_elem = nav->next;
-			ft_strdel(&nav->arg);
+			if (nav->arg)
+				ft_strdel(&nav->arg);
 			free(nav);
 			nav = next_elem;
 		}
