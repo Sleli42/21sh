@@ -11,30 +11,8 @@
 /* ************************************************************************** */
 
 #include "21sh.h"
-
-/*
-
-tputs_termcap("cd") -> efface jusqu'a la fin de l'ecran
-
-*/
-
-void		debug(t_all *all)
-{
-	printf("\npromptLen: %d\n", PROMPT_LEN);
-		printf("strLen: %d\n", (int)ft_strlen(all->cmd));
-		printf("ws_col: %d\n", LINE_LEN);
-		printf("nbLine: %d\n", all->nb_lines);
-		printf("cuurLine: %d\n", all->curr_line);
-		printf("all->cmd: %s\n", all->cmd);
-		printf("strLen: [ %c ]\n", all->cmd[ft_strlen(all->cmd)]);
-		printf("strLen - 1: [ %c ]\n", all->cmd[ft_strlen(all->cmd) - 1]);
-		printf("strLen - promptLen: [ %c ]\n", all->cmd[(int)ft_strlen(all->cmd) - PROMPT_LEN]);
-		printf("(strLen - 1) - promptLen: [ %c ]\n", all->cmd[((int)ft_strlen(all->cmd) - 1) - PROMPT_LEN]);
-		printf("ws_col * currLine: [ %c ]\n", all->cmd[LINE_LEN * all->curr_line]);
-		printf("ws_col * nbLine: [ %c ]\n", all->cmd[LINE_LEN * all->nb_lines]);
-		printf("ws_col * currLine - promptLen: [ %c ]\n", all->cmd[(LINE_LEN * all->curr_line) - PROMPT_LEN]);
-	// mcol * curr_line) - 1]);
-}
+#define		END_OF_FILE		(LINE_LEN * all->nb_lines)
+#define		END_OF_LINE		(LINE_LEN * all->curr_line)
 
 void	shift_first_char(t_all *all, int curr_line)
 {
@@ -56,45 +34,54 @@ void	shift_last_char(t_all *all, int curr_line)
 	write(1, &all->cmd[ct], 1);
 }
 
-void	shift(t_all *all)
+void	eof(t_all *all)
+{
+	int		save;
+
+	save = all->curr_line;
+	tputs_termcap("sc");
+	if (all->nb_lines - all->curr_line == 0)
+	{
+		tputs_termcap("do");
+		write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
+	}
+	else
+		while (all->nb_lines - save >= 0)
+			shift_last_char(all, save++);
+	tputs_termcap("rc");
+	all->line2write += 1;
+}
+
+void	eol(t_all *all)
 {
 	int		save;
 	int		ct;
 
+	save = all->curr_line;
+	ct = 0;
+	while (all->nb_lines - save > 0)
+	{
+		tputs_termcap("do");
+		write(1, &all->cmd[CURSOR - PROMPT_LEN], 1);
+		tputs_termcap("le");
+		save++;
+		ct++;
+	}
+	while (ct-- > 1)
+		tputs_termcap("up");
+	all->curr_line++;
+}
+
+void	shift(t_all *all)
+{
+	int		ct;
+
 	create_cmd(all);
 	ct = 0;
-	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == (LINE_LEN * all->nb_lines))
-	{
-		tputs_termcap("sc");
-		if (all->nb_lines - all->curr_line == 0)
-		{
-			tputs_termcap("do");
-			write(1, &all->cmd[ft_strlen(all->cmd) - 1], 1);
-		}
-		else
-		{
-			save = all->curr_line;
-			while (all->nb_lines - save >= 0)
-				shift_last_char(all, save++);
-		}
-		tputs_termcap("rc");
-		all->line2write += 1;
-	}
-	else if (CURSOR == (LINE_LEN * all->curr_line))
-	{
-		save = all->curr_line;
-		while (all->nb_lines - save > 0)
-		{
-			tputs_termcap("do");
-			write(1, &all->cmd[CURSOR - PROMPT_LEN], 1);
-			tputs_termcap("le");
-			save++;
-			ct++;
-		}
-		while (ct-- > 1)
-			tputs_termcap("up");
-		all->curr_line++;
-	}
+	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == END_OF_FILE)
+		eof(all);
+	else if (CURSOR == END_OF_LINE)
+		eol(all);
 	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line > 0)
 	{
 		ct = all->curr_line;

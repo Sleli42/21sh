@@ -17,27 +17,19 @@ void	open_path_directory(t_all *all, char *dir2open)
 	DIR			*entry;
 	t_dirent	*dirp;
 
-	// ft_putstr("HERE\n");
-	// tmp_path = ft_strdup("./");
-	//printf("tmpPath: %s\n", tmp_path);
 	all->tmp_cmd = ft_strdup(all->cmd);
-	// tmp = cut_cmd(all->cmd);
-//	all->tmp_cmd = cut_cmd(all->cmd);
-	//printf("tmpcmd: |%s|\n", all->tmp_cmd);
 	all->list_dir = create_clst();
 	if (!(entry = opendir(dir2open)))
 		return ;
 	else
 	{
 		while ((dirp = readdir(entry)))
-		{
 			if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
 				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
-		}
 	}
-	// sort_name(&all->list_dir->head);
 	display_elems(all, all->list_dir);
 	closedir(entry);
+	del_clist(&all->list_dir);
 	all->already_autocomplete = 1;
 	loop(all);
 }
@@ -45,17 +37,13 @@ void	open_path_directory(t_all *all, char *dir2open)
 void	swap_elems(t_select *a, t_select *b)
 {
 	char	*tmp_s;
-	//int		tmp_i;
 
 	tmp_s = ft_strdup(a->arg);
-	//tmp_i = a->index;
 	ft_strdel(&a->arg);
 	a->arg = ft_strdup(b->arg);
-	//a->index = b->index;
 	ft_strdel(&b->arg);
 	b->arg = ft_strdup(tmp_s);
 	ft_strdel(&tmp_s);
-	//b->index = tmp_i;
 }
 
 void	sort_name(t_select **lst)

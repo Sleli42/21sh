@@ -121,8 +121,8 @@ void	init_loop(t_all *all)
 
 void	already_in_func(t_all *all)
 {
-	if (all->list_dir)
-		del_clist(&all->list_dir);
+	// if (all->list_dir)
+	// 	del_clist(&all->list_dir);
 	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->p_mark)
 	{

@@ -20,7 +20,6 @@ int		find_maxlen_elem(t_clist *lst)
 	ret = ft_strlen(nav->arg);
 	while (nav->next)
 	{
-		//ret = ft_strlen(nav->arg);
 		if (ft_strlen(nav->arg) > (size_t)ret)
 			ret = ft_strlen(nav->arg);
 		nav = nav->next;
@@ -35,16 +34,11 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 	init_windows_size(all);
 	all->maxlen_arg = find_maxlen_elem(lst);
 	ret = 0;
-	// printf("largeur: %d\n", LINE_LEN);
-	// printf("maxlen: %d\n", all->maxlen_arg);
 	while (LINE_LEN > (all->maxlen_arg + 2))
 	{
 		LINE_LEN -= (all->maxlen_arg + 2);
-		// printf("largeur: %d\n", LINE_LEN);
 		ret++;
 	}
-	// printf("ret = %d\n", ret);
-	// exit(1);
 	return (ret);
 }
 
@@ -74,22 +68,14 @@ char	*cut_cmd_equ(t_all *all)
 	if (!(ret = (char *)malloc(sizeof(char *))))
 		error("MALLOC");
 	if (all->already_open && all->cmd[tmp] != '/')
-	{
 		while (all->cmd[tmp] && all->cmd[tmp] != '/')
 			tmp--;
-	}
 	else
-	{
 		while (all->cmd[tmp] && all->cmd[tmp] != ' ')
 			tmp--;
-	}
 	tmp += 1;
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-	{
-		// printf("tmp: [ %c ]\n", all->cmd[tmp]);
 		ret[ct++] = all->cmd[tmp++];
-	}
 	ret[ct] = '\0';
-	// printf("ret: [ %s ]\n", ret);
 	return (ret);
 }
