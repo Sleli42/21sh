@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-void	copy_buffer(t_all *all)
+void		copy_buffer(t_all *all)
 {
 	if (!all->already_in_select)
 	{
@@ -23,8 +23,6 @@ void	copy_buffer(t_all *all)
 	}
 	else
 	{
-		// printf("nbMOvesRIght: %d\n", all->cpy_move_right);
-		//printf("cursor pos : %d\n", all->cursor_pos);
 		tputs_termcap("me");
 		all->already_in_select = 0;
 		if (all->cpy_move_right > 0)
@@ -34,7 +32,7 @@ void	copy_buffer(t_all *all)
 	}
 }
 
-void	cut_buffer(t_all *all)
+void		cut_buffer(t_all *all)
 {
 	if (!all->already_in_select)
 	{
@@ -64,7 +62,8 @@ static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
 	ct = 0;
 	i = 0;
 	j = 0;
-	if (!(ret = (char *)malloc(sizeof(char) * ft_strlen(cmd) + ft_strlen(cpy) + 1)))
+	if (!(ret = (char *)malloc(sizeof(char) * ft_strlen(cmd) + \
+												ft_strlen(cpy) + 1)))
 		return (NULL);
 	while (cmd[i] && i < pos - 1)
 		ret[ct++] = cmd[i++];
@@ -77,7 +76,7 @@ static char	*insert_str_to_str(char *cmd, char *cpy, int pos)
 	return (ret);
 }
 
-void	paste_buffer(t_all *all)
+void		paste_buffer(t_all *all)
 {
 	int		save;
 	char	*new_str;

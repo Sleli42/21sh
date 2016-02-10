@@ -52,5 +52,8 @@ void	search_autocomplete(t_all *all)
 	else if (all->cmd[CURSOR - PROMPT_LEN - 1] == ' ')
 		open_path_directory(all, "./");
 	else
-		list_dir_equ(all, cut_cmd_equ(all));
+	{
+		cut_cmd_equ(all);
+		list_dir_equ(all);
+	}
 }

@@ -41,7 +41,7 @@ void	cut_right(t_all *all)
 
 void	cut_left(t_all *all)
 {
-	int 	count;
+	int		count;
 
 	count = 0;
 	all->stop = 0;

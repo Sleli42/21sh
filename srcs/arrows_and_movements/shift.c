@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "21sh.h"
-#define		END_OF_FILE		(LINE_LEN * all->nb_lines)
-#define		END_OF_LINE		(LINE_LEN * all->curr_line)
+#define		END_OF_FILE	(LINE_LEN * all->nb_lines)
+#define		END_OF_LINE	(LINE_LEN * all->curr_line)
 
 void	shift_first_char(t_all *all, int curr_line)
 {
@@ -82,7 +82,8 @@ void	shift(t_all *all)
 		eof(all);
 	else if (CURSOR == END_OF_LINE)
 		eol(all);
-	else if (all->curr_line < all->nb_lines && all->nb_lines - all->curr_line > 0)
+	else if (all->curr_line < all->nb_lines && \
+				all->nb_lines - all->curr_line > 0)
 	{
 		ct = all->curr_line;
 		tputs_termcap("sc");

@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-int		ft_getkey(char *s)
+int			getkey(char *s)
 {
 	int			result;
 	int			i;
@@ -41,7 +41,7 @@ int			check_keys_arrows(t_all *all, char *buff)
 	int		ct;
 
 	ct = 0;
-	all->current_key = ft_getkey(buff);
+	all->current_key = getkey(buff);
 	if (all->current_key == K_ENTER)
 		return (-1);
 	if (all->current_key == K_RIGHT || all->current_key == K_LEFT
@@ -57,11 +57,25 @@ int			check_keys_arrows(t_all *all, char *buff)
 	return (0);
 }
 
-void		parse_keys(t_all *all)
+void		key_loop(t_all *all, const t_keys keys[17])
 {
 	int		i;
-	static const	t_keys	keys[] =
 
+	i = 0;
+	while (i < 17)
+	{
+		if (all->current_key == keys[i].action_name)
+		{
+			keys[i].f(all);
+			return ;
+		}
+		i++;
+	}
+}
+
+void		parse_keys(t_all *all)
+{
+	static const	t_keys	keys[] =
 	{{K_UP, goto_latest_commands},
 	{K_DOWN, goto_latest_commands},
 	{K_RIGHT, horizontal_moves},
@@ -79,14 +93,6 @@ void		parse_keys(t_all *all)
 	{K_CTRL_COPY, copy_buffer},
 	{K_CTRL_PASTE, paste_buffer},
 	{K_TAB, search_autocomplete}};
-	i = 0;
-	while (i < 17)
-	{
-		if (all->current_key ==  keys[i].action_name)
-		{
-			keys[i].f(all);
-			return ;
-		}
-		i++;
-	}
+
+	key_loop(all, keys);
 }

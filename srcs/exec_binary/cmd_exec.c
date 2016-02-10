@@ -17,14 +17,13 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 	char						*cmp;
 	int							i;
 	static const	t_redirect	redirection[] =
-
 	{{"|", create_pipe},
 	{">", erase_and_replace},
 	{">>", add_to_end},
 	{"<", read_file},
 	{"<<", read_stdin}};
+
 	i = 0;
-	(void)all;
 	cmp = ft_strdup(my_strstr(cmd));
 	if (cmp != NULL)
 	{
@@ -38,22 +37,11 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 	}
 }
 
-void	exec_simple_cmd(t_all *all, char *cmd)
+void	simple_cmd_loop(t_all *all, const t_builtins built[9], char *cmd)
 {
-	int							i;
-	int							stop;
-	static const t_builtins		built[] =
+	int		i;
+	int		stop;
 
-	{{"env", env_display},
-	{"set env", env_set},
-	{"unset env", env_unset},
-	{"pwd", pwd_display},
-	{"cd", goto_dir},
-	{"exit", free_all},
-	{"!", built_mark},
-	{"history", built_history},
-	{"read", read_built},
-	{"echo", built_echo}};
 	i = 0;
 	stop = 0;
 	while (i < 9)
@@ -68,6 +56,23 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	}
 	if (!stop)
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
+}
+
+void	exec_simple_cmd(t_all *all, char *cmd)
+{
+	static const t_builtins		built[] =
+	{{"env", env_display},
+	{"set env", env_set},
+	{"unset env", env_unset},
+	{"pwd", pwd_display},
+	{"cd", goto_dir},
+	{"exit", free_all},
+	{"!", built_mark},
+	{"history", built_history},
+	{"read", read_built},
+	{"echo", built_echo}};
+
+	simple_cmd_loop(all, built, cmd);
 }
 
 void	exec_command(t_all *all)

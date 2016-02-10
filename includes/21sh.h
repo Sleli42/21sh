@@ -136,6 +136,7 @@ typedef struct			s_all
 	t_stat				stat;
 	char				*tmp_cmd;
 	char				*tmp_dir;
+	char				*equ2find;
 	int					already_autocomplete;
 	int					already_open;
 	int					replace_cursor;
@@ -182,6 +183,7 @@ typedef struct			s_all
 	char				*cmd;
 	int					fd2open;
 	int					stop;
+	int					skip;
 		// --SOSO
 	int					lv;
 }						t_all;
@@ -204,16 +206,13 @@ typedef	struct			s_keys
 	void				(*f)(t_all *);
 }						t_keys;
 
-// void	line_edition(t_all *all, char *buff);
-
-
 /* ----------------------------------------------------------------------------------
 *** ============================================================ ARROWS_AND_MOVEMENTS
 */
 	/*
-	*** ======================= horizontal_movements_tools.c
+	*** ======================= parse_keys.c
 	*/
-	int			ft_getkey(char *s);
+	int			getkey(char *s);
 	int			check_keys_arrows(t_all *all, char *buff);
 	void		parse_keys(t_all *all);
 	/*
@@ -290,7 +289,7 @@ typedef	struct			s_keys
 	int			find_maxlen_elem(t_clist *lst);
 	int			define_nb_files_by_row(t_all *all, t_clist *lst);
 	int			no_spaces(t_cmd *lst);
-	char		*cut_cmd_equ(t_all *all);
+	void		cut_cmd_equ(t_all *all);
 	/*
 	*** ======================= binary_search.c
 	*/
@@ -305,7 +304,7 @@ typedef	struct			s_keys
 	*** ======================= equality_search.c
 	*/
 	char		*update_tmp_cmd(t_all *all, char *str2add, int len2skip);
-	void		list_dir_equ(t_all *all, char *equ2find);
+	void		list_dir_equ(t_all *all);
 
 /* ----------------------------------------------------------------------
 *** ============================================================ BUILTINS
@@ -404,6 +403,8 @@ typedef	struct			s_keys
 	/*
 	*** ======================= cmd_exec.c
 	*/
+	void		simple_cmd_loop(t_all *all, \
+					const t_builtins built[9], char *cmd);
 	void		exec_simple_cmd(t_all *all, char *cmd);
 	void		exec_redirection_cmd(t_all *all, char *cmd);
 	void		exec_command(t_all *all);

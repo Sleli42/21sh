@@ -12,9 +12,8 @@
 
 #include "21sh.h"
 
-void	display_prompt(t_all *all) {
-	(void)all;
-	//tputs_termcap("me");
+void	display_prompt(t_all *all)
+{
 	tputs_termcap("ve");
 	write(1, "$: ", 3);
 	all->cursor_pos += PROMPT_LEN;
@@ -30,7 +29,6 @@ void	create_and_exec_command(t_all *all)
 	{
 		printf("cmd: |%s|\n", all->cmd);
 		all->line2write += all->nb_lines;
-		//printf("--> %d\n", all->line2write);
 	}
 	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
 	{
@@ -41,28 +39,27 @@ void	create_and_exec_command(t_all *all)
 	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
 								((t_cmd *)all->cmd_termcaps->head)->c)
 		del_dlist2(all->cmd_termcaps);
-	//reset_term();
 	all->line2write += all->nb_lines;
+	if (all->cmd)
+		ft_strdel(&all->cmd);
 	loop(all);
 }
 
 static void	define_nb_lines(t_all *all)
 {
-	// ft_putstr("STOP0");
 	create_cmd(all);
-	// ft_putstr("STOP1");
-	///printf("rows: %d\n", all->ws.ws_row);
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == LINE_LEN * all->nb_lines)
 		all->nb_lines++;
 }
 
 void	insert_char(t_all *all)
 {
-	all->already_open = (*all->buff == ' ') ? 0 : all->already_open;
+	all->already_open = 0;
 	if (*all->buff == '$')
 		all->lv += 1;
 	tputs_termcap("im");
-	if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght && *all->buff != '\n')
+	if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght \
+													&& *all->buff != '\n')
 	{
 		if (*all->buff != '\n')
 			ft_putchar(*all->buff);
@@ -91,7 +88,6 @@ void	read_keys(t_all *all)
 	key = 0;
 	if (read(0, all->buff, (MAXLEN - 1)) == -1)
 		return ;
-	// read(0, all->buff, (MAXLEN - 1));
 	if ((key = check_keys_arrows(all, all->buff)) < 0)
 		return ;
 	else if (key > 0)
@@ -121,8 +117,6 @@ void	init_loop(t_all *all)
 
 void	already_in_func(t_all *all)
 {
-	// if (all->list_dir)
-	// 	del_clist(&all->list_dir);
 	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->p_mark)
 	{
@@ -151,7 +145,6 @@ void	already_in_func_extended(t_all *all)
 		realloc_termcaps_cmd(all, all->tmp_cmd);
 		create_cmd(all);
 		ft_putstr(all->cmd);
-			// printf("repalce: %d\n", all->replace_cursor);
 		if (all->replace_cursor > 0 && CURSOR > all->replace_cursor)
 		{
 			while (CURSOR-- > all->replace_cursor)

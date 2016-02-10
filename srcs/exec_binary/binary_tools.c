@@ -29,6 +29,14 @@ char	*create_path(char *path, char *bin)
 	return (tmp);
 }
 
+void	write_error(t_all *all, char *cmd_error)
+{
+	ft_putstr("Command: '");
+	ft_putstr(cmd_error);
+	ft_putstr("' not found\n");
+	all->line2write += all->nb_lines;
+}
+
 void	exec_right_binary(t_all *all, char **argv_bin)
 {
 	int		ct;
@@ -51,12 +59,7 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 		ct++;
 	}
 	if (!stop)
-	{
-		printf("Command: '%s' not found\n", argv_bin[0]);
-		all->line2write += all->nb_lines;
-		// ft_putstr("")
-		// ft_putstr("Command not found\n");
-	}
+		write_error(all, argv_bin[0]);
 }
 
 void	exec_binary(char *bin, char **argv_bin, char **env)

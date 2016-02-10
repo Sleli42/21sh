@@ -14,12 +14,13 @@
 
 char	goto_elem(t_cmd *cmd, int pos)
 {
-	t_cmd	*tmp = cmd;
-	int		ct = 1;
+	t_cmd	*tmp;
+	int		ct;
 
+	tmp = cmd;
+	ct = 1;
 	while (ct++ < pos)
 		tmp = tmp->next;
-	//printf("-> |%c|\n", tmp->c);
 	return (tmp->c);
 }
 
@@ -35,11 +36,6 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	int		ct;
 
 	ct = 0;
-	// if (all->cmd_termcaps)
-	// {
-	// 	del_dlist2(all->cmd_termcaps);
-	// 	all->cmd_termcaps = create_cmd_dlst();
-	// }
 	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
 								((t_cmd *)all->cmd_termcaps->head)->c)
 	{
@@ -64,10 +60,10 @@ void	create_cmd(t_all *all)
 	if (CMD_NULL)
 		return ;
 	nav = all->cmd_termcaps->head;
-	i = 0;	
+	i = 0;
 	if (all->cmd && *all->cmd)
 		ft_strdel(&all->cmd);
-	if (!(all->cmd = (char *)malloc(sizeof(char) * 
+	if (!(all->cmd = (char *)malloc(sizeof(char) * \
 				len_lst_cmd(all->cmd_termcaps->head) + 1)))
 		error("MALLOC");
 	if (nav && all->cmd)

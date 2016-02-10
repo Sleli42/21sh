@@ -57,15 +57,14 @@ int		no_spaces(t_cmd *lst)
 	return (1);
 }
 
-char	*cut_cmd_equ(t_all *all)
+void	cut_cmd_equ(t_all *all)
 {
 	int		ct;
 	int		tmp;
-	char	*ret;
 
 	ct = 0;
 	tmp = (CURSOR - PROMPT_LEN) - 1;
-	if (!(ret = (char *)malloc(sizeof(char *))))
+	if (!(all->equ2find = (char *)malloc(sizeof(char *))))
 		error("MALLOC");
 	if (all->already_open && all->cmd[tmp] != '/')
 		while (all->cmd[tmp] && all->cmd[tmp] != '/')
@@ -75,7 +74,6 @@ char	*cut_cmd_equ(t_all *all)
 			tmp--;
 	tmp += 1;
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-		ret[ct++] = all->cmd[tmp++];
-	ret[ct] = '\0';
-	return (ret);
+		all->equ2find[ct++] = all->cmd[tmp++];
+	all->equ2find[ct] = '\0';
 }

@@ -16,11 +16,12 @@ void	del_char_multi_lines(t_all *all)
 {
 	int	ct;
 	int	save;
-	
+
 	ct = all->curr_line;
 	save = CURSOR;
 	create_cmd(all);
-	if ((int)ft_strlen(all->cmd) < ((all->nb_lines - 1) * LINE_LEN) - PROMPT_LEN)
+	if ((int)ft_strlen(all->cmd) < ((all->nb_lines - 1) * LINE_LEN) \
+														- PROMPT_LEN)
 		all->nb_lines--;
 	tputs_termcap("sc");
 	while (ct < all->nb_lines)
@@ -43,7 +44,7 @@ void	del_char(t_all *all)
 		if ((size_t)CURSOR - PROMPT_LEN <= all->cmd_termcaps->lenght + 1)
 		{
 			(all->current_key != K_BACKSPACE)
-			 ? dlst_del_one2(all->cmd_termcaps, CURSOR - (PROMPT_LEN - 1))
+			? dlst_del_one2(all->cmd_termcaps, CURSOR - (PROMPT_LEN - 1))
 				: dlst_del_one2(all->cmd_termcaps, CURSOR - PROMPT_LEN);
 		}
 		(all->current_key == K_BACKSPACE)

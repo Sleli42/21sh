@@ -22,7 +22,7 @@ static int	count_char_to_shift(t_all *all, int start_pos)
 	return (ret);
 }
 
-void	goto_up_line(t_all *all)
+void		goto_up_line(t_all *all)
 {
 	int		ct;
 
@@ -43,7 +43,7 @@ void	goto_up_line(t_all *all)
 	}
 }
 
-void	goto_down_line(t_all *all)
+void		goto_down_line(t_all *all)
 {
 	int		ct;
 
@@ -62,7 +62,9 @@ void	goto_down_line(t_all *all)
 				tputs_termcap("nd");
 		}
 		else
+		{
 			while (ct-- > 0)
-		 		tputs_termcap("nd");
+				tputs_termcap("nd");
+		}
 	}
 }

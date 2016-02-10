@@ -12,9 +12,9 @@
 
 #include "21sh.h"
 
-void	init_term(void)
+void		init_term(void)
 {
-	char	*term_name;
+	char			*term_name;
 	struct termios	term;
 
 	term_name = NULL;
@@ -31,14 +31,14 @@ void	init_term(void)
 		term_error("TCSETATTR");
 }
 
-void	init_windows_size(t_all *all)
+void		init_windows_size(t_all *all)
 {
 	if (ioctl(init_tty(), TIOCGWINSZ, &all->ws) == -1)
 		term_error("ioctl");
 	all->max_rows = tgetnum("co");
 }
 
-int		init_tty(void)
+int			init_tty(void)
 {
 	int		tty;
 

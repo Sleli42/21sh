@@ -43,18 +43,6 @@ void	results_analysis_bin(t_all *all)
 		sort_name(&all->list_dir->head);
 		display_elems(all, all->list_dir);
 	}
-	// if (all->list_dir->lenght <= 0)
-	// {
-	// 	tputs_termcap("bl");
-	// 	return ;
-	// }
-	// else if (all->list_dir->lenght == 1)
-	// {
-	// 	all->tmp_cmd = update_tmp_cmd(all, all->list_dir->head->arg,
-	// 		(int)ft_strlen(equ2find));
-	// }
-	// else if (all->list_dir->lenght > 1)
-	// 	display_elems(all, all->list_dir);
 }
 
 void	search_bin_path(t_all *all)
@@ -83,19 +71,6 @@ void	search_bin_path(t_all *all)
 	}
 	results_analysis_bin(all);
 	del_clist(&all->list_dir);
-	// if (all->list_dir->lenght == 1)
-	// {
-	// 	if (all->tmp_cmd)
-	// 		ft_strdel(&all->tmp_cmd);
-	// 	all->tmp_cmd = ft_strdup(ft_strjoin(all->list_dir->head->arg, " "));
-	// }
-	// if (all->list_dir->lenght > 100)
-	// {
-	// 	char	buff[1];
-	// 	printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
-	// 	read(0, buff, 1);
-	// 	if (*buff == 'y')
-	// }
 	all->already_autocomplete = 1;
 	loop(all);
 }

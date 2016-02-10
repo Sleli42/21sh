@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-void	standard_mode(char char2print)
+void		standard_mode(char char2print)
 {
 	tputs_termcap("dc");
 	tputs_termcap("me");
@@ -22,7 +22,7 @@ void	standard_mode(char char2print)
 	tputs_termcap("le");
 }
 
-void	reverse_mode(char char2print)
+void		reverse_mode(char char2print)
 {
 	tputs_termcap("dc");
 	tputs_termcap("mr");
@@ -41,7 +41,8 @@ static void	del_highlighted_right(t_all *all)
 
 	i = all->cursor_pos;
 	save = all->cursor_pos - 1;
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos - PROMPT_LEN);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, \
+						all->save_cursor_pos - PROMPT_LEN);
 	while (i-- > all->save_cursor_pos)
 		tputs_termcap("le");
 	while (i++ < save)
@@ -58,7 +59,8 @@ static void	del_highlighted_left(t_all *all)
 	t_cmd	*nav;
 
 	i = all->cursor_pos;
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->cursor_pos - PROMPT_LEN);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, \
+							all->cursor_pos - PROMPT_LEN);
 	while (nav && i++ < all->save_cursor_pos + 1)
 	{
 		standard_mode(nav->c);
@@ -68,13 +70,14 @@ static void	del_highlighted_left(t_all *all)
 	}
 }
 
-void	copy_right(t_all *all)
+void		copy_right(t_all *all)
 {
 	t_cmd	*nav;
 	int		i;
 
 	i = 0;
-	nav = goto_cursor_pos(all->cmd_termcaps->head, all->save_cursor_pos - PROMPT_LEN);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, \
+						all->save_cursor_pos - PROMPT_LEN);
 	del_highlighted_right(all);
 	all->copy = ft_strnew(all->cpy_move_right + 1);
 	while (nav && all->cpy_move_right > 0)
@@ -86,7 +89,7 @@ void	copy_right(t_all *all)
 	all->copy[i] = 0;
 }
 
-void	copy_left(t_all *all)
+void		copy_left(t_all *all)
 {
 	t_cmd	*nav;
 	int		i;

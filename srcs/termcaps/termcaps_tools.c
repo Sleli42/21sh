@@ -46,7 +46,7 @@ void	restore_term(t_termios restore)
 		term_error("TCSETATTR");
 }
 
-void 	reset_term(void)
+void	reset_term(void)
 {
 	struct termios	term;
 
