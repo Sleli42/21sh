@@ -90,7 +90,15 @@ void		paste_buffer(t_all *all)
 		realloc_termcaps_cmd(all, new_str);
 		ft_strdel(&new_str);
 		tputs_termcap("im");
-		ft_putstr(all->copy);
+		int			i = 0;
+		while (all->copy[i])
+		{
+			ft_putchar(all->copy[i]);
+			if (all->nb_lines >= 1)
+				shift(all);
+			i++;
+		}
+		// ft_putstr(all->copy);
 		tputs_termcap("ei");
 		CURSOR = save + PROMPT_LEN + (ft_strlen(all->copy) - 1);
 	}

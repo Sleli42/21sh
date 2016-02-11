@@ -50,6 +50,6 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 		while (tmp && ++ct < pos - 1)
 			tmp = tmp->next;
 	}
-	// printf("StartPos: [ %c ]\n", tmp->c);
+	// printf("c: [ %c ]\n", tmp->c);
 	return (tmp);
 }

@@ -49,9 +49,9 @@ static void	del_highlighted_right(t_all *all)
 	{
 		standard_mode(nav->c);
 		nav = nav->next;
-		// if (i == (LINE_LEN * (all->curr_line - 1)))
-		// 	tputs_termcap("do");
-		// else
+		if (i == (LINE_LEN * (all->curr_line - 1)) - PROMPT_LEN)
+			tputs_termcap("do");
+		else
 			tputs_termcap("nd");
 	}
 }
@@ -87,7 +87,13 @@ static void	del_highlighted_left(t_all *all)
 	{
 		standard_mode(nav->c);
 		nav = nav->next;
-		tputs_termcap("nd");
+		if (i == (LINE_LEN * (all->curr_line)) - PROMPT_LEN)
+		{
+			all->curr_line += 1;
+			tputs_termcap("do");
+		}
+		else
+			tputs_termcap("nd");
 	}
 }
 

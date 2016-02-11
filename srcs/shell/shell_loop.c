@@ -159,8 +159,8 @@ void	already_in_func_extended(t_all *all)
 void	loop(t_all *all)
 {
 	init_loop(all);
-	already_in_func(all);
 	display_prompt(all);
+	already_in_func(all);
 	while (*all->buff != '\n')
 	{
 		define_nb_lines(all);
