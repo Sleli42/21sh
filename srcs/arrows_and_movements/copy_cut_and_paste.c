@@ -16,7 +16,7 @@ void		copy_buffer(t_all *all)
 {
 	if (!all->already_in_select)
 	{
-		all->save_cursor_pos = all->cursor_pos;
+		all->save_cursor_pos = all->cursor_pos - PROMPT_LEN + 1;
 		all->already_in_select = 1;
 		all->cpy_move_right = 0;
 		all->cpy_move_left = 0;
@@ -84,20 +84,14 @@ void		paste_buffer(t_all *all)
 	save = 0;
 	if (all->copy)
 	{
-		save = all->cursor_pos;
-		all->cursor_pos += ft_strlen(all->copy);
+		save = (all->cursor_pos - PROMPT_LEN) + 1;
 		create_cmd(all);
 		new_str = insert_str_to_str(all->cmd, all->copy, save);
-		save = all->cursor_pos;
 		realloc_termcaps_cmd(all, new_str);
 		ft_strdel(&new_str);
 		tputs_termcap("im");
 		ft_putstr(all->copy);
 		tputs_termcap("ei");
-		while (save < all->cursor_pos)
-		{
-			tputs_termcap("nd");
-			save++;
-		}
+		CURSOR = save + PROMPT_LEN + (ft_strlen(all->copy) - 1);
 	}
 }

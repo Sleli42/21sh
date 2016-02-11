@@ -55,7 +55,7 @@ void	opt_left_move(t_all *all)
 void	reprint_char(t_all *all, t_cmd *nav)
 {
 	if (all->current_key == K_LEFT && all->cpy_move_right >= 0
-		&& CURSOR > all->save_cursor_pos)
+		&& CURSOR - PROMPT_LEN > all->save_cursor_pos)
 	{
 		standard_mode(nav->c);
 		all->cpy_move_right--;
@@ -67,7 +67,9 @@ void	reprint_char(t_all *all, t_cmd *nav)
 		all->cpy_move_left--;
 	}
 	else
+	{
 		reverse_mode(nav->c);
+	}
 }
 
 void	horizontal_moves(t_all *all)
@@ -75,8 +77,10 @@ void	horizontal_moves(t_all *all)
 	all->already_open = 0;
 	if (all->already_in_select \
 		&& ((size_t)all->cursor_pos - PROMPT_LEN) < all->cmd_termcaps->lenght)
+	{
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, \
 									(all->cursor_pos - PROMPT_LEN) + 1));
+	}
 	if (all->current_key == K_LEFT && CURSOR > PROMPT_LEN)
 	{
 		goto_left(all);

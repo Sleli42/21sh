@@ -39,34 +39,20 @@ static void	del_highlighted_right(t_all *all)
 	int		save;
 	t_cmd	*nav;
 
-	i = all->cursor_pos;
-	save = all->cursor_pos - 1;
+	i = (CURSOR - PROMPT_LEN) + 1;
+	save = all->cursor_pos - PROMPT_LEN;
 	nav = goto_cursor_pos(all->cmd_termcaps->head, \
-						all->save_cursor_pos - PROMPT_LEN);
+						all->save_cursor_pos);
 	while (i-- > all->save_cursor_pos)
 		tputs_termcap("le");
 	while (i++ < save)
 	{
 		standard_mode(nav->c);
 		nav = nav->next;
-		tputs_termcap("nd");
-	}
-}
-
-static void	del_highlighted_left(t_all *all)
-{
-	int		i;
-	t_cmd	*nav;
-
-	i = all->cursor_pos;
-	nav = goto_cursor_pos(all->cmd_termcaps->head, \
-							all->cursor_pos - PROMPT_LEN);
-	while (nav && i++ < all->save_cursor_pos + 1)
-	{
-		standard_mode(nav->c);
-		nav = nav->next;
-		tputs_termcap("nd");
-		all->cursor_pos++;
+		// if (i == (LINE_LEN * (all->curr_line - 1)))
+		// 	tputs_termcap("do");
+		// else
+			tputs_termcap("nd");
 	}
 }
 
@@ -76,9 +62,9 @@ void		copy_right(t_all *all)
 	int		i;
 
 	i = 0;
-	nav = goto_cursor_pos(all->cmd_termcaps->head, \
-						all->save_cursor_pos - PROMPT_LEN);
 	del_highlighted_right(all);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, \
+						all->save_cursor_pos);
 	all->copy = ft_strnew(all->cpy_move_right + 1);
 	while (nav && all->cpy_move_right > 0)
 	{
@@ -89,21 +75,45 @@ void		copy_right(t_all *all)
 	all->copy[i] = 0;
 }
 
+static void	del_highlighted_left(t_all *all)
+{
+	int		i;
+	t_cmd	*nav;
+
+	i = (all->cursor_pos - PROMPT_LEN);
+	nav = goto_cursor_pos(all->cmd_termcaps->head, \
+							(all->cursor_pos - PROMPT_LEN) + 1);
+	while (nav && i++ < all->save_cursor_pos)
+	{
+		standard_mode(nav->c);
+		nav = nav->next;
+		tputs_termcap("nd");
+	}
+}
+
 void		copy_left(t_all *all)
 {
 	t_cmd	*nav;
 	int		i;
 
-	nav = goto_cursor_pos(all->cmd_termcaps->head,
-		(all->save_cursor_pos - PROMPT_LEN) - all->cpy_move_left);
 	i = 0;
 	del_highlighted_left(all);
-	all->cpy_move_left += 1;
+	nav = goto_cursor_pos(all->cmd_termcaps->head,
+		(all->cursor_pos - PROMPT_LEN) + 1);
 	all->copy = ft_strnew(all->cpy_move_left + 1);
+	if (CURSOR != PROMPT_LEN)
+		nav = nav->next;
+	else
+	{
+		all->cpy_move_left += 1;
+		CURSOR -= 1;
+	}
 	while (nav && i < all->cpy_move_left)
 	{
 		all->copy[i++] = nav->c;
 		nav = nav->next;
+		CURSOR++;
 	}
+	CURSOR += 1;
 	all->copy[i] = 0;
 }
