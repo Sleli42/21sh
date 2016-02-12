@@ -46,10 +46,7 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 	tmp = lst;
 	ct = -1;
 	if (tmp)
-	{
 		while (tmp && ++ct < pos - 1)
 			tmp = tmp->next;
-	}
-	// printf("c: [ %c ]\n", tmp->c);
 	return (tmp);
 }

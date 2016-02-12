@@ -110,7 +110,6 @@ char	*open_right_directory(t_all *all, char *equ2find)
 		{
 			if (directory_in_path(all, equ2find))
 			{
-				// all->equ2find = cut_last_equality(equ2find);
 				all->equ2find = equ2find + all->skip;
 				return (cut_directory_in_path(equ2find));
 			}

@@ -24,8 +24,11 @@ void	open_path_directory(t_all *all, char *dir2open)
 	else
 	{
 		while ((dirp = readdir(entry)))
+		{
 			if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
-				clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+				clst_add_elem_back(all->list_dir, \
+									clst_create_elem(dirp->d_name));
+		}
 	}
 	display_elems(all, all->list_dir);
 	closedir(entry);

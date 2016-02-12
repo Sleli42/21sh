@@ -14,9 +14,10 @@
 
 int		find_maxlen_elem(t_clist *lst)
 {
-	t_select	*nav = lst->head;
-	int			ret = 0;
+	t_select	*nav;
+	int			ret;
 
+	nav = lst->head;
 	ret = ft_strlen(nav->arg);
 	while (nav->next)
 	{
@@ -44,8 +45,9 @@ int		define_nb_files_by_row(t_all *all, t_clist *lst)
 
 int		no_spaces(t_cmd *lst)
 {
-	t_cmd	*tmp = lst;
+	t_cmd	*tmp;
 
+	tmp = lst;
 	if (tmp->c == '.' && tmp->next->c == '/')
 		return (0);
 	while (tmp)

@@ -31,7 +31,10 @@ void	goto_left(t_all *all)
 		goto_up(all);
 	else if (CURSOR == ((all->curr_line) * LINE_LEN) - 1
 			&& all->already_in_select)
-			reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, CURSOR - PROMPT_LEN));
+	{
+		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, \
+												CURSOR - PROMPT_LEN));
+	}
 	else
 		tputs_termcap("le");
 	CURSOR--;
@@ -39,10 +42,6 @@ void	goto_left(t_all *all)
 
 void	goto_up(t_all *all)
 {
-	// int	save = 0;
-
-	// if (all->already_in_select)
-	// 	save = CURSOR;
 	all->curr_line--;
 	tputs_termcap("up");
 	CURSOR = (all->curr_line > 1)
@@ -52,12 +51,6 @@ void	goto_up(t_all *all)
 		tputs_termcap("nd");
 		CURSOR++;
 	}
-	// if (all->already_in_select)
-	// 	tputs_termcap("nd");
-	// {
-	// 	printf("cursor: %d\n", CURSOR);
-	// 	printf("save: %d\n", save);
-	// }
 }
 
 void	goto_begin(t_all *all)

@@ -256,6 +256,7 @@ typedef	struct			s_keys
 	*/
 	void		copy_buffer(t_all *all);
 	void		cut_buffer(t_all *all);
+	void		paste_copy_in_cmd(t_all *all);
 	void		paste_buffer(t_all *all);
 	/*
 	*** ======================= copy_tools.c

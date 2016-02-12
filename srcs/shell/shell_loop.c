@@ -118,7 +118,6 @@ void	init_loop(t_all *all)
 
 void	already_in_func(t_all *all)
 {
-	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	if (all->p_mark)
 	{
 		ft_putstr(all->cmd);
@@ -160,6 +159,7 @@ void	already_in_func_extended(t_all *all)
 void	loop(t_all *all)
 {
 	init_loop(all);
+	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	display_prompt(all);
 	already_in_func(all);
 	while (*all->buff != '\n')

@@ -12,6 +12,17 @@
 
 #include "21sh.h"
 
+void	add_spaces(t_all *all, int tmp_len, int ct)
+{
+	if (tmp_len < all->maxlen_arg \
+				&& ct != all->files_by_row - 1)
+	{
+		write(1, " ", 1);
+		while (tmp_len++ < all->maxlen_arg)
+			write(1, " ", 1);
+	}
+}
+
 void	display_elems(t_all *all, t_clist *lst)
 {
 	t_select	*nav;
@@ -31,13 +42,7 @@ void	display_elems(t_all *all, t_clist *lst)
 			write(1, "\n", 1);
 		}
 		ft_putstr(nav->arg);
-		if (tmp_len < all->maxlen_arg && nav->next \
-							&& ct != all->files_by_row - 1)
-		{
-			write(1, " ", 1);
-			while (tmp_len++ < all->maxlen_arg)
-				write(1, " ", 1);
-		}
+		(nav->next) ? add_spaces(all, tmp_len, ct) : NULL;
 		nav = nav->next;
 		ct++;
 	}
