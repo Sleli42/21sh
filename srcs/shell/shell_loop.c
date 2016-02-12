@@ -104,6 +104,7 @@ void	init_loop(t_all *all)
 	all->stop = 0;
 	all->already_in_history = 0;
 	all->already_in_select = 0;
+	all->already_in_paste = 0;
 	all->cursor_pos = 0;
 	all->nb_lines = 1;
 	all->curr_line = 1;

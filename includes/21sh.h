@@ -168,6 +168,7 @@ typedef struct			s_all
 	int					cpy_move_left;
 			// --PASTE
 	char				*copy;
+	int					already_in_paste;
 			// --READ
 	t_var				*local_var;
 	int					query;

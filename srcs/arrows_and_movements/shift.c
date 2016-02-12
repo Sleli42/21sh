@@ -50,6 +50,7 @@ void	eof(t_all *all)
 			shift_last_char(all, save++);
 	tputs_termcap("rc");
 	all->line2write += 1;
+	all->nb_lines += (all->already_in_paste) ? 1 : 0;
 }
 
 void	eol(t_all *all)
@@ -78,6 +79,10 @@ void	shift(t_all *all)
 
 	create_cmd(all);
 	ct = 0;
+	// printf("currLine: %d\n", all->curr_line);
+	// printf("nbLine: %d\n", all->nb_lines);
+	// printf("endOfLine: %d\n", END_OF_LINE);
+	// printf("PROMTP + LEN: %lu\n", PROMPT_LEN + ft_strlen(all->cmd) - 1);
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == END_OF_FILE)
 		eof(all);
 	else if (CURSOR == END_OF_LINE)
@@ -85,6 +90,7 @@ void	shift(t_all *all)
 	else if (all->curr_line < all->nb_lines && \
 				all->nb_lines - all->curr_line > 0)
 	{
+		// ft_putstr("HERE\n");
 		ct = all->curr_line;
 		tputs_termcap("sc");
 		while (all->nb_lines - ct > 0)
