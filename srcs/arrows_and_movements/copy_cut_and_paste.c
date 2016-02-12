@@ -90,17 +90,27 @@ void		paste_buffer(t_all *all)
 		// new_str = insert_str_to_str(all->cmd, all->copy, save);
 		tputs_termcap("im");
 		int			i = 0;
+		if (CMD_NULL) /* FAUX */
+			all->cmd_termcaps = create_cmd_dlst();
 		while (all->copy[i])
 		{
 			if (all->copy[i] != '\n')
 				ft_putchar(all->copy[i]);
-			update_cmd_line_insert(all, all->copy[i]);
+			if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+				update_cmd_line_insert(all, all->copy[i]);
+			else
+			{
+				dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(all->copy[i]));
+				CURSOR++;
+			}
 			if (all->nb_lines >= 1)
 				shift(all);
 			i++;
 		}
+		create_cmd(all);
+		// printf("allcmd: |%s|\n", all->cmd);
 		// new_str = insert_str_to_str(all->cmd, all->copy, save);
-		// realloc_termcaps_cmd(all, new_str);
+		realloc_termcaps_cmd(all, all->cmd);
 		// ft_strdel(&new_str);
 		// ft_putstr(all->copy);
 		tputs_termcap("ei");

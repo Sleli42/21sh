@@ -105,39 +105,50 @@ rc      Restaurer la position enregistrée du curseur
 cb      Effacer depuis le début de la ligne jusqu'au curseur
 */
 
-void	goto_latest_commands(t_all *all)
+void	del_histo_multi_lines(t_all *all)
 {
-	size_t ct;
+	int		save;
+	int		ct;
 
-	if (all->pcmd_t == all->cmd_termcaps && all->current_key == K_DOWN && all->index_history == all->pos_history)
-		return ;
-	ct = all->cmd_termcaps->lenght > 1 ? all->cursor_pos : PROMPT_LEN;
-	if (ct > 0)
+	save = all->curr_line;
+	ct = 0;
+	while (save++ < all->nb_lines)
 	{
-		while (ct != PROMPT_LEN)
-		{
-			tputs_termcap("le");
-			ct--;
-		}
+		tputs_termcap("do");
 		tputs_termcap("ce");
-		all->cursor_pos = PROMPT_LEN;
+		ct++;
 	}
-	if (all->cursor_pos == PROMPT_LEN)
-		tputs_termcap("sc");
+	while (ct--)
+		tputs_termcap("up");
+}
+
+void	history_up(t_all *all)
+{
 	if (all->current_key == K_UP && all->index_history > 1)
-	{
+	{											/* IF IS NOT LATEST CMD K_UP */
 		if (all->cursor_pos > PROMPT_LEN)
 		{
-			tputs_termcap("rc");
-			tputs_termcap("ce");
+			if (all->cursor_pos > LINE_LEN * all->curr_line)
+				printf("count nb line 2 del\n");
+			else
+			{
+				tputs_termcap("rc");
+				tputs_termcap("ce");
+			}
 			all->cursor_pos = PROMPT_LEN;
 		}
 		all->index_history--;
 		display_index_cmd(all);
 	}
-	else if (all->current_key == K_UP && all->cmd_termcaps)
+	else if (all->current_key == K_UP && !CMD_NULL)
+	{											/* IF IS LATEST CMD K_UP */
 		display_index_cmd(all);
-	else if (all->current_key == K_DOWN && all->index_history <= all->pos_history - 1)
+	}
+}
+
+void	history_down(t_all *all)
+{
+	if (all->current_key == K_DOWN && all->index_history <= all->pos_history - 1)
 	{
 		all->index_history++;
 		if (all->cursor_pos > PROMPT_LEN || all->index_history == all->pos_history)
@@ -173,6 +184,32 @@ void	goto_latest_commands(t_all *all)
 		}
 		display_index_cmd(all);
 	}
+}
+
+void	goto_latest_commands(t_all *all)
+{
+	size_t ct;
+
+	if (all->pcmd_t == all->cmd_termcaps && all->current_key == K_DOWN && all->index_history == all->pos_history)
+		return ;
+	ct = all->cmd_termcaps->lenght > 1 ? all->cursor_pos : PROMPT_LEN;
+	if (ct > 0)
+	{
+		// printf("nbLines: %d\n", all->nb_lines)
+		while (ct != PROMPT_LEN)
+		{
+			tputs_termcap("le");
+			ct--;
+		}
+		tputs_termcap("ce");
+		all->cursor_pos = PROMPT_LEN;
+	}
+	if (all->cursor_pos == PROMPT_LEN)
+		tputs_termcap("sc");
+	if (all->current_key == K_UP)
+		history_up(all);
+	if (all->current_key == K_DOWN)
+		history_down(all);
 }
 
 int		check_history_file(char **histo)
