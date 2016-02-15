@@ -58,7 +58,6 @@ void	write_buffer(t_all *all)
 	int		ct;
 
 	ct = 0;
-	ft_putstr("-->");
 	ft_putstr(all->buff);
 	if (ft_strlen(all->buff) > 1)
 	{
@@ -175,62 +174,51 @@ void	already_in_func_extended(t_all *all)
 	}
 }
 
-void	parse_cursor_pos(void)
+void	parse_cursor_row(t_all *all, char *buff)
 {
-	char	*buff;
+	char	tmp[2];
+	int		ct;
+	int		i;
 
-	buff = ft_strnew((MAXLEN - 1));
-	if (read(0, buff, (MAXLEN - 1)) == -1)
-	{
-		write(1, "Read error\n", 12);
-		return ;
-	}
-	printf("The buffer: |%s|\n", buff);
+	ct = 0;
+	i = 1;
+	while (buff[i] && buff[i] != ';')
+		tmp[ct++] = buff[i++];
+	tmp[ct] = 0;
+	all->curr_row = ft_atoi(tmp);
 }
 
-void	get_cursor_pos(void)
+void	get_cursor_row(t_all *all)
 {
 	int		fd;
-	int		ret;
-	// char	*buff;
+	int		ct;
+	char	*buff;
+	char	*cpy;
 
-	ret = 0;
-	// buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
+	ct = 0;
+	buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
+	cpy = ft_strnew(20);
 	if ((fd = open("/dev/tty", O_RDWR)) == -1)
 		write(1, "Open error\n", 12);
-	ft_putstr_fd("\033[6n", 0);
-	// while ((ret = (read(0, buff, (MAXLEN - 1)))) > 0)
-	// 	buff[ret] = 0;
-	// buff = NULL;
-	// // buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
-	// if (read(0, buff, (MAXLEN - 1)) == -1)
-	// {
-	// 	// printf("-> %s\n", buff);
-	// 	write(1, "Read error\n", 12);
-	// }
-	// else
-		parse_cursor_pos();
-	// else
-	// {
-	// 	// *buff = 0;
-	// 	printf("|%s|\n", buff);
-	// }
-	// else
-	// 	write(1, "Read error\n", 12);
-	// else
-	// 	ft_putstr(buff);
-	// 	;
-	// buff[ret] = 0;
-	// printf("\nret: %d\n", ret);
-	// printf("\nbuff: %s\n", buff);
-	// if (read(0, buff, (MAXLEN - 1)) == -1)
-	// 	write(1, "Read error\n", 12);
-	// else
-	// {
-		// printf("\nret: %d\n", ret);
-	// 	// buff[ret] = 0;
-		// printf("|%s|\n", buff);
-	// }
+	ft_putstr_fd("\033[6n", fd);
+	while (*buff != '\n')
+	{
+		if ((read(0, buff, (MAXLEN - 1))) == -1)
+			write(1, "Read error\n", 12);
+		if (buff[0] == '\033')
+		{
+			buff++;
+			while (buff[ct])
+			{
+				cpy[ct] = buff[ct];
+				ct++;
+			}
+			cpy[ct] = 0;
+			break ;
+		}
+	}
+	parse_cursor_row(all, cpy);
+	ft_strdel(&cpy);
 }
 
 void	loop(t_all *all)
@@ -254,8 +242,6 @@ void	loop(t_all *all)
 	}
 	else
 	{
-		get_cursor_pos();
-		all->line2write += 1;
 		ft_putchar('\n');
 		(loop(all));
 	}

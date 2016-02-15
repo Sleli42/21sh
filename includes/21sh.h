@@ -149,8 +149,8 @@ typedef struct			s_all
 		// VERTICAL MOVES
 	int					nb_lines;
 	int					curr_line;
-	int					line2write;
 	int					max_rows;
+	int					curr_row;
 		// HISTORY
 	char				**history_buff;
 	int					fd_history;
