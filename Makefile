@@ -51,6 +51,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_EXEC)cmd_parse.c \
 			$(SRCS_EXEC)cmd_exec.c \
 		 	$(SRCS_HISTORY)history.c \
+		 	$(SRCS_HISTORY)history_tools.c \
 		 	$(SRCS_LISTS)clist.c \
 			$(SRCS_LISTS)dlist.c \
 			$(SRCS_LISTS)dlist_tools.c \

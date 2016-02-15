@@ -40,6 +40,7 @@ void	create_and_exec_command(t_all *all)
 								((t_cmd *)all->cmd_termcaps->head)->c)
 		del_dlist2(all->cmd_termcaps);
 	all->line2write += all->nb_lines;
+	// printf("lines: %d\n", all->line2write);
 	if (all->cmd)
 		ft_strdel(&all->cmd);
 	loop(all);
@@ -52,6 +53,27 @@ static void	define_nb_lines(t_all *all)
 		all->nb_lines++;
 }
 
+void	write_buffer(t_all *all)
+{
+	int		ct;
+
+	ct = 0;
+	ft_putstr(all->buff);
+	if (ft_strlen(all->buff) > 1)
+	{
+		while (all->buff[ct])
+		{
+			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(all->buff[ct++]));
+			all->cursor_pos++;
+		}
+	}
+	else
+	{
+		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*all->buff));
+		all->cursor_pos++;
+	}
+}
+
 void	insert_char(t_all *all)
 {
 	all->already_open = 0;
@@ -62,7 +84,7 @@ void	insert_char(t_all *all)
 													&& *all->buff != '\n')
 	{
 		if (*all->buff != '\n')
-			ft_putchar(*all->buff);
+			write_buffer(all);
 		update_cmd_line_insert(all, *all->buff);
 		if (all->nb_lines >= 1)
 			shift(all);
@@ -72,11 +94,7 @@ void	insert_char(t_all *all)
 		if (all->cursor_pos == all->ws.ws_col * all->curr_line)
 			all->curr_line++;
 		if (*all->buff != '\n')
-		{
-			ft_putchar(*all->buff);
-			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*all->buff));
-			all->cursor_pos++;
-		}
+			write_buffer(all);
 	}
 	tputs_termcap("ei");
 }
@@ -177,6 +195,7 @@ void	loop(t_all *all)
 	}
 	else
 	{
+		all->line2write += 1;
 		ft_putchar('\n');
 		(loop(all));
 	}

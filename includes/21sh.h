@@ -484,12 +484,19 @@ typedef	struct			s_keys
 	/*
 	*** ======================= history.c
 	*/
+	void		del_histo_lines(t_all *all, int nblines2del);
+	void		history_down(t_all *all);
+	void		history_up(t_all *all);
+	void		goto_latest_commands(t_all *all);
+	// void		built_history(t_all *all, char *cmd);
+	/*
+	*** ======================= history_tools.c
+	*/
 	char		**parse_history(void);
 	void		add_to_history(t_all *all);
 	void		display_index_cmd(t_all *all);
-	void		goto_latest_commands(t_all *all);
 	int			check_history_file(char **histo);
-	void		built_history(t_all *all, char *cmd);
+	int			count_lines_2del(t_all *all);
 
 /* ----------------------------------------------------------------------
 *** ============================================================ TERMCAPS
