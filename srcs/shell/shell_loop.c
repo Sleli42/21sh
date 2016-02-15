@@ -58,6 +58,7 @@ void	write_buffer(t_all *all)
 	int		ct;
 
 	ct = 0;
+	ft_putstr("-->");
 	ft_putstr(all->buff);
 	if (ft_strlen(all->buff) > 1)
 	{
@@ -174,6 +175,64 @@ void	already_in_func_extended(t_all *all)
 	}
 }
 
+void	parse_cursor_pos(void)
+{
+	char	*buff;
+
+	buff = ft_strnew((MAXLEN - 1));
+	if (read(0, buff, (MAXLEN - 1)) == -1)
+	{
+		write(1, "Read error\n", 12);
+		return ;
+	}
+	printf("The buffer: |%s|\n", buff);
+}
+
+void	get_cursor_pos(void)
+{
+	int		fd;
+	int		ret;
+	// char	*buff;
+
+	ret = 0;
+	// buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
+	if ((fd = open("/dev/tty", O_RDWR)) == -1)
+		write(1, "Open error\n", 12);
+	ft_putstr_fd("\033[6n", 0);
+	// while ((ret = (read(0, buff, (MAXLEN - 1)))) > 0)
+	// 	buff[ret] = 0;
+	// buff = NULL;
+	// // buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
+	// if (read(0, buff, (MAXLEN - 1)) == -1)
+	// {
+	// 	// printf("-> %s\n", buff);
+	// 	write(1, "Read error\n", 12);
+	// }
+	// else
+		parse_cursor_pos();
+	// else
+	// {
+	// 	// *buff = 0;
+	// 	printf("|%s|\n", buff);
+	// }
+	// else
+	// 	write(1, "Read error\n", 12);
+	// else
+	// 	ft_putstr(buff);
+	// 	;
+	// buff[ret] = 0;
+	// printf("\nret: %d\n", ret);
+	// printf("\nbuff: %s\n", buff);
+	// if (read(0, buff, (MAXLEN - 1)) == -1)
+	// 	write(1, "Read error\n", 12);
+	// else
+	// {
+		// printf("\nret: %d\n", ret);
+	// 	// buff[ret] = 0;
+		// printf("|%s|\n", buff);
+	// }
+}
+
 void	loop(t_all *all)
 {
 	init_loop(all);
@@ -195,6 +254,7 @@ void	loop(t_all *all)
 	}
 	else
 	{
+		get_cursor_pos();
 		all->line2write += 1;
 		ft_putchar('\n');
 		(loop(all));
