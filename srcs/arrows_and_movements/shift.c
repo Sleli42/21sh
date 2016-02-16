@@ -40,6 +40,7 @@ void	eof(t_all *all)
 
 	save = all->curr_line;
 	tputs_termcap("sc");
+	all->up_count = 0;
 	if (all->nb_lines - all->curr_line == 0)
 	{
 		tputs_termcap("do");
@@ -49,8 +50,10 @@ void	eof(t_all *all)
 		while (all->nb_lines - save >= 0)
 			shift_last_char(all, save++);
 	tputs_termcap("rc");
-	all->line2write += 1;
-	all->nb_lines += (all->already_in_paste) ? 1 : 0;
+	if (all->curr_row == all->max_rows || \
+		(((all->curr_row * LINE_LEN) + (int)ft_strlen(all->cmd)) \
+		> ((all->max_rows - 1) * LINE_LEN)))
+		tputs_termcap("up");
 }
 
 void	eol(t_all *all)
@@ -78,6 +81,7 @@ void	shift(t_all *all)
 	int		ct;
 
 	create_cmd(all);
+	get_cursor_row(all);
 	ct = 0;
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == END_OF_FILE)
 		eof(all);

@@ -151,11 +151,13 @@ typedef struct			s_all
 	int					curr_line;
 	int					max_rows;
 	int					curr_row;
+	int					up_count;
 		// HISTORY
 	char				**history_buff;
 	int					fd_history;
 	int					pos_history;
 	int					index_history;
+	int					lines2del;
 
 	t_dlist				*cmd_history;
 	int					already_in_history;
@@ -425,6 +427,9 @@ typedef	struct			s_keys
 	/*
 	*** ======================= shell_loop.c
 	*/
+	void		get_cursor_row(t_all *all);
+	void		parse_cursor_row(t_all *all, char *buff);
+
 	void		display_prompt(t_all *all);
 	void		create_and_exec_command(t_all *all);
 	void		read_keys(t_all *all);
@@ -484,7 +489,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= history.c
 	*/
-	void		del_histo_lines(t_all *all, int nblines2del);
+	void		del_histo_lines(int nblines2del);
 	void		history_down(t_all *all);
 	void		history_up(t_all *all);
 	void		goto_latest_commands(t_all *all);

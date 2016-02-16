@@ -28,7 +28,6 @@ void	create_and_exec_command(t_all *all)
 	if (all->cmd)
 	{
 		printf("cmd: |%s|\n", all->cmd);
-		all->line2write += all->nb_lines;
 	}
 	if (!all->cmd[0] == 0 && ft_strlen(all->cmd) > 0)
 	{
@@ -39,8 +38,6 @@ void	create_and_exec_command(t_all *all)
 	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
 								((t_cmd *)all->cmd_termcaps->head)->c)
 		del_dlist2(all->cmd_termcaps);
-	all->line2write += all->nb_lines;
-	// printf("lines: %d\n", all->line2write);
 	if (all->cmd)
 		ft_strdel(&all->cmd);
 	loop(all);
@@ -61,16 +58,18 @@ void	write_buffer(t_all *all)
 	ft_putstr(all->buff);
 	if (ft_strlen(all->buff) > 1)
 	{
+		// ft_putstr("OK JSUIS LA QUOI\n");
 		while (all->buff[ct])
 		{
-			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(all->buff[ct++]));
-			all->cursor_pos++;
+			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(all->buff[ct]));
+			CURSOR++;
+			ct++;
 		}
 	}
 	else
 	{
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(*all->buff));
-		all->cursor_pos++;
+		CURSOR++;
 	}
 }
 
@@ -84,7 +83,7 @@ void	insert_char(t_all *all)
 													&& *all->buff != '\n')
 	{
 		if (*all->buff != '\n')
-			write_buffer(all);
+			ft_putstr(all->buff);
 		update_cmd_line_insert(all, *all->buff);
 		if (all->nb_lines >= 1)
 			shift(all);
@@ -218,6 +217,7 @@ void	get_cursor_row(t_all *all)
 		}
 	}
 	parse_cursor_row(all, cpy);
+	close(fd);
 	ft_strdel(&cpy);
 }
 

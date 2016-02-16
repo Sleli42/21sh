@@ -35,7 +35,7 @@ void		init_windows_size(t_all *all)
 {
 	if (ioctl(init_tty(), TIOCGWINSZ, &all->ws) == -1)
 		term_error("ioctl");
-	all->max_rows = tgetnum("co");
+	all->max_rows = tgetnum("li");
 }
 
 int			init_tty(void)

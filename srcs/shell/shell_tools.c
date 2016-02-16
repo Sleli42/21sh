@@ -26,9 +26,11 @@ char	goto_elem(t_cmd *cmd, int pos)
 
 void	update_cmd_line_insert(t_all *all, char char2add)
 {
+	// printf("CURSOR: %d\n", CURSOR);
 	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
-		dlst_cmd_new(char2add), (all->cursor_pos - PROMPT_LEN) + 1);
-	all->cursor_pos++;
+		dlst_cmd_new(char2add), (CURSOR - PROMPT_LEN) + 1);
+	CURSOR++;
+	// printf("CURSOR: %d\n", CURSOR);
 }
 
 void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)

@@ -43,7 +43,6 @@ t_all		*init_all(char **env)
 	all->pipe = NULL;
 	all->nav = NULL;
 	all->tmp_cmd = NULL;
-	all->line2write = 1;
 	all->already_autocomplete = 0;
 	all->already_open = 0;
 	init_history(all);

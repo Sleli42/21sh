@@ -21,12 +21,14 @@ t_dlist2		*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos)
 	ct = 1;
 	//pos = (pos == 0) ? 1 : pos;
 	//display_dlst(lst);
-	//printf("cursor on node : %d\n", pos);
+	// printf("cursor on node : %d\n", pos);
 	while (tmp && ct <= pos)
 	{
 		if (pos == ct)
 		{
-			//printf("node: %c\n", tmp->c);
+			// printf("node: |%c|\n", tmp->c);
+			// printf("tmp->next : |%c|\n", tmp->next->c);
+			// printf("tmp->prev : |%c|\n", tmp->prev->c);
 			if (tmp->next == NULL)
 			{
 				//printf("tail: %c && tmp: %c\n", lst->tail->c, tmp->c);

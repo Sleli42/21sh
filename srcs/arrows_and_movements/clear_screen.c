@@ -18,7 +18,6 @@ void	ft_clear_screen(t_all *all)
 	{
 		tputs_termcap("cl");
 		display_prompt(all);
-		all->line2write = 1;
 	}
 	else
 	{
@@ -26,6 +25,5 @@ void	ft_clear_screen(t_all *all)
 		display_prompt(all);
 		create_cmd(all);
 		ft_putstr(all->cmd);
-		all->line2write = all->nb_lines;
 	}
 }

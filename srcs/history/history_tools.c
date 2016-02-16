@@ -114,7 +114,6 @@ int		count_lines_2del(t_all *all)
 	ret = all->curr_line;
 	while (CURSOR > ret * LINE_LEN)
 		ret++;
-	all->line2write += ret;
 	return (ret);
 }
 

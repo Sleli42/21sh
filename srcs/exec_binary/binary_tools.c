@@ -29,12 +29,11 @@ char	*create_path(char *path, char *bin)
 	return (tmp);
 }
 
-void	write_error(t_all *all, char *cmd_error)
+void	write_error(char *cmd_error)
 {
 	ft_putstr("Command: '");
 	ft_putstr(cmd_error);
 	ft_putstr("' not found\n");
-	all->line2write += all->nb_lines;
 }
 
 void	exec_right_binary(t_all *all, char **argv_bin)
@@ -59,7 +58,7 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 		ct++;
 	}
 	if (!stop)
-		write_error(all, argv_bin[0]);
+		write_error(argv_bin[0]);
 }
 
 void	exec_binary(char *bin, char **argv_bin, char **env)
