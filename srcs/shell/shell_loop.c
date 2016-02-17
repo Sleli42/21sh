@@ -58,7 +58,6 @@ void	write_buffer(t_all *all)
 	ft_putstr(all->buff);
 	if (ft_strlen(all->buff) > 1)
 	{
-		// ft_putstr("OK JSUIS LA QUOI\n");
 		while (all->buff[ct])
 		{
 			dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(all->buff[ct]));
@@ -119,7 +118,6 @@ void	read_keys(t_all *all)
 void	init_loop(t_all *all)
 {
 	all->stop = 0;
-	all->already_in_history = 0;
 	all->already_in_select = 0;
 	all->already_in_paste = 0;
 	all->cursor_pos = 0;
@@ -233,8 +231,9 @@ void	loop(t_all *all)
 		already_in_func_extended(all);
 		read_keys(all);
 	}
-	if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
-								((t_cmd *)all->cmd_termcaps->head)->c)
+	// if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
+	// 							((t_cmd *)all->cmd_termcaps->head)->c)
+	if (!CMD_NULL)
 	{
 		if (all->lv)
 			find_lv(all, all->lv);

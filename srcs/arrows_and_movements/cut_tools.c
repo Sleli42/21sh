@@ -16,11 +16,11 @@ void	cut_delete_char(t_all *all, int count)
 {
 	while (count > 0)
 	{
-		dlst_del_one2(all->cmd_termcaps, (all->cursor_pos - PROMPT_LEN) + 1);
+		dlst_del_one2(all->cmd_termcaps, (CURSOR - PROMPT_LEN) + 1);
 		tputs_termcap("dc");
 		tputs_termcap("le");
 		count--;
-		all->cursor_pos--;
+		CURSOR--;
 		if (all->nb_lines > 1)
 			del_char_multi_lines(all);
 	}
@@ -28,10 +28,10 @@ void	cut_delete_char(t_all *all, int count)
 
 void	cut_right(t_all *all)
 {
-	while (all->cursor_pos > all->save_cursor_pos)
+	while (CURSOR > all->save_cursor_pos)
 	{
-		dlst_del_one2(all->cmd_termcaps, all->cursor_pos - PROMPT_LEN);
-		all->cursor_pos--;
+		dlst_del_one2(all->cmd_termcaps, CURSOR - PROMPT_LEN);
+		CURSOR--;
 		tputs_termcap("le");
 		tputs_termcap("dc");
 		if (all->nb_lines > 1)
@@ -45,11 +45,11 @@ void	cut_left(t_all *all)
 
 	count = 0;
 	all->stop = 0;
-	if (all->cursor_pos == 1)
+	if (CURSOR == 1)
 		all->stop += 1;
-	while (all->cursor_pos < all->save_cursor_pos)
+	while (CURSOR < all->save_cursor_pos)
 	{
-		all->cursor_pos++;
+		CURSOR++;
 		count++;
 		tputs_termcap("nd");
 	}

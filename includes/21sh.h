@@ -55,9 +55,9 @@
 # define	PROMPT_LEN		3
 # define	LINE_LEN		all->ws.ws_col
 # define	CURSOR			all->cursor_pos
-# define	CMD_NULL		(!all->cmd_termcaps || !all->cmd_termcaps->head || !all->cmd_termcaps->head->c)
+# define	CMD_NULL		(!all->cmd_termcaps || !all->cmd_termcaps->head || \
+													!all->cmd_termcaps->head->c)
 // # define	AUTOCOMP_NULL	(!all->list_dir || !all->list_dir->head || !all->list_dir->head->arg)
-
 # define	SPLIT_T			" ;&<>()=|*/{}\"\'`\n"
 
 typedef struct dirent	t_dirent;

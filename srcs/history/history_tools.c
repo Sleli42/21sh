@@ -73,18 +73,9 @@ void	display_index_cmd(t_all *all)
 
 	ct = 0;
 	tmp = NULL;
-	// if (all->history_buff != NULL)
-	// {
-	//	write(1, "bug\n", 4);
-		// if (all->history_buff[0] != NULL)
-		// {
-			if (all->history_buff)
-				del_array(&all->history_buff);
-			all->history_buff = parse_history();
-		// }
-	// }
-	// exit(printf("here\n"));
-			// if ()
+	if (all->history_buff)
+		del_array(&all->history_buff);
+	all->history_buff = parse_history();
 	if (!check_history_file(all->history_buff))
 	{
 		exit(printf("nohi\n")); /* gestion erreur */
@@ -92,7 +83,6 @@ void	display_index_cmd(t_all *all)
 	}
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
-	// exit(printf("here\n"));
 	tmp = ft_strdup(all->history_buff[all->index_history - 1] + (ct + 1));
 	ft_putstr(tmp);
 	realloc_termcaps_cmd(all, tmp);

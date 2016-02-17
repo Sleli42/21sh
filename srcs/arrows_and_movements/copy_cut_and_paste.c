@@ -16,7 +16,7 @@ void		copy_buffer(t_all *all)
 {
 	if (!all->already_in_select)
 	{
-		all->save_cursor_pos = all->cursor_pos - PROMPT_LEN + 1;
+		all->save_cursor_pos = CURSOR - PROMPT_LEN + 1;
 		all->already_in_select = 1;
 		all->cpy_move_right = 0;
 		all->cpy_move_left = 0;
@@ -36,7 +36,7 @@ void		cut_buffer(t_all *all)
 {
 	if (!all->already_in_select)
 	{
-		all->save_cursor_pos = all->cursor_pos;
+		all->save_cursor_pos = CURSOR;
 		all->already_in_select = 1;
 		all->cpy_move_right = 0;
 		all->cpy_move_left = 0;
@@ -63,7 +63,7 @@ void		paste_copy_in_cmd(t_all *all)
 	{
 		if (all->copy[i] != '\n')
 			ft_putchar(all->copy[i]);
-		if (all->cursor_pos - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
+		if (CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
 			update_cmd_line_insert(all, all->copy[i]);
 		else
 		{
@@ -84,7 +84,7 @@ void		paste_buffer(t_all *all)
 	if (all->copy)
 	{
 		all->already_in_paste = 1;
-		save = (all->cursor_pos - PROMPT_LEN) + 1;
+		save = (CURSOR - PROMPT_LEN) + 1;
 		tputs_termcap("im");
 		paste_copy_in_cmd(all);
 		tputs_termcap("ei");

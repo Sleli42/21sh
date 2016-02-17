@@ -79,7 +79,7 @@ void	horizontal_moves(t_all *all)
 		&& ((size_t)all->cursor_pos - PROMPT_LEN) < all->cmd_termcaps->lenght)
 	{
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, \
-									(all->cursor_pos - PROMPT_LEN) + 1));
+									(CURSOR - PROMPT_LEN) + 1));
 	}
 	if (all->current_key == K_LEFT && CURSOR > PROMPT_LEN)
 	{
