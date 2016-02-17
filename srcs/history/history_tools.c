@@ -68,10 +68,10 @@ void	add_to_history(t_all *all)
 
 void	display_index_cmd(t_all *all)
 {
-	int		ct = 0;
-	int		i = 0;
+	int		ct;
 	char	*tmp;
 
+	ct = 0;
 	tmp = NULL;
 	// if (all->history_buff != NULL)
 	// {
@@ -94,7 +94,6 @@ void	display_index_cmd(t_all *all)
 		ct++;
 	// exit(printf("here\n"));
 	tmp = ft_strdup(all->history_buff[all->index_history - 1] + (ct + 1));
-	all->cursor_pos = i;
 	ft_putstr(tmp);
 	realloc_termcaps_cmd(all, tmp);
 }

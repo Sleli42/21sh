@@ -489,7 +489,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= history.c
 	*/
-	void		del_histo_lines(int nblines2del);
+	void		del_histo_lines(t_all *all, int nblines2del);
 	void		history_down(t_all *all);
 	void		history_up(t_all *all);
 	void		goto_latest_commands(t_all *all);

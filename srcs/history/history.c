@@ -24,36 +24,56 @@ void	history_up(t_all *all)
 	{											/* IF IS NOT LATEST CMD K_UP */
 		if (all->cursor_pos > PROMPT_LEN)
 		{
+			del_histo_lines(all, all->lines2del);
+	// 		if (all->lines2del > 1 && (all->curr_row * LINE_LEN) + \
+	// 	(int)ft_strlen(all->cmd) > ((all->max_rows - 1) * LINE_LEN))
+	// {
+	// 	// printf("\n\nCURSOR: %d\n\n", CURSOR);
+	// 	if (CURSOR > PROMPT_LEN)
+	// 	{
+	// 		// printf("CURSOR: %d\n", CURSOR);
+	// 		while (CURSOR-- > PROMPT_LEN)
+	// 			tputs_termcap("le");
+	// 	}
+	// 	display_prompt(all);
+	// 	tputs_termcap("sc");
+	// 	// ft_putstr("\nOK\n");
+	// }
+	// 	// tputs_termcap("up"), ft_putstr("YES");
+	// // ft_putstr("\nRESTORE\n");
+	// tputs_termcap("rc");
+	// tputs_termcap("ce");
 			// del_histo_lines(all, count_lines_2del(all));
 			// if (all->cursor_pos > LINE_LEN * all->curr_line)
 			// 	printf("count nb line 2 del\n");
 			// else
 			// {
 			// ft_putchar('*');
-				tputs_termcap("rc");
-				// printf("currRow: %d\n", all->curr_row);
-				if (all->curr_row == all->max_rows || \
-					(((all->curr_row * LINE_LEN) + (int)ft_strlen(all->cmd)) \
-					> ((all->max_rows - 1) * LINE_LEN)))
-				{
-					ft_putstr("YES\n");
-					int			i = 1;
-					while (i++ < all->lines2del)
-						tputs_termcap("up");
-				}
-				tputs_termcap("ce");
+				// tputs_termcap("rc");
+				// // printf("currRow: %d\n", all->curr_row);
+				// // if (all->curr_row == all->max_rows || \
+				// // 	(((all->curr_row * LINE_LEN) + (int)ft_strlen(all->cmd)) \
+				// // 	> ((all->max_rows - 1) * LINE_LEN)))
+				// // {
+					// ft_putstr("YES\n");
+				// // 	int			i = 1;
+				// // 	while (i++ < all->lines2del)
+				// // 		tputs_termcap("up");
+				// // }
+				// tputs_termcap("ce");
+				// ft_putchar('*');
 			// if (all->line2write >= all->max_rows)
 			// 	ft_putchar('*');
 			// }
 			all->cursor_pos = PROMPT_LEN;
-			// tputs_termcap("sc");
 		}
 		all->index_history--;
 		display_index_cmd(all);
 	}
 	else if (all->current_key == K_UP && !CMD_NULL)
 	{											/* IF IS LATEST CMD K_UP */
-		display_index_cmd(all);
+		// display_index_cmd(all);
+		;
 	}
 }
 
@@ -64,8 +84,9 @@ void	history_down(t_all *all)
 		all->index_history++;
 		if (all->cursor_pos > PROMPT_LEN || all->index_history == all->pos_history)
 		{
-			tputs_termcap("rc");
-			tputs_termcap("ce");
+			del_histo_lines(all, all->lines2del);
+			// tputs_termcap("rc");
+			// tputs_termcap("ce");
 			all->cursor_pos = PROMPT_LEN;
 		}
 		if (all->index_history == all->pos_history)
@@ -97,19 +118,52 @@ void	history_down(t_all *all)
 	}
 }
 
-void	del_histo_lines(int nblines2del)
+void	del_histo_lines(t_all *all, int nblines2del)
 {
 	int		save;
 
 	save = 1;
+	(void)all;
 	// get_cursor_row(all);
 	// printf("curr row: %d\n", all->curr_row);
+	// printf("lines2del: %d\n", nblines2del);
+	// printf("all->cmd: %s\n", all->cmd);
 	while (save++ < nblines2del)
 	{
 		tputs_termcap("ce");
 		tputs_termcap("cb");
 		tputs_termcap("up");
 	}
+	if (all->lines2del > 1 && (all->curr_row * LINE_LEN) + \
+		(int)ft_strlen(all->cmd) > ((all->max_rows - 1) * LINE_LEN))
+	{
+		// printf("\n\nCURSOR: %d\n\n", CURSOR);
+		if (CURSOR > PROMPT_LEN)
+		{
+			// printf("CURSOR: %d\n", CURSOR);
+			while (CURSOR-- > PROMPT_LEN)
+				tputs_termcap("le");
+		}
+		display_prompt(all);
+		tputs_termcap("sc");
+		// ft_putstr("\nOK\n");
+	}
+		// tputs_termcap("up"), ft_putstr("YES");
+	// ft_putstr("\nRESTORE\n");
+	tputs_termcap("rc");
+	tputs_termcap("ce");
+	// ft_putchar('|');
+	// if ((nblines2del > 1) && (all->curr_row * LINE_LEN) + \
+	// 	(int)ft_strlen(all->cmd) > ((all->max_rows - 1) * LINE_LEN))
+	// {
+	// 	tputs_termcap("up");
+	// 	tputs_termcap("ce");
+	// 	ft_putchar('|');
+	// 	tputs_termcap("sc");
+	// }
+	// (nblines2del > 1) ? tputs_termcap("sc") : NULL;
+	// (nblines2del <= 1) ? tputs_termcap("sc") : NULL;
+	// ft_putchar('|');
 	// if (all->line2write >= all->max_rows)
 	// {
 	// 	// ft_putstr("\n\nYES\n\n");
@@ -151,12 +205,13 @@ void	goto_latest_commands(t_all *all)
 	// 		all->cursor_pos = PROMPT_LEN;
 	// 	}
 	// }
+	// printf("CURSOR : %d\n", CURSOR);
 	if (all->cursor_pos == PROMPT_LEN)
 	{
 		// ft_putstr("YES\n");
 		tputs_termcap("sc");
 	}
-	del_histo_lines(all->lines2del);
+	// del_histo_lines(all->lines2del);
 	if (all->current_key == K_UP)
 		history_up(all);
 	if (all->current_key == K_DOWN)

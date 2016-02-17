@@ -14,6 +14,7 @@
 
 void	ft_clear_screen(t_all *all)
 {
+	// tputs_termcap("sc");
 	if (all->cmd_termcaps->lenght == 0)
 	{
 		tputs_termcap("cl");
