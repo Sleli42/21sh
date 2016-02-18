@@ -33,14 +33,19 @@ void	erase_and_replace(t_all *all, char *cmd)
 
 	argv = NULL;
 	redirect = NULL;
-	redirect = ft_strsplit(cmd, '>');
-	redirect[1] = ft_epur_str(redirect[1]);
-	if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-		write(1, "err0r1\n", 6);//shell_error("OPEN", redirect[1]);
-	argv = ft_strsplit(redirect[0], ' ');
-	dupstdout = dup(1);
-	dup_and_exec(all, argv, dupstdout, 1);
-	del_array(&redirect);
+	if (check_aggregations(cmd))
+		exec_aggregations(all, cmd);
+	else
+	{
+		redirect = ft_strsplit(cmd, '>');
+		redirect[1] = ft_epur_str(redirect[1]);
+		if ((all->fd2open = open(redirect[1], O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+			write(1, "err0r1\n", 6);
+		argv = ft_strsplit(redirect[0], ' ');
+		dupstdout = dup(1);
+		dup_and_exec(all, argv, dupstdout, 1);
+		del_array(&redirect);
+	}
 }
 
 void	add_to_end(t_all *all, char *cmd)

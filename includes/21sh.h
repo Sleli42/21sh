@@ -184,6 +184,12 @@ typedef struct			s_all
 	char				**pipe;
 	char				*oldpwd;
 	char				*cmd;
+		// AGGREGATIONS
+	char				**cmd_array;
+	char				*agg2split;
+	char				*file;
+	char				agg;
+		//
 	int					fd2open;
 	int					stop;
 	int					skip;
@@ -482,6 +488,8 @@ typedef	struct			s_keys
 	*** ======================= redirection_tools.c
 	*/
 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
+	int			check_aggregations(char *cmd);
+	void		exec_aggregations(t_all *all, char *cmd);
 
 /* ---------------------------------------------------------------------
 *** ============================================================ HISTORY
@@ -493,7 +501,6 @@ typedef	struct			s_keys
 	void		history_down(t_all *all);
 	void		history_up(t_all *all);
 	void		goto_latest_commands(t_all *all);
-	// void		built_history(t_all *all, char *cmd);
 	/*
 	*** ======================= history_tools.c
 	*/

@@ -1,0 +1,14 @@
+total 207
+drwxr-xr-x   7 lubaujar  2014_paris   4096 Feb 18 15:03 .
+drwx------  15 lubaujar  2014_paris   4096 Feb 18 15:02 ..
+-rw-r--r--   1 lubaujar  2014_paris   2086 Feb 18 14:52 .21sh_history
+drwxr-xr-x   8 lubaujar  2014_paris   4096 Feb 18 15:02 .git
+-rw-r--r--   1 lubaujar  2014_paris    246 Feb 17 15:33 .gitignore
+-rwxr-xr-x   1 lubaujar  2014_paris  70004 Feb 18 14:52 42sh
+-rw-r--r--   1 lubaujar  2014_paris   3492 Feb 17 15:33 Makefile
+-rw-r--r--   1 lubaujar  2014_paris     41 Feb 17 15:33 README.md
+-rw-r--r--   1 lubaujar  2014_paris      0 Feb 18 15:06 file
+drwxr-xr-x   2 lubaujar  2014_paris   4096 Feb 17 15:33 includes
+drwxr-xr-x   3 lubaujar  2014_paris   4096 Feb 18 14:26 libft
+drwxr-xr-x   2 lubaujar  2014_paris   4096 Feb 18 14:52 objs
+drwxr-xr-x  12 lubaujar  2014_paris   4096 Feb 17 15:33 srcs

@@ -32,7 +32,7 @@ char	*ft_epur_str(char *s)
 		{
 			while ((s[i] && s[i] == ' ') || (s[i] && s[i] == '\t'))
 				i++;
-			if (s[i + 1] != '\0')
+			if (s[i] != '\0')
 				ret[j++] = ' ';
 			else
 				break ;

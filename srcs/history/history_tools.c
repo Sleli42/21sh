@@ -105,14 +105,3 @@ int		count_lines_2del(t_all *all)
 		ret++;
 	return (ret);
 }
-
-
-
-
-
-
-
-
-
-
-
