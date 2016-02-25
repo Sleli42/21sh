@@ -68,54 +68,11 @@ char	*get_good_file(char **array)
 {
 	while (array && *array)
 	{
-		if (!ft_strcmp(*array, "&>"))
+		if (!ft_strcmp(*array, "&>") || !ft_strcmp(*array, ">&"))
 			return (*(array + 1));
 		array++;
 	}
 	return (NULL);
-	// int		ct;
-	// int		i;
-	// int		j;
-	// char	*ret;
-
-	// ct = 0;
-	// i = 0;
-	// j = 0;
-	// if (!(ret = malloc(sizeof(char) * 50)))
-	// 	error("MALLOC");
-	// while (array && array[ct])
-	// {
-	// 	i = 0;
-	// 	while (array[ct] && array[ct][i])
-	// 	{
-	// 		if ((array[ct][i] == '&' && array[ct][i + 1] == '>')
-	// 			|| (array[ct][i] == '&' && array[ct][i + 1] == '<'))
-	// 		{
-	// 			if (array[ct][i + 2])
-	// 			{
-	// 				i += 1;
-	// 				while (array[ct][i])
-	// 					ret[j++] = array[ct][++i];
-	// 				ret[j] = 0;
-	// 				return (ret);
-	// 			}
-	// 			else
-	// 			{
-	// 				ct += 1;
-	// 				while (array[ct][j])
-	// 				{
-	// 					ret[j] = array[ct][j];
-	// 					j++;
-	// 				}
-	// 				ret[j] = 0;
-	// 				return (ret);
-	// 			}
-	// 		}
-	// 		i++;
-	// 	}
-	// 	ct++;
-	// }
-	// return (NULL);
 }
 
 int		count_arg_agg(char **array, char *file)
@@ -130,27 +87,6 @@ int		count_arg_agg(char **array, char *file)
 		array++;
 	}
 	return (ret);
-	// int		ret;
-	// int		stop;
-	// int		i;
-	// int		j;
-
-	// i = 0;
-	// stop = 0;
-	// ret = 0;
-	// while (array && array[i])
-	// {
-	// 	j = 0;
-	// 	while (array[i] && array[i][j])
-	// 	{
-	// 		if (i > 1 && array[i][0] != '-')
-	// 			return (ret);
-	// 		j++;
-	// 	}
-	// 	i++;
-	// 	(!stop) ? ret++ : stop--;
-	// }
-	// return (ret);
 }
 
 char	**create_argv_cmd(char **split_agg, char *file)
@@ -165,15 +101,20 @@ char	**create_argv_cmd(char **split_agg, char *file)
 		error("MALLOC");
 	while (split_agg && *split_agg)
 	{
-		if (ft_strcmp(*split_agg, "&>") && ft_strcmp(*split_agg, file))
+		if ((ft_strcmp(*split_agg, "&>") && ft_strcmp(*split_agg, file))
+			&& (ft_strcmp(*split_agg, ">&") && ft_strcmp(*split_agg, file)))
+		{
+			// printf("ret[i]: |%s|\n", ret[i]);
+			// printf("*split: |%s|\n", *split_agg);
 			ret[i++] = ft_strdup(*split_agg);
+		}
 		split_agg++;
 	}
 	ret[i] = NULL;
 	return (ret);
 }
 
-char	*rework_cmd(char *cmd)
+char	*rework_cmd_agg1(char *cmd)
 {
 	char	*ret;
 	int		i;
@@ -193,7 +134,7 @@ char	*rework_cmd(char *cmd)
 			ret[j++] = cmd[i++];
 		}
 		ret[j] = '\0';
-		// printf("ret: |%s|\n", ret);
+			// printf("ret: |%s|\n", ret);
 	}
 	return (ret);
 }
@@ -203,19 +144,123 @@ void	exec_agg1(t_all *all, char *cmd)
 	char	**split_agg;
 	char	**split_2exec;
 	char	*file;
-	// char	*tmp;
-	// int		ct;
+	int		dupout = dup(1);
+	int		duperr = dup(2);
 
-	cmd = rework_cmd(cmd);
+	cmd = rework_cmd_agg1(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
 	file = get_good_file(split_agg);
-	// printf("file found: %s\n", file);
+	if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		write(1, "err0r1\n", 6);
 	split_2exec = create_argv_cmd(split_agg, file);
+	dup2(all->fd2open, 1);
+	dup2(all->fd2open, 2);
+	close(all->fd2open);
 	exec_right_binary(all, split_2exec);
-	// display_array(split_2exec);
-	// printf("test: |%s|\n", split_agg[ft_tablen(split_agg)]);
-	// printf("test - 1: |%s|\n", split_agg[ft_tablen(split_agg) - 1]);
-	// printf("[end]file: |%s|\n", file);
+	dup2(dupout, 1);
+	dup2(duperr, 2);
+	del_array(&split_agg);
+	del_array(&split_2exec);
+}
+
+char	*rework_cmd_agg2(char *cmd)
+{
+	char	*ret;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	ret = ft_strnew(ft_strlen(cmd) + 20);
+	if (ret && cmd)
+	{
+		while (cmd[i])
+		{
+			if ((cmd[i] == '>' && cmd[i - 1] != ' ')
+				|| (cmd[i - 1] == '&' && cmd[i] != ' '))
+				ret[j++] = ' ';
+			ret[j++] = cmd[i++];
+		}
+		ret[j] = '\0';
+			// printf("ret: |%s|\n", ret);
+	}
+	return (ret);
+}
+
+int		check_error_agg2(char **split, char *file)
+{
+	while (split && ft_strcmp(*split, ">&"))
+		split++;
+	if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
+	{
+		ft_putstr("sh: ");
+		ft_putnbr(ft_atoi(file));
+		ft_putstr(": Bad file descriptor\n");
+		return (1);
+	}
+	else if (ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2)
+	{
+		ft_putstr("sh: ");
+		ft_putstr(file);
+		ft_putstr(": ambiguous redirect\n");
+		return (1);
+	}
+	return (0);
+}
+
+void	exec_agg2(t_all *all, char *cmd)
+{
+	char	**split_agg;
+	char	**split_2exec;
+	char	*file;
+	int		dupout = dup(1);
+	int		duperr = dup(2);
+
+	// ft_putstr("HERE\n");
+	split_2exec = NULL;
+	cmd = rework_cmd_agg2(cmd);
+	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
+	file = get_good_file(split_agg);
+	if (!check_error_agg2(split_agg, file))
+	{
+		if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+			write(1, "err0r1\n", 6);
+		split_2exec = create_argv_cmd(split_agg, file);
+		// display_array(split_2exec);
+		dup2(all->fd2open, 1);
+		dup2(all->fd2open, 2);
+		close(all->fd2open);
+		exec_right_binary(all, split_2exec);
+		dup2(dupout, 1);
+		dup2(duperr, 2);
+		del_array(&split_2exec);
+	}
+	del_array(&split_agg);
+	// printf("filefnd: |%s|\n", file);
+	// printf("char: |%c|\n", file[0]);
+	// printf("digit: |%d|\n", ft_isdigit(file[0]));
+	// int		try = ft_isdigit(file[0]);
+	// if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
+	// {
+	// 	ft_putstr("sh: ");
+	// 	ft_putnbr(ft_atoi(file));
+	// 	ft_putstr(": Bad file descriptor\n");
+	// }
+	// else
+	// {
+	// 	if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+	// 		write(1, "err0r1\n", 6);
+	// 	split_2exec = create_argv_cmd(split_agg, file);
+	// 	// display_array(split_2exec);
+	// 	dup2(all->fd2open, 1);
+	// 	dup2(all->fd2open, 2);
+	// 	close(all->fd2open);
+	// 	exec_right_binary(all, split_2exec);
+	// 	dup2(dupout, 1);
+	// 	dup2(duperr, 2);
+	// 	del_array(&split_2exec);
+	// }
+	// del_array(&split_agg);
 }
 
 void	exec_aggregations(t_all *all, char *cmd)
@@ -240,6 +285,8 @@ void	exec_aggregations(t_all *all, char *cmd)
 		// del_array(&split);
 
 	}
+	else if (*tmp == '>' && *(tmp + 1) == '&')
+		exec_agg2(all, cmd);
 	// ls -l &> test; cat test
 	// total 178
 	// -rwxr-xr-x   1 lubaujar  2014_paris  70012 Feb 19 11:36 42sh
