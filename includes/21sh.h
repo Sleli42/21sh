@@ -487,6 +487,7 @@ typedef	struct			s_keys
 	/*
 	*** ======================= redirection_tools.c
 	*/
+	void		display_array(char **array);
 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
 	int			check_aggregations(char *cmd);
 	void		exec_aggregations(t_all *all, char *cmd);

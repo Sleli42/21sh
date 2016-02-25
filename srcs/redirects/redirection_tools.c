@@ -66,87 +66,139 @@ char	*check_file_in_cmd(char *cmd)
 
 char	*get_good_file(char **array)
 {
-	int		ct;
-	int		i;
-	int		j;
-	char	*ret;
-
-	ct = 0;
-	i = 0;
-	j = 0;
-	if (!(ret = malloc(sizeof(char) * 50)))
-		error("MALLOC");
-	while (array && array[ct])
+	while (array && *array)
 	{
-		i = 0;
-		while (array[ct] && array[ct][i])
-		{
-			if ((array[ct][i] == '&' && array[ct][i + 1] == '>')
-				|| (array[ct][i] == '&' && array[ct][i + 1] == '<'))
-			{
-				if (array[ct][i + 2])
-				{
-					i += 1;
-					while (array[ct][i])
-						ret[j++] = array[ct][++i];
-					ret[j] = 0;
-					return (ret);
-				}
-				else
-				{
-					ct += 1;
-					while (array[ct][j])
-					{
-						ret[j] = array[ct][j];
-						j++;
-					}
-					ret[j] = 0;
-					return (ret);
-				}
-			}
-			i++;
-		}
-		ct++;
+		if (!ft_strcmp(*array, "&>"))
+			return (*(array + 1));
+		array++;
 	}
 	return (NULL);
+	// int		ct;
+	// int		i;
+	// int		j;
+	// char	*ret;
+
+	// ct = 0;
+	// i = 0;
+	// j = 0;
+	// if (!(ret = malloc(sizeof(char) * 50)))
+	// 	error("MALLOC");
+	// while (array && array[ct])
+	// {
+	// 	i = 0;
+	// 	while (array[ct] && array[ct][i])
+	// 	{
+	// 		if ((array[ct][i] == '&' && array[ct][i + 1] == '>')
+	// 			|| (array[ct][i] == '&' && array[ct][i + 1] == '<'))
+	// 		{
+	// 			if (array[ct][i + 2])
+	// 			{
+	// 				i += 1;
+	// 				while (array[ct][i])
+	// 					ret[j++] = array[ct][++i];
+	// 				ret[j] = 0;
+	// 				return (ret);
+	// 			}
+	// 			else
+	// 			{
+	// 				ct += 1;
+	// 				while (array[ct][j])
+	// 				{
+	// 					ret[j] = array[ct][j];
+	// 					j++;
+	// 				}
+	// 				ret[j] = 0;
+	// 				return (ret);
+	// 			}
+	// 		}
+	// 		i++;
+	// 	}
+	// 	ct++;
+	// }
+	// return (NULL);
 }
 
-int		count_arg_before_agg(char **array)
+int		count_arg_agg(char **array, char *file)
 {
 	int		ret;
-	int		stop;
+
+	ret = 0;
+	while (array && *array)
+	{
+		if (ft_strcmp(*array, "&>") && ft_strcmp(*array, file))
+			ret++;
+		array++;
+	}
+	return (ret);
+	// int		ret;
+	// int		stop;
+	// int		i;
+	// int		j;
+
+	// i = 0;
+	// stop = 0;
+	// ret = 0;
+	// while (array && array[i])
+	// {
+	// 	j = 0;
+	// 	while (array[i] && array[i][j])
+	// 	{
+	// 		if (i > 1 && array[i][0] != '-')
+	// 			return (ret);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// 	(!stop) ? ret++ : stop--;
+	// }
+	// return (ret);
+}
+
+char	**create_argv_cmd(char **split_agg, char *file)
+{
+	char	**ret;
+	int		i;
+
+	ret = NULL;
+	i = 0;
+	if (!(ret = (char **)malloc(sizeof(char *) * \
+					count_arg_agg(split_agg, file) + 1)))
+		error("MALLOC");
+	while (split_agg && *split_agg)
+	{
+		if (ft_strcmp(*split_agg, "&>") && ft_strcmp(*split_agg, file))
+			ret[i++] = ft_strdup(*split_agg);
+		split_agg++;
+	}
+	ret[i] = NULL;
+	return (ret);
+}
+
+char	*rework_cmd(char *cmd)
+{
+	char	*ret;
 	int		i;
 	int		j;
 
 	i = 0;
-	stop = 0;
-	ret = 0;
-	while (array && array[i])
+	j = 0;
+	ret = ft_strnew(ft_strlen(cmd) + 20);
+	if (ret && cmd)
 	{
-		j = 0;
-		while (array[i] && array[i][j])
+		while (cmd[i])
 		{
-			if (i > 1 && array[i][0] != '-')
-				return (ret);
-			j++;
+			if ((cmd[i] == '&' && cmd[i - 1] != ' ')
+				|| (cmd[i - 1] == '>' && cmd[i] != ' ')
+				|| (cmd[i - 1] == '<' && cmd[i] != ' '))
+				ret[j++] = ' ';
+			ret[j++] = cmd[i++];
 		}
-		i++;
-		(!stop) ? ret++ : stop--;
+		ret[j] = '\0';
+		// printf("ret: |%s|\n", ret);
 	}
 	return (ret);
 }
 
-char	**create_argv_cmd(char **split_agg)
-{
-	// char	**ret;
-	int		count;
-
-	count = count_arg_before_agg(split_agg);
-	printf("count: %d\n", count);
-	return (NULL);
-}
-
-void	exec_agg1(char *cmd)
+void	exec_agg1(t_all *all, char *cmd)
 {
 	char	**split_agg;
 	char	**split_2exec;
@@ -154,12 +206,13 @@ void	exec_agg1(char *cmd)
 	// char	*tmp;
 	// int		ct;
 
+	cmd = rework_cmd(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
 	file = get_good_file(split_agg);
-	/* HERE */
-	split_2exec = create_argv_cmd(split_agg);
-	/* HERE */
-
+	// printf("file found: %s\n", file);
+	split_2exec = create_argv_cmd(split_agg, file);
+	exec_right_binary(all, split_2exec);
+	// display_array(split_2exec);
 	// printf("test: |%s|\n", split_agg[ft_tablen(split_agg)]);
 	// printf("test - 1: |%s|\n", split_agg[ft_tablen(split_agg) - 1]);
 	// printf("[end]file: |%s|\n", file);
@@ -183,7 +236,7 @@ void	exec_aggregations(t_all *all, char *cmd)
 	// cmd = ft_strchr(cmd, '>');
 	if (*tmp == '>' && *(tmp - 1) == '&')
 	{
-		exec_agg1(cmd);
+		exec_agg1(all, cmd);
 		// del_array(&split);
 
 	}
