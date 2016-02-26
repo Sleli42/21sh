@@ -64,11 +64,11 @@ char	*check_file_in_cmd(char *cmd)
 	return (cmd);
 }
 
-char	*get_good_file(char **array)
+char	*get_good_file_agg1(char **array)
 {
 	while (array && *array)
 	{
-		if (!ft_strcmp(*array, "&>") || !ft_strcmp(*array, ">&"))
+		if (!ft_strcmp(*array, "&>"))
 			return (*(array + 1));
 		array++;
 	}
@@ -82,14 +82,15 @@ int		count_arg_agg(char **array, char *file)
 	ret = 0;
 	while (array && *array)
 	{
-		if (ft_strcmp(*array, "&>") && ft_strcmp(*array, file))
+		if ((ft_strcmp(*array, "&>") && ft_strcmp(*array, file))
+			|| (ft_strcmp(*array, ">&") && ft_strcmp(*array, file)))
 			ret++;
 		array++;
 	}
 	return (ret);
 }
 
-char	**create_argv_cmd(char **split_agg, char *file)
+char	**create_argv_cmd_agg1(char **split_agg, char *file)
 {
 	char	**ret;
 	int		i;
@@ -101,13 +102,8 @@ char	**create_argv_cmd(char **split_agg, char *file)
 		error("MALLOC");
 	while (split_agg && *split_agg)
 	{
-		if ((ft_strcmp(*split_agg, "&>") && ft_strcmp(*split_agg, file))
-			&& (ft_strcmp(*split_agg, ">&") && ft_strcmp(*split_agg, file)))
-		{
-			// printf("ret[i]: |%s|\n", ret[i]);
-			// printf("*split: |%s|\n", *split_agg);
+		if (ft_strcmp(*split_agg, "&>") && ft_strcmp(*split_agg, file))
 			ret[i++] = ft_strdup(*split_agg);
-		}
 		split_agg++;
 	}
 	ret[i] = NULL;
@@ -149,10 +145,10 @@ void	exec_agg1(t_all *all, char *cmd)
 
 	cmd = rework_cmd_agg1(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
-	file = get_good_file(split_agg);
+	file = get_good_file_agg1(split_agg);
 	if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 		write(1, "err0r1\n", 6);
-	split_2exec = create_argv_cmd(split_agg, file);
+	split_2exec = create_argv_cmd_agg1(split_agg, file);
 	dup2(all->fd2open, 1);
 	dup2(all->fd2open, 2);
 	close(all->fd2open);
@@ -208,6 +204,46 @@ int		check_error_agg2(char **split, char *file)
 	return (0);
 }
 
+char	*get_good_file_agg2(char **array)
+{
+	while (array && *array)
+	{
+		if (!ft_strcmp(*array, ">&"))
+		{
+			// if (ft_isdigit(*(array + 1)[0]))
+			// 	return (NULL);
+			// else
+				return (*(array + 1));
+		}
+		array++;
+	}
+	return (NULL);
+}
+
+char	**create_argv_cmd_agg2(char **split_agg, char *file)
+{
+	char	**ret;
+	int		i;
+
+	ret = NULL;
+	i = 0;
+	if (!(ret = (char **)malloc(sizeof(char *) * \
+					count_arg_agg(split_agg, file) + 1)))
+		error("MALLOC");
+	while (split_agg && *split_agg)
+	{
+		if (ft_isdigit(*split_agg[0]) && !ft_strcmp(*(split_agg + 1), ">&"))
+			split_agg++;
+		if (ft_isdigit(*(split_agg)[0]) && !ft_strcmp(*(split_agg - 1), ">&"))
+			split_agg++;
+		if (ft_strcmp(*split_agg, ">&") && ft_strcmp(*split_agg, file))
+			ret[i++] = ft_strdup(*split_agg);
+		split_agg++;
+	}
+	ret[i] = NULL;
+	return (ret);
+}
+
 void	exec_agg2(t_all *all, char *cmd)
 {
 	char	**split_agg;
@@ -216,51 +252,32 @@ void	exec_agg2(t_all *all, char *cmd)
 	int		dupout = dup(1);
 	int		duperr = dup(2);
 
-	// ft_putstr("HERE\n");
 	split_2exec = NULL;
+	file = NULL;
 	cmd = rework_cmd_agg2(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
-	file = get_good_file(split_agg);
+	file = get_good_file_agg2(split_agg);
+	// printf("file fd: |%s|\n", file);
 	if (!check_error_agg2(split_agg, file))
 	{
-		if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-			write(1, "err0r1\n", 6);
-		split_2exec = create_argv_cmd(split_agg, file);
+		split_2exec = create_argv_cmd_agg2(split_agg, file);
 		// display_array(split_2exec);
-		dup2(all->fd2open, 1);
-		dup2(all->fd2open, 2);
-		close(all->fd2open);
-		exec_right_binary(all, split_2exec);
-		dup2(dupout, 1);
-		dup2(duperr, 2);
+		if (!ft_isdigit(file[0]))
+		{
+			if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+				write(1, "err0r1\n", 6);
+			dup2(all->fd2open, 1);
+			dup2(all->fd2open, 2);
+			close(all->fd2open);
+			exec_right_binary(all, split_2exec);
+			dup2(dupout, 1);
+			dup2(duperr, 2);
+		}
+		else
+			exec_right_binary(all, split_2exec);
 		del_array(&split_2exec);
 	}
 	del_array(&split_agg);
-	// printf("filefnd: |%s|\n", file);
-	// printf("char: |%c|\n", file[0]);
-	// printf("digit: |%d|\n", ft_isdigit(file[0]));
-	// int		try = ft_isdigit(file[0]);
-	// if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
-	// {
-	// 	ft_putstr("sh: ");
-	// 	ft_putnbr(ft_atoi(file));
-	// 	ft_putstr(": Bad file descriptor\n");
-	// }
-	// else
-	// {
-	// 	if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-	// 		write(1, "err0r1\n", 6);
-	// 	split_2exec = create_argv_cmd(split_agg, file);
-	// 	// display_array(split_2exec);
-	// 	dup2(all->fd2open, 1);
-	// 	dup2(all->fd2open, 2);
-	// 	close(all->fd2open);
-	// 	exec_right_binary(all, split_2exec);
-	// 	dup2(dupout, 1);
-	// 	dup2(duperr, 2);
-	// 	del_array(&split_2exec);
-	// }
-	// del_array(&split_agg);
 }
 
 void	exec_aggregations(t_all *all, char *cmd)
