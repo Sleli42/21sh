@@ -194,7 +194,8 @@ int		check_error_agg2(char **split, char *file)
 		ft_putstr(": Bad file descriptor\n");
 		return (1);
 	}
-	else if (ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2)
+	else if (ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2
+		&& ft_strcmp(file, "-"))
 	{
 		ft_putstr("sh: ");
 		ft_putstr(file);
@@ -209,12 +210,7 @@ char	*get_good_file_agg2(char **array)
 	while (array && *array)
 	{
 		if (!ft_strcmp(*array, ">&"))
-		{
-			// if (ft_isdigit(*(array + 1)[0]))
-			// 	return (NULL);
-			// else
-				return (*(array + 1));
-		}
+			return (*(array + 1));
 		array++;
 	}
 	return (NULL);
@@ -232,9 +228,11 @@ char	**create_argv_cmd_agg2(char **split_agg, char *file)
 		error("MALLOC");
 	while (split_agg && *split_agg)
 	{
-		if (ft_isdigit(*split_agg[0]) && !ft_strcmp(*(split_agg + 1), ">&"))
+		if (*(split_agg + 1) && ft_isdigit(*split_agg[0]) \
+								&& !ft_strcmp(*(split_agg + 1), ">&"))
 			split_agg++;
-		if (ft_isdigit(*(split_agg)[0]) && !ft_strcmp(*(split_agg - 1), ">&"))
+		if (*(split_agg + 1) && ft_isdigit(*split_agg[0]) \
+								&& !ft_strcmp(*(split_agg - 1), ">&"))
 			split_agg++;
 		if (ft_strcmp(*split_agg, ">&") && ft_strcmp(*split_agg, file))
 			ret[i++] = ft_strdup(*split_agg);
@@ -257,12 +255,13 @@ void	exec_agg2(t_all *all, char *cmd)
 	cmd = rework_cmd_agg2(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
 	file = get_good_file_agg2(split_agg);
-	// printf("file fd: |%s|\n", file);
+	// display_array(split_agg);
+	// printf("file fnd: |%s|\n", file);
 	if (!check_error_agg2(split_agg, file))
 	{
 		split_2exec = create_argv_cmd_agg2(split_agg, file);
 		// display_array(split_2exec);
-		if (!ft_isdigit(file[0]))
+		if (!ft_isdigit(file[0]) && ft_strcmp(file, "-"))
 		{
 			if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 				write(1, "err0r1\n", 6);
@@ -280,46 +279,53 @@ void	exec_agg2(t_all *all, char *cmd)
 	del_array(&split_agg);
 }
 
+void	close_agg(t_all *all, char *cmd, char c)
+{
+	int		fd;
+	int		dupout;
+
+	if (ft_isdigit(c))
+	{
+		fd = c - 48;
+		if (fd > 1)
+			exec_agg2(all, cmd);
+		else
+		{
+			// printf("fd: %d\n", fd);
+			if (fcntl(fd, F_GETFD) != -1)
+			{
+				dupout = dup(1);
+				// printf("--> fd: %d\n", fd);
+				// close(fd);
+				close(fd);
+				dup2(dupout, STDOUT_FILENO);
+			}
+		}
+	}
+}
+
 void	exec_aggregations(t_all *all, char *cmd)
 {
-	// int		fd2dup;
-	// int		fd2back;
-	// // char	**split;
-	// char	*file;
-
-	(void)all;
-	// fd2dup = 0;
-	// fd2back = 0;
-	// file = NULL;
-	// split = ft_strsplit(cmd, ' ');
 	char	*tmp;
 
 	tmp = ft_strchr(cmd, '>');
-	// cmd = ft_strchr(cmd, '>');
-	if (*tmp == '>' && *(tmp - 1) == '&')
+	if (tmp)
 	{
-		exec_agg1(all, cmd);
-		// del_array(&split);
+		if (*(tmp + 1) == '&' && *(tmp + 2) == '-')
+			close_agg(all, cmd, *(tmp - 1));
+		else if (*tmp == '>' && *(tmp - 1) == '&')
+		{
+			exec_agg1(all, cmd);
+			// del_array(&split);
+		}
+		else if (*tmp == '>' && *(tmp + 1) == '&')
+			exec_agg2(all, cmd);
+	}
+	else
+	{
+		tmp = ft_strchr(cmd, '<');
 
 	}
-	else if (*tmp == '>' && *(tmp + 1) == '&')
-		exec_agg2(all, cmd);
-	// ls -l &> test; cat test
-	// total 178
-	// -rwxr-xr-x   1 lubaujar  2014_paris  70012 Feb 19 11:36 42sh
-	// -rw-r--r--   1 lubaujar  2014_paris   3492 Feb 17 15:33 Makefile
-	// display_array(split);
-	// printf("c - 1: |%c|\n", *(cmd - 1));
-	// printf("c + 1: |%c|\n", *(cmd + 1));
-	// if (ft_isdigit(*(cmd - 1))) /* file descriptor 2 dup */
-	// 	fd2dup = *(cmd - 1) - '0';
-	// if (*(cmd + 1) == '&') 		/* file descriptor 2 replace */
-	// 	fd2back = *(cmd + 2) - '0';
-	// else						/* file 2 replace */
-	// {
-	// 	split = ft_strsplit(cmd, ' ');
-	// 	display_array(split);
-	// }
 }
 
 /*

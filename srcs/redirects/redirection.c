@@ -74,14 +74,19 @@ void	read_file(t_all *all, char *cmd)
 
 	argv = NULL;
 	redirect = NULL;
-	redirect = ft_strsplit(cmd, '<');
-	redirect[1] = ft_epur_str(redirect[1]);
-	if ((all->fd2open = open(redirect[1], O_RDONLY)) == -1)
+	if (check_aggregations(cmd))
+		exec_aggregations(all, cmd);
+	else
+	{
+		redirect = ft_strsplit(cmd, '<');
+		redirect[1] = ft_epur_str(redirect[1]);
+		if ((all->fd2open = open(redirect[1], O_RDONLY)) == -1)
 		write(1, "err0r\n", 6);//shell_error("OPEN", redirect[1]);
-	argv = ft_strsplit(redirect[0], ' ');
-	dupstdin = dup(0);
-	dup_and_exec(all, argv, dupstdin, 0);
-	del_array(&redirect);
+		argv = ft_strsplit(redirect[0], ' ');
+		dupstdin = dup(0);
+		dup_and_exec(all, argv, dupstdin, 0);
+		del_array(&redirect);
+	}
 }
 
 void	read_stdin(t_all *all, char *cmd)
