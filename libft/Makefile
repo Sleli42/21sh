@@ -6,7 +6,7 @@
 #    By: lubaujar <lubaujar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/12 19:50:41 by lubaujar          #+#    #+#              #
-#    Updated: 2015/08/28 23:38:03 by lubaujar         ###   ########.fr        #
+#    Updated: 2016/03/03 15:44:14 by lubaujar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,6 @@ SRC = ft_atoi.c\
 	  ft_tablen.c\
 	  del_array.c\
 	  lst_len.c\
-	  my_strstr.c\
 	  get_next_line.c\
 
 OBJ = $(SRC:.c=.o)

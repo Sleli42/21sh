@@ -193,6 +193,8 @@ typedef struct			s_all
 	int					fd2open;
 	int					stop;
 	int					skip;
+	int					inpipe;
+	int					inredir;
 		// --SOSO
 	int					lv;
 }						t_all;
@@ -464,6 +466,7 @@ typedef	struct			s_keys
 /* -----------------------------------------------------------------------
 *** ============================================================ REDIRECTS
 */
+	char		*my_strstr(t_all *all, char *s);
 	/*
 	*** ======================= pipe.c
 	*/

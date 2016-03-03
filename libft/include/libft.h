@@ -98,6 +98,5 @@ void				del_array(char ***array);
 char				*ft_epur_str(char *s);
 int					lst_len(t_list *lst);
 int					get_next_line(int const fd, char **line);
-char				*my_strstr(char *s);
 
 #endif
