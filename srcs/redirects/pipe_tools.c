@@ -50,12 +50,12 @@ int		open_file(char *file, int redir)
 		if (redir == 1)
 		{
 			if ((fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-				write(1, "open err0r\n", 11);
+				write(2, "open err0r\n", 11);
 		}
 		else
 		{
 			if ((fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
-				write(1, "open err0r\n", 11);
+				write(2, "open err0r\n", 11);
 		}
 	}
 	return (fd);

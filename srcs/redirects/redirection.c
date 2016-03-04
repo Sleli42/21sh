@@ -124,21 +124,18 @@ void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 {
 	pid_t	child;
 	int		fd;
+	// int		save;
 
+	(void)all;
 	fd = open_file(file, redir);
 	if (cmd == NULL)
 		return ;
 	if ((child = fork()) == -1)
-		write(1, "fork  error\n", 11);
+		write(2, "fork  error\n", 11);
 	if (child == 0)
 	{
-		if (file != NULL)
-		{
-			dup2(fd, 1);
-			close(fd);
-		}
-		if (execve(cmd, args, all->dupenv) == -1)
-			write(1, "execve error\n", 13);
+		if (execve(cmd, args, NULL) == -1)
+			write(2, "execve error\n", 13);
 	}
 	else
 		wait(NULL);

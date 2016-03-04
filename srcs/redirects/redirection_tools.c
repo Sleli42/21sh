@@ -183,11 +183,13 @@ char	*rework_cmd_agg2(char *cmd)
 	return (ret);
 }
 
-int		check_error_agg2(char **split, char *file)
+int		check_error_agg2(t_all *all, char **split, char *file)
 {
 	while (split && ft_strcmp(*split, ">&"))
 		split++;
-	if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
+	if (!ft_strcmp(*(split + 1), "-"))
+		close_fd(all, *(split - 1));
+	else if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
 	{
 		ft_putstr("sh: ");
 		ft_putnbr(ft_atoi(file));
@@ -249,6 +251,7 @@ void	exec_agg2(t_all *all, char *cmd)
 	char	*file;
 	int		dupout;
 	int		duperr;
+	int		tmp_fd;
 
 	split_2exec = NULL;
 	file = NULL;
@@ -259,7 +262,7 @@ void	exec_agg2(t_all *all, char *cmd)
 	duperr = dup(2);
 	// display_array(split_agg);
 	// printf("file fnd: |%s|\n", file);
-	if (!check_error_agg2(split_agg, file))
+	if (!check_error_agg2(all, split_agg, file))
 	{
 		split_2exec = create_argv_cmd_agg2(split_agg, file);
 		// display_array(split_2exec);
@@ -275,7 +278,21 @@ void	exec_agg2(t_all *all, char *cmd)
 			dup2(duperr, 2);
 		}
 		else
+		{
 			exec_right_binary(all, split_2exec);
+			if (all->fd2restore >= 1 && all->fd2restore <= 2)
+			{
+				tmp_fd = dup(all->fd2restore);
+				dup2((all->fd2restore == 1) ? dupout : duperr, all->fd2restore);
+				all->fd2restore = 0;
+			}
+			// else if (all->fd2restore > 2)
+			// {
+			// 	dup2(dupout, 1);
+			// 	dup2(duperr, 2);
+			// 	all->fd2restore = 0;
+			// }
+		}
 		(split_2exec) ? del_array(&split_2exec) : NULL;
 	}
 	(split_agg) ? del_array(&split_agg) : NULL;
@@ -302,6 +319,28 @@ void	close_agg(t_all *all, char *cmd, char c)
 			}
 		}
 	}
+}
+
+void	close_fd(t_all *all, char *fd2close)
+{
+	if ((ft_isdigit(fd2close[0]) && ft_atoi(fd2close) == 1)
+		|| !ft_isdigit(fd2close[0]))
+	{
+		all->fd2restore = 1;
+		close(STDOUT_FILENO);
+	}
+	else if ((ft_isdigit(fd2close[0]) && ft_atoi(fd2close) == 2))
+	{
+		all->fd2restore = 2;
+		// ft_putstr("OK tout va bien ne suis la \n");
+		close(STDERR_FILENO);
+	}
+	// else if (!ft_isdigit(fd2close[0]))
+	// {
+	// 	all->fd2restore = 3;
+	// 	close(STDOUT_FILENO);
+	// 	close(STDERR_FILENO);
+	// }
 }
 
 // void	close_agg2(t_all *all, char *cmd, char c)
@@ -371,26 +410,40 @@ void	exec_aggregations(t_all *all, char *cmd)
 	char	*tmp;
 
 	// ft_putstr("OUAIIIIIIIIIIs\n\n\n\n");
-	tmp = ft_strdup(ft_strchr(cmd, '>'));
+	// tmp = ft_strdup(cmd);
+	tmp = ft_strchr(cmd, '>');
 	if (tmp)
 	{
-		if (*(tmp + 1) == '&' && *(tmp + 2) == '-')
-			close_agg(all, cmd, *(tmp - 1));
-		else if (*tmp == '>' && *(tmp - 1) == '&')
+		// if (*(tmp + 1) == '&' && *(tmp + 2) == '-')
+			// close_agg(all, cmd, *(tmp - 1));
+		// printf("tmp - 1: |%c|\n", *(tmp - 1));
+		if (*tmp == '>' && *(tmp - 1) == '&')
 			exec_agg1(all, cmd);
 		else if (*tmp == '>' && *(tmp + 1) == '&')
 			exec_agg2(all, cmd);
 	}
 	else
 	{
-		tmp = ft_strdup(ft_strchr(cmd, '<'));
+		tmp = ft_strchr(tmp, '<');
 		if (*(tmp + 1) == '&' && *(tmp + 2) == '-')
 			exec_agg2(all, cmd);
 	}
-	(tmp) ? ft_strdel(&tmp) : NULL;
+	// (tmp != NULL) ? ft_strdel(&tmp) : NULL;
 }
 
 /*
+	tests:
+			- touch riri; rm riri; cat riri 2>&-
+			- ls -l 1>&-; ls -X 2>&-; ls -laX >&-; ls -l 2>&-
+			- echo lol taratata 2>&-; echo taratata 1>&-; echo lol 3>&-
+
+			- ls 1>&2; ls 2>&1; ls 1>&5
+			- echo -X test 2>&1; echo -X test 1>&2; echo -X test 5>&4
+
+			- ls -l &> file 2; cat file; rm file; cat file 2>&-
+
+
+
 	possibilities: 
 			- fd>&fd
 			- X>&fd -> fd bad, if not open

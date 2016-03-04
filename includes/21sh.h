@@ -195,6 +195,7 @@ typedef struct			s_all
 	int					skip;
 	int					inpipe;
 	int					inredir;
+	int					fd2restore;
 		// --SOSO
 	int					lv;
 }						t_all;
@@ -493,6 +494,7 @@ typedef	struct			s_keys
 	void		display_array(char **array);
 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
 	int			check_aggregations(char *cmd);
+	void		close_fd(t_all *all, char *fd2close);
 	void		exec_aggregations(t_all *all, char *cmd);
 
 /* ---------------------------------------------------------------------
