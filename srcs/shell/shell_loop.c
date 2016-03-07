@@ -43,7 +43,7 @@ void	create_and_exec_command(t_all *all)
 	loop(all);
 }
 
-static void	define_nb_lines(t_all *all)
+void	define_nb_lines(t_all *all)
 {
 	create_cmd(all);
 	if (PROMPT_LEN + ((int)ft_strlen(all->cmd) - 1) == LINE_LEN * all->nb_lines)

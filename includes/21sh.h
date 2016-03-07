@@ -436,12 +436,17 @@ typedef	struct			s_keys
 	/*
 	*** ======================= shell_loop.c
 	*/
-	void		get_cursor_row(t_all *all);
-	void		parse_cursor_row(t_all *all, char *buff);
-
 	void		display_prompt(t_all *all);
 	void		create_and_exec_command(t_all *all);
+	void		define_nb_lines(t_all *all);
+	void		write_buffer(t_all *all);
+	void		insert_char(t_all *all);
 	void		read_keys(t_all *all);
+	void		init_loop(t_all *all);
+	void		already_in_func(t_all *all);
+	void		already_in_func_extended(t_all *all);
+	void		get_cursor_row(t_all *all);
+	void		parse_cursor_row(t_all *all, char *buff);
 	void		loop(t_all *all);
 	/*
 	*** ======================= shell_tools.c

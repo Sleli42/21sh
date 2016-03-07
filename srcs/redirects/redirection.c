@@ -95,27 +95,47 @@ void	read_stdin(t_all *all, char *cmd)
 	char	**argv;
 	char	*key;
 	char	*buff;
+	char	*tmp_buff;
 	int		dupstdin;
+	int		i;
 
 	(void)all;
 	argv = NULL;
-	buff = NULL;
+	buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
+	tmp_buff = ft_strnew(MAXLEN - 1);
 	redirect = ft_strsplit(cmd, '<');
 	key = ft_epur_str(redirect[1 + 1]);
 	argv = ft_strsplit(redirect[0], ' ');
 	while (1)
 	{
-		ft_putstr("heredoc> ");
-		get_next_line(0, &buff);
-		if (ft_strcmp(key, buff) == 0)
+		i = 0;
+		ft_putstr("> ");
+		(!buff) ? buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1)): NULL;
+		(!tmp_buff) ? tmp_buff = ft_strnew(MAXLEN - 1): NULL;
+		while (read(0, buff, (MAXLEN - 1)) != -1)
+		{
+			if (*buff == '\n')
+				break ;
+			ft_putchar(*buff);
+			tmp_buff[i++] = *buff;
+		}
+		tmp_buff[i] = '\0';
+		if (!ft_strcmp(key, tmp_buff))
 		{
 			dupstdin = dup(0);
+			write(1, "\n", 1);
 			dup_and_exec(all, argv, dupstdin, 0);
 			break ;
 		}
 		else
-			if (buff != NULL)
+		{
+			if (buff && tmp_buff)
+			{
 				ft_strdel(&buff);
+				ft_strdel(&tmp_buff);
+			}
+		}
+		write(1, "\n", 1);
 	}
 	del_array(&redirect);
 }
@@ -124,7 +144,6 @@ void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 {
 	pid_t	child;
 	int		fd;
-	// int		save;
 
 	(void)all;
 	fd = open_file(file, redir);

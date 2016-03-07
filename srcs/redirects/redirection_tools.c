@@ -41,6 +41,7 @@ char	*my_strstr(t_all *all, char *s)
 	int		i;
 
 	tmp = s;
+	ret = NULL;
 	i = 0;
 	all->inpipe = 0;
 	all->inredir = 0;
@@ -51,18 +52,20 @@ char	*my_strstr(t_all *all, char *s)
 		else if (tmp[i] == '>')
 		{
 			all->inredir = 1;
-			if (tmp[i + 1] == '>' && tmp[i + 2] == ' ')
+			if (tmp[i + 1] == '>')
 				ret = ft_strdup(">>");
 			else
 				ret = ft_strdup(">");
+			break ;
 		}
 		else if (tmp[i] == '<')
 		{
 			all->inredir = 1;
-			if (tmp[i + 1] == '<' && tmp[i + 2] == ' ')
+			if (tmp[i + 1] == '<')
 				ret = ft_strdup("<<");
 			else
 				ret = ft_strdup("<");
+			break ;
 		}
 		i++;
 	}
