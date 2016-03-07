@@ -61,6 +61,10 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_REDIRECTS)pipe_tools.c \
 			$(SRCS_REDIRECTS)redirection.c \
 			$(SRCS_REDIRECTS)redirection_tools.c \
+			$(SRCS_REDIRECTS)aggregation1.c \
+			$(SRCS_REDIRECTS)aggregation2.c \
+			$(SRCS_REDIRECTS)aggregation3.c \
+			$(SRCS_REDIRECTS)aggregation_tools.c \
 		 	$(SRCS_SHELL)debug.c \
 			$(SRCS_SHELL)error.c \
 			$(SRCS_SHELL)shell_init.c \
