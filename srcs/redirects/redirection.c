@@ -147,6 +147,8 @@ void	exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir)
 
 	(void)all;
 	fd = open_file(file, redir);
+	// ft_putstr("REDIRECT ARGS\n");
+	// display_array(args);
 	if (cmd == NULL)
 		return ;
 	if ((child = fork()) == -1)

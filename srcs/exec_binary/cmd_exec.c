@@ -25,8 +25,8 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 
 	i = 0;
 	cmp = my_strstr(all, cmd);
-	if (all->inpipe == 1 && all->inredir == 1)
-		cmp = ft_strdup("|");
+	// if (all->inpipe == 1 && all->inredir == 1)
+	// 	cmp = ft_strdup("|");
 	// printf("cmp: |%s|\n", cmp);
 	if (cmp != NULL)
 	{
