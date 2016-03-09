@@ -52,7 +52,7 @@ char			**ft_strsplit(char const *s, char c)
 	while (++ct < stop)
 	{
 		j = 0;
-		if (!(array[ct] = (char *)malloc(sizeof(char) * 2048)))
+		if (!(array[ct] = (char *)malloc(sizeof(char))))
 			return (NULL);
 		while (s[i] && s[i] != c)
 			array[ct][j++] = s[i++];

@@ -27,8 +27,17 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 // others
+# include "arrows_and_movements.h"
+# include "autocomplete.h"
 # include "colors.h"
+# include "env.h"
+# include "exec_binary.h"
+# include "history.h"
+# include "lists.h"
 # include "read.h"
+# include "redirect.h"
+# include "shell.h"
+# include "termcaps.h"
 
 # define	MAXLEN			2048
 # define	K_UP			279165000
@@ -61,7 +70,6 @@
 # define	SPLIT_T			" ;&<>()=|*/{}\"\'`\n"
 
 typedef struct dirent	t_dirent;
-typedef struct termios	t_termios;
 typedef struct winsize	t_winsize;
 typedef struct stat		t_stat;
 
@@ -209,11 +217,11 @@ typedef	struct			s_redirect
 	void				(*f)(t_all *, char *);
 }						t_redirect;
 
-typedef	struct			s_builtins
-{
-	char				*action_name;
-	void				(*f)(t_all *, char *);
-}						t_builtins;
+// typedef	struct			s_builtins
+// {
+// 	char				*action_name;
+// 	void				(*f)(t_all *, char *);
+// }						t_builtins;
 
 typedef	struct			s_keys
 {
@@ -221,106 +229,36 @@ typedef	struct			s_keys
 	void				(*f)(t_all *);
 }						t_keys;
 
-/* ----------------------------------------------------------------------------------
-*** ============================================================ ARROWS_AND_MOVEMENTS
-*/
-	/*
-	*** ======================= parse_keys.c
-	*/
-	int			getkey(char *s);
-	int			check_keys_arrows(t_all *all, char *buff);
-	void		parse_keys(t_all *all);
-	/*
-	*** ======================= delete_char.c
-	*/
-	void		del_char_multi_lines(t_all *all);
-	void		del_char(t_all *all);
-	/*
-	*** ======================= horizontal_movements.c
-	*/
-	void		horizontal_moves(t_all *all);
-	void		opt_left_move(t_all *all);
-	void		opt_right_move(t_all *all);
-	void		reprint_char(t_all *all, t_cmd *nav);
-	/*
-	*** ======================= horizontal_movements_tools.c
-	*/
-	int			check_if_spaces_before(t_all *all, int pos);
-	int			check_if_spaces_after(t_all *all, int pos);
-	t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
-	/*
-	*** ======================= goto.c
-	*/
-	void		goto_end(t_all *all);
-	void		goto_begin(t_all *all);
-	void		goto_up(t_all *all);
-	void		goto_right(t_all *all);
-	void		goto_left(t_all *all);
-	/*
-	*** ======================= vertical_movements.c
-	*/
-	void		goto_up_line(t_all *all);
-	void		goto_down_line(t_all *all);
-	/*
-	*** ======================= clear_screen.c
-	*/
-	void		ft_clear_screen(t_all *all);
-	/*
-	*** ======================= copy_cut_and_paste.c
-	*/
-	void		copy_buffer(t_all *all);
-	void		cut_buffer(t_all *all);
-	void		paste_copy_in_cmd(t_all *all);
-	void		paste_buffer(t_all *all);
-	/*
-	*** ======================= copy_tools.c
-	*/
-	void		standard_mode(char char2print);
-	void		reverse_mode(char char2print);
-	void		copy_right(t_all *all);
-	void		copy_left(t_all *all);
-	/*
-	*** ======================= cut_tools.c
-	*/
-	void		cut_right(t_all *all);
-	void		cut_left(t_all *all);
-	/*
-	*** ======================= shift.c
-	*/
-	void		shift_first_char(t_all *all, int curr_line);
-	void		shift_last_char(t_all *all, int curr_line);
-	void		shift(t_all *all);
-
-/* --------------------------------------------------------------------------
-*** ============================================================ AUTOCOMPLETE
-*/
-	/*
-	*** ======================= autocomplete.c
-	*/
-	void		display_elems(t_all *all, t_clist *lst);
-	void		search_autocomplete(t_all *all);
-	/*
-	*** ======================= autocomplete_tools.c
-	*/
-	int			find_maxlen_elem(t_clist *lst);
-	int			define_nb_files_by_row(t_all *all, t_clist *lst);
-	int			no_spaces(t_cmd *lst);
-	void		cut_cmd_equ(t_all *all);
-	/*
-	*** ======================= binary_search.c
-	*/
-	void		search_bin_path(t_all *all);
-	/*
-	*** ======================= directory_search.c
-	*/
-	void		open_path_directory(t_all *all, char *dir2open);
-	void		swap_elems(t_select *a, t_select *b);
-	void		sort_name(t_select **lst);
-	/*
-	*** ======================= equality_search.c
-	*/
-	char		*update_tmp_cmd(t_all *all, char *str2add, int len2skip);
-	void		list_dir_equ(t_all *all);
+// /* --------------------------------------------------------------------------
+// *** ============================================================ AUTOCOMPLETE
+// */
+// 	/*
+// 	*** ======================= autocomplete.c
+// 	*/
+// 	void		display_elems(t_all *all, t_clist *lst);
+// 	void		search_autocomplete(t_all *all);
+// 	/*
+// 	*** ======================= autocomplete_tools.c
+// 	*/
+// 	int			find_maxlen_elem(t_clist *lst);
+// 	int			define_nb_files_by_row(t_all *all, t_clist *lst);
+// 	int			no_spaces(t_cmd *lst);
+// 	void		cut_cmd_equ(t_all *all);
+// 	/*
+// 	*** ======================= binary_search.c
+// 	*/
+// 	void		search_bin_path(t_all *all);
+// 	/*
+// 	*** ======================= directory_search.c
+// 	*/
+// 	void		open_path_directory(t_all *all, char *dir2open);
+// 	void		swap_elems(t_select *a, t_select *b);
+// 	void		sort_name(t_select **lst);
+// 	/*
+// 	*** ======================= equality_search.c
+// 	*/
+// 	char		*update_tmp_cmd(t_all *all, char *str2add, int len2skip);
+// 	void		list_dir_equ(t_all *all);
 
 /* ----------------------------------------------------------------------
 *** ============================================================ BUILTINS
@@ -341,236 +279,236 @@ typedef	struct			s_keys
 	*/
 	void		update_oldpwd(t_all *all);
 
-/* -----------------------------------------------------------------
-*** ============================================================ ENV
-*/
-	/*
-	*** ======================= env.c
-	*/
-	void		env_display(t_all *all, char *cmd);
-	void		env_set(t_all *all, char *cmd);
-	void		env_unset(t_all *all, char *cmd);
-	/*
-	*** ======================= env_init.c
-	*/
-	t_dlist		*init_env(char **env);
-	/*
-	*** ======================= env_tools.c
-	*/
-	char		*find_env_arg(t_all *all, char *arg2find);
-	char		**ft_dupenv(char **env);
+// /* -----------------------------------------------------------------
+// *** ============================================================ ENV
+// */
+// 	/*
+// 	*** ======================= env.c
+// 	*/
+// 	void		env_display(t_all *all, char *cmd);
+// 	void		env_set(t_all *all, char *cmd);
+// 	void		env_unset(t_all *all, char *cmd);
+// 	/*
+// 	*** ======================= env_init.c
+// 	*/
+// 	t_dlist		*init_env(char **env);
+// 	/*
+// 	*** ======================= env_tools.c
+// 	*/
+// 	char		*find_env_arg(t_all *all, char *arg2find);
+// 	char		**ft_dupenv(char **env);
 
-/* -------------------------------------------------------------------
-*** ============================================================ LISTS
-*/
-	/*
-	*** ======================= dlist.c
-	*/
-	t_node		*dlst_node_new(char *data, size_t index);
-	t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
-	t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
-	void		del_dlist(t_dlist *lst);
-	/*
-	*** ======================= dlist_tools.c
-	*/
-	t_dlist		*create_dlst(void);
-	int			len_lst_node(t_node *lst);
-	int			update_list(t_dlist *lst, t_node *elem);
-	/*
-	*** ======================= dlist_2.c
-	*/
-	t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
-	t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);
-	t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
-	t_dlist2	*dlst_del_one2(t_dlist2 *lst, int pos);
-	void		del_dlist2(t_dlist2 *lst);
-	/*
-	*** ======================= dlist_2_tools.c
-	*/
-	t_cmd		*dlst_cmd_new(char c);
-	t_dlist2	*create_cmd_dlst(void);
-	void		swap_elems_cmd(t_cmd *a, t_cmd *b);
-	int			len_lst_cmd(t_cmd *lst);
-	int			update_list2(t_dlist2 *lst, t_cmd *elem);
-	/*
-	*** ======================= clist.c
-	*/
-	t_clist		*create_clst(void);
-	t_select	*clst_create_elem(char *s);
-	t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
-	int			len_clst(t_select *lst);
-	void		del_clist(t_clist **lst);
+// /* -------------------------------------------------------------------
+// *** ============================================================ LISTS
+// */
+// 	/*
+// 	*** ======================= dlist.c
+// 	*/
+// 	t_node		*dlst_node_new(char *data, size_t index);
+// 	t_dlist		*dlst_add_back(t_dlist *lst, t_node *node);
+// 	t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del);
+// 	void		del_dlist(t_dlist *lst);
+// 	/*
+// 	*** ======================= dlist_tools.c
+// 	*/
+// 	t_dlist		*create_dlst(void);
+// 	int			len_lst_node(t_node *lst);
+// 	int			update_list(t_dlist *lst, t_node *elem);
+// 	/*
+// 	*** ======================= dlist_2.c
+// 	*/
+// 	t_dlist2	*dlst_insert_cmd(t_dlist2 *lst, t_cmd *node, int pos);
+// 	t_dlist2	*dlist_add_front_2(t_dlist2 *lst, t_cmd *node);
+// 	t_dlist2	*dlst_add_back_2(t_dlist2 *lst, t_cmd *node);
+// 	t_dlist2	*dlst_del_one2(t_dlist2 *lst, int pos);
+// 	void		del_dlist2(t_dlist2 *lst);
+// 	/*
+// 	*** ======================= dlist_2_tools.c
+// 	*/
+// 	t_cmd		*dlst_cmd_new(char c);
+// 	t_dlist2	*create_cmd_dlst(void);
+// 	void		swap_elems_cmd(t_cmd *a, t_cmd *b);
+// 	int			len_lst_cmd(t_cmd *lst);
+// 	int			update_list2(t_dlist2 *lst, t_cmd *elem);
+// 	/*
+// 	*** ======================= clist.c
+// 	*/
+// 	t_clist		*create_clst(void);
+// 	t_select	*clst_create_elem(char *s);
+// 	t_clist		*clst_add_elem_back(t_clist *lst, t_select *node);
+// 	int			len_clst(t_select *lst);
+// 	void		del_clist(t_clist **lst);
 
-/* -------------------------------------------------------------------------
-*** ============================================================ EXEC_BINARY
-*/
-	/*
-	*** ======================= binary_tools.c
-	*/
-	int			good_access(char *bin);
-	char		*create_path(char *path, char *bin);
-	void		exec_right_binary(t_all *all, char **argv_bin);
-	void		exec_binary(char *bin, char **argv_bin, char **env);
-	/*
-	*** ======================= cmd_parse.c
-	*/
-	void		parse_command(t_all *all, char *buff);
-	int			check_redirection(char *s);
-	/*
-	*** ======================= cmd_exec.c
-	*/
-	void		simple_cmd_loop(t_all *all, \
-					const t_builtins built[9], char *cmd);
-	void		exec_simple_cmd(t_all *all, char *cmd);
-	void		exec_redirection_cmd(t_all *all, char *cmd);
-	void		exec_command(t_all *all);
+// /* -------------------------------------------------------------------------
+// *** ============================================================ EXEC_BINARY
+// */
+// 	/*
+// 	*** ======================= binary_tools.c
+// 	*/
+// 	int			good_access(char *bin);
+// 	char		*create_path(char *path, char *bin);
+// 	void		exec_right_binary(t_all *all, char **argv_bin);
+// 	void		exec_binary(char *bin, char **argv_bin, char **env);
+// 	/*
+// 	*** ======================= cmd_parse.c
+// 	*/
+// 	void		parse_command(t_all *all, char *buff);
+// 	int			check_redirection(char *s);
+// 	/*
+// 	*** ======================= cmd_exec.c
+// 	*/
+// 	void		simple_cmd_loop(t_all *all, \
+// 					const t_builtins built[9], char *cmd);
+// 	void		exec_simple_cmd(t_all *all, char *cmd);
+// 	void		exec_redirection_cmd(t_all *all, char *cmd);
+// 	void		exec_command(t_all *all);
 
-/* -------------------------------------------------------------------
-*** ============================================================ SHELL
-*/
-	/*
-	*** ======================= main.c
-	*/
-	int			main(int ac, char **av, char **env);
-	/*
-	*** ======================= shell_init.c
-	*/
-	t_all		*init_all(char **env);
-	/*
-	*** ======================= shell_loop.c
-	*/
-	void		display_prompt(t_all *all);
-	void		create_and_exec_command(t_all *all);
-	void		define_nb_lines(t_all *all);
-	void		write_buffer(t_all *all);
-	void		insert_char(t_all *all);
-	void		read_keys(t_all *all);
-	void		init_loop(t_all *all);
-	void		already_in_func(t_all *all);
-	void		already_in_func_extended(t_all *all);
-	void		get_cursor_row(t_all *all);
-	void		parse_cursor_row(t_all *all, char *buff);
-	void		loop(t_all *all);
-	/*
-	*** ======================= shell_tools.c
-	*/
-	char		goto_elem(t_cmd *cmd, int pos);
-	void		update_cmd_line_insert(t_all *all, char char2add);
-	void		realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
-	void		create_cmd(t_all *all);
-	/*
-	*** ======================= debug.c
-	*/
-	void		display_dlst(t_dlist2 *lst);
-	void		display_current_arg(t_all *all);
-	void		display_line(t_dlist2 *cmd_termcaps);
-	void		display_cursor(t_dlist2 *lst, int pos);
-	void		read_key(char *buff);
-	/*
-	*** ======================= error.c
-	*/
-	void		error(char *err);
-	void		term_error(char *err);
+// /* -------------------------------------------------------------------
+// *** ============================================================ SHELL
+// */
+// 	/*
+// 	*** ======================= main.c
+// 	*/
+// 	int			main(int ac, char **av, char **env);
+// 	/*
+// 	*** ======================= shell_init.c
+// 	*/
+// 	t_all		*init_all(char **env);
+// 	/*
+// 	*** ======================= shell_loop.c
+// 	*/
+// 	void		display_prompt(t_all *all);
+// 	void		create_and_exec_command(t_all *all);
+// 	void		define_nb_lines(t_all *all);
+// 	void		write_buffer(t_all *all);
+// 	void		insert_char(t_all *all);
+// 	void		read_keys(t_all *all);
+// 	void		init_loop(t_all *all);
+// 	void		already_in_func(t_all *all);
+// 	void		already_in_func_extended(t_all *all);
+// 	void		get_cursor_row(t_all *all);
+// 	void		parse_cursor_row(t_all *all, char *buff);
+// 	void		loop(t_all *all);
+// 	/*
+// 	*** ======================= shell_tools.c
+// 	*/
+// 	char		goto_elem(t_cmd *cmd, int pos);
+// 	void		update_cmd_line_insert(t_all *all, char char2add);
+// 	void		realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
+// 	void		create_cmd(t_all *all);
+// 	/*
+// 	*** ======================= debug.c
+// 	*/
+// 	void		display_dlst(t_dlist2 *lst);
+// 	void		display_current_arg(t_all *all);
+// 	void		display_line(t_dlist2 *cmd_termcaps);
+// 	void		display_cursor(t_dlist2 *lst, int pos);
+// 	void		read_key(char *buff);
+// 	/*
+// 	*** ======================= error.c
+// 	*/
+// 	void		error(char *err);
+// 	void		term_error(char *err);
 
-/* -----------------------------------------------------------------------
-*** ============================================================ REDIRECTS
-*/
-	char		*my_strstr(t_all *all, char *s);
-	/*
-	*** ======================= pipe.c
-	*/
-	void		create_pipe(t_all *all, char *cmd);
-	void		exec_pipe_process(t_all *all, char *cmd, char **args);
-	/*
-	*** ======================= pipe_tools.c
-	*/
-	char		*create_good_path(t_all *all, char *cmd);
-	int			check_redirect(char *s);
-	int			open_file(char *file, int redir);
-	char		*redirected_in_args(char **args, int *redir_type);
-	/*
-	*** ======================= redirection.c
-	*/
-	void		erase_and_replace(t_all *all, char *cmd);
-	void		add_to_end(t_all *all, char *cmd);
-	void		read_file(t_all *all, char *cmd);
-	void		read_stdin(t_all *all, char *cmd);
-	void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
-	/*
-	*** ======================= redirection_tools.c
-	*/
-	void		display_array(char **array);
-	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
-	int			check_aggregations(char *cmd);
-	void		close_fd(t_all *all, char *fd2close);
-	void		exec_aggregations(t_all *all, char *cmd);
-	/*
-	*** ======================= aggregation1.c
-	*/
-	char		*get_good_file_agg1(char **array);
-	char		*rework_cmd_agg1(char *cmd);
-	char		**create_argv_cmd_agg1(char **split_agg, char *file);
-	void		exec_agg1(t_all *all, char *cmd);
-	/*
-	*** ======================= aggregation2.c
-	*/
-	char		*rework_cmd_agg2(char *cmd);
-	int			check_error_agg2(t_all *all, char **split, char *file);
-	char		*get_good_file_agg2(char **array);
-	char		**create_argv_cmd_agg2(char **split_agg, char *file);
-	void		exec_agg2(t_all *all, char *cmd);
-	/*
-	*** ======================= aggregation3.c
-	*/
-	char		*rework_cmd_agg3(char *cmd);
-	int			check_error_agg3(t_all *all, char **split, char *file);
-	char		*get_good_file_agg3(char **array);
-	char		**create_argv_cmd_agg3(char **split_agg, char *file);
-	void		exec_agg3(t_all *all, char *cmd);
-	/*
-	*** ======================= aggregation_tools.c
-	*/
-	int			check_aggregations(char *cmd);
-	char		*check_file_in_cmd(char *cmd);
-	int			count_arg_agg(char **array, char *file);
-	void		close_fd(t_all *all, char *fd2close);
-	void		exec_aggregations(t_all *all, char *cmd);
+// /* -----------------------------------------------------------------------
+// *** ============================================================ REDIRECTS
+// */
+// 	char		*my_strstr(t_all *all, char *s);
+// 	/*
+// 	*** ======================= pipe.c
+// 	*/
+// 	void		create_pipe(t_all *all, char *cmd);
+// 	void		exec_pipe_process(t_all *all, char *cmd, char **args);
+// 	/*
+// 	*** ======================= pipe_tools.c
+// 	*/
+// 	char		*create_good_path(t_all *all, char *cmd);
+// 	int			check_redirect(char *s);
+// 	int			open_file(char *file, int redir);
+// 	char		*redirected_in_args(char **args, int *redir_type);
+// 	/*
+// 	*** ======================= redirection.c
+// 	*/
+// 	void		erase_and_replace(t_all *all, char *cmd);
+// 	void		add_to_end(t_all *all, char *cmd);
+// 	void		read_file(t_all *all, char *cmd);
+// 	void		read_stdin(t_all *all, char *cmd);
+// 	void		exec_redirect(t_all *all, char *cmd, char **args, char *file, int redir);
+// 	/*
+// 	*** ======================= redirection_tools.c
+// 	*/
+// 	void		display_array(char **array);
+// 	void		dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
+// 	int			check_aggregations(char *cmd);
+// 	void		close_fd(t_all *all, char *fd2close);
+// 	void		exec_aggregations(t_all *all, char *cmd);
+// 	/*
+// 	*** ======================= aggregation1.c
+// 	*/
+// 	char		*get_good_file_agg1(char **array);
+// 	char		*rework_cmd_agg1(char *cmd);
+// 	char		**create_argv_cmd_agg1(char **split_agg, char *file);
+// 	void		exec_agg1(t_all *all, char *cmd);
+// 	/*
+// 	*** ======================= aggregation2.c
+// 	*/
+// 	char		*rework_cmd_agg2(char *cmd);
+// 	int			check_error_agg2(t_all *all, char **split, char *file);
+// 	char		*get_good_file_agg2(char **array);
+// 	char		**create_argv_cmd_agg2(char **split_agg, char *file);
+// 	void		exec_agg2(t_all *all, char *cmd);
+// 	/*
+// 	*** ======================= aggregation3.c
+// 	*/
+// 	char		*rework_cmd_agg3(char *cmd);
+// 	int			check_error_agg3(t_all *all, char **split, char *file);
+// 	char		*get_good_file_agg3(char **array);
+// 	char		**create_argv_cmd_agg3(char **split_agg, char *file);
+// 	void		exec_agg3(t_all *all, char *cmd);
+// 	/*
+// 	*** ======================= aggregation_tools.c
+// 	*/
+// 	int			check_aggregations(char *cmd);
+// 	char		*check_file_in_cmd(char *cmd);
+// 	int			count_arg_agg(char **array, char *file);
+// 	void		close_fd(t_all *all, char *fd2close);
+// 	void		exec_aggregations(t_all *all, char *cmd);
 
-/* ---------------------------------------------------------------------
-*** ============================================================ HISTORY
-*/
-	/*
-	*** ======================= history.c
-	*/
-	void		del_histo_lines(t_all *all, int nblines2del);
-	void		history_down(t_all *all);
-	void		history_up(t_all *all);
-	void		goto_latest_commands(t_all *all);
-	/*
-	*** ======================= history_tools.c
-	*/
-	char		**parse_history(void);
-	void		add_to_history(t_all *all);
-	void		display_index_cmd(t_all *all);
-	int			check_history_file(char **histo);
-	int			count_lines_2del(t_all *all);
+// /* ---------------------------------------------------------------------
+// *** ============================================================ HISTORY
+// */
+// 	/*
+// 	*** ======================= history.c
+// 	*/
+// 	void		del_histo_lines(t_all *all, int nblines2del);
+// 	void		history_down(t_all *all);
+// 	void		history_up(t_all *all);
+// 	void		goto_latest_commands(t_all *all);
+// 	/*
+// 	*** ======================= history_tools.c
+// 	*/
+// 	char		**parse_history(void);
+// 	void		add_to_history(t_all *all);
+// 	void		display_index_cmd(t_all *all);
+// 	int			check_history_file(char **histo);
+// 	int			count_lines_2del(t_all *all);
 
-/* ----------------------------------------------------------------------
-*** ============================================================ TERMCAPS
-*/
-	/*
-	*** ======================= termcaps_init.c
-	*/
-	void		init_term(void);
-	void		init_windows_size(t_all *all);
-	int			init_tty(void);
-	/*
-	*** ======================= termcaps_tools.c
-	*/
-	t_all		*f_cpy(t_all *all);
-	int			lu_putchar(int c);
-	void		tputs_termcap(char *tc);
-	void		restore_term(t_termios restore);
-	void 		reset_term(void);
+// /* ----------------------------------------------------------------------
+// *** ============================================================ TERMCAPS
+// */
+// 	/*
+// 	*** ======================= termcaps_init.c
+// 	*/
+// 	void		init_term(void);
+// 	void		init_windows_size(t_all *all);
+// 	int			init_tty(void);
+// 	/*
+// 	*** ======================= termcaps_tools.c
+// 	*/
+// 	t_all		*f_cpy(t_all *all);
+// 	int			lu_putchar(int c);
+// 	void		tputs_termcap(char *tc);
+// 	void		restore_term(t_termios restore);
+// 	void 		reset_term(void);
 
 #endif

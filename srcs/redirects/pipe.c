@@ -45,16 +45,32 @@ int		redirect_in_args(char **array)
 {
 	while (*array)
 	{
-		// printf("s :    |%s|\n", *array);
-		// printf("s[0] : |%c|\n", *array[0]);
 		if (*array[0] == '>' || *array[0] == '<')
-		{
-			// ft_putstr("YES\n");
 			return (1);
-		}
-		// if (!ft_strcmp(*array, ">") || !ft_strcmp(*array, "<"))
-			// return (1);
 		array++;
+	}
+	return (0);
+}
+
+int		redirect_in_arrays(t_all *all, char ***arrays)
+{
+	int			count;
+	int			ct;
+
+	count = 0;
+	while (arrays[count])
+	{
+		ct = 0;
+		while (arrays[count][ct])
+		{
+			if (arrays[count][ct][0] == '>')
+			{
+				all->file2redir = ft_strdup(arrays[count][ct + 1]);
+				return (1);
+			}
+			ct++;
+		}
+		count++;
 	}
 	return (0);
 }
@@ -81,15 +97,42 @@ char	**modify_pipe_array(t_all *all, char **array)
 	return (modify);
 }	
 
+void	del_arrays(char ****arrays)
+{
+	int		i;
+	int		j;
+	char	***tmp;
+
+	i = 0;
+	tmp = *arrays;
+	if (tmp)
+	{
+		while (tmp && tmp[i])
+		{
+			j = 0;
+			while (tmp[i] && tmp[i][j])
+			{
+				(tmp[i][j] != NULL) ? ft_strdel(&tmp[i][j]): NULL;
+				j++;
+			}
+			(tmp[i] != NULL) ? free(tmp[i]): NULL;
+			tmp[i] = NULL;
+			i++;
+		}
+		// free(tmp);
+		// tmp = NULL;
+	}
+}
+
 void	loop_pipe(t_all *all, char ***pipe2exec)
 {
 	pid_t	pid;
 	int		p[2];
 	int		dup_stdin;
-	char	*file;
-	// int		redir;
+	int		dup_stdout;
 
-	file = NULL;
+	if (redirect_in_arrays(all, pipe2exec))
+		all->fd2open = open_file(all->file2redir, 1);
 	while (*pipe2exec)
 	{
 		pipe(p);
@@ -102,16 +145,11 @@ void	loop_pipe(t_all *all, char ***pipe2exec)
 			if (*(pipe2exec + 1))
 				dup2(p[1], 1);
 			close(p[0]);
-			// ft_putstr("first\n");
-			// display_array(*pipe2exec);
 			if (redirect_in_args(*pipe2exec))
 			{
-				int		dup_out;
-
-				dup_out = dup(1);
+				dup_stdout = dup(1);
 				*pipe2exec = modify_pipe_array(all, *pipe2exec);
-				all->fd2open = open_file(all->file2redir, 1);
-				dup_and_exec(all, *pipe2exec, dup_out, 1);
+				dup_and_exec(all, *pipe2exec, dup_stdout, 1);
 			}
 			else
 			{
@@ -129,15 +167,22 @@ void	loop_pipe(t_all *all, char ***pipe2exec)
 			pipe2exec++;
 		}
 	}
+	// del_arrays(&pipe2exec);
+	// ft_putstr("GOTO DEL ALL ELEMS\n");
 }
 
 void	create_pipe(t_all *all, char *cmd)
 {
 	char	***pipe2exec;
+	int 	i;
 
+	i = 0;
 	pipe2exec = create_pipe_arrays(ft_strsplit(cmd, '|'));
-	// display_arrays(pipe2exec);
 	loop_pipe(all, pipe2exec);
+	while (pipe2exec[i])
+		del_array(&pipe2exec[i++]);
+	free(pipe2exec);
+	pipe2exec = NULL;
 }
 
 /*

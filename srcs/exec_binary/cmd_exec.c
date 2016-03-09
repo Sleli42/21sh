@@ -27,12 +27,11 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 	cmp = my_strstr(all, cmd);
 	// if (all->inpipe == 1 && all->inredir == 1)
 	// 	cmp = ft_strdup("|");
-	// printf("cmp: |%s|\n", cmp);
 	if (cmp != NULL)
 	{
 		while (i < 5)
 		{
-			if (ft_strcmp(cmp, redirection[i].action_name) == 0)
+			if (!ft_strcmp(cmp, redirection[i].action_name))
 				redirection[i].f(all, cmd);
 			i++;
 		}
@@ -49,8 +48,8 @@ void	simple_cmd_loop(t_all *all, const t_builtins built[9], char *cmd)
 	stop = 0;
 	while (i < 9)
 	{
-		if (ft_strncmp(cmd, built[i].action_name,
-			ft_strlen(built[i].action_name)) == 0)
+		if (!ft_strncmp(cmd, built[i].action_name, \
+						ft_strlen(built[i].action_name)))
 		{
 			built[i].f(all, cmd);
 			stop = 1;
@@ -58,7 +57,9 @@ void	simple_cmd_loop(t_all *all, const t_builtins built[9], char *cmd)
 		i++;
 	}
 	if (!stop)
+	{
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
+	}
 }
 
 void	exec_simple_cmd(t_all *all, char *cmd)

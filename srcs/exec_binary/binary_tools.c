@@ -45,8 +45,6 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 	ct = 0;
 	stop = 0;
 	bin_tmp = NULL;
-	// ft_putstr("\n\tARGV_BIN ARRAY\n\n");
-	// display_array(argv_bin);
 	while (all->path2exec[ct])
 	{
 		bin_tmp = create_path(all->path2exec[ct], argv_bin[0]);
@@ -59,8 +57,9 @@ void	exec_right_binary(t_all *all, char **argv_bin)
 		ft_strdel(&bin_tmp);
 		ct++;
 	}
-	if (!stop)
+	if (!stop && argv_bin)
 		write_error(argv_bin[0]);
+	(argv_bin != NULL) ? del_array(&argv_bin): NULL;
 }
 
 void	exec_binary(char *bin, char **argv_bin, char **env)
