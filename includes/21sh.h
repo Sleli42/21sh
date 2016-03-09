@@ -189,6 +189,9 @@ typedef struct			s_all
 	char				*agg2split;
 	char				*file;
 	char				agg;
+		// PIPES & REDIRECTIONS
+	char				*file2redir;
+	int					redir_in_pipe;
 		//
 	int					fd2open;
 	int					stop;

@@ -45,12 +45,41 @@ int		redirect_in_args(char **array)
 {
 	while (*array)
 	{
-		if (!ft_strcmp(*array, ">") || !ft_strcmp(*array, "<"))
+		// printf("s :    |%s|\n", *array);
+		// printf("s[0] : |%c|\n", *array[0]);
+		if (*array[0] == '>' || *array[0] == '<')
+		{
+			// ft_putstr("YES\n");
 			return (1);
+		}
+		// if (!ft_strcmp(*array, ">") || !ft_strcmp(*array, "<"))
+			// return (1);
 		array++;
 	}
 	return (0);
 }
+
+char	**modify_pipe_array(t_all *all, char **array)
+{
+	char	**modify;
+	int		count;
+
+	count = 0;
+	all->redir_in_pipe = 1;
+	while (array[count] && array[count][0] != '>')
+		count++;
+	if (!(modify = (char**)malloc(sizeof(char*) * count + 1)))
+		error("MALLOC");
+	count = 0;
+	while (array[count] && array[count][0] != '>')
+	{
+		modify[count] = ft_strdup(array[count]);
+		count++;
+	}
+	all->file2redir = ft_strdup(array[count + 1]);
+	modify[count] = NULL;
+	return (modify);
+}	
 
 void	loop_pipe(t_all *all, char ***pipe2exec)
 {
@@ -58,12 +87,13 @@ void	loop_pipe(t_all *all, char ***pipe2exec)
 	int		p[2];
 	int		dup_stdin;
 	char	*file;
-	int		redir;
+	// int		redir;
 
 	file = NULL;
 	while (*pipe2exec)
 	{
 		pipe(p);
+		all->redir_in_pipe = 0;
 		if ((pid = fork()) == -1)
 			ft_putstr("fork() error\n");
 		else if (pid == 0)
@@ -72,13 +102,23 @@ void	loop_pipe(t_all *all, char ***pipe2exec)
 			if (*(pipe2exec + 1))
 				dup2(p[1], 1);
 			close(p[0]);
+			// ft_putstr("first\n");
+			// display_array(*pipe2exec);
 			if (redirect_in_args(*pipe2exec))
-				file = redirected_in_args(*pipe2exec, &redir);
-			if (execve(create_good_path(all, *pipe2exec[0]), \
+			{
+				int		dup_out;
+
+				dup_out = dup(1);
+				*pipe2exec = modify_pipe_array(all, *pipe2exec);
+				all->fd2open = open_file(all->file2redir, 1);
+				dup_and_exec(all, *pipe2exec, dup_out, 1);
+			}
+			else
+			{
+				if (execve(create_good_path(all, *pipe2exec[0]), \
 								*pipe2exec, all->dupenv) == -1)
-				ft_putstr("execve() error\n");
-			// if (redirect_in_args(*pipe2exec))
-				// exec_redirect(all, create_good_path(all, *pipe2exec[0]), *pipe2exec, file, redir);
+					ft_putstr("execve() error\n");
+			}
 			exit(21);
 		}
 		else
