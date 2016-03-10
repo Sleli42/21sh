@@ -15,7 +15,7 @@
 char	**parse_history(void)
 {
 	char	**ret;
-	char	*buff;
+	char	buff[MAXLEN];
 	int		r;
 	int		fd;
 	char	*stock;
@@ -23,9 +23,7 @@ char	**parse_history(void)
 
 	if ((fd = open(".21sh_history", O_RDONLY)) == -1)
 		error("OPEN");
-	buff = NULL;
 	ret = NULL;
-	buff = ft_strnew(MAXLEN - 1);
 	stock = NULL;
 	while ((r = read(fd, buff, (MAXLEN - 1))) > 0)
 	{
@@ -48,7 +46,8 @@ void	add_to_history(t_all *all)
 	int		ct;
 	int		i;
 
-	if (!(history_line = (char *)malloc(sizeof(char) * (int)all->cmd_termcaps->lenght + 1)))
+	if (!(history_line = (char *)malloc(sizeof(char) * \
+						(int)all->cmd_termcaps->lenght + 1)))
 		return ;
 	tmp = ft_itoa(all->pos_history++);
 	ct = 0;

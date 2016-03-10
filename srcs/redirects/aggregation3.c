@@ -116,7 +116,8 @@ void	exec_agg3(t_all *all, char *cmd)
 		split_2exec = create_argv_cmd_agg3(split_agg, file);
 		if (!ft_isdigit(file[0]) && ft_strcmp(file, "-"))
 		{
-			if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
+			if (!(all->fd2open = open(file, \
+					O_WRONLY | O_CREAT | O_APPEND, 0644)))
 				write(1, "err0r1\n", 6);
 			dup2(all->fd2open, 1);
 			dup2(all->fd2open, 2);
@@ -134,7 +135,6 @@ void	exec_agg3(t_all *all, char *cmd)
 				all->fd2restore = -1;
 			}
 		}
-		(split_2exec) ? del_array(&split_2exec) : NULL;
 	}
 	(split_agg) ? del_array(&split_agg) : NULL;
 }

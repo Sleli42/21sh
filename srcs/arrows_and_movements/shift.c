@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "21sh.h"
-#define	END_OF_FILE	(LINE_LEN * all->nb_lines)
-#define	END_OF_LINE	(LINE_LEN * all->curr_line)
 
 void	shift_first_char(t_all *all, int curr_line)
 {

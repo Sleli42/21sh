@@ -12,6 +12,23 @@
 
 #include "21sh.h"
 
+void	ask_for_big_display(t_all *all)
+{
+	char	buff[1];
+
+	ft_putstr("display ");
+	ft_putnbr((int)all->list_dir->lenght);
+	ft_putstr(" possibilities ? y or n\n");
+	read(0, buff, 1);
+	if (*buff == 'y')
+	{
+		sort_name(&all->list_dir->head);
+		display_elems(all, all->list_dir);
+	}
+	else if (*buff == 'n')
+		return ;
+}
+
 int		find_maxlen_elem(t_clist *lst)
 {
 	t_select	*nav;

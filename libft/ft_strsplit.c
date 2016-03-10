@@ -47,12 +47,12 @@ char			**ft_strsplit(char const *s, char c)
 	ct = -1;
 	i = 0;
 	stop = count_words((char *)s, c);
-	if (!(array = (char **)malloc(sizeof(char *) * stop + 1)))
+	if (!(array = (char **)malloc(sizeof(char *) * stop + 2)))
 		return (NULL);
 	while (++ct < stop)
 	{
 		j = 0;
-		if (!(array[ct] = (char *)malloc(sizeof(char))))
+		if (!(array[ct] = (char *)malloc(sizeof(char) * 2048)))
 			return (NULL);
 		while (s[i] && s[i] != c)
 			array[ct][j++] = s[i++];

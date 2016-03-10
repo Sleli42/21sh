@@ -25,22 +25,14 @@ void	create_and_exec_command(t_all *all)
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
-	// if (all->cmd)
-	// {
-	// 	printf("cmd: |%s|\n", all->cmd);
-	// }
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		add_to_history(all);
 		parse_command(all, all->cmd);
 		exec_command(all);
 	}
-	// if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
-	// 							((t_cmd *)all->cmd_termcaps->head)->c)
-	(CMD_NULL) ? del_dlist2(all->cmd_termcaps): NULL;
-	(all->cmd && all->cmd[0]) ? ft_strdel(&all->cmd): NULL;
-	// if (all->cmd)
-	// 	ft_strdel(&all->cmd);
+	(CMD_NULL) ? del_dlist2(all->cmd_termcaps) : NULL;
+	(all->cmd && all->cmd[0]) ? ft_strdel(&all->cmd) : NULL;
 	loop(all);
 }
 
@@ -232,8 +224,6 @@ void	loop(t_all *all)
 		already_in_func_extended(all);
 		read_keys(all);
 	}
-	// if (all->cmd_termcaps && ((t_cmd *)all->cmd_termcaps->head) && \
-	// 							((t_cmd *)all->cmd_termcaps->head)->c)
 	if (!CMD_NULL)
 	{
 		if (all->lv)

@@ -26,18 +26,7 @@ void	results_analysis_bin(t_all *all)
 		all->tmp_cmd = ft_strdup(ft_strjoin(all->list_dir->head->arg, " "));
 	}
 	else if (all->list_dir->lenght > 100)
-	{
-		char	buff[1];
-		printf("display %d possibilities ? y or n\n", (int)all->list_dir->lenght);
-		read(0, buff, 1);
-		if (*buff == 'y')
-		{
-			sort_name(&all->list_dir->head);
-			display_elems(all, all->list_dir);
-		}
-		else
-			return ;
-	}
+		ask_for_big_display(all);
 	else
 	{
 		sort_name(&all->list_dir->head);
@@ -45,16 +34,14 @@ void	results_analysis_bin(t_all *all)
 	}
 }
 
-void	search_bin_path(t_all *all)
+void	search_bin_path_loop(t_all *all)
 {
-	int			ct;
 	char		*tmp;
 	DIR			*entry;
 	t_dirent	*dirp;
+	int			ct;
 
 	ct = 0;
-	all->tmp_cmd = ft_strdup(all->cmd);
-	all->list_dir = create_clst();
 	while (all->path2exec[ct])
 	{
 		tmp = ft_strjoin(all->path2exec[ct++], "/");
@@ -63,12 +50,23 @@ void	search_bin_path(t_all *all)
 		else
 		{
 			while ((dirp = readdir(entry)))
-				if (!ft_strncmp(dirp->d_name, all->cmd, ft_strlen(all->cmd)))
-					clst_add_elem_back(all->list_dir, clst_create_elem(dirp->d_name));
+			{
+				if (!ft_strncmp(dirp->d_name, all->cmd, \
+						ft_strlen(all->cmd)))
+					clst_add_elem_back(all->list_dir, \
+						clst_create_elem(dirp->d_name));
+			}
 			closedir(entry);
 		}
 		ft_strdel(&tmp);
 	}
+}
+
+void	search_bin_path(t_all *all)
+{
+	all->tmp_cmd = ft_strdup(all->cmd);
+	all->list_dir = create_clst();
+	search_bin_path_loop(all);
 	results_analysis_bin(all);
 	del_clist(&all->list_dir);
 	all->already_autocomplete = 1;

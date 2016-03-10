@@ -31,6 +31,8 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ARROWS)parse_keys.c \
 			$(SRCS_ARROWS)clear_screen.c \
 			$(SRCS_ARROWS)copy_cut_and_paste.c \
+			$(SRCS_ARROWS)copy_left.c \
+			$(SRCS_ARROWS)copy_right.c \
 			$(SRCS_ARROWS)copy_tools.c \
 			$(SRCS_ARROWS)cut_tools.c \
 			$(SRCS_ARROWS)shift.c \
@@ -39,6 +41,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_AUTOCOMPLETE)binary_search.c \
 			$(SRCS_AUTOCOMPLETE)directory_search.c \
 			$(SRCS_AUTOCOMPLETE)equality_search.c \
+			$(SRCS_AUTOCOMPLETE)equality_search_tools.c \
 			$(SRCS_BUILTINS)builtins.c \
 			$(SRCS_BUILTINS)builtins_tools.c \
 			$(SRCS_BUILTINS)read_built.c \

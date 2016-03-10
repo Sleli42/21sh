@@ -103,7 +103,6 @@ void	exec_agg2(t_all *all, char *cmd)
 	char	*file;
 	int		dupout;
 	int		duperr;
-	// int		tmp_fd;
 
 	split_2exec = NULL;
 	file = NULL;
@@ -112,15 +111,13 @@ void	exec_agg2(t_all *all, char *cmd)
 	file = get_good_file_agg2(split_agg);
 	dupout = dup(1);
 	duperr = dup(2);
-	// display_array(split_agg);
-	// printf("file fnd: |%s|\n", file);
 	if (!check_error_agg2(all, split_agg, file))
 	{
 		split_2exec = create_argv_cmd_agg2(split_agg, file);
-		// display_array(split_2exec);
 		if (!ft_isdigit(file[0]) && ft_strcmp(file, "-"))
 		{
-			if ((all->fd2open = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+			if ((all->fd2open = open(file, \
+					O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 				write(1, "err0r1\n", 6);
 			dup2(all->fd2open, 1);
 			dup2(all->fd2open, 2);
@@ -134,12 +131,10 @@ void	exec_agg2(t_all *all, char *cmd)
 			exec_right_binary(all, split_2exec);
 			if (all->fd2restore >= 1 && all->fd2restore <= 2)
 			{
-				// choose_good_dup(all);
 				dup2((all->fd2restore == 1) ? dupout : duperr, all->fd2restore);
 				all->fd2restore = -1;
 			}
 		}
-		(split_2exec) ? del_array(&split_2exec) : NULL;
 	}
 	(split_agg) ? del_array(&split_agg) : NULL;
 }

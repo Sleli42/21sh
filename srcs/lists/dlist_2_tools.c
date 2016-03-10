@@ -12,7 +12,7 @@
 
 #include "21sh.h"
 
-t_dlist2		*create_cmd_dlst(void)
+t_dlist2	*create_cmd_dlst(void)
 {
 	t_dlist2	*new;
 
@@ -27,7 +27,7 @@ t_dlist2		*create_cmd_dlst(void)
 	return (new);
 }
 
-t_cmd			*dlst_cmd_new(char c)
+t_cmd		*dlst_cmd_new(char c)
 {
 	t_cmd	*new;
 
@@ -50,7 +50,7 @@ void		swap_elems_cmd(t_cmd *a, t_cmd *b)
 	b->c = tmp;
 }
 
-int				len_lst_cmd(t_cmd *lst)
+int			len_lst_cmd(t_cmd *lst)
 {
 	t_cmd		*nav;
 	int			ret;
@@ -80,7 +80,7 @@ int			update_list2(t_dlist2 *lst, t_cmd *elem)
 	{
 		elem->c = 0;
 		lst->head = elem->next;
-		lst->head->prev = NULL;;
+		lst->head->prev = NULL;
 	}
 	else
 	{

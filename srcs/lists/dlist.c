@@ -27,7 +27,7 @@ t_node		*dlst_node_new(char *data, size_t index)
 	return (new);
 }
 
-t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
+t_dlist		*dlst_add_back(t_dlist *lst, t_node *node)
 {
 	if (lst && node)
 	{
@@ -47,7 +47,7 @@ t_dlist			*dlst_add_back(t_dlist *lst, t_node *node)
 	return (lst);
 }
 
-t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
+t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del)
 {
 	t_node	*tmp;
 	int		found;
@@ -76,7 +76,7 @@ t_dlist			*dlst_del_one(t_dlist *lst, char *arg2del)
 	return (lst);
 }
 
-void			del_dlist(t_dlist *lst)
+void		del_dlist(t_dlist *lst)
 {
 	t_node	*next_elem;
 	t_node	*tmp;

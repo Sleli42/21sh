@@ -29,7 +29,7 @@ char	*find_env_arg(t_all *all, char *arg2find)
 	return (NULL);
 }
 
-char		**ft_dupenv(char **env)
+char	**ft_dupenv(char **env)
 {
 	char	**dup;
 	int		i;

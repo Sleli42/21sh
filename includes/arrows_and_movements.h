@@ -15,6 +15,9 @@
 
 # include "21sh.h"
 
+# define	END_OF_FILE	(LINE_LEN * all->nb_lines)
+# define	END_OF_LINE	(LINE_LEN * all->curr_line)
+
 typedef struct s_all	t_all;
 typedef struct s_cmd	t_cmd;
 
@@ -71,12 +74,20 @@ typedef struct s_cmd	t_cmd;
 	void		paste_copy_in_cmd(t_all *all);
 	void		paste_buffer(t_all *all);
 	/*
+	*** ======================= copy_left.c
+	*/
+	void		del_highlighted_left(t_all *all);
+	void		copy_left(t_all *all);
+	/*
+	*** ======================= copy_right.c
+	*/
+	void		del_highlighted_right(t_all *all);
+	void		copy_right(t_all *all);
+	/*
 	*** ======================= copy_tools.c
 	*/
 	void		standard_mode(char char2print);
 	void		reverse_mode(char char2print);
-	void		copy_right(t_all *all);
-	void		copy_left(t_all *all);
 	/*
 	*** ======================= cut_tools.c
 	*/

@@ -12,61 +12,6 @@
 
 #include "21sh.h"
 
-/*
-	tests:
-			- touch riri; rm riri; cat riri 2>&-
-			- ls -l 1>&-; ls -X 2>&-; ls -laX >&-; ls -l 2>&-
-			- echo lol taratata 2>&-; echo taratata 1>&-; echo lol 3>&-
-
-			- ls 1>&2; ls 2>&1; ls 1>&5
-			- echo -X test 2>&1; echo -X test 1>&2; echo -X test 5>&4
-
-			- ls -l &> file 2; cat file; rm file; cat file 2>&-
-
-
-
-	possibilities: 
-			- fd>&fd
-			- X>&fd -> fd bad, if not open
-			- cmd >& file 		== 	fd > file
-			- badCmd 1>& file 	== 	fd > file
-			- cmd &> file 		== 	fd > file
-
-	errors:
-			- badCmd 2>& file -> bash: file: ambiguous redirect
-
-
-				test fd: int fcntl(int fd, int cmd);
-						  				(fd, F_GETFD) == -1 -> error bad fd
-	==========================================================
-				-- if (ls -l 1>&2)	==
-						-->	ls -l 1 (dup) > 2
-						--> ls -l stdout (dup) stderr
-				-- if (1>&fd) && !fd
-						--> bad file descriptor -> error
-				-- if (NULL>&fd) && fd
-						--> NULL = stdout par defaut
-				-- if (NULL>&file)
-						--> NULL = stdout && stderr
-	==========================================================
-				ls -l 1>& file -a  ==
-						--> ls -l -a > file
-	==========================================================
-				cat -p 2>&file
-						-->	bash: file: ambiguous redirect
-				cat -p > file
-						-->	cat: illegal option -- p
-						-->	usage: cat [-benstuv] [file ...]
-				cat -p >& file
-						-->	error cat > file
-				cat -p 2>&1
-						-->	cat: illegal option -- p
-						-->	usage: cat [-benstuv] [file ...]
-				cat -p 2>&3
-						-->	bash: 3: Bad file descriptor
-
-*/
-
 int		check_aggregations(char *cmd)
 {
 	int		ct;

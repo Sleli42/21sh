@@ -30,6 +30,8 @@ void	history_up(t_all *all)
 
 void	extended_history_down(t_all *all)
 {
+	t_cmd	*p;
+
 	all->cmd_termcaps ? del_dlist2(all->cmd_termcaps) : NULL;
 	all->cmd_termcaps = all->pcmd_t ? all->pcmd_t : NULL;
 	if (!(all->cmd_termcaps))
@@ -37,12 +39,12 @@ void	extended_history_down(t_all *all)
 		tputs_termcap("rc");
 		tputs_termcap("le");
 		tputs_termcap("le");
- 		tputs_termcap("le");
+		tputs_termcap("le");
 		return (loop(all));
 	}
 	else if (!CMD_NULL)
 	{
-		t_cmd *p = all->cmd_termcaps->head;
+		p = all->cmd_termcaps->head;
 		while (p && p->c)
 		{
 			ft_putchar(p->c);
@@ -54,7 +56,8 @@ void	extended_history_down(t_all *all)
 
 void	history_down(t_all *all)
 {
-	if (all->current_key == K_DOWN && all->index_history <= all->pos_history - 1)
+	if (all->current_key == K_DOWN \
+			&& all->index_history <= all->pos_history - 1)
 	{
 		all->index_history++;
 		if (CURSOR > PROMPT_LEN || all->index_history == all->pos_history)
@@ -99,7 +102,8 @@ void	del_histo_lines(t_all *all, int nblines2del)
 
 void	goto_latest_commands(t_all *all)
 {
-	if (all->pcmd_t == all->cmd_termcaps && all->current_key == K_DOWN && all->index_history == all->pos_history)
+	if (all->pcmd_t == all->cmd_termcaps \
+		&& all->current_key == K_DOWN && all->index_history == all->pos_history)
 		return ;
 	get_cursor_row(all);
 	all->lines2del = count_lines_2del(all);
