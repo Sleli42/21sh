@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_keys.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/03 18:06:46 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/03 18:06:48 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:16 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 int			getkey(char *s)
 {

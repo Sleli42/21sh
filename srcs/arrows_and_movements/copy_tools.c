@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   copy_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/05 17:17:19 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/05 17:17:20 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:53 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void		standard_mode(char char2print)
 {

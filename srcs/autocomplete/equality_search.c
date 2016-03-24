@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   equality_search.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/01 00:48:53 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/01 00:48:55 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:10:14 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 char	*open_right_directory(t_all *all, char *equ2find)
 {

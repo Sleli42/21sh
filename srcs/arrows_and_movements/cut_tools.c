@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cut_tools.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/07 13:50:51 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/07 13:50:53 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:48 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	cut_delete_char(t_all *all, int count)
 {

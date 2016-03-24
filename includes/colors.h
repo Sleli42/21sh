@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   colors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 20:07:50 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/25 20:07:51 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 15:59:24 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
-
 #ifndef COLORS_H
 # define COLORS_H
+
+# include "full_sh.h"
 
 # define RED				"\e[31m"
 # define BLUE 				"\e[34m"

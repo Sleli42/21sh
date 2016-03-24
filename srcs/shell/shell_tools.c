@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.c                                            :+:      :+:    :+:   */
+/*   shell_tools.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/03 16:43:24 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/11/03 16:43:29 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:01:38 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 char	goto_elem(t_cmd *cmd, int pos)
 {
@@ -26,8 +26,9 @@ char	goto_elem(t_cmd *cmd, int pos)
 
 void	update_cmd_line_insert(t_all *all, char char2add)
 {
-	all->cmd_termcaps = dlst_insert_cmd(all->cmd_termcaps,
-		dlst_cmd_new(char2add), (CURSOR - PROMPT_LEN) + 1);
+	all->cmd_termcaps = dlst_insert_cmd(all, all->cmd_termcaps,
+		dlst_cmd_new(char2add), (CURSOR - PROMPT_LEN \
+								+ all->globing.esc_mem) + 1);
 	CURSOR++;
 }
 

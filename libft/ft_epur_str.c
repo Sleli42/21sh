@@ -11,28 +11,26 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_epur_str(char *s)
 {
 	char	*ret;
-	int		i;
 	int		j;
 
-	i = 0;
 	j = 0;
-	if (!(ret = (char *)malloc(sizeof(char) * 200)))
+	ret = ft_strnew(ft_strlen(s) + 1);
+	if ((!s && !*s) || !ret)
 		return (NULL);
-	while ((s[i] && s[i] == ' ') || (s[i] && s[i] == '\t'))
-		i++;
-	while (s[i])
+	while ((*s && *s == ' ') || (*s && *s == '\t'))
+		s++;
+	while (*s)
 	{
-		ret[j++] = s[i++];
-		if (s[i] == ' ' || s[i] == '\t')
+		ret[j++] = *(s++);
+		if (*s == ' ' || *s == '\t')
 		{
-			while ((s[i] && s[i] == ' ') || (s[i] && s[i] == '\t'))
-				i++;
-			if (s[i] != '\0')
+			while ((*s && *s == ' ') || (*s && *s == '\t'))
+				s++;
+			if (*s != 0)
 				ret[j++] = ' ';
 			else
 				break ;

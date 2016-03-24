@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   autocomplete_tools.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/01 00:55:58 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/01 00:55:59 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:10:32 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	ask_for_big_display(t_all *all)
 {

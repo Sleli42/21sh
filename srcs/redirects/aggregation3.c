@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   aggregation3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/07 13:11:09 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/07 13:11:10 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:04:02 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 char	*rework_cmd_agg3(char *cmd)
 {
@@ -33,30 +33,6 @@ char	*rework_cmd_agg3(char *cmd)
 		ret[j] = '\0';
 	}
 	return (ret);
-}
-
-int		check_error_agg3(t_all *all, char **split, char *file)
-{
-	while (split && ft_strcmp(*split, "<&"))
-		split++;
-	if (!ft_strcmp(*(split + 1), "-"))
-		close_fd(all, *(split - 1));
-	else if (ft_isdigit(file[0]) && ft_atoi(file) > 2)
-	{
-		ft_putstr("sh: ");
-		ft_putnbr(ft_atoi(file));
-		ft_putstr(": Bad file descriptor\n");
-		return (1);
-	}
-	else if ((ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2
-		&& ft_strcmp(file, "-")) || !ft_isdigit(*(split + 1)[0]))
-	{
-		ft_putstr("sh: ");
-		ft_putstr(file);
-		ft_putstr(": ambiguous redirect\n");
-		return (1);
-	}
-	return (0);
 }
 
 char	*get_good_file_agg3(char **array)
@@ -96,45 +72,47 @@ char	**create_argv_cmd_agg3(char **split_agg, char *file)
 	return (ret);
 }
 
+void	exec_agg3_extended(t_all *all, char **split_agg, char *file)
+{
+	char	**split_2exec;
+
+	split_2exec = create_argv_cmd_agg3(split_agg, file);
+	if (!ft_isdigit(file[0]) && ft_strcmp(file, "-"))
+	{
+		if (!(all->fd2open = open(file, \
+			O_WRONLY | O_CREAT | O_APPEND, 0644)))
+			redirection_error(file);
+		dup2(all->fd2open, 1);
+		dup2(all->fd2open, 2);
+		close(all->fd2open);
+		exec_right_binary(all, split_2exec);
+		dup2(all->dupout, 1);
+		dup2(all->duperr, 2);
+	}
+	else
+	{
+		exec_right_binary(all, split_2exec);
+		if (all->fd2restore >= 0 && all->fd2restore <= 2)
+			dup2((all->fd2restore == 1) ? all->dupout
+				: all->duperr, all->fd2restore);
+	}
+	(split_2exec && *split_2exec) ? del_array(&split_2exec) : NULL;
+}
+
 void	exec_agg3(t_all *all, char *cmd)
 {
 	char	**split_agg;
 	char	**split_2exec;
 	char	*file;
-	int		dupout;
-	int		duperr;
 
 	split_2exec = NULL;
 	file = NULL;
 	cmd = rework_cmd_agg3(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
 	file = get_good_file_agg3(split_agg);
-	dupout = dup(1);
-	duperr = dup(2);
+	all->dupout = dup(1);
+	all->duperr = dup(2);
 	if (!check_error_agg3(all, split_agg, file))
-	{
-		split_2exec = create_argv_cmd_agg3(split_agg, file);
-		if (!ft_isdigit(file[0]) && ft_strcmp(file, "-"))
-		{
-			if (!(all->fd2open = open(file, \
-					O_WRONLY | O_CREAT | O_APPEND, 0644)))
-				write(1, "err0r1\n", 6);
-			dup2(all->fd2open, 1);
-			dup2(all->fd2open, 2);
-			close(all->fd2open);
-			exec_right_binary(all, split_2exec);
-			dup2(dupout, 1);
-			dup2(duperr, 2);
-		}
-		else
-		{
-			exec_right_binary(all, split_2exec);
-			if (all->fd2restore >= 0 && all->fd2restore <= 2)
-			{
-				dup2((all->fd2restore == 1) ? dupout : duperr, all->fd2restore);
-				all->fd2restore = -1;
-			}
-		}
-	}
+		exec_agg3_extended(all, split_agg, file);
 	(split_agg) ? del_array(&split_agg) : NULL;
 }

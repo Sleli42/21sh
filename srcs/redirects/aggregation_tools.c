@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   aggregation_tools.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/07 13:11:28 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/07 13:11:29 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:03:49 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 int		check_aggregations(char *cmd)
 {

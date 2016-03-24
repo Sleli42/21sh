@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/05 11:03:01 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/11/05 11:03:03 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:06:30 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	exec_redirection_cmd(t_all *all, char *cmd)
 {
@@ -33,18 +33,18 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 				redirection[i].f(all, cmd);
 			i++;
 		}
-		ft_strdel(&cmp);
 	}
+	cmp ? ft_strdel(&cmp) : NULL;
 }
 
-void	simple_cmd_loop(t_all *all, const t_builtins built[9], char *cmd)
+void	simple_cmd_loop(t_all *all, t_builtins built[10], char *cmd)
 {
 	int		i;
 	int		stop;
 
 	i = 0;
 	stop = 0;
-	while (i < 9)
+	while (i < 10)
 	{
 		if (!ft_strncmp(cmd, built[i].action_name, \
 						ft_strlen(built[i].action_name)))
@@ -55,9 +55,7 @@ void	simple_cmd_loop(t_all *all, const t_builtins built[9], char *cmd)
 		i++;
 	}
 	if (!stop)
-	{
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
-	}
 }
 
 void	exec_simple_cmd(t_all *all, char *cmd)
@@ -74,7 +72,7 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	{"read", read_built},
 	{"echo", built_echo}};
 
-	simple_cmd_loop(all, built, cmd);
+	simple_cmd_loop(all, (t_builtins *)built, cmd);
 }
 
 void	exec_command(t_all *all)
@@ -82,9 +80,9 @@ void	exec_command(t_all *all)
 	int		i;
 
 	i = 0;
-	if (all->parsecmd != NULL)
+	if (all->parsecmd && *all->parsecmd && **all->parsecmd)
 	{
-		while (all->parsecmd[i])
+		while (all->parsecmd[i] && *(all->parsecmd[i]))
 		{
 			if (check_redirection(all->parsecmd[i]) == 1)
 				exec_redirection_cmd(all, all->parsecmd[i]);

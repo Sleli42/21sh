@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   autocomplete.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/09 14:48:16 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/12/09 14:48:22 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:10:37 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	add_spaces(t_all *all, int tmp_len, int ct)
 {

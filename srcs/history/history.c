@@ -6,11 +6,11 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 01:12:03 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/01 10:26:25 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/03/21 16:06:51 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	history_up(t_all *all)
 {

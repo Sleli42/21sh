@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   aggregation1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/07 13:11:09 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/07 13:11:10 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:04:13 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 char	*get_good_file_agg1(char **array)
 {

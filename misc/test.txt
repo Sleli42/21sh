@@ -1,0 +1,11 @@
+	
+	tests:
+		- touch riri; rm riri; cat riri 2>&-
+		- ls -l 1>&-; ls -X 2>&-; ls -laX >&-; ls -l 2>&-
+			- echo lol taratata 2>&-; echo taratata 1>&-; echo lol 3>&-
+
+		- ls 1>&2; ls 2>&1; ls 1>&5
+		- echo -X test 2>&1; echo -X test 1>&2; echo -X test 5>&4
+
+		- ls -l &> file 2; cat file; rm file; cat file 2>&-
+		- ls | cat | wc -c > fifi; cat fifi; rm fifi; touch riri; rm riri; cat riri 2>&-

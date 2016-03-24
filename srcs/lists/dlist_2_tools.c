@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dlist_2_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/03 18:29:35 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/03 18:29:36 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:04:50 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 t_dlist2	*create_cmd_dlst(void)
 {

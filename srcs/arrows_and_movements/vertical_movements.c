@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   vertical_movements.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 12:24:29 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/18 12:24:30 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:05 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 static int	count_char_to_shift(t_all *all, int start_pos)
 {

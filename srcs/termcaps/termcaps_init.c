@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   termcaps_init.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/03 17:46:08 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/03 17:46:10 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:05:28 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void		init_term(void)
 {

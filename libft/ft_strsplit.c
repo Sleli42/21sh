@@ -6,7 +6,7 @@
 /*   By: lubaujar <lubaujar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 14:42:32 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/08/29 05:15:12 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/17 23:25:58 by lubaujar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,15 @@ char			**ft_strsplit(char const *s, char c)
 
 	ct = -1;
 	i = 0;
+	if (s == NULL)
+		return (NULL);
 	stop = count_words((char *)s, c);
-	if (!(array = (char **)malloc(sizeof(char *) * stop + 2)))
+	if (!(array = (char **)malloc(sizeof(char *) * stop + 1)))
 		return (NULL);
 	while (++ct < stop)
 	{
 		j = 0;
-		if (!(array[ct] = (char *)malloc(sizeof(char) * 2048)))
+		if (!(array[ct] = (char *)malloc(sizeof(char) * 4096)))
 			return (NULL);
 		while (s[i] && s[i] != c)
 			array[ct][j++] = s[i++];

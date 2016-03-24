@@ -3,39 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   history_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/15 12:33:17 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/15 12:33:19 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:06:46 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
-char	**parse_history(void)
+char	**parse_history(t_all *all)
 {
+	t_hist	msc;
 	char	**ret;
 	char	buff[MAXLEN];
-	int		r;
-	int		fd;
-	char	*stock;
-	char	*tmp;
 
-	if ((fd = open(".21sh_history", O_RDONLY)) == -1)
+	if ((msc.fd = open(all->history_path, O_RDONLY)) == -1)
 		error("OPEN");
 	ret = NULL;
-	stock = NULL;
-	while ((r = read(fd, buff, (MAXLEN - 1))) > 0)
+	msc.stock = NULL;
+	while ((msc.r = read(msc.fd, buff, (MAXLEN - 1))) > 0)
 	{
-		tmp = NULL;
-		buff[r] = 0;
-		tmp = ft_strjoin(stock, buff);
-		stock = ft_strdup(tmp);
-		ft_strdel(&tmp);
+		msc.tmp = NULL;
+		buff[msc.r] = 0;
+		msc.tmp = ft_strjoin(msc.stock, buff);
+		msc.stock = ft_strdup(msc.tmp);
+		ft_strdel(&msc.tmp);
 	}
-	ret = stock ? ft_strsplit(stock, '\n') : NULL;
-	stock ? ft_strdel(&stock) : NULL;
-	close(fd);
+	ret = msc.stock ? ft_strsplit(msc.stock, '\n') : NULL;
+	msc.stock ? ft_strdel(&msc.stock) : NULL;
+	close(msc.fd);
 	return (ret);
 }
 
@@ -46,23 +43,22 @@ void	add_to_history(t_all *all)
 	int		ct;
 	int		i;
 
-	if (!(history_line = (char *)malloc(sizeof(char) * \
-						(int)all->cmd_termcaps->lenght + 1)))
-		return ;
+	history_line = ft_strnew(all->cmd_termcaps->lenght + 1);
 	tmp = ft_itoa(all->pos_history++);
 	ct = 0;
 	i = 0;
-	while (tmp[i])
+	while (tmp && tmp[i])
 		history_line[ct++] = tmp[i++];
 	(tmp) ? ft_strdel(&tmp) : NULL;
 	history_line[ct++] = ':';
 	i = 0;
+	!all->cmd ? create_cmd(all) : NULL;
 	while (all->cmd[i])
 		history_line[ct++] = all->cmd[i++];
 	history_line[ct] = '\0';
 	write(all->fd_history, history_line, ft_strlen(history_line));
 	write(all->fd_history, "\n", 1);
-	(history_line) ? ft_strdel(&history_line) : NULL;
+	(history_line && *history_line) ? ft_strdel(&history_line) : NULL;
 }
 
 void	display_index_cmd(t_all *all)
@@ -74,12 +70,10 @@ void	display_index_cmd(t_all *all)
 	tmp = NULL;
 	if (all->history_buff)
 		del_array(&all->history_buff);
-	all->history_buff = parse_history();
+	if ((all->history_buff = parse_history(all)) == NULL)
+		return (init_history(all));
 	if (!check_history_file(all->history_buff))
-	{
-		exit(printf("nohi\n")); /* gestion erreur */
-		return ;
-	}
+		return (ft_putstr("no history"));
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
 	tmp = ft_strdup(all->history_buff[all->index_history - 1] + (ct + 1));

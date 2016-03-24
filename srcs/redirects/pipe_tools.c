@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/03 23:37:12 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/03 23:37:14 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:03:37 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 char	*create_good_path(t_all *all, char *cmd)
 {
@@ -84,4 +84,26 @@ char	*redirected_in_args(char **args, int *redir_type)
 		i++;
 	}
 	return (NULL);
+}
+
+char	**modify_pipe_array(t_all *all, char **array)
+{
+	char	**modify;
+	int		count;
+
+	count = 0;
+	all->redir_in_pipe = 1;
+	while (array[count] && array[count][0] != '>')
+		count++;
+	if (!(modify = (char**)malloc(sizeof(char*) * count + 1)))
+		error("MALLOC");
+	count = 0;
+	while (array[count] && array[count][0] != '>')
+	{
+		modify[count] = ft_strdup(array[count]);
+		count++;
+	}
+	all->file2redir = ft_strdup(array[count + 1]);
+	modify[count] = NULL;
+	return (modify);
 }

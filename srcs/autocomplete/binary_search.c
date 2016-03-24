@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   binary_search.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/01 00:47:56 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/01 00:47:58 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:10:27 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	results_analysis_bin(t_all *all)
 {

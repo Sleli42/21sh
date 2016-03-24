@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   horizontal_movements.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/03 18:00:16 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/03 18:00:18 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:31 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	opt_right_move(t_all *all)
 {
@@ -25,7 +25,7 @@ void	opt_right_move(t_all *all)
 		while (all->cmd[CURSOR - PROMPT_LEN] != ' ')
 			goto_right(all);
 	}
-	else if (CURSOR + PROMPT_LEN < (int)ft_strlen(all->cmd))
+	else
 		goto_end(all);
 }
 
@@ -67,9 +67,7 @@ void	reprint_char(t_all *all, t_cmd *nav)
 		all->cpy_move_left--;
 	}
 	else
-	{
 		reverse_mode(nav->c);
-	}
 }
 
 void	horizontal_moves(t_all *all)

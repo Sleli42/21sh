@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dlist.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/03 16:13:46 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/11/03 16:13:47 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:05:01 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 t_node		*dlst_node_new(char *data, size_t index)
 {
@@ -58,7 +58,7 @@ t_dlist		*dlst_del_one(t_dlist *lst, char *arg2del)
 	{
 		while (tmp && !found)
 		{
-			if (ft_strncmp(tmp->s, arg2del, ft_strlen(arg2del)) == 0)
+			if (!ft_strncmp(tmp->s, arg2del, ft_strlen(arg2del)))
 			{
 				if (!tmp->next && !tmp->prev)
 				{

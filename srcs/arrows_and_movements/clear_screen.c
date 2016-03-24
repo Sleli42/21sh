@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   clear_screen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 17:35:45 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/01/04 17:35:46 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:12:28 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	ft_clear_screen(t_all *all)
 {

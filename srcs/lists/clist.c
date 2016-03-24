@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   c_list.c                                           :+:      :+:    :+:   */
+/*   clist.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 15:23:55 by lubaujar          #+#    #+#             */
-/*   Updated: 2015/12/11 15:23:57 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:05:06 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 t_clist		*create_clst(void)
 {
@@ -34,7 +34,7 @@ t_select	*clst_create_elem(char *s)
 	if (!(new = (t_select *)malloc(sizeof(t_select))))
 		return (NULL);
 	new->arg = ft_strdup(s);
-	new->onArg = 0;
+	new->onarg = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

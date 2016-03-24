@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   goto_funcs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/08 15:33:44 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/02/08 15:33:45 by lubaujar         ###   ########.fr       */
+/*   Updated: 2016/03/21 16:11:35 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "full_sh.h"
 
 void	goto_right(t_all *all)
 {
