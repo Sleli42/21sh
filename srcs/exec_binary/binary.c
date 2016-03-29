@@ -26,6 +26,8 @@ void		exec_right_binary(t_all *all, char **argv_bin)
 
 	ct = 0;
 	bin_tmp = NULL;
+	(all->path2exec && *all->path2exec) ? del_array(&all->path2exec) : NULL;
+	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	while (all->path2exec[ct])
 	{
 		if (!(bin_tmp = create_path(all->path2exec[ct], argv_bin[0])))

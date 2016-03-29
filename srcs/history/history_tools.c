@@ -77,8 +77,8 @@ void	display_index_cmd(t_all *all)
 	while (all->history_buff[all->index_history - 1][ct] != ':')
 		ct++;
 	tmp = ft_strdup(all->history_buff[all->index_history - 1] + (ct + 1));
-	ft_putstr(tmp);
 	realloc_termcaps_cmd(all, tmp);
+	ft_putstr(tmp);
 }
 
 int		check_history_file(char **histo)

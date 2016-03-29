@@ -86,4 +86,6 @@ void	env_set(t_all *all, char *cmd)
 void	env_unset(t_all *all, char *cmd)
 {
 	dlst_del_one(all->env, (cmd + 10));
+	(all->dupenv) ? del_array(&all->dupenv) : NULL;
+	all->dupenv = realloc_env_array(all->env);
 }
