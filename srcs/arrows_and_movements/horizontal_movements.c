@@ -14,7 +14,6 @@
 
 void	opt_right_move(t_all *all)
 {
-	create_cmd(all);
 	if (check_if_spaces_after(all, (CURSOR - PROMPT_LEN) + 1))
 	{
 		CURSOR++;
@@ -31,7 +30,6 @@ void	opt_right_move(t_all *all)
 
 void	opt_left_move(t_all *all)
 {
-	create_cmd(all);
 	if (check_if_spaces_before(all, (CURSOR - PROMPT_LEN) - 1))
 	{
 		CURSOR--;

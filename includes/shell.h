@@ -74,6 +74,7 @@ char		goto_elem(t_cmd *cmd, int pos);
 void		update_cmd_line_insert(t_all *all, char char2add);
 void		realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
 void		create_cmd(t_all *all);
+void		define_current_line(t_all *all);
 
 /*
 *** ======================= debug.c

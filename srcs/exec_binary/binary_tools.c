@@ -46,3 +46,21 @@ char		*create_path(char *path, char *bin)
 	tmp ? ft_strdel(&tmp) : NULL;
 	return (ret);
 }
+
+void	check_mode_file(t_all *all, char *cmd)
+{
+	if (stat(ft_strjoin("./", cmd + 2), &all->stat) != -1)
+	{
+		if (all->stat.st_mode & S_IXOTH)
+			return ;
+		else
+		{
+			ft_putstr("42sh: ");
+			ft_putstr(cmd);
+			ft_putstr(": Permission denied\n");
+			return (loop(all));
+		}
+	}
+	else
+		return (loop(all));
+}

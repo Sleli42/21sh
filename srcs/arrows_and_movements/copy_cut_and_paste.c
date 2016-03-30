@@ -91,5 +91,6 @@ void		paste_buffer(t_all *all)
 		create_cmd(all);
 		realloc_termcaps_cmd(all, all->cmd);
 		CURSOR = save + PROMPT_LEN + (ft_strlen(all->copy) - 1);
+		define_current_line(all);
 	}
 }

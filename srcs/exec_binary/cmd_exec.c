@@ -55,7 +55,11 @@ void	simple_cmd_loop(t_all *all, t_builtins built[10], char *cmd)
 		i++;
 	}
 	if (!stop)
+	{
+		if (!ft_strncmp(cmd, "./", 2))
+			check_mode_file(all, cmd);
 		exec_right_binary(all, ft_strsplit(cmd, ' '));
+	}
 }
 
 void	exec_simple_cmd(t_all *all, char *cmd)

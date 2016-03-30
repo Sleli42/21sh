@@ -13,14 +13,19 @@
 |                                    BONUS_                                    |
 |------------------------------------------------------------------------------|
 |                                                                              |
-|    • Les redirections avancées : \                                           |
-|		l’aggrégation des sorties de fichier et le heredoc "<<".       |
 |    • les variables locales                                                   |
-|    • L’historique des commandes et les builtins history et "!" \             |
-|    avec toutes leurs options si elles en ont.                                |
-|    • Les descripteurs de fichiers et la builtin read avec toutes ses options.|
+|    • L’historique des commandes et les builtins history et "!"               |
+|    • La builtin read avec toutes ses options.								   |
 |    • Complétion dynamique.                                                   |
 |    • Message d'acceuil.                                                      |
 |    • Builtins echo & PWD.                                                    |
 |    • Signal sonore d'erreur                                                  |
+|______________________________________________________________________________|
+
+ ______________________________________________________________________________
+|                                                                              |
+|                                 CURRENT BUGS                                 |
+|------------------------------------------------------------------------------|
+|    • "\" + ENTER  	-> globbing bug                                        |
+|    • "!" + search 	-> no cmd display                                      |
 |______________________________________________________________________________|

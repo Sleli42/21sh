@@ -49,7 +49,9 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 		all->pcmd_t = NULL;
 	while (cmd2realloc[ct])
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
-	all->cursor_pos = (int)all->cmd_termcaps->lenght + PROMPT_LEN;
+	CURSOR = (int)all->cmd_termcaps->lenght + PROMPT_LEN;
+	define_current_line(all);
+	all->nb_lines = all->curr_line;
 	all->pcmd_i = 1;
 }
 
@@ -76,4 +78,13 @@ void	create_cmd(t_all *all)
 		}
 	}
 	all->cmd[i] = '\0';
+}
+
+void		define_current_line(t_all *all)
+{
+	if (all->curr_line == 1)
+	{
+		while (CURSOR > (LINE_LEN * all->curr_line))
+			all->curr_line++;
+	}
 }

@@ -41,6 +41,7 @@ void			exec_binary(char *bin, char **argv_bin, char **env);
 int				good_access(char *bin);
 char			*get_pwd_path(char *bin);
 char			*create_path(char *path, char *bin);
+void			check_mode_file(t_all *all, char *cmd);
 
 /*
 *** ======================= cmd_parse.c

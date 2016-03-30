@@ -55,28 +55,38 @@ void	goto_up(t_all *all)
 
 void	goto_begin(t_all *all)
 {
-	while (CURSOR > PROMPT_LEN)
+	if (CURSOR == PROMPT_LEN)
+		tputs_termcap("bl");
+	else
 	{
-		if (all->curr_line > 1
-			&& CURSOR == ((all->curr_line - 1) * LINE_LEN))
-			goto_up(all);
-		else
-			tputs_termcap("le");
-		CURSOR--;
+		while (CURSOR > PROMPT_LEN)
+		{
+			if (all->curr_line > 1
+				&& CURSOR == ((all->curr_line - 1) * LINE_LEN))
+				goto_up(all);
+			else
+				tputs_termcap("le");
+			CURSOR--;
+		}
 	}
 }
 
 void	goto_end(t_all *all)
 {
-	while (all->cmd[CURSOR - PROMPT_LEN])
+	if (CURSOR == (int)all->cmd_termcaps->lenght + PROMPT_LEN)
+		tputs_termcap("bl");
+	else
 	{
-		if (CURSOR == (LINE_LEN * all->curr_line) - 1)
+		while (all->cmd[CURSOR - PROMPT_LEN])
 		{
-			tputs_termcap("do");
-			all->curr_line++;
+			if (CURSOR == (LINE_LEN * all->curr_line) - 1)
+			{
+				tputs_termcap("do");
+				all->curr_line++;
+			}
+			else
+				tputs_termcap("nd");
+			CURSOR++;
 		}
-		else
-			tputs_termcap("nd");
-		CURSOR++;
 	}
 }

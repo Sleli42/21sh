@@ -27,7 +27,6 @@ void		goto_up_line(t_all *all)
 	int		ct;
 
 	ct = 0;
-	ft_putstr("OUAIS OUAIS OUAIS GROS\n");
 	if (all->current_key == K_CTRL_UP && all->curr_line > 1)
 	{
 		ct = count_char_to_shift(all, ((all->curr_line - 1) * LINE_LEN));
@@ -42,6 +41,8 @@ void		goto_up_line(t_all *all)
 			tputs_termcap("nd");
 		}
 	}
+	else
+		tputs_termcap("bl");
 }
 
 void		goto_down_line(t_all *all)
@@ -68,4 +69,6 @@ void		goto_down_line(t_all *all)
 				tputs_termcap("nd");
 		}
 	}
+	else
+		tputs_termcap("bl");
 }
