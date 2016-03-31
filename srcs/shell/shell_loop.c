@@ -22,6 +22,7 @@ int		check_globbing(t_all *all)
 	{
 		*all->buff = '.';
 		all->globing.back--;
+		all->globing.esc_mem += CURSOR - PROMPT_LEN;
 		all->cursor_pos = PROMPT_LEN;
 		ft_putstr("\n > ");
 		return (0);
@@ -66,6 +67,7 @@ void	read_keys(t_all *all)
 
 void	already_in_func(t_all *all)
 {
+	create_cmd(all);
 	if (all->p_mark && all->cmd)
 	{
 		ft_putstr(all->cmd);
