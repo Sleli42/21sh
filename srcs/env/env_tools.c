@@ -17,7 +17,7 @@ char	*find_env_arg(t_all *all, char *arg2find)
 	t_node		*nav;
 
 	nav = all->env->head;
-	if (nav)
+	if (nav && arg2find)
 	{
 		while (nav)
 		{
@@ -26,7 +26,7 @@ char	*find_env_arg(t_all *all, char *arg2find)
 			nav = nav->next;
 		}
 	}
-	return (ft_strjoin(arg2find, " "));
+	return (NULL);
 }
 
 char	**ft_dupenv(char **env)

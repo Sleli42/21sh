@@ -25,26 +25,37 @@ void			pwd_display(t_all *all, char *cmd)
 	ft_putendl(pwd);
 }
 
+void			write_error_goto_dir(char *err)
+{
+	ft_putstr("cd: no such file or directory: ");
+	ft_putstr(err);
+	ft_putchar('\n');
+}
+
 void			goto_dir(t_all *all, char *cmd)
 {
 	char		*buff;
 
 	buff = NULL;
-	all->oldpwd = getcwd(buff, 512);
-	all->oldpwd = ft_strjoin(all->oldpwd, "/");
+	(all->oldpwd && *all->oldpwd) ? ft_strdel(&all->oldpwd) : NULL;
+	all->oldpwd = ft_strdup(getcwd(buff, 512));
+	all->oldpwd = (ft_strcmp(all->oldpwd, "/")) \
+			? ft_strjoin(all->oldpwd, "/") : all->oldpwd;
 	cmd += 3;
 	if (*cmd == '\0')
 		cmd = ft_strdup(find_env_arg(all, "HOME") + 5);
-	else if (*cmd == '-')
+	if (*cmd == '~')
+		cmd = ft_strjoin(find_env_arg(all, "HOME") + 5, cmd + 1);
+	if (*cmd == '-')
 		cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
-	if (access(ft_strjoin(all->oldpwd, cmd), F_OK | R_OK) == 0)
+	if (access(cmd, F_OK) == 0)
 	{
 		if (chdir(cmd) == -1)
 			error("DIR");
 		update_oldpwd(all);
 	}
 	else
-		ft_putstr("BAAAAD FILE\n");
+		write_error_goto_dir(cmd);
 }
 
 void			built_history(t_all *all, char *cmd)
@@ -72,5 +83,6 @@ void			free_all(t_all *all, char *cmd)
 	free(all);
 	all = NULL;
 	ft_putendl("exit");
-	exit(1);
+	(cmd + 5 && ft_isdigit(*(cmd + 5))) \
+		? exit(ft_atoi(cmd + 5)) : exit(1);
 }

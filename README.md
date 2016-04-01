@@ -26,6 +26,7 @@
 |                                                                              |
 |                                 CURRENT BUGS                                 |
 |------------------------------------------------------------------------------|
-|    • "\" + ENTER  	-> globbing bug                                        |
-|    • "!" + search 	-> no cmd display                                      |
+|    • VAR_ENV=NEW_VAR_ENV -> BUG 					                           |
+|    • history up + multilignes -> decalage							           |
+|    • table de hachage binare  					                           |
 |______________________________________________________________________________|
