@@ -15,10 +15,8 @@
 void	parse_command(t_all *all, char *buff)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
-	tmp = NULL;
 	all->parsecmd ? del_array(&all->parsecmd) : NULL;
 	all->parsecmd = NULL;
 	if (buff && buff[0] != '\0')

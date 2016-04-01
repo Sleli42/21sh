@@ -30,19 +30,21 @@ void			goto_dir(t_all *all, char *cmd)
 	char		*buff;
 
 	buff = NULL;
-	all->oldpwd = getcwd(buff, 42);
+	all->oldpwd = getcwd(buff, 512);
 	all->oldpwd = ft_strjoin(all->oldpwd, "/");
 	cmd += 3;
-	if (cmd[0] == '\0')
-		cmd = ft_strdup("/nfs/zfs-student-5/users/2014/lubaujar/");
-	else if (cmd[0] == '-')
+	if (*cmd == '\0')
+		cmd = ft_strdup(find_env_arg(all, "HOME") + 5);
+	else if (*cmd == '-')
 		cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
-	if (access(cmd, F_OK) == 0)
+	if (access(ft_strjoin(all->oldpwd, cmd), F_OK | R_OK) == 0)
 	{
 		if (chdir(cmd) == -1)
 			error("DIR");
 		update_oldpwd(all);
 	}
+	else
+		ft_putstr("BAAAAD FILE\n");
 }
 
 void			built_history(t_all *all, char *cmd)

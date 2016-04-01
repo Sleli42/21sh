@@ -25,7 +25,7 @@ void	history_up(t_all *all)
 		display_index_cmd(all);
 	}
 	else if (all->current_key == K_UP && !CMD_NULL)
-		;
+		return ;
 }
 
 void	extended_history_down(t_all *all)

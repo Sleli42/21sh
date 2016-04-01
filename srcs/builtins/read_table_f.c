@@ -24,9 +24,6 @@ int						check_digit(char *s)
 
 int						ft_u(t_all *all, char *n)
 {
-	int					ret;
-
-	ret = 0;
 	if (!check_digit(n))
 		return (-1);
 	if ((all->r_box.fd = ft_atoi(n)) > 255)

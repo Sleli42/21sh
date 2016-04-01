@@ -32,14 +32,12 @@ void		init_loop(t_all *all)
 void		init_history(t_all *all)
 {
 	char	buf[512];
-	char	*path;
 
-	path = getcwd(buf, 512);
 	all->history_path = NULL;
 	if ((all->fd_history = open(".21sh_history", \
 				O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
 		write(1, "open error\n", 11);
-	all->history_path = ft_strjoin(buf, "/.21sh_history");
+	all->history_path = ft_strjoin(getcwd(buf, 512), "/.21sh_history");
 	all->history_buff = parse_history(all);
 	all->pos_history = check_history_file(all->history_buff);
 }

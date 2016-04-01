@@ -77,6 +77,7 @@ void			update_oldpwd(t_all *all)
 	t_node		*nav;
 
 	nav = all->env->head;
+	ft_putstr("HERE\n");
 	if (nav)
 	{
 		while (nav)
@@ -98,4 +99,5 @@ void			update_oldpwd(t_all *all)
 			nav = nav->next;
 		}
 	}
+	ft_putstr("HERE\n");
 }

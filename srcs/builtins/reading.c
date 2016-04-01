@@ -83,10 +83,8 @@ int				reading(t_all *all, t_read *r_box, char **stock, int fd)
 int				get_char(t_all *all, t_read *r_box, int fd, char **s)
 {
 	int			breakpoint;
-	int			i;
 
 	breakpoint = 0;
-	i = 0;
 	if (all->r_box.timeout > 0)
 		set_timeout(all);
 	else

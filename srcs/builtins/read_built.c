@@ -106,14 +106,10 @@ int						init_var(t_all *all, char *cmd)
 void					read_built(t_all *all, char *cmd)
 {
 	t_read				p;
-	int					i;
-	int					j;
 
 	init_rbox(all);
 	if (!init_var(all, cmd))
 		return ;
-	j = 0x0;
-	i = 0x0;
 	if (!all->r_box.var_tab)
 		return ;
 	p = all->r_box;

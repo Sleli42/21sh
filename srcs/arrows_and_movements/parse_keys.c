@@ -38,9 +38,6 @@ int			getkey(char *s)
 
 int			check_keys_arrows(t_all *all, char *buff)
 {
-	int		ct;
-
-	ct = 0;
 	all->current_key = getkey(buff);
 	if (all->current_key == K_ENTER)
 		return (-1);

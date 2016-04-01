@@ -69,11 +69,9 @@ char	*get_cursor_row_loop(char *buff)
 void	get_cursor_row(t_all *all)
 {
 	int		fd;
-	int		ct;
 	char	*buff;
 	char	*cpy;
 
-	ct = 0;
 	buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
 	if ((fd = open("/dev/tty", O_RDWR)) == -1)
 		write(1, "Open error\n", 12);

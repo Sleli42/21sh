@@ -102,10 +102,8 @@ void	exec_agg2_extended(t_all *all, char **split_agg, char *file)
 void	exec_agg2(t_all *all, char *cmd)
 {
 	char	**split_agg;
-	char	**split_2exec;
 	char	*file;
 
-	split_2exec = NULL;
 	file = NULL;
 	cmd = rework_cmd_agg2(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
