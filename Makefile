@@ -60,6 +60,7 @@ SRCS			= $(SRC)main.c \
 			$(SRCS_ENV)env.c \
 			$(SRCS_ENV)env_init.c \
 			$(SRCS_ENV)env_tools.c \
+			$(SRCS_ENV)env_tools_2.c \
 			$(SRCS_EXEC)binary.c \
 	 		$(SRCS_EXEC)binary_tools.c \
 			$(SRCS_EXEC)cmd_parse.c \

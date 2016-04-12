@@ -37,16 +37,18 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 	cmp ? ft_strdel(&cmp) : NULL;
 }
 
-void	simple_cmd_loop(t_all *all, t_builtins built[10], char *cmd)
+void	simple_cmd_loop(t_all *all, t_builtins built[11], char *cmd)
 {
 	int		i;
 	int		stop;
+	char	*tmp;
 
 	i = 0;
 	stop = 0;
-	while (i < 10)
+	while (i < 11)
 	{
-		if (!ft_strncmp(cmd, built[i].action_name, \
+		tmp = (i == 2 && symbol_in_cmd(cmd, '=')) ? cmd + count_var_len(cmd) : cmd;
+		if (!ft_strncmp(tmp, built[i].action_name, \
 						ft_strlen(built[i].action_name)))
 		{
 			built[i].f(all, cmd);
@@ -67,6 +69,7 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 	static const t_builtins		built[] =
 	{{"env", env_display},
 	{"set env", env_set},
+	{"=", env_modify},
 	{"unset env", env_unset},
 	{"pwd", pwd_display},
 	{"cd", goto_dir},

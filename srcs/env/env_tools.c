@@ -46,14 +46,16 @@ char	**ft_dupenv(char **env)
 int		count_var_len(char *var)
 {
 	int		ret;
+	int		ct;
 
 	ret = 0;
+	ct = 0;
 	if (var)
 	{
-		while (var && *var != '=')
+		while (var && var[ct] != '=')
 		{
 			ret++;
-			var++;
+			ct++;
 		}
 	}
 	return (ret);

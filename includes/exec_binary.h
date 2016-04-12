@@ -54,7 +54,7 @@ int				check_redirection(char *s);
 *** ======================= cmd_exec.c
 */
 
-void			simple_cmd_loop(t_all *all, t_builtins built[10], char *cmd);
+void			simple_cmd_loop(t_all *all, t_builtins built[11], char *cmd);
 void			exec_simple_cmd(t_all *all, char *cmd);
 void			exec_redirection_cmd(t_all *all, char *cmd);
 void			exec_command(t_all *all);
