@@ -56,19 +56,34 @@ void	update_env(t_all *all, char *s)
 	}
 }
 
+int		good_env_formatting(char *s)
+{
+	char	*tmp;
+
+	tmp = ft_strchr(s, '=');
+	if (*(tmp - 1) && ft_isprint(*(tmp - 1))
+		&& *tmp == '=' && *(tmp + 1) && ft_isprint(*(tmp + 1)))
+		return (1);
+	return (0);
+}
+
 int		symbol_in_cmd(char *s, int symbol)
 {
 	int	ct;
+	int	ret;
 
 	ct = 0;
+	ret = 0;
 	if (s && s[ct] && symbol)
 	{
 		while (s && s[ct])
 		{
 			if (s[ct] == symbol)
-				return (1);
+				ret++;
 			ct++;
 		}
 	}
+	if (ret == 1)
+		return (1);
 	return (0);
 }

@@ -28,6 +28,7 @@ typedef struct s_node		t_node;
 */
 
 void		env_display(t_all *all, char *cmd);
+void		multi_env_set(t_all *all, char **array);
 void		env_set(t_all *all, char *cmd);
 void		env_unset(t_all *all, char *cmd);
 void		env_modify(t_all *all, char *cmd);
@@ -55,6 +56,7 @@ char		**ft_dupenv(char **env);
 
 char		**realloc_env_array(t_dlist *env);
 void		update_env(t_all *all, char *s);
+int			good_env_formatting(char *s);
 int			symbol_in_cmd(char *s, int symbol);
 
 #endif
