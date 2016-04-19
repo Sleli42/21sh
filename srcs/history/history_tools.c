@@ -93,7 +93,7 @@ int		count_lines_2del(t_all *all)
 {
 	int		ret;
 
-	ret = all->curr_line;
+	ret = 1;
 	while (CURSOR > ret * LINE_LEN)
 		ret++;
 	return (ret);

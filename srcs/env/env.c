@@ -16,14 +16,22 @@ void	env_display(t_all *all, char *cmd)
 {
 	t_node	*nav;
 
-	(void)cmd;
-	nav = all->env->head;
-	if (nav)
+	printf("3: |%c|\n", cmd[3]);
+	if (cmd[3] == ' ' && cmd[4] != '\0')
 	{
-		while (nav)
+		ft_putstr("yes\n");
+		exec_right_binary(all, ft_strsplit(cmd + 3, ' '));
+	}
+	else
+	{
+		nav = all->env->head;
+		if (nav)
 		{
-			ft_putendl(nav->s);
-			nav = nav->next;
+			while (nav)
+			{
+				ft_putendl(nav->s);
+				nav = nav->next;
+			}
 		}
 	}
 }
@@ -76,7 +84,6 @@ void	env_unset(t_all *all, char *cmd)
 
 void	env_modify(t_all *all, char *cmd)
 {
-	ft_putstr("HERE alrod que je ne suis pas du tout sensé aller ici \n\n");
 	if (var_already_exist(all, cmd))
 		update_env(all, cmd);
 	else

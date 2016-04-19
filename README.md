@@ -26,7 +26,7 @@
 |                                                                              |
 |                                 CURRENT BUGS                                 |
 |------------------------------------------------------------------------------|
-|    • VAR_ENV=NEW_VAR_ENV -> BUG 					                           |
-|    • history up + multilignes -> decalage							           |
+|    • 					                           							   |
+|    • A verifier ->history up + multilignes -> decalage					   |
 |    • table de hachage binare  					                           |
 |______________________________________________________________________________|
