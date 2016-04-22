@@ -31,6 +31,7 @@ typedef	struct	s_builtins
 *** ======================= binary.c
 */
 
+void			exec_right_binary_loop(t_all *all, char **argv_bin);
 void			exec_right_binary(t_all *all, char **argv_bin);
 void			exec_binary(char *bin, char **argv_bin, char **env);
 
@@ -38,6 +39,7 @@ void			exec_binary(char *bin, char **argv_bin, char **env);
 *** ======================= binary_tools.c
 */
 
+void			write_error(char *cmd_error);
 int				good_access(char *bin);
 char			*get_pwd_path(char *bin);
 char			*create_path(char *path, char *bin);
@@ -58,5 +60,13 @@ void			simple_cmd_loop(t_all *all, t_builtins built[11], char *cmd);
 void			exec_simple_cmd(t_all *all, char *cmd);
 void			exec_redirection_cmd(t_all *all, char *cmd);
 void			exec_command(t_all *all);
+
+/*
+*** ======================= hash.c
+*/
+
+int				hash_bin(char *s);
+void			add_to_hash_table(t_all *all, char *bin);
+int				hash_exist(char **hash, char *s);
 
 #endif

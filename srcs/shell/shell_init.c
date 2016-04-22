@@ -82,6 +82,7 @@ t_all		*init_all(char **env)
 	all->tmp_cmd = NULL;
 	all->already_autocomplete = 0;
 	all->already_open = 0;
+	all->hash = malloc(sizeof(char *) * 250);
 	init_history(all);
 	init_read(all);
 	init_glob(all);

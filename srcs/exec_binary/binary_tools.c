@@ -12,6 +12,13 @@
 
 #include "full_sh.h"
 
+void	write_error(char *cmd_error)
+{
+	ft_putstr("Command: '");
+	ft_putstr(cmd_error);
+	ft_putstr("' not found\n");
+}
+
 int			good_access(char *bin)
 {
 	if (access(bin, F_OK) == 0)

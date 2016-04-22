@@ -211,6 +211,7 @@ typedef struct			s_all
 	int					duperr;
 	int					fd2restore;
 	t_glob				globing;
+	char				**hash;
 }						t_all;
 
 /*
