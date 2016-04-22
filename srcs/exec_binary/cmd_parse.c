@@ -12,7 +12,20 @@
 
 #include "full_sh.h"
 
-void	parse_command(t_all *all, char *buff)
+static int	len_array(char **array)
+{
+	int		ret;
+
+	ret = 0;
+	while (*array)
+	{
+		ret++;
+		array++;
+	}
+	return (ret);
+}
+
+void		parse_command(t_all *all, char *buff)
 {
 	int		i;
 
@@ -22,7 +35,9 @@ void	parse_command(t_all *all, char *buff)
 	if (buff && buff[0] != '\0')
 	{
 		all->parsecmd = ft_strsplit(buff, ';');
-		if (!all->parsecmd || !*all->parsecmd || !ft_isprint(**all->parsecmd))
+		// printf("len: %d\n", len_array(all->parsecmd));
+		if (len_array(all->parsecmd) == 1 &&
+			(!all->parsecmd || !*all->parsecmd || !ft_isprint(**all->parsecmd)))
 			return ;
 	}
 	else
@@ -37,7 +52,7 @@ void	parse_command(t_all *all, char *buff)
 	}
 }
 
-int		check_redirection(char *s)
+int			check_redirection(char *s)
 {
 	int		ct;
 

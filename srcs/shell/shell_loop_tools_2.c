@@ -92,7 +92,7 @@ void		insert_char(t_all *all)
 													&& *all->buff != '\n')
 	{
 		if (*all->buff != '\n')
-			ft_putstr(all->buff);
+			all->globing.cr_split ? (all->globing.cr_split = 0) : ft_putstr(all->buff);
 		update_cmd_line_insert(all, *all->buff);
 		if (all->nb_lines >= 1)
 			shift(all);

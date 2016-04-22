@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "full_sh.h"
+#define G_ all->globing.crush && all->globing.sub
 
 int		check_globbing(t_all *all)
 {
@@ -18,14 +19,16 @@ int		check_globbing(t_all *all)
 
 	i = 0;
 	if (*all->buff == '\n' && \
-		(all->globing.back | all->globing.crush | all->globing.sub) > 0)
+		(all->globing.back | all->globing.crush | all->globing.sub\
+		 | all->globing.quote | all->globing.d_quote) > 0)
 	{
-		*all->buff = '.';
-		all->globing.back--;
+		*all->buff = all->globing.crush ? ';' : '.';
+		all->globing.cr_split++;
+		all->globing.back ? all->globing.back-- : 0;
 		all->globing.esc_mem += CURSOR - PROMPT_LEN;
 		all->cursor_pos = PROMPT_LEN;
 		ft_putstr("\n > ");
-		return (0);
+		return (*all->buff == ';' ? *all->buff : 0);
 	}
 	while (GLOB[i])
 	{
@@ -43,25 +46,28 @@ int		check_globbing(t_all *all)
 void	read_keys(t_all *all)
 {
 	int		key;
+	int		cr;
 
 	key = 0;
+	cr = 0;
 	if (read(0, all->buff, (MAXLEN - 1)) == -1)
 		return ;
-	if (!check_globbing(all))
-		return ;
-	if (*all->buff == 4)
+	if ((cr = check_globbing(all)))
 	{
-		ft_putstr("\n$: exit\n");
-		exit(0);
-	}
-	if ((key = check_keys_arrows(all, all->buff)) < 0)
-		return ;
-	else if (key > 0)
-		parse_keys(all);
-	else
-	{
-		all->replace_cursor = 0;
-		insert_char(all);
+		if (*all->buff == 4)
+		{
+			ft_putstr("\n$: exit\n");
+			exit(0);
+		}
+		if ((key = check_keys_arrows(all, all->buff)) < 0)
+			return ;
+		else if (key > 0)
+			parse_keys(all);
+		else
+		{
+			all->replace_cursor = 0;
+			insert_char(all);
+		}
 	}
 }
 
@@ -115,6 +121,7 @@ void	loop(t_all *all)
 		already_in_func_extended(all);
 		read_keys(all);
 	}
+	check_glob(&all->globing);
 	if (!CMD_NULL && !all->globing.err)
 	{
 		if (all->lv)

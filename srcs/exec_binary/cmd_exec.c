@@ -87,7 +87,9 @@ void	exec_command(t_all *all)
 	int		i;
 
 	i = 0;
-	if (all->parsecmd && *all->parsecmd && **all->parsecmd)
+	while (all->parsecmd[i][0] == 0)
+		i++;
+	if (all->parsecmd && all->parsecmd[i] && all->parsecmd[i][0])
 	{
 		while (all->parsecmd[i] && *(all->parsecmd[i]))
 		{

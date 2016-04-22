@@ -133,6 +133,7 @@ typedef struct			s_glob
 	char				*err;
 	int					esc_mem;
 	int					dt_print;
+	int					cr_split;
 }						t_glob;
 
 /*

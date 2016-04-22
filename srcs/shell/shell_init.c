@@ -64,6 +64,7 @@ void		init_glob(t_all *all)
 	g->esc_mem = 0x0;
 	g->err = NULL;
 	g->dt_print = 0x0;
+	g->cr_split = 0x0;
 }
 
 t_all		*init_all(char **env)
