@@ -15,24 +15,28 @@
 int			hash_bin(char *s)
 {
 	int		ret;
+	int		ct;
 
 	ret = 0;
-	while (*s)
+	ct = 0;
+	while (s[ct])
 	{
-		ret += *s;
-		s++;
+		ret += s[ct];
+		ct++;
 	}
 	ret %= 100;
 	return (ret);
 }
 
-static int			skip_collision(char **hash, int case)
+void		skip_collision(char **hash, int *ct)
 {
-	if (hash[case] != NULL)
-		return (case);
+	if (hash[*ct] == NULL)
+		return ;
 	else
-		skip_collision(hash, case++);
-	return (case);
+	{
+		(*ct)++;
+		skip_collision(hash, ct);
+	}
 }
 
 void		add_to_hash_table(t_all *all, char *bin)
@@ -42,11 +46,12 @@ void		add_to_hash_table(t_all *all, char *bin)
 	ret = hash_bin(ft_strrchr(bin, '/') + 1);
 	if (bin && ret < 250)
 	{
-		if (!all->hash[ret] && !*all->hash[ret])
+		if (all->hash[ret] == NULL)
 			all->hash[ret] = ft_strdup(bin);
 		else
 		{
-			all->hash[skip_collision(all->hash, ret)] = ft_strdup(bin);
+			skip_collision(all->hash, &ret);
+			all->hash[ret] = ft_strdup(bin);
 		}
 	}
 }
@@ -55,8 +60,12 @@ int			hash_exist(char **hash, char *s)
 {
 	int		try;
 
+	if ((!hash && !*hash) || (!s && !*s))
+		return (0);
 	try = hash_bin(s);
-	if (hash[try] && *hash[try])
+	if (hash[try] && ft_strcmp(hash[try], s))
+		return (0);
+	if (hash[try] != NULL && *hash[try])
 		return (1);
 	return (0);
 }
