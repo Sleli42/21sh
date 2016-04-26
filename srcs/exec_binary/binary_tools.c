@@ -12,7 +12,7 @@
 
 #include "full_sh.h"
 
-void	write_error(char *cmd_error)
+void		write_error(char *cmd_error)
 {
 	ft_putstr("Command: '");
 	ft_putstr(cmd_error);
@@ -54,7 +54,7 @@ char		*create_path(char *path, char *bin)
 	return (ret);
 }
 
-void	check_mode_file(t_all *all, char *cmd)
+void		check_mode_file(t_all *all, char *cmd)
 {
 	if (stat(ft_strjoin("./", cmd + 2), &all->stat) != -1)
 	{

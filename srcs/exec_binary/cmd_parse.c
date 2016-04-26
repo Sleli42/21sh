@@ -35,7 +35,6 @@ void		parse_command(t_all *all, char *buff)
 	if (buff && buff[0] != '\0')
 	{
 		all->parsecmd = ft_strsplit(buff, ';');
-		// printf("len: %d\n", len_array(all->parsecmd));
 		if (len_array(all->parsecmd) == 1 &&
 			(!all->parsecmd || !*all->parsecmd || !ft_isprint(**all->parsecmd)))
 			return ;

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "full_sh.h"
+#define ERROR_MSG	"\n42sh: Parse error"
 
 void		check_glob(t_glob *g)
 {
@@ -18,7 +19,7 @@ void		check_glob(t_glob *g)
 		return ;
 	else if (g->sub != 0 || g->crush != 0 || g->c_indx != 0 || g->quote != 0 ||\
 			g->d_quote != 0)
-		g->err = g->err && *g->err ? g->err : ft_strdup("\nParse error");
+		g->err = g->err && *g->err ? g->err : ft_strdup(ERROR_MSG);
 }
 
 void		save_glob(t_all *all, t_glob *g)
@@ -36,7 +37,7 @@ void		save_glob(t_all *all, t_glob *g)
 	else if (*all->buff == '\\')
 		g->back += g->back ? -1 : 1;
 	if (g->sub < 0 || g->crush < 0 || g->c_indx < 0)
-		g->err = ft_strdup("\nParse error");
+		g->err = ft_strdup(ERROR_MSG);
 	all->cursor_pos++;
 }
 
@@ -46,11 +47,12 @@ void		create_and_exec_command(t_all *all)
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
+	all->cmd = ft_epur_str(all->cmd);
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
-		add_to_history(all);
 		parse_command(all, all->cmd);
 		all->parsecmd && *all->parsecmd ? exec_command(all) : NULL;
+		add_to_history(all);
 	}
 	!CMD_NULL ? del_dlist2(all->cmd_termcaps) : NULL;
 	all->cmd && *all->cmd ? ft_strdel(&all->cmd) : NULL;
@@ -92,7 +94,8 @@ void		insert_char(t_all *all)
 													&& *all->buff != '\n')
 	{
 		if (*all->buff != '\n')
-			all->globing.cr_split ? (all->globing.cr_split = 0) : ft_putstr(all->buff);
+			all->globing.cr_split ? (all->globing.cr_split = 0) : \
+												ft_putstr(all->buff);
 		update_cmd_line_insert(all, *all->buff);
 		if (all->nb_lines >= 1)
 			shift(all);

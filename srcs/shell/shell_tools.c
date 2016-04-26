@@ -80,7 +80,7 @@ void	create_cmd(t_all *all)
 	all->cmd[i] = '\0';
 }
 
-void		define_current_line(t_all *all)
+void	define_current_line(t_all *all)
 {
 	if (all->curr_line == 1)
 	{

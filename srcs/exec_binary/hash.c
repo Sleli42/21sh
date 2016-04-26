@@ -26,6 +26,15 @@ int			hash_bin(char *s)
 	return (ret);
 }
 
+static int			skip_collision(char **hash, int case)
+{
+	if (hash[case] != NULL)
+		return (case);
+	else
+		skip_collision(hash, case++);
+	return (case);
+}
+
 void		add_to_hash_table(t_all *all, char *bin)
 {
 	int		ret;
@@ -33,13 +42,11 @@ void		add_to_hash_table(t_all *all, char *bin)
 	ret = hash_bin(ft_strrchr(bin, '/') + 1);
 	if (bin && ret < 250)
 	{
-		if (!all->hash[ret])
+		if (!all->hash[ret] && !*all->hash[ret])
 			all->hash[ret] = ft_strdup(bin);
 		else
 		{
-			while (all->hash[ret] != NULL && ret < 250)
-				ret++;
-			all->hash[ret] = ft_strdup(bin);
+			all->hash[skip_collision(all->hash, ret)] = ft_strdup(bin);
 		}
 	}
 }

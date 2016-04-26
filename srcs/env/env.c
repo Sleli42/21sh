@@ -16,12 +16,8 @@ void	env_display(t_all *all, char *cmd)
 {
 	t_node	*nav;
 
-	printf("3: |%c|\n", cmd[3]);
 	if (cmd[3] == ' ' && cmd[4] != '\0')
-	{
-		ft_putstr("yes\n");
 		exec_right_binary(all, ft_strsplit(cmd + 3, ' '));
-	}
 	else
 	{
 		nav = all->env->head;
@@ -45,7 +41,6 @@ void	multi_env_set(t_all *all, char **array)
 	{
 		if (good_env_formatting(array[ct]))
 		{
-			// printf("s: %s\n", array[ct]);
 			if (var_already_exist(all, array[ct]))
 				update_env(all, array[ct]);
 			else

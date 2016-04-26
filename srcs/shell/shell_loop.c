@@ -11,19 +11,18 @@
 /* ************************************************************************** */
 
 #include "full_sh.h"
-#define G_ all->globing.crush && all->globing.sub
+#define G_		(all->globing.crush && all->globing.sub)
+#define G_ALL	(all->globing.back | all->globing.crush | all->globing.sub)
+#define G_ALL2	(all->globing.quote | all->globing.d_quote)
 
 int		check_globbing(t_all *all)
 {
 	int		i;
 
 	i = 0;
-	if (*all->buff == '\n' && \
-		(all->globing.back | all->globing.crush | all->globing.sub\
-		 | all->globing.quote | all->globing.d_quote) > 0)
+	if (*all->buff == '\n' && (G_ALL || G_ALL2 > 0))
 	{
 		*all->buff = all->globing.crush ? ';' : '.';
-		all->globing.cr_split++;
 		all->globing.back ? all->globing.back-- : 0;
 		all->globing.esc_mem += CURSOR - PROMPT_LEN;
 		all->cursor_pos = PROMPT_LEN;
