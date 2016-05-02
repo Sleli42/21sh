@@ -51,7 +51,7 @@ void		create_and_exec_command(t_all *all)
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		parse_command(all, all->cmd);
-		all->parsecmd && *all->parsecmd ? exec_command(all) : NULL;
+		all->parsecmd && all->parsecmd[0] ? exec_command(all) : NULL;
 		add_to_history(all);
 	}
 	!CMD_NULL ? del_dlist2(all->cmd_termcaps) : NULL;

@@ -88,16 +88,19 @@ void	exec_command(t_all *all)
 	int		i;
 
 	i = 0;
-	while (all->parsecmd[i][0] == 0)
-		i++;
-	if (all->parsecmd && all->parsecmd[i] && all->parsecmd[i][0])
+	if (all->parsecmd)
 	{
-		while (all->parsecmd[i] && *(all->parsecmd[i]))
+		while (all->parsecmd[i])
 		{
-			if (check_redirection(all->parsecmd[i]) == 1)
-				exec_redirection_cmd(all, all->parsecmd[i]);
+			if ((!all->parsecmd[i] || !all->parsecmd[i][0]))
+				;
 			else
-				exec_simple_cmd(all, all->parsecmd[i]);
+			{
+				if (check_redirection(all->parsecmd[i]) == 1)
+					exec_redirection_cmd(all, all->parsecmd[i]);
+				else
+					exec_simple_cmd(all, all->parsecmd[i]);
+			}
 			i++;
 		}
 	}

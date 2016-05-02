@@ -45,7 +45,7 @@ char		*create_path(char *path, char *bin)
 	char	*ret;
 
 	if (*bin == '/')
-		return (bin);
+		return (!access(bin, F_OK | X_OK) ? bin : NULL);
 	else if (*bin == '.')
 		return (get_pwd_path(bin));
 	tmp = ft_strjoin(path, "/");

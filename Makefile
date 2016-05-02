@@ -10,117 +10,121 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC					= srcs/
-SRCS_ARROWS			= $(SRC)arrows_and_movements/
-SRCS_AUTOCOMPLETE	= $(SRC)autocomplete/
-SRCS_BUILTINS		= $(SRC)builtins/
-SRCS_ENV			= $(SRC)env/
-SRCS_EXEC			= $(SRC)exec_binary/
-SRCS_HISTORY 		= $(SRC)history/
-SRCS_LISTS 			= $(SRC)lists/
-SRCS_REDIRECTS 		= $(SRC)redirects/
-SRCS_SHELL 			= $(SRC)shell/
-SRCS_TERMCAPS 		= $(SRC)termcaps/
-
-SRCS			= $(SRC)main.c \
-			$(SRCS_ARROWS)horizontal_movements.c \
-			$(SRCS_ARROWS)horizontal_movements_tools.c \
-			$(SRCS_ARROWS)goto_funcs.c \
-			$(SRCS_ARROWS)vertical_movements.c \
-			$(SRCS_ARROWS)delete_char.c \
-			$(SRCS_ARROWS)parse_keys.c \
-			$(SRCS_ARROWS)clear_screen.c \
-			$(SRCS_ARROWS)copy_cut_and_paste.c \
-			$(SRCS_ARROWS)copy_left.c \
-			$(SRCS_ARROWS)copy_right.c \
-			$(SRCS_ARROWS)copy_tools.c \
-			$(SRCS_ARROWS)cut_tools.c \
-			$(SRCS_ARROWS)shift.c \
-			$(SRCS_AUTOCOMPLETE)autocomplete.c \
-			$(SRCS_AUTOCOMPLETE)autocomplete_tools.c \
-			$(SRCS_AUTOCOMPLETE)binary_search.c \
-			$(SRCS_AUTOCOMPLETE)directory_search.c \
-			$(SRCS_AUTOCOMPLETE)equality_search.c \
-			$(SRCS_AUTOCOMPLETE)equality_search_tools.c \
-			$(SRCS_BUILTINS)builtins.c \
-			$(SRCS_BUILTINS)builtins_tools.c \
-			$(SRCS_BUILTINS)read_built.c \
-			$(SRCS_BUILTINS)read_built2.c \
-			$(SRCS_BUILTINS)read_list.c \
-			$(SRCS_BUILTINS)read_table_f.c \
-			$(SRCS_BUILTINS)read_table_f2.c \
-			$(SRCS_BUILTINS)reading.c \
-			$(SRCS_BUILTINS)read_array.c \
-			$(SRCS_BUILTINS)read_msc.c \
-			$(SRCS_BUILTINS)local_var.c \
-			$(SRCS_BUILTINS)local_var_msc.c \
-			$(SRCS_BUILTINS)echo.c \
-			$(SRCS_BUILTINS)mark_built.c \
-			$(SRCS_BUILTINS)mark_built2.c \
-			$(SRCS_ENV)env.c \
-			$(SRCS_ENV)env_init.c \
-			$(SRCS_ENV)env_tools.c \
-			$(SRCS_ENV)env_tools_2.c \
-			$(SRCS_EXEC)binary.c \
-	 		$(SRCS_EXEC)binary_tools.c \
-			$(SRCS_EXEC)cmd_parse.c \
-			$(SRCS_EXEC)cmd_exec.c \
-			$(SRCS_EXEC)hash.c \
-		 	$(SRCS_HISTORY)history.c \
-		 	$(SRCS_HISTORY)history_tools.c \
-		 	$(SRCS_LISTS)clist.c \
-			$(SRCS_LISTS)dlist.c \
-			$(SRCS_LISTS)dlist_tools.c \
-			$(SRCS_LISTS)dlist_2.c \
-			$(SRCS_LISTS)dlist_2_tools.c \
-			$(SRCS_LISTS)dlist_2_tools_2.c \
-			$(SRCS_REDIRECTS)pipe.c \
-			$(SRCS_REDIRECTS)pipe_tools.c \
-			$(SRCS_REDIRECTS)pipe_tools_2.c \
-			$(SRCS_REDIRECTS)redirection.c \
-			$(SRCS_REDIRECTS)redirection_tools.c \
-			$(SRCS_REDIRECTS)aggregation1.c \
-			$(SRCS_REDIRECTS)aggregation2.c \
-			$(SRCS_REDIRECTS)aggregation3.c \
-			$(SRCS_REDIRECTS)aggregation_tools.c \
-			$(SRCS_REDIRECTS)aggregation_error.c \
-			$(SRCS_SHELL)error.c \
-			$(SRCS_SHELL)shell_init.c \
-			$(SRCS_SHELL)shell_loop.c \
-			$(SRCS_SHELL)shell_loop_tools.c \
-			$(SRCS_SHELL)shell_loop_tools_2.c \
-			$(SRCS_SHELL)shell_tools.c \
-			$(SRCS_TERMCAPS)termcaps_init.c \
-			$(SRCS_TERMCAPS)termcaps_tools.c \
-		
 NAME = 21sh
 RM = rm -rf
 FLAGS = -Wall -Wextra -Werror
 DEBUG = -g -gmodules -fexceptions -ftrapv -fcommon
 LDFLAGS = -I./includes/ -I./libft/include/
-LIB = libft/libft.a
 
-OBJ = $(SRCS:.c=.o)
+# SRC					= srcs/
+SRCS_ARROWS			= arrows_and_movements/
+SRCS_AUTOCOMPLETE	= autocomplete/
+SRCS_BUILTINS		= builtins/
+SRCS_ENV			= env/
+SRCS_EXEC			= exec_binary/
+SRCS_HISTORY 		= history/
+SRCS_LISTS 			= lists/
+SRCS_REDIRECTS 		= redirects/
+SRCS_SHELL 			= shell/
+SRCS_TERMCAPS 		= termcaps/
 
-all:		$(NAME)
+SRC			= main.c \
+			horizontal_movements.c \
+			horizontal_movements_tools.c \
+			goto_funcs.c \
+			vertical_movements.c \
+			delete_char.c \
+			parse_keys.c \
+			clear_screen.c \
+			copy_cut_and_paste.c \
+			copy_left.c \
+			copy_right.c \
+			copy_tools.c \
+			cut_tools.c \
+			shift.c \
+			autocomplete.c \
+			autocomplete_tools.c \
+			binary_search.c \
+			directory_search.c \
+			equality_search.c \
+			equality_search_tools.c \
+			builtins.c \
+			builtins_tools.c \
+			read_built.c \
+			read_built2.c \
+			read_list.c \
+			read_table_f.c \
+			read_table_f2.c \
+			reading.c \
+			read_array.c \
+			read_msc.c \
+			local_var.c \
+			local_var_msc.c \
+			echo.c \
+			mark_built.c \
+			mark_built2.c \
+			env.c \
+			env_init.c \
+			env_tools.c \
+			env_tools_2.c \
+			binary.c \
+	 		binary_tools.c \
+			cmd_parse.c \
+			cmd_exec.c \
+			hash.c \
+		 	history.c \
+		 	history_tools.c \
+		 	clist.c \
+			dlist.c \
+			dlist_tools.c \
+			dlist_2.c \
+			dlist_2_tools.c \
+			dlist_2_tools_2.c \
+			pipe.c \
+			pipe_tools.c \
+			pipe_tools_2.c \
+			redirection.c \
+			redirection_tools.c \
+			aggregation1.c \
+			aggregation2.c \
+			aggregation3.c \
+			aggregation_tools.c \
+			aggregation_error.c \
+			error.c \
+			shell_init.c \
+			shell_loop.c \
+			shell_loop_tools.c \
+			shell_loop_tools_2.c \
+			shell_tools.c \
+			termcaps_init.c \
+			termcaps_tools.c \
 
-$(LIB):
-			@make -C libft/
+OBJ = $(SRC:.c=.o)
 
-$(NAME):	$(LIB) $(OBJ)
-	@gcc -o $(NAME) $(FLAGS) *.o -L./libft/ -lft -ltermcap
-	@mkdir -p ./objs/
-	@mv *.o ./objs/
-	@echo "\n\t\t\033[35mexec \033[0m./$(NAME)"
+	SRCDIR	= ./srcs/
+	OBJDIR	= ./objs/
+	INCDIR	= ./includes/
+	SRCS	= $(addprefix $(SRCDIR), $(SRC))
+	OBJS	= $(addprefix $(OBJDIR), $(OBJ))
+	INCS	= $(addprefix $(INCDIR), $(INC))
 
-%.o: %.c
-	@echo "\033[35m[ GCC ] \033[0m$^"
-	@gcc -c $^ -I./includes/ -I./libft/include $(FLAGS)
+all: $(NAME)
+
+$(NAME): $(OBJS) $(INCS)
+	@gcc $(FLAGS) -o $@ $^ -L./libft/ -lft -ltermcap
+	@echo "\t\t\033[35mexec \033[0m./$(NAME)"
+
+$(OBJS): $(SRCS)
+	@make -C libft/
+	@gcc $(FLAGS) -c $(SRCS) $(LDFLAGS)
+	@echo "\033[35m[ GCC ] \033[0m   *.c"
+	@mkdir -p $(OBJDIR)
+	@mv $(OBJ) $(OBJDIR)
 
 clean:
 	@echo "\033[35m[ DELETE ]\033[0m *.o"
-	@$(RM) */*.o
-	@$(RM) objs
+	@$(RM) $(OBJ)
+	@$(RM) ./objs/
 
 fclean: clean
 	@make fclean -C libft/
