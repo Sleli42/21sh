@@ -97,6 +97,20 @@ void	read_stdin(t_all *all, char *cmd)
 	redirect = NULL;
 	redirect = ft_strsplit(cmd, '<');
 	argv = ft_strsplit(redirect[0], ' ');
+	if ((!argv[0][0] || !ft_isalpha(argv[0][0])) \
+			&& (!argv[1][0] || !ft_isalpha(argv[1][0])))
+	{
+		ft_putstr("Parse error\n");
+	}
+	else
+	{
+		printf("|%c| && %d\n", argv[0][0], ft_isalpha(argv[0][0]));
+		printf("|%c| && %d\n", argv[1][0], ft_isalpha(argv[1][0]));
+	}
+	return ;
+	/***
+	***		check good forma
+	***/
 	while (1)
 	{
 		ft_putstr("> ");

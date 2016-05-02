@@ -23,7 +23,7 @@ void	dup_and_exec(t_all *all, char **cmd_argv, int fd2back, int fd2dup)
 
 void	redirection_error(char *file)
 {
-	ft_putstr("42shZer: no such file or directory: ");
+	ft_putstr("42sh: no such file or directory: ");
 	ft_putstr(file);
 	ft_putchar('\n');
 }
