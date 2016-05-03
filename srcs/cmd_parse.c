@@ -12,15 +12,17 @@
 
 #include "full_sh.h"
 
-static int	len_array(char **array)
+int			len_array(char **array)
 {
 	int		ret;
+	int		i;
 
 	ret = 0;
-	while (*array)
+	i = 0;
+	while (array[i])
 	{
 		ret++;
-		array++;
+		i++;
 	}
 	return (ret);
 }

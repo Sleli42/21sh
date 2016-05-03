@@ -25,6 +25,8 @@ void	erase_and_replace(t_all *all, char *cmd)
 	else
 	{
 		redirect = ft_strsplit(cmd, '>');
+		if ((!redirect[0][0]) || len_array(redirect) < 2)
+			return (redirection_error_2());
 		redirect[1] = ft_epur_str(redirect[1]);
 		if ((all->fd2open = open(redirect[1], \
 				O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
@@ -48,6 +50,9 @@ void	add_to_end(t_all *all, char *cmd)
 	argv = NULL;
 	redirect = NULL;
 	redirect = ft_strsplit(cmd, '>');
+	printf("len: %d\n", len_array(redirect));
+	if ((!redirect[0][0]) || len_array(redirect) < 3)
+		return (redirection_error_2());
 	redirect[1] = ft_epur_str(redirect[1 + 1]);
 	if ((all->fd2open = open(redirect[1], \
 				O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
@@ -74,6 +79,12 @@ void	read_file(t_all *all, char *cmd)
 	else
 	{
 		redirect = ft_strsplit(cmd, '<');
+		/**
+		*** BUG ex: "wc < srcs/lol.c > file"
+		*** no such file "srcs... > file"
+		**/
+		if ((!redirect[0][0]) || len_array(redirect) < 2)
+			return (redirection_error_2());
 		redirect[1] = ft_epur_str(redirect[1]);
 		if ((all->fd2open = open(redirect[1], O_RDONLY)) == -1)
 		{
@@ -97,20 +108,8 @@ void	read_stdin(t_all *all, char *cmd)
 	redirect = NULL;
 	redirect = ft_strsplit(cmd, '<');
 	argv = ft_strsplit(redirect[0], ' ');
-	if ((!argv[0][0] || !ft_isalpha(argv[0][0])) \
-			&& (!argv[1][0] || !ft_isalpha(argv[1][0])))
-	{
-		ft_putstr("Parse error\n");
-	}
-	else
-	{
-		printf("|%c| && %d\n", argv[0][0], ft_isalpha(argv[0][0]));
-		printf("|%c| && %d\n", argv[1][0], ft_isalpha(argv[1][0]));
-	}
-	return ;
-	/***
-	***		check good forma
-	***/
+	if ((!redirect[0][0]) || len_array(redirect) < 3)
+		return (redirection_error_2());
 	while (1)
 	{
 		ft_putstr("> ");

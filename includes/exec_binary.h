@@ -49,6 +49,7 @@ void			check_mode_file(t_all *all, char *cmd);
 *** ======================= cmd_parse.c
 */
 
+int				len_array(char **array);
 void			parse_command(t_all *all, char *buff);
 int				check_redirection(char *s);
 

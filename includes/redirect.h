@@ -64,9 +64,13 @@ void	read_stdin(t_all *all, char *cmd);
 
 char	*read_stdin_cpy_buff(void);
 int		read_stdin_cmp_key(t_all *all, char **argv, char *key, char *tmp_buff);
-void	redirection_error(char *file);
 void	dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
 
+/*
+*** ======================= redirection_error.c
+*/
+void	redirection_error(char *file);
+void	redirection_error_2(void);
 /*
 *** ======================= aggregation1.c
 */

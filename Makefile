@@ -85,6 +85,7 @@ SRC			= main.c \
 			pipe_tools_2.c \
 			redirection.c \
 			redirection_tools.c \
+			redirection_error.c \
 			aggregation1.c \
 			aggregation2.c \
 			aggregation3.c \
