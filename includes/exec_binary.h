@@ -46,6 +46,13 @@ char			*create_path(char *path, char *bin);
 void			check_mode_file(t_all *all, char *cmd);
 
 /*
+*** ======================= binary_operators.c
+*/
+
+int				binary_operators(char **array, int *nb_bin_ope);
+void			loop_binary_ope(char **parsecmd, int bin_ope);
+
+/*
 *** ======================= cmd_parse.c
 */
 

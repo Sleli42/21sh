@@ -1,4 +1,4 @@
-# **************************************************************************** #
+	# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -69,7 +69,7 @@ SRC			= main.c \
 			env_tools_2.c \
 			binary.c \
 	 		binary_tools.c \
-			cmd_parse.c \
+			parse_and_exec.c \
 			cmd_exec.c \
 			hash.c \
 		 	history.c \
@@ -99,6 +99,7 @@ SRC			= main.c \
 			shell_tools.c \
 			termcaps_init.c \
 			termcaps_tools.c \
+			binary_operators.c
 
 OBJ = $(SRC:.c=.o)
 

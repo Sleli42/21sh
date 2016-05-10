@@ -48,9 +48,9 @@ void	simple_cmd_loop(t_all *all, t_builtins built[11], char *cmd)
 	while (i < 11)
 	{
 		tmp = (i == 2 && symbol_in_cmd(cmd, '=')) ?
-							cmd + count_var_len(cmd) : cmd;
+		cmd + count_var_len(cmd) : cmd;
 		if (!ft_strncmp(tmp, built[i].action_name, \
-						ft_strlen(built[i].action_name)))
+			ft_strlen(built[i].action_name)))
 		{
 			built[i].f(all, cmd);
 			stop = 1;
@@ -86,20 +86,33 @@ void	exec_simple_cmd(t_all *all, char *cmd)
 void	exec_command(t_all *all)
 {
 	int		i;
+	int		j;
 
 	i = 0;
+	all->nb_bin_ope = 0;
 	if (all->parsecmd)
 	{
 		while (all->parsecmd[i])
 		{
-			if ((!all->parsecmd[i] || !all->parsecmd[i][0]))
-				;
+			j = 0;
+			if (binary_operators(all->parsecmd[i], &all->nb_bin_ope))
+				loop_binary_ope(all->parsecmd[i], all->nb_bin_ope);
 			else
 			{
-				if (check_redirection(all->parsecmd[i]) == 1)
-					exec_redirection_cmd(all, all->parsecmd[i]);
-				else
-					exec_simple_cmd(all, all->parsecmd[i]);
+				// while (all->parsecmd[i][j])
+				// {
+				// 	// printf("j:%d - [ %s ]\n", j, all->parsecmd[i][j]);
+				// 	// if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
+				// 	// 	;
+				// 	// else
+				// 	// {
+				// 	// 	if (check_redirection(all->parsecmd[i][j]) == 1)
+				// 	// 		exec_redirection_cmd(all, all->parsecmd[i][j]);
+				// 	// 	else
+				// 	// 		exec_simple_cmd(all, all->parsecmd[i][j]);
+				// 	// }
+				// 	j++;
+				// }
 			}
 			i++;
 		}

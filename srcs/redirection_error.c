@@ -24,3 +24,56 @@ void	redirection_error_2(void)
 	ft_putstr("42sh: Parse error: Syntax error\n");
 	return ;
 }
+
+/*****************
+
+wc -l < Makefile > file && wc -l < auteur >> file || ls -l ; cat file
+
+medium split:
+
+	[ wc -l < Makefile > file ]
+		-> [ && ] <-
+	[ wc -l < auteur >> file ]
+		-> [ || ] <-
+	[ ls -l ]
+
+	[ cat ]
+	[ file ]
+
+
+	---------
+
+	split:
+
+					[ wc ]
+					[ -l ]
+			[ < ]
+					[ Makefile ]
+			[ > ]
+					[ file ]
+
+		[ && ]
+
+					[ wc -l ]
+			[ < ]
+					[ auteur ]
+			[ >> ]
+					[ file ]
+
+		[ || ]
+
+					[ ls ]
+					[ -l ]
+	[ ; ]
+
+					[ cat ]
+					[ file ]
+
+[lubaujar@e2r4p12 42sheu (master ✗)]$ &&
+	zsh: parse error near `&&'
+[lubaujar@e2r4p12 42sheu (master ✗)]$ &&&&
+	zsh: parse error near `&&'
+[lubaujar@e2r4p12 42sheu (master ✗)]$ ls -l &&& ls
+	zsh: parse error near `&'
+
+********************/

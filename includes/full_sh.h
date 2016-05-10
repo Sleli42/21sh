@@ -195,7 +195,7 @@ typedef struct			s_all
 	char				**dupenv;
 	char				*tmp_var_env;
 	char				**path2exec;
-	char				**parsecmd;
+	char				***parsecmd;
 	char				**pipe;
 	char				*oldpwd;
 	char				*cmd;
@@ -213,6 +213,7 @@ typedef struct			s_all
 	int					fd2restore;
 	t_glob				globing;
 	char				**hash;
+	int					nb_bin_ope;
 }						t_all;
 
 /*

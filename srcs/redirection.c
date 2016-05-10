@@ -81,7 +81,7 @@ void	read_file(t_all *all, char *cmd)
 		redirect = ft_strsplit(cmd, '<');
 		/**
 		*** BUG ex: "wc < srcs/lol.c > file"
-		*** no such file "srcs... > file"
+		*** no such file "srcs/lo... > file"
 		**/
 		if ((!redirect[0][0]) || len_array(redirect) < 2)
 			return (redirection_error_2());
