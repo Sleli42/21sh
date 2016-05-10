@@ -96,23 +96,23 @@ void	exec_command(t_all *all)
 		{
 			j = 0;
 			if (binary_operators(all->parsecmd[i], &all->nb_bin_ope))
-				loop_binary_ope(all->parsecmd[i], all->nb_bin_ope);
+				loop_binary_ope(all, all->parsecmd[i], all->nb_bin_ope);
 			else
 			{
-				// while (all->parsecmd[i][j])
-				// {
-				// 	// printf("j:%d - [ %s ]\n", j, all->parsecmd[i][j]);
-				// 	// if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
-				// 	// 	;
-				// 	// else
-				// 	// {
-				// 	// 	if (check_redirection(all->parsecmd[i][j]) == 1)
-				// 	// 		exec_redirection_cmd(all, all->parsecmd[i][j]);
-				// 	// 	else
-				// 	// 		exec_simple_cmd(all, all->parsecmd[i][j]);
-				// 	// }
-				// 	j++;
-				// }
+				while (all->parsecmd[i][j])
+				{
+					// printf("j:%d - [ %s ]\n", j, all->parsecmd[i][j]);
+					if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
+						;
+					else
+					{
+						if (check_redirection(all->parsecmd[i][j]) == 1)
+							exec_redirection_cmd(all, all->parsecmd[i][j]);
+						else
+							exec_simple_cmd(all, all->parsecmd[i][j]);
+					}
+					j++;
+				}
 			}
 			i++;
 		}

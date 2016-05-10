@@ -214,6 +214,7 @@ typedef struct			s_all
 	t_glob				globing;
 	char				**hash;
 	int					nb_bin_ope;
+	int					err_exec;
 }						t_all;
 
 /*

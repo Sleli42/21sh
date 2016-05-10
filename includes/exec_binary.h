@@ -33,7 +33,7 @@ typedef	struct	s_builtins
 
 void			exec_right_binary_loop(t_all *all, char **argv_bin);
 void			exec_right_binary(t_all *all, char **argv_bin);
-void			exec_binary(char *bin, char **argv_bin, char **env);
+void			exec_binary(t_all *all, char *bin, char **argv_bin, char **env);
 
 /*
 *** ======================= binary_tools.c
@@ -50,7 +50,7 @@ void			check_mode_file(t_all *all, char *cmd);
 */
 
 int				binary_operators(char **array, int *nb_bin_ope);
-void			loop_binary_ope(char **parsecmd, int bin_ope);
+void			loop_binary_ope(t_all *all, char **parsecmd, int bin_ope);
 
 /*
 *** ======================= cmd_parse.c

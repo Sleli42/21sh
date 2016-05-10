@@ -29,18 +29,18 @@ int			count_medium_split(char *s)
 	return (ret + (ret + 1));
 }
 
-void		display_array(char **array)
-{
-	int		i;
+// static void		display_array(char **array)
+// {
+// 	int		i;
 
-	i = 0;
-	while (array[i])
-	{
+// 	i = 0;
+// 	while (array[i])
+// 	{
 	
-		printf("\t\t [ %s ] \n", array[i]);
-		i++;
-	}
-}
+// 		printf("\t\t [ %s ] \n", array[i]);
+// 		i++;
+// 	}
+// }
 
 void		medium_split_extend(char **medium, char *cmd, char *tmp, int *i, int *ct)
 {
@@ -120,7 +120,6 @@ void		parse_command(t_all *all, char *buff)
 	{
 		big_parse[ct] = ft_epur_str(big_parse[ct]);
 		all->parsecmd[ct] = medium_parse(big_parse[ct]);
-		display_array(all->parsecmd[ct]);
 		ct++;
 	}
 	all->parsecmd[ct] = NULL;
