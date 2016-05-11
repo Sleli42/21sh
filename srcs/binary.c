@@ -53,6 +53,7 @@ void		exec_binary(t_all *all, char *bin, char **argv_bin, char **env)
 	int		buff;
 	pid_t	pid;
 
+	all->err_exec = 0;
 	pid = fork();
 	if (pid == -1)
 		error("FORK");

@@ -1,9 +1,9 @@
 # Note 21sh
 
 
-◦ une édition de la ligne de commande avec les termcaps (voir ci-après)
-◦ le séparateur de commandes “;”
-◦ les pipes “|”
+◦ édition de la ligne de commande avec les termcaps
+◦ le séparateur de commandes “;”, ainsi que "&&" et "||"
+◦ les pipes “|” et multi-pipes
 ◦ les quatre redirections “<”, “>”, “<<” et “>>”
 ◦ les aggrégations de descripteurs de fichiers, par exemple pour fermer la \
 															sortie d’erreur.
@@ -26,7 +26,7 @@
 |                                                                              |
 |                                 CURRENT BUGS                                 |
 |------------------------------------------------------------------------------|
-|    • 					                           							   |
-|    • 																		   |
+|    • 	Redirections 		                      							   |
+|    • 	aggregations fd														   |
 |    •   					                           						   |
 |______________________________________________________________________________|

@@ -50,7 +50,7 @@ void			check_mode_file(t_all *all, char *cmd);
 */
 
 int				binary_operators(char **array, int *nb_bin_ope);
-void			loop_binary_ope(t_all *all, char **parsecmd, int bin_ope);
+void			loop_binary_ope(t_all *all, char **parsecmd);
 
 /*
 *** ======================= cmd_parse.c

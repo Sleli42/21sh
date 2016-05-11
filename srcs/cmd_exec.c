@@ -96,7 +96,7 @@ void	exec_command(t_all *all)
 		{
 			j = 0;
 			if (binary_operators(all->parsecmd[i], &all->nb_bin_ope))
-				loop_binary_ope(all, all->parsecmd[i], all->nb_bin_ope);
+				loop_binary_ope(all, all->parsecmd[i]);
 			else
 			{
 				while (all->parsecmd[i][j])

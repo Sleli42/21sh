@@ -21,7 +21,7 @@ void	redirection_error(char *file)
 
 void	redirection_error_2(void)
 {
-	ft_putstr("42sh: Parse error: Syntax error\n");
+	ft_putstr("42sh: syntax error near unexpected token `newline'\n");
 	return ;
 }
 

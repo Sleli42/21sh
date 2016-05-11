@@ -69,7 +69,7 @@ SRC			= main.c \
 			env_tools_2.c \
 			binary.c \
 	 		binary_tools.c \
-			parse_and_exec.c \
+			parse_cmd.c \
 			cmd_exec.c \
 			hash.c \
 		 	history.c \

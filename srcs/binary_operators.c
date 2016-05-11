@@ -69,30 +69,66 @@ int		check_good_bin_format(char **parsecmd)
 // 	}
 // }
 
-void	loop_binary_ope(t_all *all, char **parsecmd, int bin_ope)
+void	and_operator(char **parsecmd, int *ct, int err)
+{
+	if (err == 256)
+	{
+		while (parsecmd[*ct])
+		{
+			if (!ft_strcmp(parsecmd[*ct], "||"))
+				break ;
+			*ct = *ct + 1;
+		}
+		*ct = (*ct != len_array(parsecmd)) ? *ct + 1 : *ct;
+	}
+	else
+		*ct = (*ct != len_array(parsecmd)) ? *ct + 1 : *ct;
+}
+
+void	or_operator(char **parsecmd, int *ct, int err)
+{
+	if (err == 256)
+	{
+		while (parsecmd[*ct])
+		{
+			if (!ft_strcmp(parsecmd[*ct], "||"))
+				break ;
+			*ct = *ct + 1;
+		}
+		*ct = (*ct != len_array(parsecmd)) ? *ct + 1 : *ct;
+	}
+	else
+	{
+		while (parsecmd[*ct])
+		{
+			if (!ft_strcmp(parsecmd[*ct], "&&"))
+				break ;
+			*ct = *ct + 1;
+		}
+		*ct = (*ct != len_array(parsecmd)) ? *ct + 1 : *ct;
+	}
+}
+
+void	goto_next_command(char **parsecmd, int *ct, int err)
+{
+	if (!ft_strcmp(parsecmd[*ct], "&&"))
+		and_operator(parsecmd, ct, err);
+	else if (!ft_strcmp(parsecmd[*ct], "||"))
+		or_operator(parsecmd, ct, err);
+}
+
+void	loop_binary_ope(t_all *all, char **parsecmd)
 {
 	int		ct;
-	int		cmp;
 
 	ct = 0;
-	cmp = 0;
 	if (!check_good_bin_format(parsecmd))
 		return ;
-	// display_array(parsecmd);
 	while (parsecmd[ct])
 	{
-		if (all->err_exec == 256)
-		{
-			/* a faire */
-		}
-		if (!ft_strcmp(parsecmd[ct], "&&"))
-		{
-			/* a faire */
-		}
-		else if (!ft_strcmp(parsecmd[ct], "||"))
-		{
-			/* a faire */
-		}
+		goto_next_command(parsecmd, &ct, all->err_exec);
+		if (ct == len_array(parsecmd))
+			break ;
 		if (!parsecmd[ct] || !parsecmd[ct][0])
 			;
 		else
@@ -104,6 +140,4 @@ void	loop_binary_ope(t_all *all, char **parsecmd, int bin_ope)
 		}
 		ct++;
 	}
-	if (cmp == bin_ope)
-		ft_putstr("soooo gooood\n");
 }

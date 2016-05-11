@@ -59,9 +59,11 @@ void	loop_pipe_extended(t_all *all, char ***pipe2exec, \
 void	loop_pipe(t_all *all, char ***pipe2exec)
 {
 	pid_t	pid;
+	int		buff;
 	int		p[2];
 	int		dup_stdin;
 
+	all->err_exec = 0;
 	if (redirect_in_arrays(all, pipe2exec))
 		all->fd2open = open_file(all->file2redir, 1);
 	while (*pipe2exec)
@@ -74,7 +76,8 @@ void	loop_pipe(t_all *all, char ***pipe2exec)
 			loop_pipe_extended(all, pipe2exec, dup_stdin, p);
 		else
 		{
-			wait(NULL);
+			waitpid(pid, &buff, 0);
+			all->err_exec = buff;
 			close(p[1]);
 			dup_stdin = p[0];
 			pipe2exec++;

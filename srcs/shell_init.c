@@ -26,7 +26,6 @@ void		init_loop(t_all *all)
 	all->pcmd_i = 0;
 	all->cmd ? ft_strdel(&all->cmd) : NULL;
 	all->buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
-	all->err_exec = 0;
 	init_windows_size(all);
 }
 
