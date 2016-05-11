@@ -64,8 +64,11 @@ void		write_buffer(t_all *all)
 	int		ct;
 
 	ct = 0;
-	if (all->globing.dt_print)
+	if (all->globing.dt_print | all->globing.cr_split)
+	{
+ 		*&all->globing.cr_split = 0x0;
 		*&all->globing.dt_print = 0x0;
+	}
 	else
 		ft_putstr(all->buff);
 	if (ft_strlen(all->buff) > 1)

@@ -27,6 +27,7 @@ int		check_globbing(t_all *all)
 		all->globing.esc_mem += CURSOR - PROMPT_LEN;
 		all->cursor_pos = PROMPT_LEN;
 		ft_putstr("\n > ");
+		all->globing.cr_split = 0x1;
 		return (*all->buff == ';' ? *all->buff : 0);
 	}
 	while (GLOB[i])
