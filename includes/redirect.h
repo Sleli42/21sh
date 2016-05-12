@@ -69,8 +69,11 @@ void	dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
 /*
 *** ======================= redirection_error.c
 */
+
 void	redirection_error(char *file);
 void	redirection_error_2(void);
+void	redirection_error_3(void);
+
 /*
 *** ======================= aggregation1.c
 */

@@ -25,6 +25,11 @@ void	redirection_error_2(void)
 	return ;
 }
 
+void	redirection_error_3(void)
+{
+	ft_putstr("42sh: syntax error or command not supported\n");
+	return ;
+}
 /*****************
 
 wc -l < Makefile > file && wc -l < auteur >> file || ls -l ; cat file

@@ -94,11 +94,9 @@ char		**medium_split(char **medium, char *cmd)
 
 char		**medium_parse(char *cmd)
 {
-	int		ct;
 	int		temp;
 	char	**medium;
 
-	ct = 0;
 	temp = count_medium_split(cmd);
 	if (!(medium = (char **)malloc(sizeof(char *) * temp + 1)))
 		error("MALLOC");

@@ -12,6 +12,27 @@
 
 #include "full_sh.h"
 
+int		multi_redirect(char *s)
+{
+	int	ct;
+	int	ret;
+
+	ct = 0;
+	ret = 0;
+	if (s && s[ct])
+	{
+		while (s[ct])
+		{
+			if (s[ct] == '>' || s[ct] == '<')
+				ret++;
+			ct++;
+		}
+	}
+	if (ret > 1)
+		return (1);
+	return (0);
+}
+
 void	exec_redirection_cmd(t_all *all, char *cmd)
 {
 	char						*cmp;
@@ -25,6 +46,8 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 
 	i = 0;
 	cmp = my_strstr(all, cmd);
+	if (multi_redirect(cmd))
+		return (redirection_error_3());
 	if (cmp != NULL)
 	{
 		while (i < 5)
