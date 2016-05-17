@@ -41,6 +41,7 @@ void	multi_env_set(t_all *all, char **array)
 	{
 		if (good_env_formatting(array[ct]))
 		{
+			// printf("s: [ %s ]\n", array[ct]);
 			if (var_already_exist(all, array[ct]))
 				update_env(all, array[ct]);
 			else
@@ -66,13 +67,30 @@ void	env_set(t_all *all, char *cmd)
 			dlst_add_back((t_dlist *)all->env, (t_node *)
 				dlst_node_new(cmd + 8, all->env->lenght));
 	}
+	del_array(&tmp);
 	(all->dupenv) ? del_array(&all->dupenv) : NULL;
 	all->dupenv = realloc_env_array(all->env);
 }
 
 void	env_unset(t_all *all, char *cmd)
 {
-	dlst_del_one(all->env, (cmd + 10));
+	char		**tmp;
+	int			ct;
+
+	tmp = ft_strsplit(cmd + 10, ' ');
+	ct = 0;
+	if (ft_tablen(tmp) > 1)
+	{
+		while (tmp[ct])
+		{
+			if (var_already_exist(all, tmp[ct]))
+				dlst_del_one(all->env, tmp[ct]);
+			ct++;
+		}
+	}
+	else
+		dlst_del_one(all->env, (cmd + 10));
+	del_array(&tmp);
 	(all->dupenv) ? del_array(&all->dupenv) : NULL;
 	all->dupenv = realloc_env_array(all->env);
 }

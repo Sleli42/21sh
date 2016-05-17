@@ -43,11 +43,14 @@ void			goto_dir(t_all *all, char *cmd)
 			? ft_strjoin(all->oldpwd, "/") : all->oldpwd;
 	cmd += 3;
 	if (*cmd == '\0')
-		cmd = ft_strdup(find_env_arg(all, "HOME") + 5);
+		cmd = find_env_arg(all, "HOME") + 5;
 	if (*cmd == '~')
 		cmd = ft_strjoin(find_env_arg(all, "HOME") + 5, cmd + 1);
 	if (*cmd == '-')
-		cmd = ft_strdup(find_env_arg(all, "OLDPWD") + 7);
+	{
+		cmd = find_env_arg(all, "OLDPWD") + 7;
+		cmd = !cmd || !*cmd ? ft_strdup("/") : cmd;
+	}
 	if (access(cmd, F_OK) == 0)
 	{
 		if (chdir(cmd) == -1)

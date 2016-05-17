@@ -87,3 +87,21 @@ int		symbol_in_cmd(char *s, int symbol)
 		return (1);
 	return (0);
 }
+
+// char	*get_dup_var(char **dupenv, char *arg2find)
+// {
+// 	int		ct;
+
+// 	ct = 0;
+// 	while (dupenv[ct])
+// 	{
+// 		printf("[%d]: %s\n", ct, dupenv[ct]);
+// 		if (!ft_strncmp(dupenv[ct], arg2find, ft_strlen(arg2find)))
+// 		{
+// 			printf("dupenv[ct]: [ %s ]\n", dupenv[ct]);
+// 			return (ft_strdup(dupenv[ct]));
+// 		}
+// 		ct++;
+// 	}
+// 	return ("\0");
+// }

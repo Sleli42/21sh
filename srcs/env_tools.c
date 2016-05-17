@@ -22,11 +22,11 @@ char	*find_env_arg(t_all *all, char *arg2find)
 		while (nav)
 		{
 			if (ft_strncmp(nav->s, arg2find, ft_strlen(arg2find)) == 0)
-				return (nav->s);
+				return (ft_strdup(nav->s));
 			nav = nav->next;
 		}
 	}
-	return (NULL);
+	return ("\0");
 }
 
 char	**ft_dupenv(char **env)

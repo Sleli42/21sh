@@ -45,19 +45,19 @@ void			by_match(t_all *all, t_mark m_box, char *cmd)
 	return (m_box.params > 1 ? create_and_exec_command(all) : loop(all));
 }
 
-void			debug(t_mark m_box)
-{
-	if()
-		;
-	if()
-		;
-	if()
-		;
-	if()
-		;
-	if()
-		;
-}
+// void			debug(t_mark m_box)
+// {
+// 	if()
+// 		;
+// 	if()
+// 		;
+// 	if()
+// 		;
+// 	if()
+// 		;
+// 	if()
+// 		;
+// }
 
 void			built_mark(t_all *all, char *cmd)
 {
@@ -75,7 +75,7 @@ void			built_mark(t_all *all, char *cmd)
 	if (ft_isdigit((int)(*m_box.p_cmd)))
 		return (by_index(all, m_box, cmd));
 	printf("check 1\n");
-	debug(m_box);
+	// debug(m_box);
 	while (m_box.p_index >= 0 && _M)
 	{
 		ft_putstr("seg");

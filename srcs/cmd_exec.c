@@ -124,7 +124,6 @@ void	exec_command(t_all *all)
 			{
 				while (all->parsecmd[i][j])
 				{
-					// printf("j:%d - [ %s ]\n", j, all->parsecmd[i][j]);
 					if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
 						;
 					else

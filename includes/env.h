@@ -58,5 +58,6 @@ char		**realloc_env_array(t_dlist *env);
 void		update_env(t_all *all, char *s);
 int			good_env_formatting(char *s);
 int			symbol_in_cmd(char *s, int symbol);
+char		*get_dup_var(char **dupenv, char *arg2find);
 
 #endif
