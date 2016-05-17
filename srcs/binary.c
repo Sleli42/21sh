@@ -12,6 +12,13 @@
 
 #include "full_sh.h"
 
+void		write_error_exec(char *err)
+{
+	ft_putstr("42sh: no such file or directory: ");
+	ft_putstr(err);
+	ft_putchar('\n');
+}
+
 void		exec_right_binary_loop(t_all *all, char **argv_bin)
 {
 	int		ct;
@@ -22,7 +29,10 @@ void		exec_right_binary_loop(t_all *all, char **argv_bin)
 	while (all->path2exec[ct])
 	{
 		if (!(bin_tmp = create_path(all->path2exec[ct], argv_bin[0])))
+		{
+			write_error_exec(argv_bin[0]);
 			break ;
+		}
 		if (bin_tmp && good_access(bin_tmp))
 		{
 			exec_binary(all, bin_tmp, argv_bin, all->dupenv);

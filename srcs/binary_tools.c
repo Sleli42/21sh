@@ -14,7 +14,7 @@
 
 void		write_error(char *cmd_error)
 {
-	ft_putstr("Command: '");
+	ft_putstr("42sh: command: '");
 	ft_putstr(cmd_error);
 	ft_putstr("' not found\n");
 }
@@ -64,7 +64,7 @@ void		check_mode_file(t_all *all, char *cmd)
 		{
 			ft_putstr("42sh: ");
 			ft_putstr(cmd);
-			ft_putstr(": Permission denied\n");
+			ft_putstr(": permission denied\n");
 			return (loop(all));
 		}
 	}

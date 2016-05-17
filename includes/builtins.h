@@ -190,6 +190,7 @@ void					built_history(t_all *all, char *cmd);
 *********************** CD *****************************************************
 */
 
+void					write_error_goto_dir(char *err);
 void					goto_dir(t_all *all, char *cmd);
 void					update_oldpwd(t_all *all);
 
