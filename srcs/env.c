@@ -12,14 +12,35 @@
 
 #include "full_sh.h"
 
+int		check_env_error(char **tmp)
+{
+	if (ft_strcmp(tmp[0], "env"))
+	{
+		write_error(tmp[0]);
+		return (0);
+	}
+	if (tmp[1] && tmp[1][0] == '-' && ft_strcmp(tmp[1], "-i"))
+	{
+		ft_putstr("env: illegal option -- ");
+		ft_putstr(tmp[1]);
+		ft_putstr("\nusage: env [-i] [name=value ...] [utility [argument ...]]\n");
+		return (0);
+	}
+	return (1);
+}
+
 void	env_display(t_all *all, char *cmd)
 {
 	t_node	*nav;
 	char	**tmp;
+	int		skip;
 
 	tmp = ft_strsplit(cmd, ' ');
+	skip = (len_array(tmp) > 1 && !ft_strcmp(tmp[1], "-i")) ? 7 : 4;
+	if (!check_env_error(tmp) || (!cmd[skip] && skip == 7) || cmd[skip] < 0)
+		return ;
 	if (cmd && len_array(tmp) > 1)
-		exec_right_binary(all, ft_strsplit(cmd + 4, ' '));
+		exec_right_binary(all, ft_strsplit(cmd + skip, ' '));
 	else
 	{
 		nav = all->env->head;
@@ -99,6 +120,16 @@ void	env_unset(t_all *all, char *cmd)
 
 void	env_modify(t_all *all, char *cmd)
 {
+	char	*tmp;
+	char	*tmp2;
+
+	tmp2 = ft_strnew(count_var_len(cmd) + 1);
+	tmp = ft_epur_str(ft_strchr(cmd, '=') + 1);
+	ft_memcpy(tmp2, cmd, count_var_len(cmd) + 1);
+	ft_strdel(&cmd);
+	cmd = ft_strjoin(tmp2, tmp);
+	ft_strdel(&tmp);
+	ft_strdel(&tmp2);
 	if (var_already_exist(all, cmd))
 		update_env(all, cmd);
 	else
