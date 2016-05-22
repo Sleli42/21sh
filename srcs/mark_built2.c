@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/10 15:20:56 by skhatir           #+#    #+#             */
-/*   Updated: 2016/05/12 19:54:59 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/22 18:44:38 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@ char			*obtain_history_p(char *history)
 {
 	char		*ret;
 
-	if (!history || *history)
-	{
-		printf("-v\n");
+	if (!history || !*history)
 		return (NULL);
-	}
-	printf("[%s]\n", history);
 	return ((ret = *history && *history == ':' ? ++history : obtain_history_p(++history)));
 }
 
