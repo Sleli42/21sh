@@ -197,6 +197,7 @@ typedef struct			s_all
 	char				**path2exec;
 	char				***parsecmd;
 	char				**pipe;
+	int					nb_pipe;
 	char				*oldpwd;
 	char				*cmd;
 	char				**cmd_array;

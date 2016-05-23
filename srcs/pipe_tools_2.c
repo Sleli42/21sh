@@ -12,6 +12,24 @@
 
 #include "full_sh.h"
 
+int		check_pipe_error(char ***pipe2exec)
+{
+	int		ct;
+
+	ct = 0;
+	ft_putstr("WEEEESH\n");
+	while (pipe2exec[ct])
+	{
+		if (!len_array(pipe2exec[ct]))
+		{
+			ft_putstr("zsh: parse error near `|'\n");
+			return (0);
+		}
+		ct++;
+	}
+	return (1);
+}
+
 int		redirect_in_args(char **array)
 {
 	while (*array)

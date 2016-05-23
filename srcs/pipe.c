@@ -92,7 +92,10 @@ void	create_pipe(t_all *all, char *cmd)
 
 	i = -1;
 	pipe2exec = create_pipe_arrays(ft_strsplit(cmd, '|'));
-	loop_pipe(all, pipe2exec);
+	if (!check_pipe_error(pipe2exec))
+		return ;
+	else
+		loop_pipe(all, pipe2exec);
 	if (pipe2exec)
 	{
 		while (pipe2exec[++i])

@@ -54,8 +54,12 @@ void		medium_split_extend(char **medium, char *cmd, char *tmp, int *i, int *ct)
 		medium[*i] = ft_epur_str(tmp);
 		*i = *i + 1;
 	}
-	while (cmd[*ct] != ' ')
+	while (cmd[*ct])
+	{
+		if (cmd[*ct] == ' ')
+			break ;
 		temp[h++] = cmd[(*ct)++];
+	}
 	temp[h] = 0;
 	medium[*i] = ft_strdup(temp);
 	*i = *i + 1;
@@ -119,7 +123,7 @@ void		parse_command(t_all *all, char *buff)
 		big_parse[ct] = ft_epur_str(big_parse[ct]);
 		all->parsecmd[ct] = medium_parse(big_parse[ct]);
 		ct++;
-	}
+	}	
 	all->parsecmd[ct] = NULL;
 }
 

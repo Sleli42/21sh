@@ -46,6 +46,7 @@ char	**modify_pipe_array(t_all *all, char **array);
 *** ======================= pipe_tools_2.c
 */
 
+int		check_pipe_error(char ***pipe2exec);
 int		redirect_in_args(char **array);
 int		redirect_in_arrays(t_all *all, char ***arrays);
 
