@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/18 18:06:36 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/21 16:33:06 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/23 16:52:48 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void		save_glob(t_all *all, t_glob *g)
 		g->back += g->back ? -1 : 1;
 	if (g->sub < 0 || g->crush < 0 || g->c_indx < 0)
 		g->err = ft_strdup(ERROR_MSG);
-	all->cursor_pos++;
 }
 
 void		create_and_exec_command(t_all *all)

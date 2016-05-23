@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/14 11:27:36 by skhatir           #+#    #+#             */
-/*   Updated: 2016/05/22 19:52:01 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/23 16:53:43 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void			by_index(t_all *all, t_mark m_box, char *cmd)
 	if (!m_box.p_cmd)
 		return ;
 	m_box.p_cmd[ft_strlen(m_box.p_cmd)] = 0;
-	all->pos_history = m_box.p_index + 1;
 	if (m_box.params > 1)
 		join_params(&m_box.p_cmd, cmd);
 	realloc_termcaps_cmd(all, m_box.p_cmd);
