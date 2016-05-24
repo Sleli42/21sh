@@ -19,14 +19,20 @@ t_dlist				*dft_env(void)
 	t_dlist			*list_env;
 	char			**dft_env;
 
-	if ((dft_env = (char **)malloc(sizeof(char *) * 6)) == NULL)
+	if ((dft_env = (char **)malloc(sizeof(char *) * 12)) == NULL)
 		exit(1);
 	dft_env[0] = "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
 	dft_env[1] = ft_strjoin("PWD=", getcwd(buf, 512));
 	dft_env[2] = "SHLVL=1";
 	dft_env[3] = "_=/usr/bin/env";
-	dft_env[4] = "HOME=/nfs/2014/s/skhatir";
-	dft_env[5] = NULL;
+	dft_env[4] = "HOME=/nfs/2014/l/lubaujar";
+	dft_env[5] = "TERM=xterm-256color";
+	dft_env[6] = "TERM_PROGRAM=iTerm.app";
+	dft_env[7] = "PAGER=less";
+	dft_env[8] = "LESS=-R";
+	dft_env[9] = "LC_CTYPE=";
+	dft_env[10] = "LSCOLORS=Gxfxcxdxbxegedabagacad";
+	dft_env[11] = NULL;
 	list_env = NULL;
 	i = -1;
 	list_env = create_dlst();

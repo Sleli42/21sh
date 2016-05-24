@@ -41,7 +41,7 @@ void			opening_sh(void)
 
 	r = 0x0;
 	if ((art = open("misc/opening.shell", O_RDONLY)) < 0)
-		return (ft_putendl("openin failed"));
+		return (ft_putendl("opening failed"));
 	while ((r = read(art, buf, 1024)))
 	{
 		buf[r] = 0;
@@ -58,7 +58,14 @@ int				main(int ac, char **av, char **env)
 	opening_sh();
 	sig_catch();
 	all = init_all(env);
-	init_term();
+	// printf("try: %s\n", all->env->head->s);
+	// printf("try: %s\n", all->env->head->next->s);
+	// printf("other try: %s\n", all->dupenv[4]);
+	// int		i = 0;
+
+	// while (all->dupenv[i])
+		// printf("dup: |%s|\n", all->dupenv[i++]);
+	init_term(all->dupenv);
 	loop(all);
 	del_dlist(all->env);
 	del_dlist(all->cmd_history);

@@ -48,7 +48,7 @@ int			count_var_len(char *var);
 int			check_match_env(t_all *all, char *s);
 int			var_already_exist(t_all *all, char *var);
 char		*find_env_arg(t_all *all, char *arg2find);
-char		**ft_dupenv(char **env);
+char		**ft_dupenv(t_dlist *env);
 
 /*
 *** ======================= env_tools_2.c

@@ -12,14 +12,32 @@
 
 #include "full_sh.h"
 
-void		init_term(void)
+static char	*get_env_var(char **dupenv, char *var)
+{
+	int		i;
+
+	i = 0;
+	if (dupenv && *dupenv)
+	{
+		while (dupenv[i])
+		{
+			if (!ft_strncmp(dupenv[i], var, ft_strlen(var)))
+				return (dupenv[i] + ft_strlen(var));
+			i++;
+		}
+	}
+	return (NULL);
+}
+
+void		init_term(char **dupenv)
 {
 	char			*term_name;
 	struct termios	term;
 
 	term_name = NULL;
-	if ((term_name = getenv("TERM=")) == NULL)
+	if ((term_name = get_env_var(dupenv, "TERM=")) == NULL)
 		term_error("GETENV");
+	printf("termname: |%s|\n", term_name);
 	if (tgetent(NULL, term_name) == -1)
 		term_error("TGETENT");
 	if (tcgetattr(0, &term) == -1)

@@ -75,7 +75,7 @@ t_all		*init_all(char **env)
 		error("MALLOC");
 	init_windows_size(all);
 	all->env = init_env(env);
-	all->dupenv = ft_dupenv(env);
+	all->dupenv = ft_dupenv(all->env);
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	all->parsecmd = NULL;
 	all->pipe = NULL;

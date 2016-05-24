@@ -29,18 +29,39 @@ char	*find_env_arg(t_all *all, char *arg2find)
 	return ("\0");
 }
 
-char	**ft_dupenv(char **env)
+char	**ft_dupenv(t_dlist *env)
 {
-	char	**dup;
-	int		i;
+	t_node		*tmp;
+	char		**dup;
+	int			i;
 
-	i = -1;
-	if (!(dup = (char **)malloc(sizeof(char *) * ft_tablen(env) + 1)))
-		return (NULL);
-	while (++i < (int)ft_tablen(env))
-		dup[i] = ft_strdup(env[i]);
-	dup[++i] = NULL;
-	return (dup);
+	tmp = env->head;
+	dup = NULL;
+	i = 0;
+	if (tmp)
+	{
+		if (!(dup = (char **)malloc(sizeof(char *) * (int)env->lenght + 1)))
+			return (NULL);
+		while (tmp)
+		{
+			dup[i] = ft_strdup(tmp->s);
+			tmp = tmp->next;
+			i++;
+		}
+		dup[i] = NULL;
+		return (dup);
+	}
+	return (NULL);
+	// char	**dup;
+	// int		i;
+
+	// i = -1;
+	// if (!(dup = (char **)malloc(sizeof(char *) * ft_tablen(env) + 1)))
+	// 	return (NULL);
+	// while (++i < (int)ft_tablen(env))
+	// 	dup[i] = ft_strdup(env[i]);
+	// dup[++i] = NULL;
+	// return (dup);
 }
 
 int		count_var_len(char *var)
