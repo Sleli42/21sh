@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 14:30:16 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/21 16:00:33 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 16:28:59 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int				check_redirection(char *s);
 
 int				count_medium_split(char *s);
 void			medium_split_extend(char **medium, char *tmp, int *i);
-void			medium_split_extend_2(char **medium, char *cmd, int *i, int *ct);
+void			medium_split_extend_2(char **medium, \
+													char *cmd, int *i, int *ct);
 
 /*
 *** ======================= cmd_parse.c

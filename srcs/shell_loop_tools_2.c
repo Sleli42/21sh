@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/18 18:06:36 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/05/23 16:52:48 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 16:27:34 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void		write_buffer(t_all *all)
 	ct = 0;
 	if (all->globing.dt_print | all->globing.cr_split)
 	{
- 		*&all->globing.cr_split = 0x0;
- 		*&all->globing.dt_print = 0x0;
+		*&all->globing.cr_split = 0x0;
+		*&all->globing.dt_print = 0x0;
 	}
 	else
 		ft_putstr(all->buff);

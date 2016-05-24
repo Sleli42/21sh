@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/02 15:46:53 by skhatir           #+#    #+#             */
-/*   Updated: 2016/05/22 18:46:03 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 16:28:30 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void					ft_tabdel(char ***tabi);
 *********************** MARK_BUILT *********************************************
 */
 
-#define _M (m_box.history && *m_box.history && m_box.history[m_box.p_index])
+# define _M (m_box.history && *m_box.history && m_box.history[m_box.p_index])
 
 typedef struct			s_mark
 {

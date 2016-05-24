@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/10 15:20:56 by skhatir           #+#    #+#             */
-/*   Updated: 2016/05/22 18:44:38 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 16:25:38 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char			*obtain_history_p(char *history)
 
 	if (!history || !*history)
 		return (NULL);
-	return ((ret = *history && *history == ':' ? ++history : obtain_history_p(++history)));
+	return ((ret = *history && *history == ':' ? \
+									++history : obtain_history_p(++history)));
 }
 
 int				get_arg(char *p_cmd)
