@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 10:26:13 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/05/24 18:35:46 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 18:58:51 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,13 @@ void	already_in_func_extended(t_all *all)
 	}
 }
 
-void	init_dft(t_all *all)
+void	loop(t_all *all)
 {
 	init_loop(all);
 	init_glob(all);
 	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	display_prompt(all);
 	already_in_func(all);
-}
-
-void	loop(t_all *all)
-{
-	init_dft(all);
 	while (*all->buff != '\n')
 	{
 		define_nb_lines(all);
