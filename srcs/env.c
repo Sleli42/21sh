@@ -12,23 +12,6 @@
 
 #include "full_sh.h"
 
-int		check_env_error(char **tmp)
-{
-	if (ft_strcmp(tmp[0], "env"))
-	{
-		write_error(tmp[0]);
-		return (0);
-	}
-	if (tmp[1] && tmp[1][0] == '-' && ft_strcmp(tmp[1], "-i"))
-	{
-		ft_putstr("env: illegal option -- ");
-		ft_putstr(tmp[1]);
-		ft_putstr("\nusage: env [-i] [name=value ...] [utility [argument ...]]\n");
-		return (0);
-	}
-	return (1);
-}
-
 void	env_display(t_all *all, char *cmd)
 {
 	t_node	*nav;

@@ -71,7 +71,7 @@ void	simple_cmd_loop(t_all *all, t_builtins built[11], char *cmd)
 	while (i < 11)
 	{
 		tmp = (i == 2 && symbol_in_cmd(cmd, '=')) ?
-						cmd + count_var_len(cmd) : cmd;
+		cmd + count_var_len(cmd) : cmd;
 		if (!ft_strncmp(tmp, built[i].action_name, \
 			ft_strlen(built[i].action_name)))
 		{
@@ -113,30 +113,24 @@ void	exec_command(t_all *all)
 
 	i = 0;
 	all->nb_bin_ope = 0;
-	if (all->parsecmd)
+	while (all->parsecmd[i])
 	{
-		while (all->parsecmd[i])
+		j = 0;
+		if (binary_operators(all->parsecmd[i], &all->nb_bin_ope))
+			loop_binary_ope(all, all->parsecmd[i]);
+		else
 		{
-			j = 0;
-			if (binary_operators(all->parsecmd[i], &all->nb_bin_ope))
-				loop_binary_ope(all, all->parsecmd[i]);
-			else
+			while (all->parsecmd[i][j])
 			{
-				while (all->parsecmd[i][j])
-				{
-					if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
-						;
-					else
-					{
-						if (check_redirection(all->parsecmd[i][j]) == 1)
-							exec_redirection_cmd(all, all->parsecmd[i][j]);
-						else
-							exec_simple_cmd(all, all->parsecmd[i][j]);
-					}
-					j++;
-				}
+				if ((!all->parsecmd[i][j] || !all->parsecmd[i][j][0]))
+					;
+				else
+					(check_redirection(all->parsecmd[i][j]) == 1) ? \
+						exec_redirection_cmd(all, all->parsecmd[i][j]) : \
+						exec_simple_cmd(all, all->parsecmd[i][j]);
+				j++;
 			}
-			i++;
 		}
+		i++;
 	}
 }

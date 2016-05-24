@@ -17,7 +17,6 @@ int		check_pipe_error(char ***pipe2exec)
 	int		ct;
 
 	ct = 0;
-	ft_putstr("WEEEESH\n");
 	while (pipe2exec[ct])
 	{
 		if (!len_array(pipe2exec[ct]))

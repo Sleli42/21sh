@@ -37,7 +37,6 @@ void		init_term(char **dupenv)
 	term_name = NULL;
 	if ((term_name = get_env_var(dupenv, "TERM=")) == NULL)
 		term_error("GETENV");
-	printf("termname: |%s|\n", term_name);
 	if (tgetent(NULL, term_name) == -1)
 		term_error("TGETENT");
 	if (tcgetattr(0, &term) == -1)

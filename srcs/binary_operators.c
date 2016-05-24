@@ -12,40 +12,11 @@
 
 #include "full_sh.h"
 
-int		error_bin_operators(char *err)
-{
-	ft_putstr("42sh: syntax error near unexpected token `");
-	ft_putstr(err);
-	ft_putstr("'\n");
-	return (0);
-}
-/*
-int		check_error_bin_ope(char **parsecmd)
-{
-	int		ct;
-
-	ct = 0;
-	while (parsecmd[ct])
-	{
-		if (!ft_strcmp(parsecmd[ct], "||") || !ft_strcmp(parsecmd[ct], "&&"))
-		{
-			if (parsecmd[ct - 1] == NULL || parsecmd[ct + 1] == NULL)
-				error_bin_operators(parsecmd[ct]);
-		}
-		if (parsecmd[ct] == NULL)
-			return (error_bin_operators(parsecmd[len_array(parsecmd) - 1]));
-		ct++;
-	}
-	return (1);
-}
-*/
 int		binary_operators(char **array, int *nb_bin_ope)
 {
 	int		ct;
 
 	ct = 0;
-	// if (!check_error_bin_ope(array))
-		// return (0);
 	while (array[ct])
 	{
 		if (!ft_strncmp(array[ct], "&&", 2) || !ft_strncmp(array[ct], "||", 2))
@@ -56,46 +27,6 @@ int		binary_operators(char **array, int *nb_bin_ope)
 		return (1);
 	return (0);
 }
-
-int		check_good_bin_format(char **parsecmd)
-{
-	int		ct;
-
-	ct = 0;
-	if (!ft_strcmp(parsecmd[0], "&&") || !ft_strcmp(parsecmd[0], "||"))
-		return (error_bin_operators(parsecmd[0]));
-	while (parsecmd[ct])
-	{
-		if (parsecmd[ct] == NULL)
-			return (error_bin_operators(parsecmd[len_array(parsecmd) - 1]));
-		else if (!ft_strcmp(parsecmd[ct], "||") || !ft_strcmp(parsecmd[ct], "&&"))
-		{
-			if (parsecmd[ct - 1] == NULL || parsecmd[ct + 1] == NULL)
-				return (error_bin_operators(parsecmd[ct]));
-		}
-		else if ((!ft_strncmp(parsecmd[ct], "&&", 2) && ft_strlen(parsecmd[ct]) > 2)
-			|| (!ft_strncmp(parsecmd[ct], "||", 2) && ft_strlen(parsecmd[ct]) > 2))
-			return (error_bin_operators(parsecmd[ct] + 2));
-		else if ((!ft_strncmp(parsecmd[ct], "&&", 2) || !ft_strncmp(parsecmd[ct], "||", 2))
-			&& ((!ft_strncmp(parsecmd[ct + 1], "&&", 2) || \
-				!ft_strncmp(parsecmd[ct + 1], "||", 2))))
-			return (error_bin_operators(parsecmd[ct + 1]));
-		ct++;
-	}
-	return (1);
-}
-
-// static void		display_array(char **array)
-// {
-// 	int		i;
-
-// 	i = 0;
-// 	while (array[i])
-// 	{
-// 		printf("\t\t [ %s ] \n", array[i]);
-// 		i++;
-// 	}
-// }
 
 void	and_operator(char **parsecmd, int *ct, int err)
 {
@@ -135,14 +66,6 @@ void	or_operator(char **parsecmd, int *ct, int err)
 		}
 		*ct = (*ct != len_array(parsecmd)) ? *ct + 1 : *ct;
 	}
-}
-
-void	goto_next_command(char **parsecmd, int *ct, int err)
-{
-	if (!ft_strcmp(parsecmd[*ct], "&&"))
-		and_operator(parsecmd, ct, err);
-	else if (!ft_strcmp(parsecmd[*ct], "||"))
-		or_operator(parsecmd, ct, err);
 }
 
 void	loop_binary_ope(t_all *all, char **parsecmd)

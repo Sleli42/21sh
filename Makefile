@@ -70,6 +70,7 @@ SRC			= main.c \
 			binary.c \
 	 		binary_tools.c \
 			parse_cmd.c \
+			parse_cmd_2.c \
 			cmd_exec.c \
 			hash.c \
 		 	history.c \
@@ -99,7 +100,8 @@ SRC			= main.c \
 			shell_tools.c \
 			termcaps_init.c \
 			termcaps_tools.c \
-			binary_operators.c
+			binary_operators.c \
+			binary_operators_tools.c
 
 OBJ = $(SRC:.c=.o)
 

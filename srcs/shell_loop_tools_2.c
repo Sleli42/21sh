@@ -66,7 +66,7 @@ void		write_buffer(t_all *all)
 	if (all->globing.dt_print | all->globing.cr_split)
 	{
  		*&all->globing.cr_split = 0x0;
-		*&all->globing.dt_print = 0x0;
+ 		*&all->globing.dt_print = 0x0;
 	}
 	else
 		ft_putstr(all->buff);

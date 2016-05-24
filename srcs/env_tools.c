@@ -22,7 +22,7 @@ char	*find_env_arg(t_all *all, char *arg2find)
 		while (nav)
 		{
 			if (ft_strncmp(nav->s, arg2find, ft_strlen(arg2find)) == 0)
-				return (ft_strdup(nav->s));
+				return (nav->s);
 			nav = nav->next;
 		}
 	}
@@ -52,16 +52,6 @@ char	**ft_dupenv(t_dlist *env)
 		return (dup);
 	}
 	return (NULL);
-	// char	**dup;
-	// int		i;
-
-	// i = -1;
-	// if (!(dup = (char **)malloc(sizeof(char *) * ft_tablen(env) + 1)))
-	// 	return (NULL);
-	// while (++i < (int)ft_tablen(env))
-	// 	dup[i] = ft_strdup(env[i]);
-	// dup[++i] = NULL;
-	// return (dup);
 }
 
 int		count_var_len(char *var)

@@ -58,13 +58,6 @@ int				main(int ac, char **av, char **env)
 	opening_sh();
 	sig_catch();
 	all = init_all(env);
-	// printf("try: %s\n", all->env->head->s);
-	// printf("try: %s\n", all->env->head->next->s);
-	// printf("other try: %s\n", all->dupenv[4]);
-	// int		i = 0;
-
-	// while (all->dupenv[i])
-		// printf("dup: |%s|\n", all->dupenv[i++]);
 	init_term(all->dupenv);
 	loop(all);
 	del_dlist(all->env);
