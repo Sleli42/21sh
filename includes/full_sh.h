@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/21 15:48:53 by skhatir           #+#    #+#             */
-/*   Updated: 2016/03/21 16:29:30 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 17:57:07 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,5 +233,10 @@ typedef	struct			s_keys
 	int					action_name;
 	void				(*f)(t_all *);
 }						t_keys;
+
+
+void					sig_handler(int sig);
+void					sig_catch(void);
+void					init_dft(t_all *all);
 
 #endif

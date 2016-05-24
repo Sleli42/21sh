@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/03 15:59:16 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/22 14:45:23 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 18:57:13 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,28 @@
 
 void			sig_handler(int sig)
 {
+	t_all		*all;
+	char		cp[3];
+
+	all = NULL;
 	if (sig == SIGTERM)
 		exit(0);
-	if (sig == SIGKILL)
-		exit(0);
 	else if (sig == SIGTSTP || sig == SIGINT || sig == SIGCONT)
-		;
+	{
+		if ((all = f_cpy(NULL)) == NULL)
+			;
+		else
+		{
+			ft_bzero(cp, 3);
+			cp[0] = '\n';
+			all && !CMD_NULL ? del_dlist2(all->cmd_termcaps) : NULL;
+			all && all->cmd && *all->cmd ? ft_strdel(&all->cmd) : NULL;
+			ioctl(0, TIOCSTI, cp);
+			init_glob(all);
+		}
+	}
+	else if (sig == SIGKILL)
+		exit(0);
 	else
 		return ;
 }
@@ -28,7 +44,7 @@ void			sig_catch(void)
 {
 	int sig;
 
-	sig = 1;
+	sig = 0;
 	while (sig++ < 32)
 		signal(sig, sig_handler);
 }

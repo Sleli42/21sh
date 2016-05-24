@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/18 18:06:36 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/05/24 16:27:34 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/05/24 16:47:44 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void		save_glob(t_all *all, t_glob *g)
 void		create_and_exec_command(t_all *all)
 {
 	create_cmd(all);
+	f_cpy(all);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
