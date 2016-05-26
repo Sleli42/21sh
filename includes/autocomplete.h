@@ -25,6 +25,8 @@ typedef struct s_select		t_select;
 *** ======================= autocomplete.c
 */
 
+char		*cut_equ(char *s);
+char		*cut_dir(char *s);
 void		display_elems(t_all *all, t_clist *lst);
 void		search_autocomplete(t_all *all);
 

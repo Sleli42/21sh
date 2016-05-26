@@ -234,7 +234,6 @@ typedef	struct			s_keys
 	void				(*f)(t_all *);
 }						t_keys;
 
-
 void					sig_handler(int sig);
 void					sig_catch(void);
 void					init_dft(t_all *all);

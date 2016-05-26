@@ -48,7 +48,7 @@ void		exec_right_binary_loop(t_all *all, char **argv_bin)
 
 void		exec_right_binary(t_all *all, char **argv_bin)
 {
-	(all->path2exec && *all->path2exec) ? del_array(&all->path2exec) : NULL;
+	(all->path2exec || *all->path2exec) ? del_array(&all->path2exec) : NULL;
 	all->path2exec = ft_strsplit(find_env_arg(all, "PATH") + 5, ':');
 	if (hash_exist(all->hash, argv_bin[0]) && argv_bin && argv_bin[0])
 		exec_binary(all, all->hash[hash_bin(argv_bin[0])], \

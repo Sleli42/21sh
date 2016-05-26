@@ -42,12 +42,17 @@ void		save_glob(t_all *all, t_glob *g)
 
 void		create_and_exec_command(t_all *all)
 {
+	char		*tmp;
+
 	create_cmd(all);
 	f_cpy(all);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 		all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);
-	all->cmd = ft_epur_str(all->cmd);
+	tmp = ft_epur_str(all->cmd);
+	all->cmd || *all->cmd ? ft_strdel(&all->cmd) : NULL;
+	all->cmd = ft_strdup(tmp);
+	tmp || *tmp ? ft_strdel(&tmp) : NULL;
 	if (all->cmd[0] != 0 && ft_strlen(all->cmd) > 0)
 	{
 		parse_command(all, all->cmd);
@@ -55,7 +60,7 @@ void		create_and_exec_command(t_all *all)
 		add_to_history(all);
 	}
 	!CMD_NULL ? del_dlist2(all->cmd_termcaps) : NULL;
-	all->cmd && *all->cmd ? ft_strdel(&all->cmd) : NULL;
+	all->cmd || *all->cmd ? ft_strdel(&all->cmd) : NULL;
 	loop(all);
 }
 

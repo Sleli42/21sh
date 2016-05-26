@@ -81,6 +81,13 @@ void	cut_cmd_equ(t_all *all)
 	int		ct;
 	int		tmp;
 
+	// printf("cmd: |%s|\n", all->cmd);
+	// printf("ccccccc: [%c]\n", *ft_strchr(all->cmd, '/'));
+	// if (all->cmd[0] == '/')
+	// {
+	// 	all->equ2find = cut_equ(all->cmd);
+	// 	return ;
+	// }
 	ct = 0;
 	tmp = (CURSOR - PROMPT_LEN) - 1;
 	if (!(all->equ2find = (char *)malloc(sizeof(char *))))

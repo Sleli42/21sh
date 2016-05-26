@@ -19,8 +19,14 @@ void	open_path_directory(t_all *all, char *dir2open)
 
 	all->tmp_cmd = ft_strdup(all->cmd);
 	all->list_dir = create_clst();
+	printf("\n[%s]\n", dir2open);
+	// printf("[%s]\n", ft_strrchr(dir2open + 1, '/'));
+	// printf("[%s]\n", ft_strrchr(dir2open, '/'));
 	if (!(entry = opendir(dir2open)))
+	{
+		// ft_putstr("ERR open()\n");
 		return ;
+	}
 	else
 	{
 		while ((dirp = readdir(entry)))

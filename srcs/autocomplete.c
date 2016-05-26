@@ -23,6 +23,52 @@ void	add_spaces(t_all *all, int tmp_len, int ct)
 	}
 }
 
+char	*cut_equ(char *s)
+{
+	char	*ret;
+	int		i;
+	int		ct;
+
+	i = ft_strlen(s) - 1;
+	ct = 0;
+	while (s[i])
+	{
+		if (s[i] == '/')
+			break ;
+		i--;
+	}
+	i += 1;
+	ret = ft_strnew((int)ft_strlen(s) - i);
+	while (s[i])
+		ret[ct++] = s[i++];
+	ret[ct] = '\0';
+	return (ret);
+}
+
+char	*cut_dir(char *s)
+{
+	int		ct;
+	int		i;
+	char	*ret;
+
+	i = (int)ft_strlen(s) - 1;
+	ct = 0;
+	while (s[i])
+	{
+		if (s[i] == '/')
+			break ;
+		i--;
+	}
+	ret = ft_strnew(i + 1);
+	while (ct <= i)
+	{
+		ret[ct] = s[ct];
+		ct++;
+	}
+	ret[ct] = '\0';
+	return (ret);
+}
+
 void	display_elems(t_all *all, t_clist *lst)
 {
 	t_select	*nav;
@@ -52,10 +98,12 @@ void	search_autocomplete(t_all *all)
 {
 	create_cmd(all);
 	if (all->cmd[0] == 0 || (ft_strlen(all->cmd) >= 1 \
-							&& no_spaces(all->cmd_termcaps->head)))
+				&& no_spaces(all->cmd_termcaps->head) && all->cmd[0] != '/'))
 		search_bin_path(all);
 	else if (all->cmd[CURSOR - PROMPT_LEN - 1] == ' ')
 		open_path_directory(all, "./");
+	else if (all->cmd[0] == '/' && all->cmd[ft_strlen(all->cmd) - 1] == '/')
+		open_path_directory(all, cut_dir(all->cmd));
 	else
 	{
 		cut_cmd_equ(all);

@@ -60,10 +60,12 @@ int			hash_exist(char **hash, char *s)
 {
 	int		try;
 
+	try = 0;
 	if ((!hash && !*hash) || (!s && !*s))
 		return (0);
 	try = hash_bin(s);
-	if (hash[try] && ft_strcmp(hash[try], s))
+	if (try > 0 && try < 250 && hash && hash[try] != NULL\
+							&& ft_strcmp(hash[try], s) > 0)
 		return (0);
 	if (hash[try] != NULL && *hash[try])
 		return (1);

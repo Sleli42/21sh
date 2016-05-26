@@ -64,6 +64,8 @@ int		directory_in_path(t_all *all, char *equ2find)
 {
 	int		ct;
 
+	if (equ2find[0] == '/')
+		return (1);
 	ct = ft_strlen(equ2find) - 1;
 	while (equ2find[ct--])
 	{
@@ -76,14 +78,37 @@ int		directory_in_path(t_all *all, char *equ2find)
 	return (0);
 }
 
+int		check_next_slash(char *s)
+{
+	int		ct;
+
+	ct = 1;
+	if (s)
+	{
+		while (s[ct])
+		{
+			if (s[ct] == '/')
+				return (1);
+			ct++;
+		}
+	}
+	return (0);
+}
+
 char	*cut_directory_in_path(char *equ2find)
 {
 	int		ct;
 	int		i;
 	char	*ret;
 
-	ct = ft_strlen(equ2find) - 1;
+	printf("equ: [%s]\n", equ2find);
+	// if (equ2find[0] == '/')
+	// {
+	// 	if (!check_next_slash(equ2find))
+	// 		return ("/");
+	// }
 	i = 0;
+	ct = ft_strlen(equ2find) - 1;
 	ret = ft_strnew(ct);
 	while (equ2find[ct] != '/' && equ2find[ct])
 		ct--;

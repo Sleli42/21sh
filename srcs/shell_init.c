@@ -70,7 +70,9 @@ void		init_glob(t_all *all)
 t_all		*init_all(char **env)
 {
 	t_all	*all;
+	int		i;
 
+	i = 0;
 	if (!(all = (t_all *)malloc(sizeof(t_all))))
 		error("MALLOC");
 	init_windows_size(all);
@@ -84,6 +86,8 @@ t_all		*init_all(char **env)
 	all->already_autocomplete = 0;
 	all->already_open = 0;
 	all->hash = malloc(sizeof(char *) * 250);
+	while (i < 250)
+		all->hash[i++] = 0;
 	init_history(all);
 	init_read(all);
 	init_glob(all);
