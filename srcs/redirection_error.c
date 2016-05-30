@@ -25,8 +25,11 @@ void	redirection_error_2(void)
 	return ;
 }
 
-void	redirection_error_3(void)
+void	redirection_error_3(int err)
 {
-	ft_putstr("42sh: syntax error or command not supported\n");
+	if (err == 1)
+		ft_putstr("42sh: Ambiguous output redirect.\n");
+	else if (err == 2)
+		ft_putstr("42sh: Ambiguous input redirect.\n");
 	return ;
 }

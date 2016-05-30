@@ -19,6 +19,8 @@ char	*open_right_directory(t_all *all, char *equ2find)
 		// return (cut_dir(equ2find));
 	// else if (*ft_strchr(all->cmd, '/') == '/')
 		// ft_putstr("cut me good\n")
+	// if (equ2find[0] == '/' && equ2find[ft_strlen(equ2find) - 1] != '/')
+	// printf("equ: [%s]\n", equ2find);
 	if (equ2find[ft_strlen(equ2find) - 1] == '/' && S_ISDIR(all->stat.st_mode))
 		return (equ2find);
 	else
@@ -45,7 +47,7 @@ void	search_equality(t_all *all, char *equ2find, char *dir2open)
 	t_dirent	*dirp;
 
 	if (!(entry = opendir(dir2open)))
-		;
+		return ;
 	else
 	{
 		while ((dirp = readdir(entry)))
@@ -80,10 +82,10 @@ void	list_dir_equ(t_all *all)
 
 	all->list_dir = create_clst();
 	all->tmp_cmd = ft_strdup(all->cmd);
-	printf("all->cmd: [%s]\n", all->cmd);
-	printf("all->equ2find: [%s]\n", all->equ2find);
+	// printf("all->cmd: [%s]\n", all->cmd);
 	dir2open = open_right_directory(all, all->equ2find);
-	printf("dir2open: [%s]\n", dir2open);
+	// printf("\ndir2open: [%s]\n", dir2open);
+	// printf("all->equ2find: [%s]\n", all->equ2find);
 	if (EQU_IS_DIRECTORY)
 	{
 		if (all->tmp_dir)
@@ -95,6 +97,7 @@ void	list_dir_equ(t_all *all)
 	}
 	else
 	{
+		all->equ2find += (all->equ2find[0] == '/' && all->equ2find[1]) ? 1 : 0;
 		search_equality(all, all->equ2find, dir2open);
 		results_analysis_equ(all, all->equ2find);
 		del_clist(&all->list_dir);

@@ -65,7 +65,7 @@ int			hash_exist(char **hash, char *s)
 		return (0);
 	try = hash_bin(s);
 	if (try > 0 && try < 250 && hash && hash[try] != NULL\
-							&& ft_strcmp(hash[try], s) > 0)
+				&& ft_strncmp(hash[try], s, ft_strlen(hash[try])))
 		return (0);
 	if (hash[try] != NULL && *hash[try])
 		return (1);

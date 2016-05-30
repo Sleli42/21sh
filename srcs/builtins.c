@@ -81,7 +81,7 @@ void			built_history(t_all *all, char *cmd)
 
 void			free_all(t_all *all, char *cmd)
 {
-	(void)cmd;
+	reset_term();
 	close(all->fd_history);
 	free(all);
 	all = NULL;

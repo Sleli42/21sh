@@ -66,7 +66,7 @@ int		directory_in_path(t_all *all, char *equ2find)
 
 	if (equ2find[0] == '/')
 		return (1);
-	ct = ft_strlen(equ2find) - 1;
+	ct = CURSOR - PROMPT_LEN;
 	while (equ2find[ct--])
 	{
 		if (equ2find[ct] == '/')
@@ -95,27 +95,50 @@ int		check_next_slash(char *s)
 	return (0);
 }
 
+int		count_nb_dir(char *s)
+{
+	int		ret;
+	int		ct;
+
+	ret = 0;
+	ct = 0;
+	if (!s)
+		return (0);
+	while (s[ct])
+	{
+		if (s[ct] == '/')
+			ret++;
+		ct++;
+	}
+	return (ret);
+}
+
 char	*cut_directory_in_path(char *equ2find)
 {
 	int		ct;
 	int		i;
+	int		count;
 	char	*ret;
 
-	printf("equ: [%s]\n", equ2find);
+	// printf("equ: [%s]\n"/, equ2find);
 	// if (equ2find[0] == '/')
 	// {
 	// 	if (!check_next_slash(equ2find))
 	// 		return ("/");
 	// }
+	count = count_nb_dir(equ2find);
 	i = 0;
 	ct = ft_strlen(equ2find) - 1;
-	ret = ft_strnew(ct);
-	while (equ2find[ct] != '/' && equ2find[ct])
+	while (equ2find[ct] && (equ2find[ct] != '/' || equ2find[ct] != ' '))
 		ct--;
-	while (i < ct)
+	ct = 0;
+	ret = ft_strnew((ft_strlen(equ2find) - 1) - ct);
+	while (equ2find[ct] && count != 0)
 	{
-		ret[i] = equ2find[i];
-		i += 1;
+		if (equ2find[ct] == '/')
+			count--;
+		ret[i++] = equ2find[ct++];
+		// printf("ret[i]: [%c]\n", ret[i - 1]);
 	}
 	ret[i] = 0;
 	return (ret);

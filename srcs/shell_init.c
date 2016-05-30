@@ -18,6 +18,7 @@ void		init_loop(t_all *all)
 	all->already_in_select = 0;
 	all->already_in_paste = 0;
 	all->cursor_pos = 0;
+	all->cursor_pos = 0;
 	all->nb_lines = 1;
 	all->curr_line = 1;
 	all->index_history = all->pos_history;

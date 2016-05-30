@@ -216,6 +216,7 @@ typedef struct			s_all
 	char				**hash;
 	int					nb_bin_ope;
 	int					err_exec;
+	int					save_curs;
 }						t_all;
 
 /*

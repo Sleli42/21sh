@@ -26,7 +26,14 @@
 |                                                                              |
 |                                 CURRENT BUGS                                 |
 |------------------------------------------------------------------------------|
-|    • env -i + cmd	 		                      							   |
+|    • 				 		                      							   |
 |    • 																		   |
 |    •   					                           						   |
 |______________________________________________________________________________|
+
+	30/05/16:
+
+- desactiver/reactiver termcaps/execve
+- autocompletion rework
+- hashtable rework
+- redirection rework -> csh

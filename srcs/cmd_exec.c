@@ -15,21 +15,28 @@
 int		multi_redirect(char *s)
 {
 	int	ct;
-	int	ret;
+	int	stop1;
+	int	stop2;
 
 	ct = 0;
-	ret = 0;
-	if (s && s[ct])
+	stop1 = 0;
+	stop2 = 0;
+	while (s[ct])
 	{
-		while (s[ct])
+		if (s[ct] == '>')
 		{
-			if (s[ct] == '>' || s[ct] == '<')
-				ret++;
-			ct++;
+			stop1++;
+			if (stop1 > 1)
+				return (1);
 		}
+		else if (s[ct] == '<')
+		{
+			stop2++;
+			if (stop2 > 1)
+				return (2);
+		}
+		ct++;
 	}
-	if (ret > 1)
-		return (1);
 	return (0);
 }
 
@@ -46,8 +53,9 @@ void	exec_redirection_cmd(t_all *all, char *cmd)
 
 	i = 0;
 	cmp = my_strstr(all, cmd);
-	if (multi_redirect(cmd))
-		return (redirection_error_3());
+	if ((i = multi_redirect(cmd)) > 0)
+		return (redirection_error_3(i));
+	i = 0;
 	if (cmp != NULL)
 	{
 		while (i < 5)

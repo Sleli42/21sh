@@ -55,6 +55,7 @@ void		exec_right_binary(t_all *all, char **argv_bin)
 											argv_bin, all->dupenv);
 	else
 		exec_right_binary_loop(all, argv_bin);
+	init_term(all->dupenv);
 	argv_bin ? del_array(&argv_bin) : NULL;
 }
 
@@ -64,6 +65,7 @@ void		exec_binary(t_all *all, char *bin, char **argv_bin, char **env)
 	pid_t	pid;
 
 	all->err_exec = 0;
+	reset_term();
 	pid = fork();
 	if (pid == -1)
 		error("FORK");

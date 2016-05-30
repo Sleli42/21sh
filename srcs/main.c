@@ -63,6 +63,7 @@ void			opening_sh(void)
 		buf[r] = 0;
 		ft_putstr(buf);
 	}
+	close(art);
 }
 
 int				main(int ac, char **av, char **env)

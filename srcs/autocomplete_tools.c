@@ -76,6 +76,24 @@ int		no_spaces(t_cmd *lst)
 	return (1);
 }
 
+int		check_prev_directory(char *s)
+{
+	int		ct;
+
+	ct = ft_strlen(s) - 1;
+	if (!s)
+		return (0);
+	while (s[ct])
+	{
+		if (s[ct] == ' ')
+			return (0);
+		if (s[ct] == '/' && s[ct - 1] != ' ')
+			return (1);
+		ct--;
+	}
+	return (0);
+}
+
 void	cut_cmd_equ(t_all *all)
 {
 	int		ct;
@@ -90,16 +108,23 @@ void	cut_cmd_equ(t_all *all)
 	// }
 	ct = 0;
 	tmp = (CURSOR - PROMPT_LEN) - 1;
-	if (!(all->equ2find = (char *)malloc(sizeof(char *))))
-		error("MALLOC");
+	all->already_open = check_prev_directory(all->cmd);
+	// printf("alreadyopen: %d\n", all->already_open);
 	if (all->already_open && all->cmd[tmp] != '/')
 		while (all->cmd[tmp] && all->cmd[tmp] != '/')
 			tmp--;
 	else
 		while (all->cmd[tmp] && all->cmd[tmp] != ' ')
 			tmp--;
+	all->equ2find = ft_strnew((CURSOR - PROMPT_LEN) - tmp);
+	// printf("c found: [%c]\n", all->cmd[tmp]);
 	tmp += 1;
+	// tmp += (all->cmd[tmp] == '/') ? 1 : 0;
+	// printf("c found: [%c]\n", all->cmd[tmp]);
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
 		all->equ2find[ct++] = all->cmd[tmp++];
+		// printf("c found: |%c|\n", all->equ2find[ct - 1]);
+	}
 	all->equ2find[ct] = '\0';
 }

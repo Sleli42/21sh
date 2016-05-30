@@ -96,7 +96,12 @@ void	display_elems(t_all *all, t_clist *lst)
 
 void	search_autocomplete(t_all *all)
 {
+	// printf("pos: %d && save pos: %d\n", CURSOR, all->save_curs);
+	all->save_curs = CURSOR;
+	// printf("CURSOR : %d\n", CURSOR);
 	create_cmd(all);
+	// printf("CURSOR : %d\n", CURSOR);
+	// CURSOR = all->save_curs;
 	if (all->cmd[0] == 0 || (ft_strlen(all->cmd) >= 1 \
 				&& no_spaces(all->cmd_termcaps->head) && all->cmd[0] != '/'))
 		search_bin_path(all);
