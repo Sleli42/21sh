@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_loop.c                                       :+:      :+:    :+:   */
+/*   shell_loop_diff.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/04 10:26:13 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/05/24 18:58:51 by skhatir          ###   ########.fr       */
+/*   Created: 2016/05/31 15:29:03 by lubaujar          #+#    #+#             */
+/*   Updated: 2016/05/31 15:29:04 by lubaujar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 #define G_		(all->globing.crush && all->globing.sub)
 #define G_ALL	(all->globing.back | all->globing.crush | all->globing.sub)
 #define G_ALL2	(all->globing.quote | all->globing.d_quote)
-
 int		check_globbing(t_all *all)
 {
 	int		i;
-
 	i = 0;
 	if (*all->buff == '\n' && (G_ALL || G_ALL2 > 0))
 	{
@@ -42,12 +40,10 @@ int		check_globbing(t_all *all)
 	}
 	return (1);
 }
-
 void	read_keys(t_all *all)
 {
 	int		key;
 	int		cr;
-
 	key = 0;
 	cr = 0;
 	if (read(0, all->buff, (MAXLEN - 1)) == -1)
@@ -70,7 +66,6 @@ void	read_keys(t_all *all)
 		}
 	}
 }
-
 void	already_in_func(t_all *all)
 {
 	create_cmd(all);
@@ -83,7 +78,6 @@ void	already_in_func(t_all *all)
 	}
 	all->cmd = !all->cmd ? ft_strnew(MAXLEN - 1) : NULL;
 }
-
 void	already_in_func_extended(t_all *all)
 {
 	if (all->buff)
@@ -107,7 +101,6 @@ void	already_in_func_extended(t_all *all)
 		all->tmp_cmd ? ft_strdel(&all->tmp_cmd) : NULL;
 	}
 }
-
 void	loop(t_all *all)
 {
 	init_loop(all);

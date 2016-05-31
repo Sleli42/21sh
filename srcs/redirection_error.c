@@ -21,7 +21,7 @@ void	redirection_error(char *file)
 
 void	redirection_error_2(void)
 {
-	ft_putstr("42sh: syntax error near unexpected token `newline'\n");
+	ft_putstr("42sh: Missing name for redirect.\n");
 	return ;
 }
 
@@ -31,5 +31,11 @@ void	redirection_error_3(int err)
 		ft_putstr("42sh: Ambiguous output redirect.\n");
 	else if (err == 2)
 		ft_putstr("42sh: Ambiguous input redirect.\n");
+	return ;
+}
+
+void	redirection_error_4(void)
+{
+	ft_putstr("42sh: Invalid null command.\n");
 	return ;
 }

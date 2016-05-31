@@ -38,14 +38,14 @@ void		init_term(char **dupenv)
 	if ((term_name = get_env_var(dupenv, "TERM=")) == NULL)
 		term_error("GETENV");
 	if (tgetent(NULL, term_name) == -1)
-		term_error("TGETENT");
+		perror("TGETENT");
 	if (tcgetattr(0, &term) == -1)
-		term_error("TCGETATTR");
+		;
 	term.c_lflag &= ~(ECHO | ICANON);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
-		term_error("TCSETATTR");
+		;
 }
 
 void		init_windows_size(t_all *all)

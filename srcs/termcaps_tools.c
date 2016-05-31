@@ -36,23 +36,13 @@ void	tputs_termcap(char *tc)
 	tputs(res, 0, lu_putchar);
 }
 
-void	restore_term(t_termios restore)
-{
-	tputs_termcap("ve");
-	tputs_termcap("me");
-	if (tcgetattr(0, &restore) == -1)
-		term_error("TCGETATTR");
-	if (tcsetattr(0, 0, &restore) == -1)
-		term_error("TCSETATTR");
-}
-
 void	reset_term(void)
 {
 	struct termios	term;
 
 	if (tcgetattr(0, &term) == -1)
-		term_error("TCGETATTR");
+		;
 	term.c_lflag = (ECHO | ICANON);
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
-		term_error("TCSETATTR");
+		;
 }

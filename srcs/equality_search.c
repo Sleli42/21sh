@@ -14,13 +14,6 @@
 
 char	*open_right_directory(t_all *all, char *equ2find)
 {
-	// stat(equ2find, &all->stat);
-	// if (equ2find[0] == '/')
-		// return (cut_dir(equ2find));
-	// else if (*ft_strchr(all->cmd, '/') == '/')
-		// ft_putstr("cut me good\n")
-	// if (equ2find[0] == '/' && equ2find[ft_strlen(equ2find) - 1] != '/')
-	// printf("equ: [%s]\n", equ2find);
 	if (equ2find[ft_strlen(equ2find) - 1] == '/' && S_ISDIR(all->stat.st_mode))
 		return (equ2find);
 	else

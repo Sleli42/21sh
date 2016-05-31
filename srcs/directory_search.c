@@ -19,20 +19,12 @@ void	open_path_directory(t_all *all, char *dir2open)
 
 	all->tmp_cmd = ft_strdup(all->cmd);
 	all->list_dir = create_clst();
-	printf("\ndir 2 open: [%s]\n", dir2open);
-	// printf("[%s]\n", ft_strrchr(dir2open + 1, '/'));
-	// printf("[%s]\n", ft_strrchr(dir2open, '/'));
 	if (!(entry = opendir(dir2open)))
-	{
-		// ft_putstr("ERR open()\n");
 		return ;
-	}
 	else
 	{
-		while ((dirp = readdir(entry)))
+		while ((dirp = readdir(entry)) && dirp->d_name[0] != '\0')
 		{
-			if (dirp->d_name[0] == '\0')
-				break ;
 			if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, ".."))
 				clst_add_elem_back(all->list_dir, \
 									clst_create_elem(dirp->d_name));

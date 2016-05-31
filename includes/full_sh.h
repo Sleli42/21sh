@@ -217,6 +217,7 @@ typedef struct			s_all
 	int					nb_bin_ope;
 	int					err_exec;
 	int					save_curs;
+	int					prog_exec;
 }						t_all;
 
 /*

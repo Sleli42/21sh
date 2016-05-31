@@ -23,13 +23,13 @@ int		multi_redirect(char *s)
 	stop2 = 0;
 	while (s[ct])
 	{
-		if (s[ct] == '>')
+		if (s[ct] == '>' && s[ct + 1] != '>')
 		{
 			stop1++;
 			if (stop1 > 1)
 				return (1);
 		}
-		else if (s[ct] == '<')
+		else if (s[ct] == '<' && s[ct + 1] != '<')
 		{
 			stop2++;
 			if (stop2 > 1)

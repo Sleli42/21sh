@@ -24,7 +24,7 @@ void			sig_handler(int sig)
 	{
 		if ((all = f_cpy(NULL)) == NULL)
 			;
-		else
+		else if (!all->prog_exec)
 		{
 			ft_bzero(cp, 3);
 			cp[0] = '\n';
