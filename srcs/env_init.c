@@ -41,6 +41,16 @@ t_dlist				*dft_env(void)
 	return (list_env);
 }
 
+void				init_inf(t_env_info *inf)
+{
+	inf->exec = 0x0;
+	inf->unless = 0x0;
+	inf->len = 0;
+	inf->bin = NULL;
+	inf->env_spe = NULL;
+	inf->set_var = NULL;
+}
+
 t_dlist				*init_env(char **env)
 {
 	t_dlist			*list_env;

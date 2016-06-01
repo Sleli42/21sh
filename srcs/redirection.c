@@ -24,21 +24,42 @@ void	display_array(char **array)
 	}
 }
 
-char	**replace_argv(char **array)
+char	**replace_argv(char **array, char *redir)
 {
 	 char	**ret;
+	 char	*tmp;
 	 int	ct;
 	 int	ct2;
 
 	 ct = 0;
-	 ct2 = 0;
+	 ct2 = 1;
 	 if (!array)
 	 	return (NULL);
 	 if (!(ret = (char **)malloc(sizeof(char *) * len_array(array))))
 	 	return (NULL);
-	 ret[ct++] = ft_strdup(array[len_array(array) - 1]);
-	 while (array[ct2] && ct2 < 2)
-	 	ret[ct++] = array[ct2++];
+	 while (array[ct2])
+	 {
+	 	// printf("array: [%s]\n", array[ct2]);
+	 	if (!ft_strcmp(array[ct2 - 1], redir))
+	 		break ;
+	 	ct2++;
+	 }
+	 ct2 += 1;
+	 // printf("s foudn: [%s]\n", array[ct2]);
+	 // ret[ct++] = ft_strdup(array[len_array(array) - 1]);
+	 while (array[ct2])
+	 {
+	 	printf("array: [%s]\n", array[ct2]);
+	 	ret[ct++] = ft_strdup(array[ct2++]);
+	 }
+	 tmp = ret[0];
+	 ct2 = 0;
+	 while (array[ct2])
+	 {
+	 	if (!ft_strcmp(array[ct2], tmp))
+	 		break ;
+	 	ret[ct++] = ft_strdup(array[ct2++]);
+	 }
 	 ret[ct] = NULL;
 	 return (ret);
 }
@@ -68,10 +89,12 @@ char	**rework_args_2_exec(char **array, char *redir)
 
 	ct = 0;
 	stop = count_args(array, redir);
+	printf("stop: %d\n", stop);
 	if (!(ret = (char **)malloc(sizeof(char *) * stop + 1)))
 		return (NULL);
 	while (array[ct] && ct < stop)
 	{
+		// printf("rwork[ct] : [%s]\n", array[ct]);
 		ret[ct] = ft_strdup(array[ct]);
 		ct++;
 	}
@@ -92,19 +115,30 @@ void	erase_and_replace(t_all *all, char *cmd)
 	else
 	{
 		redirect = ft_strsplit(cmd, ' ');
+		// printf("REDIRECT:\n\n");
+		// display_array(redirect);
 		// display_array(redirect);
 		// printf("len: %d\n", len_array(redirect));
 		// printf("test: [%d]\n", redirect[0][0]);
-		if (len_array(redirect) == 1 \
-				|| (len_array(redirect) <= 2 && redirect[1][0] == '>'))
-			return (redirection_error_2());
-		if (len_array(redirect) <= 2 && redirect[0][0] == '>')
-			return (redirection_error_4());
-		if (len_array(redirect) == 3 && redirect[0][0] == '>')
-			argv = replace_argv(redirect);
-		(argv || *argv) ? del_array(&argv) : NULL;
-		argv = rework_args_2_exec(redirect, ">");
-		display_array(argv);
+		// if (len_array(redirect) == 1 \
+				// || (len_array(redirect) <= 2 && redirect[1][0] == '>'))
+			// return (redirection_error_2());
+		// if (len_array(redirect) <= 2 && redirect[0][0] == '>')
+			// return (redirection_error_4());
+		if (redirect[0][0] == '>')
+		{
+			// printf("REDIRECT:\n\n");
+			// display_array(redirect);
+			argv = replace_argv(redirect, ">");
+			printf("ARGV:\n\n");
+			display_array(argv);
+		}
+		// (argv || *argv) ? del_array(&argv) : NULL;
+		// printf("REDIRECT 2:\n\n");
+		// display_array(redirect);
+		// argv = rework_args_2_exec(redirect, ">");
+		// printf("ARGV 2:\n\n");
+		// display_array(argv);
 		// redirect[1] = ft_epur_str(redirect[1]);
 		if ((all->fd2open = open(redirect[2], \
 			O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
@@ -113,7 +147,7 @@ void	erase_and_replace(t_all *all, char *cmd)
 		dupstdout = dup(1);
 		dup_and_exec(all, argv, dupstdout, 1);
 		redirect ? del_array(&redirect) : NULL;
-		ft_putstr("YIIIH 2\n");
+		// ft_putstr("YIIIH 2\n");
 	}
 }
 

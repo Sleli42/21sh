@@ -35,7 +35,7 @@ void		exec_right_binary_loop(t_all *all, char **argv_bin)
 		}
 		if (bin_tmp && good_access(bin_tmp))
 		{
-			exec_binary(all, bin_tmp, argv_bin, all->dupenv);
+			exec_binary(all, bin_tmp, argv_bin, all->env_exec);
 			add_to_hash_table(all, bin_tmp);
 			break ;
 		}
@@ -53,7 +53,7 @@ void		exec_right_binary(t_all *all, char **argv_bin)
 	if (all->path2exec && hash_exist(all->hash, argv_bin[0]) \
 											&& argv_bin && argv_bin[0])
 		exec_binary(all, all->hash[hash_bin(argv_bin[0])], \
-											argv_bin, all->dupenv);
+											argv_bin, all->env_exec);
 	else
 		exec_right_binary_loop(all, argv_bin);
 	init_term(all->dupenv);
@@ -66,14 +66,16 @@ void		exec_binary(t_all *all, char *bin, char **argv_bin, char **env)
 	pid_t	pid;
 
 	all->err_exec = 0;
-	reset_term();
+	(void)env;
 	pid = fork();
 	if (pid == -1)
 		error("FORK");
 	all->prog_exec = pid == 0 ? 1 : 0;
 	if ((all->prog_exec = pid) == 0)
 	{
-		if (execve(bin, argv_bin, env) == -1)
+		if (!ft_strncmp(bin, "/bin/bash", ft_strlen("/bin/bash")))
+			reset_term();
+		if (execve(bin, argv_bin, all->env_exec) == -1)
 			error("EXECVE");
 		exit(1);
 	}

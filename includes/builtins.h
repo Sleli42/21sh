@@ -197,6 +197,30 @@ void					update_oldpwd(t_all *all);
 
 /*
 ********************************************************************************
+*********************** ENV ****************************************************
+*/
+
+#include "env.h"
+
+typedef struct			s_env_info
+{
+	int					exec;
+	int					unless;
+	int					len;
+	char				*bin;
+	char				**env_spe;
+	char				**set_var;
+}						t_env_info;
+
+
+char					**ft_tabdelone(char **array, char *s);
+char					*dup_comp(char *target, char **array);
+char					**ft_tabjoin(char **dupenv, char **env_spe);
+void					ft_printtab(char **array);
+void					init_inf(t_env_info *inf);
+
+/*
+********************************************************************************
 *********************** MSC ****************************************************
 */
 

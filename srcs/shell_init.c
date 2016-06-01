@@ -18,7 +18,6 @@ void		init_loop(t_all *all)
 	all->already_in_select = 0;
 	all->already_in_paste = 0;
 	all->cursor_pos = 0;
-	all->cursor_pos = 0;
 	all->nb_lines = 1;
 	all->curr_line = 1;
 	all->index_history = all->pos_history;
@@ -28,7 +27,7 @@ void		init_loop(t_all *all)
 	all->cmd ? ft_strdel(&all->cmd) : NULL;
 	all->buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
 	all->prog_exec = 0;
-	// all->env_exec = all->dupenv;
+	all->env_exec = all->dupenv;
 	init_windows_size(all);
 }
 

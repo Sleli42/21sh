@@ -218,6 +218,7 @@ typedef struct			s_all
 	int					err_exec;
 	int					save_curs;
 	int					prog_exec;
+	char				**env_exec;
 }						t_all;
 
 /*
