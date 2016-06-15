@@ -37,3 +37,4 @@
 - autocompletion rework
 - hashtable rework
 - redirection rework -> csh
+	error: "> ls cat" prbl ctrl+C

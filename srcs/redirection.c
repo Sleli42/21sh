@@ -76,12 +76,10 @@ char	**rework_args_2_exec(char **array, char *redir)
 
 	ct = 0;
 	stop = count_args(array, redir);
-	// printf("stop: %d\n", stop);
 	if (!(ret = (char **)malloc(sizeof(char *) * stop + 1)))
 		return (NULL);
 	while (array[ct] && ct < stop)
 	{
-		// printf("rwork[ct] : [%s]\n", array[ct]);
 		ret[ct] = ft_strdup(array[ct]);
 		ct++;
 	}
@@ -100,7 +98,7 @@ char	*formatting_redirect_cmd(char *cmd, char *redir)
 	ret = ft_strnew(ft_strlen(cmd) + 20);
 	while (cmd[ct])
 	{
-		if (cmd[ct] == redir[0] && cmd[ct + 1] != ' ')
+		if (cmd[ct] == redir[0] && cmd[ct + 1] != ' ' && cmd[ct + 1] != redir[0])
 		{
 			ret[ct2++] = cmd[ct++];
 			ret[ct2++] = ' ';
@@ -111,6 +109,62 @@ char	*formatting_redirect_cmd(char *cmd, char *redir)
 	ret[ct2] = 0;
 	ft_strdel(&cmd);
 	return (ret);
+}
+
+static int		check_if_valid_cmd(t_all *all, char *try)
+{
+	int		ct;
+	char	*bin_tmp;
+
+	ct = 0;
+	bin_tmp = NULL;
+	while (all->path2exec[ct])
+	{
+		if (!(bin_tmp = create_path(all->path2exec[ct], try)))
+		{
+			write_error_exec(try);
+			return (0);
+		}
+		if (bin_tmp && good_access(bin_tmp))
+			break ;
+		bin_tmp ? ft_strdel(&bin_tmp) : NULL;
+		ct++;
+	}
+	if (!all->path2exec[ct])
+	{
+		all->err = 1;
+		write_error(try);
+		return (0);
+	}
+	return (1);
+}
+
+static int		check_error(t_all *all, char **array, char *redir)
+{
+	char	**tmp;
+	int		ct;
+
+	ct = 0;
+	tmp = array;
+	// ft_putstr("YYYih\n");
+	if (len_array(array) == 1)
+		return (redirection_error_2());
+	else if (!ft_strcmp(tmp[0], redir) && len_array(array) == 2)
+		return (redirection_error_4());
+	if (!check_if_valid_cmd(all, tmp[0]))
+		return (-1);
+	while (tmp[ct])
+	{
+		if (!ft_strcmp(tmp[ct], redir))
+		{
+			if (!tmp[ct + 1])
+				return (redirection_error_2());
+			else if (ct == 0)
+				return (redirection_error_4());
+		}
+		ct++;
+	}
+	return (1);
 }
 
 void	erase_and_replace(t_all *all, char *cmd)
@@ -125,44 +179,19 @@ void	erase_and_replace(t_all *all, char *cmd)
 		exec_aggregations(all, cmd);
 	else
 	{
-		// printf("cmd: [ %s ]\n", cmd);
 		cmd = formatting_redirect_cmd(cmd, ">");
-		// printf("rework cmd: [ %s ]\n", cmd);
 		redirect = ft_strsplit(cmd, ' ');
-		// printf("REDIRECT:\n\n");
-		// display_array(redirect);
-		// display_array(redirect);
-		// printf("len: %d\n", len_array(redirect));
-		// printf("test: [%d]\n", redirect[0][0]);
-		if (len_array(redirect) == 1 \
-				|| (len_array(redirect) <= 2 && redirect[1][0] == '>'))
-			return (redirection_error_2());
-		if (len_array(redirect) <= 2 && redirect[0][0] == '>')
-			return (redirection_error_4());
-		if (redirect[0][0] == '>')
-		{
-			// printf("REDIRECT:\n\n");
-			// display_array(redirect);
-			argv = replace_argv(redirect, ">");
-			// printf("\nARGV:\n");
-			// display_array(argv);
-		}
-		exit(1);
-		// (argv || *argv) ? del_array(&argv) : NULL;
-		// printf("REDIRECT 2:\n\n");
-		// display_array(redirect);
-		// argv = rework_args_2_exec(redirect, ">");
-		// printf("ARGV 2:\n\n");
-		// display_array(argv);
-		// redirect[1] = ft_epur_str(redirect[1]);
-		if ((all->fd2open = open(redirect[2], \
+		if (len_array(redirect) > 1 && redirect[0][0] == '>')
+			redirect = replace_argv(redirect, ">");
+		if (!check_error(all, redirect, ">"))
+			return ;
+		argv = rework_args_2_exec(redirect, ">");
+		if ((all->fd2open = open(redirect[len_array(redirect) - 1], \
 			O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-			return (redirection_error(redirect[2]));
-		// argv = ft_strsplit(redirect[0], ' ');
+			return (redirection_error(redirect[len_array(redirect) - 1]));
 		dupstdout = dup(1);
-		dup_and_exec(all, argv, dupstdout, 1);
+		(!all->err) ? dup_and_exec(all, argv, dupstdout, 1) : NULL;
 		redirect ? del_array(&redirect) : NULL;
-		// ft_putstr("YIIIH 2\n");
 	}
 }
 
@@ -174,16 +203,18 @@ void	add_to_end(t_all *all, char *cmd)
 
 	argv = NULL;
 	redirect = NULL;
-	redirect = ft_strsplit(cmd, '>');
-	if ((!redirect[0][0]) || len_array(redirect) < 3)
-		return (redirection_error_2());
-	redirect[1] = ft_epur_str(redirect[1 + 1]);
-	if ((all->fd2open = open(redirect[1], \
+	cmd = formatting_redirect_cmd(cmd, ">>");
+	redirect = ft_strsplit(cmd, ' ');
+	if (len_array(redirect) > 1 && redirect[0][0] == '>')
+		redirect = replace_argv(redirect, ">>");
+	if (!check_error(all, redirect, ">>"))
+		return ;
+	argv = rework_args_2_exec(redirect, ">>");
+	if ((all->fd2open = open(redirect[len_array(redirect) - 1], \
 		O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
-		return (redirection_error(redirect[1]));
-	argv = ft_strsplit(redirect[0], ' ');
+		return (redirection_error(redirect[len_array(redirect) - 1]));
 	dupstdout = dup(1);
-	dup_and_exec(all, argv, dupstdout, 1);
+	(!all->err) ? dup_and_exec(all, argv, dupstdout, 1) : NULL;
 	redirect ? del_array(&redirect) : NULL;
 }
 
@@ -199,15 +230,18 @@ void	read_file(t_all *all, char *cmd)
 		exec_aggregations(all, cmd);
 	else
 	{
-		redirect = ft_strsplit(cmd, '<');
-		if ((!redirect[0][0]) || len_array(redirect) < 2)
-			return (redirection_error_2());
-		redirect[1] = ft_epur_str(redirect[1]);
-		if ((all->fd2open = open(redirect[1], O_RDONLY)) == -1)
-			return (redirection_error(redirect[1]));
-		argv = ft_strsplit(redirect[0], ' ');
+		cmd = formatting_redirect_cmd(cmd, "<");
+		redirect = ft_strsplit(cmd, ' ');
+		if (len_array(redirect) > 1 && redirect[0][0] == '<')
+			redirect = replace_argv(redirect, "<");
+		if (!check_error(all, redirect, "<"))
+			return ;
+		argv = rework_args_2_exec(redirect, "<");
+		if ((all->fd2open = open(redirect[len_array(redirect) - 1], \
+			O_RDONLY, 0644)) == -1)
+			return (redirection_error(redirect[len_array(redirect) - 1]));
 		dupstdin = dup(0);
-		dup_and_exec(all, argv, dupstdin, 0);
+		(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
 		redirect ? del_array(&redirect) : NULL;
 	}
 }
@@ -245,20 +279,30 @@ void	read_stdin(t_all *all, char *cmd)
 	char	**argv;
 	char	*tmp_buff;
 
+	cmd = formatting_redirect_cmd(cmd, "<<");
+	redirect = ft_strsplit(cmd, ' ');
+	if (len_array(redirect) > 1 && redirect[0][0] == '<')
+		redirect = replace_argv(redirect, "<<");
+	display_array(redirect);
+	if (!check_error(all, redirect, "<<"))
+			return ;
 	argv = NULL;
-	redirect = NULL;
-	if (count_redirect(cmd) > 2)
-		return (redirection_error_2());
-	redirect = ft_strsplit(cmd, '<');
-	argv = ft_strsplit(redirect[0], ' ');
-	if (!redirect[0][0])
-		return (redirection_error_4());
+	if ((all->fd2open = open(".tmp_file", \
+				O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		error("OPEN");
+	argv = rework_args_2_exec(redirect, "<<");
+	// display_array(argv);
 	while (1)
 	{
 		ft_putstr("> ");
 		tmp_buff = read_stdin_cpy_buff();
-		if (read_stdin_cmp_key(all, argv,
-			ft_epur_str(redirect[1 + 1]), tmp_buff))
+		if (ft_strcmp(tmp_buff, redirect[len_array(redirect) - 1]))
+		{
+			ft_putstr_fd(tmp_buff, all->fd2open);
+			ft_putstr_fd("\n", all->fd2open);
+		}
+		if (read_stdin_cmp_key(all, argv, \
+			redirect[len_array(redirect) - 1], tmp_buff))
 			break ;
 		write(1, "\n", 1);
 	}

@@ -62,6 +62,7 @@ char	*read_stdin_cpy_buff(void)
 		ft_putchar(*buff);
 		tmp_buff[i++] = *buff;
 	}
+	// tmp_buff[i++] = '\n';
 	tmp_buff[i] = '\0';
 	return (tmp_buff);
 }
@@ -74,7 +75,10 @@ int		read_stdin_cmp_key(t_all *all, char **argv, char *key, char *tmp_buff)
 	{
 		dupstdin = dup(0);
 		write(1, "\n", 1);
-		dup_and_exec(all, argv, dupstdin, 0);
+		close(all->fd2open);
+		if ((all->fd2open = open(".tmp_file", O_RDONLY, 0644)) == -1)
+			return (0);
+		(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
 		return (1);
 	}
 	else

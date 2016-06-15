@@ -31,6 +31,7 @@ typedef	struct	s_builtins
 *** ======================= binary.c
 */
 
+void			write_error_exec(char *err);
 void			exec_right_binary_loop(t_all *all, char **argv_bin);
 void			exec_right_binary(t_all *all, char **argv_bin);
 void			exec_binary(t_all *all, char *bin, char **argv_bin, char **env);

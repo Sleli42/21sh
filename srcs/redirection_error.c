@@ -19,10 +19,10 @@ void	redirection_error(char *file)
 	ft_putchar('\n');
 }
 
-void	redirection_error_2(void)
+int		redirection_error_2(void)
 {
 	ft_putstr("42sh: Missing name for redirect.\n");
-	return ;
+	return (0);
 }
 
 void	redirection_error_3(int err)
@@ -34,8 +34,8 @@ void	redirection_error_3(int err)
 	return ;
 }
 
-void	redirection_error_4(void)
+int		redirection_error_4(void)
 {
 	ft_putstr("42sh: Invalid null command.\n");
-	return ;
+	return (0);
 }
