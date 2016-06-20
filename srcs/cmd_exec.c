@@ -18,10 +18,10 @@ int		multi_redirect(char *s)
 	int	stop1;
 	int	stop2;
 
-	ct = 0;
+	ct = -1;
 	stop1 = 0;
 	stop2 = 0;
-	while (s[ct])
+	while (s[++ct])
 	{
 		if ((s[ct] == '>' && s[ct + 1] != '>')
 			|| (stop1 == 1 && s[ct] == '|'))
@@ -37,7 +37,6 @@ int		multi_redirect(char *s)
 			if (stop2 > 1)
 				return (2);
 		}
-		ct++;
 	}
 	return (0);
 }

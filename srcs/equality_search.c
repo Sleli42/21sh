@@ -12,6 +12,30 @@
 
 #include "full_sh.h"
 
+char	*cut_directory_in_path(char *equ2find)
+{
+	int		ct;
+	int		i;
+	int		count;
+	char	*ret;
+
+	count = count_nb_dir(equ2find);
+	i = 0;
+	ct = ft_strlen(equ2find) - 1;
+	while (equ2find[ct] && (equ2find[ct] != '/' || equ2find[ct] != ' '))
+		ct--;
+	ct = 0;
+	ret = ft_strnew((ft_strlen(equ2find) - 1) - ct);
+	while (equ2find[ct] && count != 0)
+	{
+		if (equ2find[ct] == '/')
+			count--;
+		ret[i++] = equ2find[ct++];
+	}
+	ret[i] = 0;
+	return (ret);
+}
+
 char	*open_right_directory(t_all *all, char *equ2find)
 {
 	if (equ2find[ft_strlen(equ2find) - 1] == '/' && S_ISDIR(all->stat.st_mode))
@@ -75,10 +99,7 @@ void	list_dir_equ(t_all *all)
 
 	all->list_dir = create_clst();
 	all->tmp_cmd = ft_strdup(all->cmd);
-	// printf("all->cmd: [%s]\n", all->cmd);
 	dir2open = open_right_directory(all, all->equ2find);
-	// printf("\ndir2open: [%s]\n", dir2open);
-	// printf("all->equ2find: [%s]\n", all->equ2find);
 	if (EQU_IS_DIRECTORY)
 	{
 		if (all->tmp_dir)

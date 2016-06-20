@@ -124,8 +124,7 @@ void	loop(t_all *all)
 	check_glob(&all->globing);
 	if (!CMD_NULL && !all->globing.err)
 	{
-		if (all->lv)
-			find_lv(all);
+		(all->lv) ? find_lv(all) : NULL;
 		all->prog_exec = 1;
 		create_and_exec_command(all);
 	}

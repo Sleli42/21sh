@@ -26,7 +26,7 @@ int		check_error_agg2(t_all *all, char **split, char *file)
 		return (1);
 	}
 	else if ((ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2
-		&& ft_strcmp(file, "-")) || !ft_isdigit(*(split + 1)[0]))
+		&& ft_strcmp(file, "-")))
 	{
 		ft_putstr("sh: ");
 		ft_putstr(file);
@@ -50,7 +50,7 @@ int		check_error_agg3(t_all *all, char **split, char *file)
 		return (1);
 	}
 	else if ((ft_isdigit(*(split - 1)[0]) && ft_atoi(*(split - 1)) > 2
-		&& ft_strcmp(file, "-")) || !ft_isdigit(*(split + 1)[0]))
+		&& ft_strcmp(file, "-")))
 	{
 		ft_putstr("sh: ");
 		ft_putstr(file);

@@ -58,6 +58,7 @@ void		sort_name(t_select **lst);
 *** ======================= equality_search.c
 */
 
+char		*cut_directory_in_path(char *equ2find);
 char		*open_right_directory(t_all *all, char *equ2find);
 void		search_equality(t_all *all, char *equ2find, char *dir2open);
 void		results_analysis_equ(t_all *all, char *equ2find);
@@ -69,7 +70,8 @@ void		list_dir_equ(t_all *all);
 
 char		*update_tmp_cmd(t_all *all, char *str2add, int len2skip);
 int			is_dir(t_all *all, char *s);
+int			check_next_slash(char *s);
 int			directory_in_path(t_all *all, char *equ2find);
-char		*cut_directory_in_path(char *equ2find);
+int			count_nb_dir(char *s);
 
 #endif

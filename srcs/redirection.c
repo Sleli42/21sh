@@ -14,41 +14,43 @@
 
 void	display_array(char **array)
 {
-	int		ct;
+	int	ct;
+	char	**tmp;
 
+	tmp = array;
 	ct = 0;
-	while (array[ct])
+	while (tmp[ct])
 	{
-		printf("array[ct]: [%s]\n", array[ct]);
+		ft_putendl(tmp[ct]);
 		ct++;
 	}
 }
 
 char	**replace_argv(char **array, char *redir)
 {
-	 char	**ret;
-	 int	ct;
-	 int	ct2;
+	char	**ret;
+	int	ct;
+	int	ct2;
 
-	 ct = 0;
-	 ct2 = 1;
-	 if (!array || !(ret = (char **)malloc(sizeof(char *) * \
-	 											len_array(array) + 1)))
-	 	return (NULL);
-	 while (array[ct2])
-	 {
-	 	if (!ft_strcmp(array[ct2 - 1], redir))
-	 		break ;
-	 	ct2++;
-	 }
-	 ct2 += 1;
-	 while (array[ct2])
-	 	ret[ct++] = ft_strdup(array[ct2++]);
-	 ct2 = 0;
-	 while (array[ct2] && ct < len_array(array))
-	 	ret[ct++] = ft_strdup(array[ct2++]);
-	 ret[ct] = NULL;
-	 return (ret);
+	ct = 0;
+	ct2 = 1;
+	if (!array || !(ret = (char **)malloc(sizeof(char *) * \
+		len_array(array) + 1)))
+		return (NULL);
+	while (array[ct2])
+	{
+		if (!ft_strcmp(array[ct2 - 1], redir))
+			break ;
+		ct2++;
+	}
+	ct2 += 1;
+	while (array[ct2])
+		ret[ct++] = ft_strdup(array[ct2++]);
+	ct2 = 0;
+	while (array[ct2] && ct < len_array(array))
+		ret[ct++] = ft_strdup(array[ct2++]);
+	ret[ct] = NULL;
+	return (ret);
 }
 
 int		count_args(char **array, char *redir)
@@ -146,8 +148,7 @@ static int		check_error(t_all *all, char **array, char *redir)
 
 	ct = 0;
 	tmp = array;
-	// ft_putstr("YYYih\n");
-	if (len_array(array) == 1)
+	if ((len_array(array) == 1) || (array[1][0] == '&' && !array[1][1]))
 		return (redirection_error_2());
 	else if (!ft_strcmp(tmp[0], redir) && len_array(array) == 2)
 		return (redirection_error_4());
@@ -218,6 +219,90 @@ void	add_to_end(t_all *all, char *cmd)
 	redirect ? del_array(&redirect) : NULL;
 }
 
+int		check_double_redirection(char **array)
+{
+	char	**tmp;
+	int		ct;
+	int		stop;
+
+	tmp = array;
+	ct = 0;
+	stop = 0;
+	while (tmp[ct])
+	{
+		if ((tmp[ct][0] == '<' && !stop)
+			|| (tmp[ct][0] == '>' && !stop))
+			stop += 1;
+		else if ((tmp[ct][0] == '>' && stop)
+			|| (tmp[ct][0] == '<' && stop))
+			stop += 1;
+		ct++;
+	}
+	if (stop == 2)
+		return (1);
+	return (0);
+}
+
+char	*first_redirect(char **array)
+{
+	char	**tmp;
+	int		ct;
+
+	tmp = array;
+	ct = 0;
+	while (tmp[ct])
+	{
+		if (tmp[ct][0] == '>' || tmp[ct][0] == '<')
+			return (tmp[ct]);
+		ct++;
+	}
+	return (NULL);
+}
+
+char	*get_fd_2_open(char **array, char *redir)
+{
+	char	**tmp;
+	int		ct;
+
+	tmp = array;
+	ct = 0;
+	while (tmp[ct])
+	{
+		// printf("tmp[ct]: [ %s ]\n", tmp[ct]);
+		if (tmp[ct][0] == redir[0])
+		{
+			// printf("found: [ %s ]\n&& +1: [ %s ]\n", tmp[ct], tmp[ct + 1]);
+			return (tmp[ct + 1]);
+		}
+		ct++;
+	}
+	return (NULL);
+}
+
+void	exec_double_redirection(t_all *all, char **array)
+{
+	char	**argv;
+	int		fd;
+	int		dupstdin;
+	int		dupstdout;
+
+	argv = rework_args_2_exec(array, first_redirect(array));
+	if ((all->fd2open = open(get_fd_2_open(array, "<"), \
+		O_RDONLY, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, "<")));
+	if ((fd = open(get_fd_2_open(array, ">"), \
+		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, ">")));
+	dupstdin = dup(0);
+	dupstdout = dup(1);
+	dup2(fd, 1);
+	(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
+	close(fd);
+	dup2(dupstdout, 1);
+	close(dupstdout);
+	array ? del_array(&array) : NULL;
+}
+
 void	read_file(t_all *all, char *cmd)
 {
 	char	**redirect;
@@ -236,6 +321,8 @@ void	read_file(t_all *all, char *cmd)
 			redirect = replace_argv(redirect, "<");
 		if (!check_error(all, redirect, "<"))
 			return ;
+		if (check_double_redirection(redirect))
+			return (exec_double_redirection(all, redirect));
 		argv = rework_args_2_exec(redirect, "<");
 		if ((all->fd2open = open(redirect[len_array(redirect) - 1], \
 			O_RDONLY, 0644)) == -1)
@@ -283,12 +370,11 @@ void	read_stdin(t_all *all, char *cmd)
 	redirect = ft_strsplit(cmd, ' ');
 	if (len_array(redirect) > 1 && redirect[0][0] == '<')
 		redirect = replace_argv(redirect, "<<");
-	display_array(redirect);
 	if (!check_error(all, redirect, "<<"))
-			return ;
+		return ;
 	argv = NULL;
 	if ((all->fd2open = open(".tmp_file", \
-				O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 		error("OPEN");
 	argv = rework_args_2_exec(redirect, "<<");
 	// display_array(argv);

@@ -62,7 +62,6 @@ char	*read_stdin_cpy_buff(void)
 		ft_putchar(*buff);
 		tmp_buff[i++] = *buff;
 	}
-	// tmp_buff[i++] = '\n';
 	tmp_buff[i] = '\0';
 	return (tmp_buff);
 }

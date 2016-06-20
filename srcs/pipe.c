@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "full_sh.h"
+#define PATH	(create_good_path(all, *pipe2exec[0]))
 
 char	***create_pipe_arrays(char **split)
 {
@@ -31,6 +32,7 @@ void	loop_pipe_extended(t_all *all, char ***pipe2exec, \
 {
 	int		dup_stdout;
 
+	*pipe2exec += (*pipe2exec[0][0] == '&') ? 1 : 0;
 	dup2(dup_stdin, 0);
 	if (*(pipe2exec + 1))
 		dup2(p[1], 1);
@@ -41,16 +43,14 @@ void	loop_pipe_extended(t_all *all, char ***pipe2exec, \
 		*pipe2exec = modify_pipe_array(all, *pipe2exec);
 		dup2(all->fd2open, 1);
 		close(all->fd2open);
-		if (execve(create_good_path(all, *pipe2exec[0]), \
-			*pipe2exec, all->dupenv) == -1)
+		if (execve(PATH, *pipe2exec, all->dupenv) == -1)
 			ft_putstr("execve() error\n");
 		dup2(dup_stdout, 1);
 		close(dup_stdout);
 	}
 	else
 	{
-		if (execve(create_good_path(all, *pipe2exec[0]), \
-			*pipe2exec, all->dupenv) == -1)
+		if (execve(PATH, *pipe2exec, all->dupenv) == -1)
 			ft_putstr("execve() error\n");
 	}
 	exit(21);

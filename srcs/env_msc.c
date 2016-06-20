@@ -37,7 +37,7 @@ char	**ft_tabdelone(char **array, char *s)
 	return (newtab);
 }
 
-char				*dup_comp(char *target, char **array)
+char	*dup_comp(char *target, char **array)
 {
 	int				i;
 	char			*ret;
@@ -72,7 +72,6 @@ char	**ft_tabjoin(char **dupenv, char **env_spe)
 		j = 0;
 		while (dupenv[i])
 		{
-
 			tabcpy[i] = dup_comp(dupenv[i], env_spe);
 			i++;
 		}
@@ -85,7 +84,7 @@ char	**ft_tabjoin(char **dupenv, char **env_spe)
 	return (tabcpy);
 }
 
-void				ft_printtab(char **array)
+void	ft_printtab(char **array)
 {
 	int				i;
 
