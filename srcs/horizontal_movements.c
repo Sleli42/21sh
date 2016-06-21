@@ -12,42 +12,69 @@
 
 #include "full_sh.h"
 
+int		count_2_next_spaces(t_all *all)
+{
+	int		stop;
+	int		tmp;
+
+	stop = 0;
+	tmp = (CURSOR - PROMPT_LEN) + 1;
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
+		stop++;
+		tmp++;
+	}
+	stop += 1;
+	return (stop);
+}
+
 void	opt_right_move(t_all *all)
 {
-	if (check_if_spaces_after(all, (CURSOR - PROMPT_LEN) + 1))
+	int		stop;
+	int		max_value;
+
+	stop = count_2_next_spaces(all) + CURSOR;
+	max_value = (int)ft_strlen(all->cmd) + PROMPT_LEN;
+	while (CURSOR < stop && CURSOR < max_value)
 	{
-		CURSOR++;
+		if (CURSOR == (LINE_LEN * (all->curr_line)))
+		{
+			tputs_termcap("do");
+			all->curr_line += 1;
+		}
 		tputs_termcap("nd");
-		if (all->cmd[CURSOR - PROMPT_LEN] == ' ')
-			while (all->cmd[CURSOR - PROMPT_LEN] == ' ')
-				goto_right(all);
-		while (all->cmd[CURSOR - PROMPT_LEN] != ' ')
-			goto_right(all);
+		CURSOR++;
 	}
-	else
-		goto_end(all);
+}
+
+int		count_2_prev_spaces(t_all *all)
+{
+	int		stop;
+	int		tmp;
+
+	stop = 0;
+	tmp = (CURSOR - PROMPT_LEN) - 1;
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
+		stop++;
+		tmp--;
+	}
+	stop += 1;
+	return (stop);
 }
 
 void	opt_left_move(t_all *all)
 {
-	if (check_if_spaces_before(all, (CURSOR - PROMPT_LEN) - 1))
+	int		stop;
+
+	stop = CURSOR - count_2_prev_spaces(all);
+	while (CURSOR > stop && CURSOR > PROMPT_LEN)
 	{
-		CURSOR--;
+		if (CURSOR == (LINE_LEN * (all->curr_line - 1)))
+			all->curr_line -= 1;
 		tputs_termcap("le");
-		while (all->cmd[CURSOR - PROMPT_LEN] != ' ')
-			goto_left(all);
-		if (all->cmd[CURSOR - PROMPT_LEN - 1] == ' ')
-		{
-			while (all->cmd[CURSOR - PROMPT_LEN] == ' ')
-			{
-				if (all->cmd[(CURSOR - PROMPT_LEN) - 1] != ' ')
-					break ;
-				goto_left(all);
-			}
-		}
+		CURSOR--;
 	}
-	else
-		goto_begin(all);
 }
 
 void	reprint_char(t_all *all, t_cmd *nav)

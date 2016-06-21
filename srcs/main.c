@@ -72,7 +72,7 @@ int				main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	opening_sh();
+	//opening_sh();
 	sig_catch();
 	all = init_all(env);
 	init_term(all->dupenv);

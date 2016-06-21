@@ -83,6 +83,8 @@ void		paste_buffer(t_all *all)
 	save = 0;
 	if (all->copy)
 	{
+		printf("\nall->cmd: %s\n", all->cmd);
+		exit(1);
 		all->already_in_paste = 1;
 		save = (CURSOR - PROMPT_LEN) + 1;
 		tputs_termcap("im");

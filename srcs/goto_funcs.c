@@ -14,7 +14,7 @@
 
 void	goto_right(t_all *all)
 {
-	if (CURSOR == (LINE_LEN * all->curr_line) - 1)
+	if (CURSOR == (LINE_LEN * (all->curr_line - 1)))
 	{
 		tputs_termcap("do");
 		all->curr_line++;

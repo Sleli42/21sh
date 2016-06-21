@@ -40,7 +40,18 @@ int			check_keys_arrows(t_all *all, char *buff)
 {
 	all->current_key = getkey(buff);
 	if (all->current_key == K_ENTER)
+	{
+		if (all->curr_line < all->nb_lines)
+		{
+			while (all->curr_line < all->nb_lines)
+			{
+				tputs_termcap("do");
+				all->curr_line++;
+			}
+			all->curr_line = 1;
+		}
 		return (-1);
+	}
 	if (all->current_key == K_RIGHT || all->current_key == K_LEFT
 		|| all->current_key == K_UP || all->current_key == K_DOWN
 		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT
