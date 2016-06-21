@@ -104,9 +104,47 @@ void		insert_char(t_all *all)
 		if (*all->buff != '\n')
 			all->globing.cr_split ? (all->globing.cr_split = 0) : \
 												ft_putstr(all->buff);
-		update_cmd_line_insert(all, *all->buff);
+		if (ft_strlen(all->buff) > 1)
+		{
+			int		ct = 0;
+			while (all->buff[ct])
+			{
+				update_cmd_line_insert(all, all->buff[ct]);
+				ct++;
+			}
+		}
+		else
+			update_cmd_line_insert(all, *all->buff);
 		if (all->nb_lines >= 1)
-			shift(all);
+		{
+			while (all->curr_line < all->nb_lines)
+			{
+				tputs_termcap("do");
+				all->curr_line++;
+			}
+			while (all->curr_line > 1)
+			{
+				tputs_termcap("ce");
+				tputs_termcap("cb");
+				tputs_termcap("up");
+				all->curr_line--;
+			}
+			display_prompt(all);
+			tputs_termcap("sc");
+			// printf("all->cmd: [%s]\n", all->cmd);
+			create_cmd(all);
+			// ct = 0;
+			ft_putchar('*');
+			exit(1);
+			// ft_putstr(all->cmd);
+			// printf("all->cmd: [%s]\n", all->cmd);
+			// printf("cursor: [%c]\n", all->cmd[CURSOR - PROMPT_LEN]);
+			// printf("cursor -1: [%c]\n", all->cmd[CURSOR - PROMPT_LEN - 1]);
+			// printf("cursor +1: [%c]\n", all->cmd[CURSOR - PROMPT_LEN + 1]);
+			// exit(1);
+			// printf("\nall->cmd: [%s]\n\nlol", all->cmd);
+			// shift(all);
+		}
 	}
 	else
 	{
