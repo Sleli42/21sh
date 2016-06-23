@@ -14,8 +14,12 @@
 
 void	goto_right(t_all *all)
 {
-	if (CURSOR == (LINE_LEN * (all->curr_line - 1)))
+	// printf("CURSOR: %d\n", CURSOR);
+	// printf("currLine: %d\n", all->curr_line);
+	// printf("lineLen * currLine: %d\n", LINE_LEN * all->curr_line);
+	if (CURSOR == (LINE_LEN * all->curr_line) - 1)
 	{
+		// ft_putchar('*');
 		tputs_termcap("do");
 		all->curr_line++;
 	}

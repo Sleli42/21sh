@@ -41,6 +41,8 @@ int			check_keys_arrows(t_all *all, char *buff)
 	all->current_key = getkey(buff);
 	if (all->current_key == K_ENTER)
 	{
+		// printf("\n\nnbLines: %d\n", all->nb_lines);
+		// printf("\n\ncurrLine: %d\n", all->curr_line);
 		if (all->curr_line < all->nb_lines)
 		{
 			while (all->curr_line < all->nb_lines)

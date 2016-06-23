@@ -79,6 +79,8 @@ void	del_histo_lines(t_all *all, int nblines2del)
 	int		save;
 
 	save = 1;
+	// while (all->curr_line++ < all->nb_lines)
+		// tputs_termcap("do");
 	while (save++ < nblines2del)
 	{
 		tputs_termcap("ce");
@@ -113,4 +115,9 @@ void	goto_latest_commands(t_all *all)
 		history_up(all);
 	if (all->current_key == K_DOWN)
 		history_down(all);
+	all->curr_line = 1;
+	all->nb_lines = 1;
+	define_current_line(all);
+	while (CURSOR > (all->nb_lines * LINE_LEN))
+		all->nb_lines++;
 }

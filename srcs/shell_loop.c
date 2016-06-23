@@ -56,6 +56,7 @@ void	read_keys(t_all *all)
 	{
 		if (*all->buff == 4)
 		{
+			/* ctrl+D */
 			ft_putstr("\n$: exit\n");
 			exit(0);
 		}
