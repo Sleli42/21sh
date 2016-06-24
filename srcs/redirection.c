@@ -99,7 +99,7 @@ char	*formatting_redirect_cmd(char *cmd, char *redir)
 	return (ret);
 }
 
-static int		check_if_valid_cmd(t_all *all, char *try)
+int		check_if_valid_cmd(t_all *all, char *try)
 {
 	int		ct;
 	char	*bin_tmp;
@@ -127,7 +127,7 @@ static int		check_if_valid_cmd(t_all *all, char *try)
 	return (1);
 }
 
-static int		check_error(t_all *all, char **array, char *redir)
+int		check_error(t_all *all, char **array, char *redir)
 {
 	char	**tmp;
 	int		ct;
@@ -163,7 +163,9 @@ void	erase_and_replace(t_all *all, char *cmd)
 	argv = NULL;
 	redirect = NULL;
 	if (check_aggregations(cmd))
+	{
 		exec_aggregations(all, cmd);
+	}
 	else
 	{
 		cmd = formatting_redirect_cmd(cmd, ">");

@@ -17,12 +17,13 @@ int		check_aggregations(char *cmd)
 	int		ct;
 
 	ct = 0;
-	while (cmd[ct++] && cmd)
+	while (cmd[ct] && cmd)
 	{
 		if ((cmd[ct] == '&' && cmd[ct + 1] == '>')
 			|| (cmd[ct] == '>' && cmd[ct + 1] == '&')
 			|| (cmd[ct] == '<' && cmd[ct + 1] == '&'))
 			return (1);
+		ct++;
 	}
 	return (0);
 }
@@ -87,6 +88,6 @@ void	exec_aggregations(t_all *all, char *cmd)
 	{
 		tmp = ft_strchr(cmd, '<');
 		if (*tmp == '<' && *(tmp + 1) == '&')
-			exec_agg3(all, cmd);
+			return (ft_putstr("Missing name for redirect.\n"));
 	}
 }
