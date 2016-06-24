@@ -12,20 +12,6 @@
 
 #include "full_sh.h"
 
-void	display_array(char **array)
-{
-	int	ct;
-	char	**tmp;
-
-	tmp = array;
-	ct = 0;
-	while (tmp[ct])
-	{
-		ft_putendl(tmp[ct]);
-		ct++;
-	}
-}
-
 char	**replace_argv(char **array, char *redir)
 {
 	char	**ret;

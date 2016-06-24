@@ -92,35 +92,35 @@ void		write_buffer(t_all *all)
 	}
 }
 
-void		display_cmd(t_all *all, int stop)
-{
-	while (all->cmd[CURSOR - PROMPT_LEN])
-	{
-		if (CURSOR == all->curr_line * LINE_LEN)
-		{
-				// exit(1);
-			// printf("YES\n");
-			tputs_termcap("do");
-			all->curr_line++;
-		}
-		ft_putchar(all->cmd[CURSOR - PROMPT_LEN]);
-		CURSOR++;
-	}
-	// printf("CURSOR: %d\n", CURSOR);
-	// printf("stop: %d\n", stop);
-	// printf("len: %d\n", (int)all->cmd_termcaps->lenght);
-	while (CURSOR > stop)
-	{
-		goto_left(all);
-		// if (all->curr_line > 1 && CURSOR == ((all->curr_line - 1) * LINE_LEN) + 1)
-		// {
-		// 	// tputs_termcap("up");
-		// 	all->curr_line--;
-		// }
-		// tputs_termcap("le");
-		// CURSOR--;
-	}
-}
+// void		display_cmd(t_all *all, int stop)
+// {
+// 	while (all->cmd[CURSOR - PROMPT_LEN])
+// 	{
+// 		if (CURSOR == all->curr_line * LINE_LEN)
+// 		{
+// 				// exit(1);
+// 			// printf("YES\n");
+// 			tputs_termcap("do");
+// 			all->curr_line++;
+// 		}
+// 		ft_putchar(all->cmd[CURSOR - PROMPT_LEN]);
+// 		CURSOR++;
+// 	}
+// 	// printf("CURSOR: %d\n", CURSOR);
+// 	// printf("stop: %d\n", stop);
+// 	// printf("len: %d\n", (int)all->cmd_termcaps->lenght);
+// 	while (CURSOR > stop)
+// 	{
+// 		goto_left(all);
+// 		// if (all->curr_line > 1 && CURSOR == ((all->curr_line - 1) * LINE_LEN) + 1)
+// 		// {
+// 		// 	// tputs_termcap("up");
+// 		// 	all->curr_line--;
+// 		// }
+// 		// tputs_termcap("le");
+// 		// CURSOR--;
+// 	}
+// }
 
 void		new_shift(t_all *all)
 {
@@ -151,16 +151,27 @@ void		new_shift(t_all *all)
 	}
 	while (CURSOR-- > PROMPT_LEN)
 		tputs_termcap("le");
-	// printf("CURSOR: %d\n", CURSOR);
+	// printf("\n\nCURSOR: %d\n", CURSOR);
 	display_prompt(all);
 	create_cmd(all);
-	CURSOR = PROMPT_LEN;
+	CURSOR = (int)all->cmd_termcaps->lenght;
 	// printf("\n\ncurrLine: %d\n", all->curr_line);
 	// printf("CURSOR: %d\n", CURSOR);
+	// printf("&& save: %d\n", save);
 	// exit(1);
 	// printf("len cmd: %d\n", (int)all->cmd_termcaps->lenght);
 	// printf("\n\n[%s]\n", all->cmd);
-	display_cmd(all, save);
+	// display_cmd(all, save);
+	ft_putstr(all->cmd);
+	/* replace cursor */
+	while (CURSOR > save - PROMPT_LEN)
+	{
+		tputs_termcap("le");
+		CURSOR--;
+	}
+	CURSOR += PROMPT_LEN;
+	all->curr_line = 1;
+	define_current_line(all);
 }
 
 void		insert_char(t_all *all)
@@ -177,7 +188,7 @@ void		insert_char(t_all *all)
 		// ft_putchar('*');
 		if (*all->buff != '\n')
 			all->globing.cr_split ? (all->globing.cr_split = 0) : \
-		ft_putstr(all->buff);
+												ft_putstr(all->buff);
 		if (ft_strlen(all->buff) > 1)
 		{
 			int		ct = 0;
@@ -189,24 +200,16 @@ void		insert_char(t_all *all)
 		}
 		else
 			update_cmd_line_insert(all, *all->buff);
-		if (all->nb_lines > 1)
+		if (all->nb_lines >= 1)
 		{
 			if (ft_strlen(all->buff) > 1)
 				new_shift(all);
 			else
 				shift(all);
-			// int ct = 0;
-			// while (all->buff[ct])
-			// {
-				// update_cmd_line_insert(all, all->buff[ct]);
-				// shift(all);
-				// ct++;
-			// }
 		}
 	}
 	else
 	{
-			// ft_putchar('*');
 		if (all->cursor_pos == all->ws.ws_col * all->curr_line)
 			all->curr_line++;
 		if (*all->buff != '\n')

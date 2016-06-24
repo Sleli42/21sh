@@ -12,6 +12,20 @@
 
 #include "full_sh.h"
 
+void	display_array(char **array)
+{
+	int	ct;
+	char	**tmp;
+
+	tmp = array;
+	ct = 0;
+	while (tmp[ct])
+	{
+		ft_putendl(tmp[ct]);
+		ct++;
+	}
+}
+
 char	*get_good_file_agg1(char **array)
 {
 	while (array && *array)
@@ -75,8 +89,10 @@ void	exec_agg1(t_all *all, char *cmd)
 	int		dupout;
 	int		duperr;
 
+	// ft_putstr("yih\n");
 	cmd = rework_cmd_agg1(cmd);
 	split_agg = ft_strsplit(ft_epur_str(cmd), ' ');
+	display_array(split_agg);
 	file = get_good_file_agg1(split_agg);
 	dupout = dup(1);
 	duperr = dup(2);
