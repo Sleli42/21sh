@@ -92,86 +92,28 @@ void		write_buffer(t_all *all)
 	}
 }
 
-// void		display_cmd(t_all *all, int stop)
-// {
-// 	while (all->cmd[CURSOR - PROMPT_LEN])
-// 	{
-// 		if (CURSOR == all->curr_line * LINE_LEN)
-// 		{
-// 				// exit(1);
-// 			// printf("YES\n");
-// 			tputs_termcap("do");
-// 			all->curr_line++;
-// 		}
-// 		ft_putchar(all->cmd[CURSOR - PROMPT_LEN]);
-// 		CURSOR++;
-// 	}
-// 	// printf("CURSOR: %d\n", CURSOR);
-// 	// printf("stop: %d\n", stop);
-// 	// printf("len: %d\n", (int)all->cmd_termcaps->lenght);
-// 	while (CURSOR > stop)
-// 	{
-// 		goto_left(all);
-// 		// if (all->curr_line > 1 && CURSOR == ((all->curr_line - 1) * LINE_LEN) + 1)
-// 		// {
-// 		// 	// tputs_termcap("up");
-// 		// 	all->curr_line--;
-// 		// }
-// 		// tputs_termcap("le");
-// 		// CURSOR--;
-// 	}
-// }
-
-void		new_shift(t_all *all)
+void		insert_char_extend(t_all *all)
 {
-	// ft_putchar('|');
-	// printf("\n\n\nchar2insert: [ %c ]\n", c2insert);
-	// printf("cursor: %d\n", CURSOR);
-	// printf("all->cmd[cursor]: [ %c ]\n", all->cmd[CURSOR]);
-	// printf("all->cmd[cursor - prompt]: [ %c ]\n", all->cmd[CURSOR - PROMPT_LEN]);
-	// printf("all->cmd[cursor - len]: [ %c ]\n", all->cmd[CURSOR - ft_strlen(all->buff)]);
-	// printf("all->cmd[cursor - len - prompt]: [ %c ]\n", all->cmd[CURSOR - ft_strlen(all->buff) - PROMPT_LEN]);
-	// exit(1);
+	int		ct;
 
-	int		save = CURSOR;
-	// printf("\n\ncurrLine: %d\n", all->curr_line);
-	// printf("nbLines: %d\n", all->nb_lines);
-	CURSOR -= LINE_LEN * (all->curr_line - 1);
-	while (all->curr_line < all->nb_lines)
+	ct = 0;
+	if (ft_strlen(all->buff) > 1)
 	{
-		tputs_termcap("do");
-		all->curr_line++;
+		while (all->buff[ct])
+		{
+			update_cmd_line_insert(all, all->buff[ct]);
+			ct++;
+		}
 	}
-	while (all->curr_line > 1)
+	else
+		update_cmd_line_insert(all, *all->buff);
+	if (all->nb_lines >= 1)
 	{
-		tputs_termcap("ce");
-		tputs_termcap("cb");
-		tputs_termcap("up");
-		all->curr_line--;
+		if (ft_strlen(all->buff) > 1)
+			new_shift(all);
+		else
+			shift(all);
 	}
-	while (CURSOR-- > PROMPT_LEN)
-		tputs_termcap("le");
-	// printf("\n\nCURSOR: %d\n", CURSOR);
-	display_prompt(all);
-	create_cmd(all);
-	CURSOR = (int)all->cmd_termcaps->lenght;
-	// printf("\n\ncurrLine: %d\n", all->curr_line);
-	// printf("CURSOR: %d\n", CURSOR);
-	// printf("&& save: %d\n", save);
-	// exit(1);
-	// printf("len cmd: %d\n", (int)all->cmd_termcaps->lenght);
-	// printf("\n\n[%s]\n", all->cmd);
-	// display_cmd(all, save);
-	ft_putstr(all->cmd);
-	/* replace cursor */
-	while (CURSOR > save - PROMPT_LEN)
-	{
-		tputs_termcap("le");
-		CURSOR--;
-	}
-	CURSOR += PROMPT_LEN;
-	all->curr_line = 1;
-	define_current_line(all);
 }
 
 void		insert_char(t_all *all)
@@ -180,33 +122,13 @@ void		insert_char(t_all *all)
 	if (*all->buff == '$')
 		all->lv += 1;
 	tputs_termcap("im");
-	// printf("CURSOR - prompt: %d\n", CURSOR - PROMPT_LEN);
-	// printf("len cmd: %d\n", (int)all->cmd_termcaps->lenght);
 	if ((CURSOR - PROMPT_LEN) < (int)all->cmd_termcaps->lenght \
 		&& *all->buff != '\n')
 	{
-		// ft_putchar('*');
 		if (*all->buff != '\n')
 			all->globing.cr_split ? (all->globing.cr_split = 0) : \
 												ft_putstr(all->buff);
-		if (ft_strlen(all->buff) > 1)
-		{
-			int		ct = 0;
-			while (all->buff[ct])
-			{
-				update_cmd_line_insert(all, all->buff[ct]);
-				ct++;
-			}
-		}
-		else
-			update_cmd_line_insert(all, *all->buff);
-		if (all->nb_lines >= 1)
-		{
-			if (ft_strlen(all->buff) > 1)
-				new_shift(all);
-			else
-				shift(all);
-		}
+		insert_char_extend(all);
 	}
 	else
 	{

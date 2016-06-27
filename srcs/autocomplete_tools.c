@@ -29,53 +29,6 @@ void	ask_for_big_display(t_all *all)
 		return ;
 }
 
-int		find_maxlen_elem(t_clist *lst)
-{
-	t_select	*nav;
-	int			ret;
-
-	nav = lst->head;
-	ret = ft_strlen(nav->arg);
-	while (nav->next)
-	{
-		if (ft_strlen(nav->arg) > (size_t)ret)
-			ret = ft_strlen(nav->arg);
-		nav = nav->next;
-	}
-	return (ret);
-}
-
-int		define_nb_files_by_row(t_all *all, t_clist *lst)
-{
-	int		ret;
-
-	init_windows_size(all);
-	all->maxlen_arg = find_maxlen_elem(lst);
-	ret = 0;
-	while (LINE_LEN > (all->maxlen_arg + 2))
-	{
-		LINE_LEN -= (all->maxlen_arg + 2);
-		ret++;
-	}
-	return (ret);
-}
-
-int		no_spaces(t_cmd *lst)
-{
-	t_cmd	*tmp;
-
-	tmp = lst;
-	if (tmp->c == '.' && tmp->next->c == '/')
-		return (0);
-	while (tmp)
-	{
-		if (tmp->c == ' ')
-			return (0);
-		tmp = tmp->next;
-	}
-	return (1);
-}
-
 int		check_prev_directory(char *s)
 {
 	int		ct;
@@ -99,17 +52,9 @@ void	cut_cmd_equ(t_all *all)
 	int		ct;
 	int		tmp;
 
-	// printf("cmd: |%s|\n", all->cmd);
-	// printf("ccccccc: [%c]\n", *ft_strchr(all->cmd, '/'));
-	// if (all->cmd[0] == '/')
-	// {
-	// 	all->equ2find = cut_equ(all->cmd);
-	// 	return ;
-	// }
 	ct = 0;
 	tmp = (CURSOR - PROMPT_LEN) - 1;
 	all->already_open = check_prev_directory(all->cmd);
-	// printf("alreadyopen: %d\n", all->already_open);
 	if (all->already_open && all->cmd[tmp] != '/')
 		while (all->cmd[tmp] && all->cmd[tmp] != '/')
 			tmp--;
@@ -117,14 +62,8 @@ void	cut_cmd_equ(t_all *all)
 		while (all->cmd[tmp] && all->cmd[tmp] != ' ')
 			tmp--;
 	all->equ2find = ft_strnew((CURSOR - PROMPT_LEN) - tmp);
-	// printf("c found: [%c]\n", all->cmd[tmp]);
 	tmp += 1;
-	// tmp += (all->cmd[tmp] == '/') ? 1 : 0;
-	// printf("c found: [%c]\n", all->cmd[tmp]);
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-	{
 		all->equ2find[ct++] = all->cmd[tmp++];
-		// printf("c found: |%c|\n", all->equ2find[ct - 1]);
-	}
 	all->equ2find[ct] = '\0';
 }

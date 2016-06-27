@@ -79,8 +79,6 @@ void	del_histo_lines(t_all *all, int nblines2del)
 	int		save;
 
 	save = 1;
-	// while (all->curr_line++ < all->nb_lines)
-		// tputs_termcap("do");
 	while (save++ < nblines2del)
 	{
 		tputs_termcap("ce");

@@ -12,22 +12,6 @@
 
 #include "full_sh.h"
 
-int		count_2_next_spaces(t_all *all)
-{
-	int		stop;
-	int		tmp;
-
-	stop = 0;
-	tmp = (CURSOR - PROMPT_LEN) + 1;
-	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-	{
-		stop++;
-		tmp++;
-	}
-	stop += 1;
-	return (stop);
-}
-
 void	opt_right_move(t_all *all)
 {
 	int		stop;
@@ -45,22 +29,6 @@ void	opt_right_move(t_all *all)
 		tputs_termcap("nd");
 		CURSOR++;
 	}
-}
-
-int		count_2_prev_spaces(t_all *all)
-{
-	int		stop;
-	int		tmp;
-
-	stop = 0;
-	tmp = (CURSOR - PROMPT_LEN) - 1;
-	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
-	{
-		stop++;
-		tmp--;
-	}
-	stop += 1;
-	return (stop);
 }
 
 void	opt_left_move(t_all *all)

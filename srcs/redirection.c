@@ -12,148 +12,6 @@
 
 #include "full_sh.h"
 
-char	**replace_argv(char **array, char *redir)
-{
-	char	**ret;
-	int	ct;
-	int	ct2;
-
-	ct = 0;
-	ct2 = 1;
-	if (!array || !(ret = (char **)malloc(sizeof(char *) * \
-		len_array(array) + 1)))
-		return (NULL);
-	while (array[ct2])
-	{
-		if (!ft_strcmp(array[ct2 - 1], redir))
-			break ;
-		ct2++;
-	}
-	ct2 += 1;
-	while (array[ct2])
-		ret[ct++] = ft_strdup(array[ct2++]);
-	ct2 = 0;
-	while (array[ct2] && ct < len_array(array))
-		ret[ct++] = ft_strdup(array[ct2++]);
-	ret[ct] = NULL;
-	return (ret);
-}
-
-int		count_args(char **array, char *redir)
-{
-	int		ret;
-	int		ct;
-
-	ret = 0;
-	ct = 0;
-	while (array[ct])
-	{
-		if (!ft_strcmp(array[ct], redir))
-			break ;
-		ct++;
-		ret++;
-	}
-	return (ret);
-}
-
-char	**rework_args_2_exec(char **array, char *redir)
-{
-	int		ct;
-	int		stop;
-	char	**ret;
-
-	ct = 0;
-	stop = count_args(array, redir);
-	if (!(ret = (char **)malloc(sizeof(char *) * stop + 1)))
-		return (NULL);
-	while (array[ct] && ct < stop)
-	{
-		ret[ct] = ft_strdup(array[ct]);
-		ct++;
-	}
-	ret[ct] = NULL;
-	return (ret);
-}
-
-char	*formatting_redirect_cmd(char *cmd, char *redir)
-{
-	int		ct;
-	int		ct2;
-	char	*ret;
-
-	ct = 0;
-	ct2 = 0;
-	ret = ft_strnew(ft_strlen(cmd) + 20);
-	while (cmd[ct])
-	{
-		if (cmd[ct] == redir[0] && cmd[ct + 1] != ' ' && cmd[ct + 1] != redir[0])
-		{
-			ret[ct2++] = cmd[ct++];
-			ret[ct2++] = ' ';
-		}
-		else
-			ret[ct2++] = cmd[ct++];
-	}
-	ret[ct2] = 0;
-	ft_strdel(&cmd);
-	return (ret);
-}
-
-int		check_if_valid_cmd(t_all *all, char *try)
-{
-	int		ct;
-	char	*bin_tmp;
-
-	ct = 0;
-	bin_tmp = NULL;
-	while (all->path2exec[ct])
-	{
-		if (!(bin_tmp = create_path(all->path2exec[ct], try)))
-		{
-			write_error_exec(try);
-			return (0);
-		}
-		if (bin_tmp && good_access(bin_tmp))
-			break ;
-		bin_tmp ? ft_strdel(&bin_tmp) : NULL;
-		ct++;
-	}
-	if (!all->path2exec[ct])
-	{
-		all->err = 1;
-		write_error(try);
-		return (0);
-	}
-	return (1);
-}
-
-int		check_error(t_all *all, char **array, char *redir)
-{
-	char	**tmp;
-	int		ct;
-
-	ct = 0;
-	tmp = array;
-	if ((len_array(array) == 1) || (array[1][0] == '&' && !array[1][1]))
-		return (redirection_error_2());
-	else if (!ft_strcmp(tmp[0], redir) && len_array(array) == 2)
-		return (redirection_error_4());
-	if (!check_if_valid_cmd(all, tmp[0]))
-		return (-1);
-	while (tmp[ct])
-	{
-		if (!ft_strcmp(tmp[ct], redir))
-		{
-			if (!tmp[ct + 1])
-				return (redirection_error_2());
-			else if (ct == 0)
-				return (redirection_error_4());
-		}
-		ct++;
-	}
-	return (1);
-}
-
 void	erase_and_replace(t_all *all, char *cmd)
 {
 	char	**redirect;
@@ -163,9 +21,7 @@ void	erase_and_replace(t_all *all, char *cmd)
 	argv = NULL;
 	redirect = NULL;
 	if (check_aggregations(cmd))
-	{
 		exec_aggregations(all, cmd);
-	}
 	else
 	{
 		cmd = formatting_redirect_cmd(cmd, ">");
@@ -207,90 +63,6 @@ void	add_to_end(t_all *all, char *cmd)
 	redirect ? del_array(&redirect) : NULL;
 }
 
-int		check_double_redirection(char **array)
-{
-	char	**tmp;
-	int		ct;
-	int		stop;
-
-	tmp = array;
-	ct = 0;
-	stop = 0;
-	while (tmp[ct])
-	{
-		if ((tmp[ct][0] == '<' && !stop)
-			|| (tmp[ct][0] == '>' && !stop))
-			stop += 1;
-		else if ((tmp[ct][0] == '>' && stop)
-			|| (tmp[ct][0] == '<' && stop))
-			stop += 1;
-		ct++;
-	}
-	if (stop == 2)
-		return (1);
-	return (0);
-}
-
-char	*first_redirect(char **array)
-{
-	char	**tmp;
-	int		ct;
-
-	tmp = array;
-	ct = 0;
-	while (tmp[ct])
-	{
-		if (tmp[ct][0] == '>' || tmp[ct][0] == '<')
-			return (tmp[ct]);
-		ct++;
-	}
-	return (NULL);
-}
-
-char	*get_fd_2_open(char **array, char *redir)
-{
-	char	**tmp;
-	int		ct;
-
-	tmp = array;
-	ct = 0;
-	while (tmp[ct])
-	{
-		// printf("tmp[ct]: [ %s ]\n", tmp[ct]);
-		if (tmp[ct][0] == redir[0])
-		{
-			// printf("found: [ %s ]\n&& +1: [ %s ]\n", tmp[ct], tmp[ct + 1]);
-			return (tmp[ct + 1]);
-		}
-		ct++;
-	}
-	return (NULL);
-}
-
-void	exec_double_redirection(t_all *all, char **array)
-{
-	char	**argv;
-	int		fd;
-	int		dupstdin;
-	int		dupstdout;
-
-	argv = rework_args_2_exec(array, first_redirect(array));
-	if ((all->fd2open = open(get_fd_2_open(array, "<"), \
-		O_RDONLY, 0644)) == -1)
-		return (redirection_error(get_fd_2_open(array, "<")));
-	if ((fd = open(get_fd_2_open(array, ">"), \
-		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-		return (redirection_error(get_fd_2_open(array, ">")));
-	dupstdin = dup(0);
-	dupstdout = dup(1);
-	dup2(fd, 1);
-	(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
-	close(fd);
-	dup2(dupstdout, 1);
-	close(dupstdout);
-	array ? del_array(&array) : NULL;
-}
-
 void	read_file(t_all *all, char *cmd)
 {
 	char	**redirect;
@@ -321,31 +93,28 @@ void	read_file(t_all *all, char *cmd)
 	}
 }
 
-int		count_redirect(char *s)
+void	exec_double_redirection(t_all *all, char **array)
 {
-	int		ct;
-	int		ret;
+	char	**argv;
+	int		fd;
+	int		dupstdin;
+	int		dupstdout;
 
-	ct = 0;
-	ret = 0;
-	if (!s)
-		return (0);
-	while (s[ct])
-	{
-		if (s[ct] == '<')
-		{
-			while (s[ct] == '<')
-			{
-				ret++;
-				if (ret > 2)
-					return (ret);
-				ct++;
-			}
-			ret = 0;
-		}
-		ct++;
-	}
-	return (ret);
+	argv = rework_args_2_exec(array, first_redirect(array));
+	if ((all->fd2open = open(get_fd_2_open(array, "<"), \
+		O_RDONLY, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, "<")));
+	if ((fd = open(get_fd_2_open(array, ">"), \
+		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, ">")));
+	dupstdin = dup(0);
+	dupstdout = dup(1);
+	dup2(fd, 1);
+	(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
+	close(fd);
+	dup2(dupstdout, 1);
+	close(dupstdout);
+	array ? del_array(&array) : NULL;
 }
 
 void	read_stdin(t_all *all, char *cmd)
@@ -365,7 +134,6 @@ void	read_stdin(t_all *all, char *cmd)
 		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
 		error("OPEN");
 	argv = rework_args_2_exec(redirect, "<<");
-	// display_array(argv);
 	while (1)
 	{
 		ft_putstr("> ");

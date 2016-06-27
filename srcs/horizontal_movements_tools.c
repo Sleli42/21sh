@@ -50,3 +50,35 @@ t_cmd	*goto_cursor_pos(t_cmd *lst, int pos)
 			tmp = tmp->next;
 	return (tmp);
 }
+
+int		count_2_prev_spaces(t_all *all)
+{
+	int		stop;
+	int		tmp;
+
+	stop = 0;
+	tmp = (CURSOR - PROMPT_LEN) - 1;
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
+		stop++;
+		tmp--;
+	}
+	stop += 1;
+	return (stop);
+}
+
+int		count_2_next_spaces(t_all *all)
+{
+	int		stop;
+	int		tmp;
+
+	stop = 0;
+	tmp = (CURSOR - PROMPT_LEN) + 1;
+	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	{
+		stop++;
+		tmp++;
+	}
+	stop += 1;
+	return (stop);
+}

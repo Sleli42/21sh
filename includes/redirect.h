@@ -54,17 +54,31 @@ int		redirect_in_arrays(t_all *all, char ***arrays);
 *** ======================= redirection.c
 */
 
-char	**replace_argv(char **array, char *redir);
-int		count_args(char **array, char *redir);
-char	**rework_args_2_exec(char **array, char *redir);
-int		check_if_valid_cmd(t_all *all, char *try);
-int		check_error(t_all *all, char **array, char *redir);
-
-
 void	erase_and_replace(t_all *all, char *cmd);
 void	add_to_end(t_all *all, char *cmd);
 void	read_file(t_all *all, char *cmd);
+void	exec_double_redirection(t_all *all, char **array);
 void	read_stdin(t_all *all, char *cmd);
+
+/*
+*** ======================= redirection_2.c
+*/
+
+char	**replace_argv(char **array, char *redir);
+int		count_args(char **array, char *redir);
+char	**rework_args_2_exec(char **array, char *redir);
+char	*formatting_redirect_cmd(char *cmd, char *redir);
+int		check_if_valid_cmd(t_all *all, char *try);
+
+/*
+*** ======================= redirection_3.c
+*/
+
+int		check_error(t_all *all, char **array, char *redir);
+int		check_double_redirection(char **array);
+char	*first_redirect(char **array);
+char	*get_fd_2_open(char **array, char *redir);
+int		count_redirect(char *s);
 
 /*
 *** ======================= redirection_tools.c

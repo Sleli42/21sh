@@ -78,7 +78,6 @@ void	shift(t_all *all)
 {
 	int		ct;
 
-	// printf("currLine: %d\n", all->curr_line);
 	create_cmd(all);
 	get_cursor_row(all);
 	ct = 0;

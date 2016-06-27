@@ -36,24 +36,27 @@ int			getkey(char *s)
 	return (result);
 }
 
+int			down_line(t_all *all)
+{
+	if (all->curr_line < all->nb_lines)
+	{
+		while (all->curr_line < all->nb_lines)
+		{
+			tputs_termcap("do");
+			all->curr_line++;
+		}
+		all->curr_line = 1;
+	}
+	return (-1);
+}
+
 int			check_keys_arrows(t_all *all, char *buff)
 {
 	all->current_key = getkey(buff);
-	if (all->current_key == K_ENTER)
-	{
-		// printf("\n\nnbLines: %d\n", all->nb_lines);
-		// printf("\n\ncurrLine: %d\n", all->curr_line);
-		if (all->curr_line < all->nb_lines)
-		{
-			while (all->curr_line < all->nb_lines)
-			{
-				tputs_termcap("do");
-				all->curr_line++;
-			}
-			all->curr_line = 1;
-		}
-		return (-1);
-	}
+	if (all->current_key == K_ENTER || all->current_key == K_SHIFT_UP \
+	|| all->current_key == K_SHIFT_DOWN || all->current_key == K_SHIFT_RIGHT \
+										|| all->current_key == K_SHIFT_LEFT)
+		return (down_line(all));
 	if (all->current_key == K_RIGHT || all->current_key == K_LEFT
 		|| all->current_key == K_UP || all->current_key == K_DOWN
 		|| all->current_key == K_CTRL_RIGHT || all->current_key == K_CTRL_LEFT

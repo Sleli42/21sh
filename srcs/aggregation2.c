@@ -38,20 +38,6 @@ void	exec_agg2_extended(t_all *all, char **split_agg, char *file)
 	}
 }
 
-void	display_array(char **array)
-{
-	int	ct;
-	char	**tmp;
-
-	tmp = array;
-	ct = 0;
-	while (tmp[ct])
-	{
-		ft_putendl(tmp[ct]);
-		ct++;
-	}
-}
-
 void	exec_agg2(t_all *all, char *cmd)
 {
 	char	**split_agg;

@@ -30,6 +30,7 @@ typedef struct s_cmd	t_cmd;
 */
 
 int			getkey(char *s);
+int			down_line(t_all *all);
 int			check_keys_arrows(t_all *all, char *buff);
 void		parse_keys(t_all *all);
 
@@ -56,6 +57,8 @@ void		reprint_char(t_all *all, t_cmd *nav);
 int			check_if_spaces_before(t_all *all, int pos);
 int			check_if_spaces_after(t_all *all, int pos);
 t_cmd		*goto_cursor_pos(t_cmd *lst, int pos);
+int			count_2_prev_spaces(t_all *all);
+int			count_2_next_spaces(t_all *all);
 
 /*
 *** ======================= goto.c
@@ -124,5 +127,12 @@ void		cut_left(t_all *all);
 void		shift_first_char(t_all *all, int curr_line);
 void		shift_last_char(t_all *all, int curr_line);
 void		shift(t_all *all);
+
+/*
+*** ======================= shift.c
+*/
+
+void		replace_cursor(t_all *all, int save);
+void		new_shift(t_all *all);
 
 #endif

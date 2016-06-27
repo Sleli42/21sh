@@ -42,8 +42,10 @@ SRC			= main.c \
 			copy_tools.c \
 			cut_tools.c \
 			shift.c \
+			shift_2.c \
 			autocomplete.c \
 			autocomplete_tools.c \
+			autocomplete_tools_2.c \
 			binary_search.c \
 			directory_search.c \
 			equality_search.c \
@@ -86,6 +88,8 @@ SRC			= main.c \
 			pipe_tools.c \
 			pipe_tools_2.c \
 			redirection.c \
+			redirection_2.c \
+			redirection_3.c \
 			redirection_tools.c \
 			redirection_error.c \
 			aggregation1.c \

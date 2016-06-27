@@ -35,10 +35,17 @@ void		search_autocomplete(t_all *all);
 */
 
 void		ask_for_big_display(t_all *all);
+int			check_prev_directory(char *s);
+void		cut_cmd_equ(t_all *all);
+
+/*
+*** ======================= autocomplete_tools_2.c
+*/
+
 int			find_maxlen_elem(t_clist *lst);
 int			define_nb_files_by_row(t_all *all, t_clist *lst);
 int			no_spaces(t_cmd *lst);
-void		cut_cmd_equ(t_all *all);
+void		add_spaces(t_all *all, int tmp_len, int ct);
 
 /*
 *** ======================= binary_search.c
