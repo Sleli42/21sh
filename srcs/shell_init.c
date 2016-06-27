@@ -28,6 +28,7 @@ void		init_loop(t_all *all)
 	all->buff = ft_memset(ft_strnew(MAXLEN - 1), 0, (MAXLEN - 1));
 	all->prog_exec = 0;
 	all->env_exec = all->dupenv;
+	all->dupstdin = 0;
 	init_windows_size(all);
 }
 

@@ -15,8 +15,8 @@
 char	**replace_argv(char **array, char *redir)
 {
 	char	**ret;
-	int	ct;
-	int	ct2;
+	int		ct;
+	int		ct2;
 
 	ct = 0;
 	ct2 = 1;
@@ -86,7 +86,8 @@ char	*formatting_redirect_cmd(char *cmd, char *redir)
 	ret = ft_strnew(ft_strlen(cmd) + 20);
 	while (cmd[ct])
 	{
-		if (cmd[ct] == redir[0] && cmd[ct + 1] != ' ' && cmd[ct + 1] != redir[0])
+		if (cmd[ct] == redir[0] && cmd[ct + 1] != ' ' \
+								&& cmd[ct + 1] != redir[0])
 		{
 			ret[ct2++] = cmd[ct++];
 			ret[ct2++] = ' ';

@@ -81,6 +81,30 @@ int		read_stdin_cmp_key(t_all *all, char **argv, char *key, char *tmp_buff)
 		return (1);
 	}
 	else
-		tmp_buff ? ft_strdel(&tmp_buff) : NULL;
+		(tmp_buff && *tmp_buff) ? ft_strdel(&tmp_buff) : NULL;
 	return (0);
+}
+
+void	exec_double_redirection(t_all *all, char **array)
+{
+	char	**argv;
+	int		fd;
+	int		dupstdin;
+	int		dupstdout;
+
+	argv = rework_args_2_exec(array, first_redirect(array));
+	if ((all->fd2open = open(get_fd_2_open(array, "<"), \
+		O_RDONLY, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, "<")));
+	if ((fd = open(get_fd_2_open(array, ">"), \
+		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		return (redirection_error(get_fd_2_open(array, ">")));
+	dupstdin = dup(0);
+	dupstdout = dup(1);
+	dup2(fd, 1);
+	(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
+	close(fd);
+	dup2(dupstdout, 1);
+	close(dupstdout);
+	array ? del_array(&array) : NULL;
 }

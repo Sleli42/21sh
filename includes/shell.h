@@ -62,8 +62,6 @@ void		parse_cursor_row(t_all *all, char *buff);
 
 void		create_and_exec_command(t_all *all);
 void		write_buffer(t_all *all);
-void		insert_char_extend(t_all *all);
-void		insert_char(t_all *all);
 void		check_glob(t_glob *g);
 void		save_glob(t_all *all, t_glob *g);
 
@@ -76,6 +74,14 @@ void		update_cmd_line_insert(t_all *all, char char2add);
 void		realloc_termcaps_cmd(t_all *all, char *cmd2realloc);
 void		create_cmd(t_all *all);
 void		define_current_line(t_all *all);
+
+/*
+*** ======================= shell_tools_2.c
+*/
+
+void		control_d(t_all *all);
+void		insert_char_extend(t_all *all);
+void		insert_char(t_all *all);
 
 /*
 *** ======================= debug.c

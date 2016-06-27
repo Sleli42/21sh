@@ -215,6 +215,7 @@ typedef struct			s_all
 	int					skip;
 	int					dupout;
 	int					duperr;
+	int					dupstdin;
 	int					fd2restore;
 	t_glob				globing;
 	char				**hash;

@@ -103,6 +103,7 @@ SRC			= main.c \
 			shell_loop_tools.c \
 			shell_loop_tools_2.c \
 			shell_tools.c \
+			shell_tools_2.c \
 			termcaps_init.c \
 			termcaps_tools.c \
 			binary_operators.c \

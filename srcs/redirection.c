@@ -67,7 +67,6 @@ void	read_file(t_all *all, char *cmd)
 {
 	char	**redirect;
 	char	**argv;
-	int		dupstdin;
 
 	argv = NULL;
 	redirect = NULL;
@@ -87,53 +86,17 @@ void	read_file(t_all *all, char *cmd)
 		if ((all->fd2open = open(redirect[len_array(redirect) - 1], \
 			O_RDONLY, 0644)) == -1)
 			return (redirection_error(redirect[len_array(redirect) - 1]));
-		dupstdin = dup(0);
-		(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
+		all->dupstdin = dup(0);
+		(!all->err) ? dup_and_exec(all, argv, all->dupstdin, 0) : NULL;
 		redirect ? del_array(&redirect) : NULL;
 	}
 }
 
-void	exec_double_redirection(t_all *all, char **array)
+void	read_stdin_loop(t_all *all, char **argv, char **redirect)
 {
-	char	**argv;
-	int		fd;
-	int		dupstdin;
-	int		dupstdout;
-
-	argv = rework_args_2_exec(array, first_redirect(array));
-	if ((all->fd2open = open(get_fd_2_open(array, "<"), \
-		O_RDONLY, 0644)) == -1)
-		return (redirection_error(get_fd_2_open(array, "<")));
-	if ((fd = open(get_fd_2_open(array, ">"), \
-		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-		return (redirection_error(get_fd_2_open(array, ">")));
-	dupstdin = dup(0);
-	dupstdout = dup(1);
-	dup2(fd, 1);
-	(!all->err) ? dup_and_exec(all, argv, dupstdin, 0) : NULL;
-	close(fd);
-	dup2(dupstdout, 1);
-	close(dupstdout);
-	array ? del_array(&array) : NULL;
-}
-
-void	read_stdin(t_all *all, char *cmd)
-{
-	char	**redirect;
-	char	**argv;
 	char	*tmp_buff;
 
-	cmd = formatting_redirect_cmd(cmd, "<<");
-	redirect = ft_strsplit(cmd, ' ');
-	if (len_array(redirect) > 1 && redirect[0][0] == '<')
-		redirect = replace_argv(redirect, "<<");
-	if (!check_error(all, redirect, "<<"))
-		return ;
-	argv = NULL;
-	if ((all->fd2open = open(".tmp_file", \
-		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
-		error("OPEN");
-	argv = rework_args_2_exec(redirect, "<<");
+	tmp_buff = NULL;
 	while (1)
 	{
 		ft_putstr("> ");
@@ -148,5 +111,26 @@ void	read_stdin(t_all *all, char *cmd)
 			break ;
 		write(1, "\n", 1);
 	}
+}
+
+void	read_stdin(t_all *all, char *cmd)
+{
+	char	**redirect;
+	char	**argv;
+
+	cmd = formatting_redirect_cmd(cmd, "<<");
+	redirect = ft_strsplit(cmd, ' ');
+	if (len_array(redirect) > 1 && redirect[0][0] == '<')
+		redirect = replace_argv(redirect, "<<");
+	if (!check_error(all, redirect, "<<"))
+		return ;
+	if (len_array(redirect) < 3)
+		return ;
+	argv = NULL;
+	if ((all->fd2open = open(".tmp_file", \
+		O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		error("OPEN");
+	argv = rework_args_2_exec(redirect, "<<");
+	read_stdin_loop(all, argv, redirect);
 	redirect ? del_array(&redirect) : NULL;
 }

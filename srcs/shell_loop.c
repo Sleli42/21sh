@@ -55,11 +55,8 @@ void	read_keys(t_all *all)
 	if ((cr = check_globbing(all)))
 	{
 		if (*all->buff == 4)
-		{
-			ft_putstr("\n$: exit\n");
-			exit(0);
-		}
-		if ((key = check_keys_arrows(all, all->buff)) < 0)
+			control_d(all);
+		else if ((key = check_keys_arrows(all, all->buff)) < 0)
 			return ;
 		else if (key > 0)
 			parse_keys(all);

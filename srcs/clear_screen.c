@@ -28,4 +28,6 @@ void	ft_clear_screen(t_all *all)
 		create_cmd(all);
 		ft_putstr(all->cmd);
 	}
+	exec_right_binary(all, ft_strsplit("reset", ' '));
+	loop(all);
 }

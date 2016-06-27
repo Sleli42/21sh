@@ -57,7 +57,7 @@ int		redirect_in_arrays(t_all *all, char ***arrays);
 void	erase_and_replace(t_all *all, char *cmd);
 void	add_to_end(t_all *all, char *cmd);
 void	read_file(t_all *all, char *cmd);
-void	exec_double_redirection(t_all *all, char **array);
+void	read_stdin_loop(t_all *all, char **argv, char **redirect);
 void	read_stdin(t_all *all, char *cmd);
 
 /*
@@ -85,8 +85,10 @@ int		count_redirect(char *s);
 */
 
 char	*read_stdin_cpy_buff(void);
+char	*my_strstr(t_all *all, char *s);
 int		read_stdin_cmp_key(t_all *all, char **argv, char *key, char *tmp_buff);
 void	dup_and_exec(t_all *all, char **argv, int fd2back, int fd2dup);
+void	exec_double_redirection(t_all *all, char **array);
 
 /*
 *** ======================= redirection_error.c

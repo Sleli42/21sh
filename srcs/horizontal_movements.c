@@ -15,13 +15,13 @@
 void	opt_right_move(t_all *all)
 {
 	int		stop;
-	int		max_value;
+	int		max;
 
 	stop = count_2_next_spaces(all) + CURSOR;
-	max_value = (int)ft_strlen(all->cmd) + PROMPT_LEN;
-	while (CURSOR < stop && CURSOR < max_value)
+	max = (int)ft_strlen(all->cmd) + PROMPT_LEN;
+	while ((CURSOR < stop && CURSOR < max))
 	{
-		if (CURSOR == (LINE_LEN * (all->curr_line)))
+		if (CURSOR == LINE_LEN * (all->curr_line))
 		{
 			tputs_termcap("do");
 			all->curr_line += 1;
@@ -38,7 +38,7 @@ void	opt_left_move(t_all *all)
 	stop = CURSOR - count_2_prev_spaces(all);
 	while (CURSOR > stop && CURSOR > PROMPT_LEN)
 	{
-		if (CURSOR == (LINE_LEN * (all->curr_line - 1)))
+		if (CURSOR == LINE_LEN * (all->curr_line - 1))
 			all->curr_line -= 1;
 		tputs_termcap("le");
 		CURSOR--;
@@ -47,14 +47,14 @@ void	opt_left_move(t_all *all)
 
 void	reprint_char(t_all *all, t_cmd *nav)
 {
-	if (all->current_key == K_LEFT && all->cpy_move_right >= 0
-		&& CURSOR - PROMPT_LEN > all->save_cursor_pos)
+	if (all->current_key == K_LEFT && all->cpy_move_right >= 0 \
+					&& CURSOR - PROMPT_LEN > all->save_cursor_pos)
 	{
 		standard_mode(nav->c);
 		all->cpy_move_right--;
 	}
-	else if (all->current_key == K_RIGHT && all->cpy_move_left >= 0
-		&& CURSOR < all->save_cursor_pos)
+	else if (all->current_key == K_RIGHT && all->cpy_move_left >= 0 \
+									&& CURSOR < all->save_cursor_pos)
 	{
 		standard_mode(nav->c);
 		all->cpy_move_left--;
