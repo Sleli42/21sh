@@ -6,7 +6,7 @@
 #    By: lubaujar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/03 15:54:43 by lubaujar          #+#    #+#              #
-#    Updated: 2015/12/16 14:22:04 by lubaujar         ###   ########.fr        #
+#    Updated: 2016/06/28 17:31:38 by skhatir          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,10 +66,12 @@ SRC			= main.c \
 			mark_built.c \
 			mark_built2.c \
 			env.c \
+			env.c \
+			env_settings.c \
 			env_init.c \
-			env_msc.c \
 			env_tools.c \
 			env_tools_2.c \
+			env_msc.c \
 			binary.c \
 	 		binary_tools.c \
 			parse_cmd.c \

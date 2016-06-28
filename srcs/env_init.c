@@ -6,7 +6,7 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 10:41:41 by lubaujar          #+#    #+#             */
-/*   Updated: 2016/03/21 16:06:14 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/06/02 17:33:49 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void				init_inf(t_env_info *inf)
 	inf->bin = NULL;
 	inf->env_spe = NULL;
 	inf->set_var = NULL;
+	inf->bin_path = NULL;
 }
 
 t_dlist				*init_env(char **env)
