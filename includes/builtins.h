@@ -206,6 +206,7 @@ typedef struct			s_env_info
 	int					unless;
 	int					len;
 	char				*bin;
+	char				*bin_path;
 	char				**env_spe;
 	char				**set_var;
 }						t_env_info;

@@ -225,6 +225,7 @@ typedef struct			s_all
 	int					prog_exec;
 	char				**env_exec;
 	int					err;
+	char				*path_mod;
 }						t_all;
 
 /*
