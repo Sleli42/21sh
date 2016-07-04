@@ -14,6 +14,7 @@
 # define ENV_H
 
 # include "full_sh.h"
+# include "builtins.h"
 
 typedef struct s_all		t_all;
 typedef struct s_dlist		t_dlist;
@@ -32,6 +33,23 @@ void		multi_env_set(t_all *all, char **array);
 void		env_set(t_all *all, char *cmd);
 void		env_unset(t_all *all, char *cmd);
 void		env_modify(t_all *all, char *cmd);
+
+/*
+*** ======================= so_env.c
+*/
+
+void		set_env_exec(t_env_info *inf, t_all *all);
+int			add_spe_env(char **params, t_env_info *inf);
+int			check_params(char **params, t_env_info *inf);
+int			env_bin(t_all *all, t_env_info *inf);
+void		update_env_info(t_all *all, t_env_info inf);
+
+/*
+*** ======================= so_env_2.c
+*/
+
+int			env_exec(t_all *all, char **params);
+char		**check_format(char *cmd);
 
 /*
 *** ======================= env_init.c

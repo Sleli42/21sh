@@ -12,7 +12,7 @@
 
 #include "full_sh.h"
 
-void	control_d(t_all *all)
+void		control_d(t_all *all)
 {
 	create_cmd(all);
 	if ((int)all->cmd_termcaps->lenght > 0 \

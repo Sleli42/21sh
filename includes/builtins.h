@@ -200,8 +200,6 @@ void					update_oldpwd(t_all *all);
 *********************** ENV ****************************************************
 */
 
-#include "env.h"
-
 typedef struct			s_env_info
 {
 	int					exec;

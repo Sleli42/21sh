@@ -66,6 +66,8 @@ SRC			= main.c \
 			mark_built.c \
 			mark_built2.c \
 			env.c \
+			so_env.c \
+			so_env_2.c \
 			env_init.c \
 			env_msc.c \
 			env_tools.c \

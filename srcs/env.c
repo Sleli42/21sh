@@ -12,118 +12,7 @@
 
 #include "full_sh.h"
 
-void				set_env_exec(t_env_info *inf, t_all *all)
-{
-	if (inf->unless > 0)
-		all->env_exec = ft_tabjoin(all->dupenv, inf->env_spe);
-	else
-	{
-		printf("IN NO ENV\n");
-		all->env_exec = inf->env_spe;
-	}
-}
-
-int					add_spe_env(char **params, t_env_info *inf)
-{
-	int 			i;
-
-	i = 0;
-	inf->env_spe = NULL;
-	if ((inf->env_spe = \
-		(char **)malloc(sizeof(char *) * (ft_tablen(params) + 1))) == NULL)
-		return (-1);
-	while (params[i])
-	{
-		if (!ft_strchr(params[i], '='))
-		{
-			inf->env_spe[i] = NULL;
-			inf->bin = params[i];
-			return ((inf->exec = 1));
-		}
-		inf->env_spe[i] = ft_strdup(params[i]);
-		i++;
-	}
-	inf->env_spe[i] = NULL;
-	return ((inf->exec = 0));
-}
-
-int					check_params(char **params, t_env_info *inf)
-{
-	int				i;
-
-	i = 0;
-	inf->unless = 1;
-	if (!ft_strcmp(params[i], "-i"))
-	{
-		inf->unless = -1;
-		params++;
-		if (!params[i])
-			return (0);
-	}
-	if ((i = add_spe_env(params, inf)) == -1)
-	{
-		ft_putendl("malloc error");
-		return (1);
-	}
-	return (0);
-}
-
-int					env_bin(t_all *all, t_env_info *inf)
-{
-	if (inf->unless == -1)
-	{
-		printf("--->94?\n");
-		all->env_exec = inf->env_spe;
-		ft_printtab(all->env_exec);
-		// exit(0);
-		exec_right_binary(all, ft_strsplit(inf->bin, ' '));
-		return (1);
-	}
-	if (inf->env_spe)
-		set_env_exec(inf, all);
-	exec_right_binary(all, ft_strsplit(inf->bin, ' '));
-	return (1);
-}
-
-void				update_env_info(t_all *all, t_env_info inf)
-{
-	int				i;
-
-	i = 0;
-	while (inf.env_spe[i])
-	{
-		if (var_already_exist(all, inf.env_spe[i]))
-			update_env(all, inf.env_spe[i]);
-		else
-			dlst_add_back((t_dlist *)all->env, (t_node *)\
-							dlst_node_new(inf.env_spe[i], all->env->lenght));
-		i++;
-	}
-}
-
-int					env_exec(t_all *all, char **params)
-{
-	t_env_info		inf;
-
-	init_inf(&inf);
-	if (check_params(params, &inf))
-		return (1);
-	if (inf.exec)
-		return (env_bin(all, &inf));
-	if (inf.unless != -1 && inf.env_spe)
-	{
-		set_env_exec(&inf, all);
-		return (0);
-	}
-	if (inf.unless == -1 && inf.env_spe)
-	{
-		ft_printtab(inf.env_spe);
-		return (1);
-	}
-	return (0);
-}
-
-void				env_display(t_all *all, char *cmd)
+void	env_display(t_all *all, char *cmd)
 {
 	char			**tmp;
 
@@ -151,25 +40,6 @@ void	multi_env_set(t_all *all, char **array)
 		}
 		ct++;
 	}
-}
-
-char	**check_format(char *cmd)
-{
-	char		**ret;
-
-	if (!cmd || !*cmd)
-		return NULL;
-	ret = NULL;
-	if (!(ret = ft_strsplit(cmd, ' ')))
-		return (NULL);
-	if (ft_tablen(ret) != 2)
-	{
-		del_array(&ret);
-		ft_putendl("Bad format: set env [var] [content]");
-		return (NULL);
-	}
-	else
-		return (ret);
 }
 
 void	env_set(t_all *all, char *cmd)
@@ -231,4 +101,3 @@ void	env_modify(t_all *all, char *cmd)
 	ft_strdel(&tmp);
 	ft_strdel(&tmp2);
 }
-

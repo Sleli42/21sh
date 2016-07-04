@@ -58,6 +58,15 @@ int		count_2_prev_spaces(t_all *all)
 
 	stop = 0;
 	tmp = (CURSOR - PROMPT_LEN) - 1;
+	if ((all->cmd[tmp] == ' ' && all->cmd[tmp - 1] == ' '))
+	{
+		while (all->cmd[tmp] && all->cmd[tmp] == ' ')
+		{
+			stop++;
+			tmp--;
+		}
+		return (stop);
+	}
 	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
 	{
 		stop++;
@@ -74,7 +83,16 @@ int		count_2_next_spaces(t_all *all)
 
 	stop = 0;
 	tmp = (CURSOR - PROMPT_LEN) + 1;
-	while (all->cmd[tmp] && all->cmd[tmp] != ' ')
+	if ((all->cmd[tmp] == ' ' && all->cmd[tmp + 1] == ' '))
+	{
+		while (all->cmd[tmp] && all->cmd[tmp] == ' ')
+		{
+			stop++;
+			tmp++;
+		}
+		return (stop);
+	}
+	while ((all->cmd[tmp] && all->cmd[tmp] != ' '))
 	{
 		stop++;
 		tmp++;
