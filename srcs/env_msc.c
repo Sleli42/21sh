@@ -6,16 +6,35 @@
 /*   By: skhatir <skhatir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/31 11:05:21 by skhatir           #+#    #+#             */
-/*   Updated: 2016/05/31 11:09:44 by skhatir          ###   ########.fr       */
+/*   Updated: 2016/06/20 23:35:32 by skhatir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "full_sh.h"
 
-char	**ft_tabdelone(char **array, char *s)
+char				**check_format(char *cmd)
 {
-	char	**newtab;
-	int		i;
+	char			**ret;
+
+	if (!cmd || !*cmd)
+		return (NULL);
+	ret = NULL;
+	if (!(ret = ft_strsplit(cmd, ' ')))
+		return (NULL);
+	if (ft_tablen(ret) != 2)
+	{
+		del_array(&ret);
+		ft_putendl("Bad format: set env [var] [content]");
+		return (NULL);
+	}
+	else
+		return (ret);
+}
+
+char				**ft_tabdelone(char **array, char *s)
+{
+	char			**newtab;
+	int				i;
 
 	newtab = NULL;
 	if (array && ft_tablen(array) > 1)
@@ -37,7 +56,7 @@ char	**ft_tabdelone(char **array, char *s)
 	return (newtab);
 }
 
-char	*dup_comp(char *target, char **array)
+char				*dup_comp(char *target, char **array)
 {
 	int				i;
 	char			*ret;
@@ -58,11 +77,11 @@ char	*dup_comp(char *target, char **array)
 	return ((ret = ft_strdup(target)));
 }
 
-char	**ft_tabjoin(char **dupenv, char **env_spe)
+char				**ft_tabjoin(char **dupenv, char **env_spe)
 {
-	char	**tabcpy;
-	int		i;
-	int		j;
+	char			**tabcpy;
+	int				i;
+	int				j;
 
 	tabcpy = NULL;
 	if ((tabcpy = (char **)malloc(sizeof(char *) * \
@@ -84,11 +103,13 @@ char	**ft_tabjoin(char **dupenv, char **env_spe)
 	return (tabcpy);
 }
 
-void	ft_printtab(char **array)
+void				ft_printtab(char **array)
 {
 	int				i;
 
 	i = 0;
+	if (!array)
+		return ;
 	while (array[i])
 	{
 		ft_putendl(array[i]);
