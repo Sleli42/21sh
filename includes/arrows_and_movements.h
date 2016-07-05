@@ -39,6 +39,8 @@ void		parse_keys(t_all *all);
 */
 
 void		del_char_multi_lines(t_all *all);
+void	del_char_k_delete(t_all *all);
+void	del_char_k_backspace(t_all *all);
 void		del_char(t_all *all);
 
 /*

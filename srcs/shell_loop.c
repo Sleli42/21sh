@@ -43,6 +43,20 @@ int		check_globbing(t_all *all)
 	return (1);
 }
 
+int	check_str(char *buff)
+{
+	int		ct;
+
+	ct = 0;
+	while (buff[ct])
+	{
+		if (!ft_isprint(buff[ct]))
+			return (0);
+		ct++;
+	}
+	return (1);
+}
+
 void	read_keys(t_all *all)
 {
 	int		key;
@@ -60,7 +74,7 @@ void	read_keys(t_all *all)
 			return ;
 		else if (key > 0)
 			parse_keys(all);
-		else
+		else if (check_str(all->buff))
 		{
 			all->replace_cursor = 0;
 			insert_char(all);
