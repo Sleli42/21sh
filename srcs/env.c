@@ -89,25 +89,6 @@ void				env_display(t_all *all, char *cmd)
 	tmp && *tmp ? del_array(&tmp) : NULL;
 }
 
-void	multi_env_set(t_all *all, char **array)
-{
-	int		ct;
-
-	ct = 0;
-	while (array[ct])
-	{
-		if (good_env_formatting(array[ct]))
-		{
-			if (var_already_exist(all, array[ct]))
-				update_env(all, array[ct]);
-			else
-				dlst_add_back((t_dlist *)all->env, (t_node *)
-					dlst_node_new(array[ct], all->env->lenght));
-		}
-		ct++;
-	}
-}
-
 void				env_modify(t_all *all, char *cmd)
 {
 	char			*tmp;

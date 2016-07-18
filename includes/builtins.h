@@ -211,7 +211,6 @@ typedef struct			s_env_info
 	char				**set_var;
 }						t_env_info;
 
-
 char					**ft_tabdelone(char **array, char *s);
 char					*dup_comp(char *target, char **array);
 char					**ft_tabjoin(char **dupenv, char **env_spe);

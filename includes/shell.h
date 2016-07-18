@@ -60,6 +60,7 @@ void		parse_cursor_row(t_all *all, char *buff);
 *** ======================= shell_loop_tools_2.c
 */
 
+int			check_str(char *buff);
 void		create_and_exec_command(t_all *all);
 void		write_buffer(t_all *all);
 void		check_glob(t_glob *g);

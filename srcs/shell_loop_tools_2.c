@@ -13,6 +13,20 @@
 #include "full_sh.h"
 #define ERROR_MSG	"\n42sh: Parse error"
 
+int			check_str(char *buff)
+{
+	int		ct;
+
+	ct = 0;
+	while (buff[ct])
+	{
+		if (!ft_isprint(buff[ct]))
+			return (0);
+		ct++;
+	}
+	return (1);
+}
+
 void		check_glob(t_glob *g)
 {
 	if (g->err)

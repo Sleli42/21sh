@@ -43,10 +43,7 @@ void				set_env_exec(t_env_info *inf, t_all *all)
 	if (inf->unless > 0)
 		all->env_exec = ft_tabjoin(all->dupenv, inf->env_spe);
 	else
-	{
-		printf("IN NO ENV\n");
 		all->env_exec = inf->env_spe;
-	}
 }
 
 void				env_set(t_all *all, char *cmd)
