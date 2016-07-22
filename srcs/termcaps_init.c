@@ -29,22 +29,21 @@ static char	*get_env_var(char **dupenv, char *var)
 	return (NULL);
 }
 
-void		init_term(char **dupenv)
+void		init_term(t_all *all, char **dupenv)
 {
 	char			*term_name;
-	struct termios	term;
 
 	term_name = NULL;
 	if ((term_name = get_env_var(dupenv, "TERM=")) == NULL)
 		term_error("GETENV");
 	if (tgetent(NULL, term_name) == -1)
 		perror("TGETENT");
-	if (tcgetattr(0, &term) == -1)
+	if (tcgetattr(0, &all->term) == -1)
 		;
-	term.c_lflag &= ~(ECHO | ICANON);
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
-	if (tcsetattr(0, TCSADRAIN, &term) == -1)
+	all->term.c_lflag &= ~(ECHO | ICANON);
+	all->term.c_cc[VMIN] = 1;
+	all->term.c_cc[VTIME] = 0;
+	if (tcsetattr(0, TCSADRAIN, &all->term) == -1)
 		;
 }
 

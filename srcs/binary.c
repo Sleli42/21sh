@@ -56,7 +56,7 @@ void		exec_right_binary(t_all *all, char **argv_bin)
 											argv_bin, all->env_exec);
 	else
 		exec_right_binary_loop(all, argv_bin);
-	init_term(all->dupenv);
+	init_term(all, all->dupenv);
 	argv_bin ? del_array(&argv_bin) : NULL;
 }
 
@@ -74,7 +74,7 @@ void		exec_binary(t_all *all, char *bin, char **argv_bin, char **env)
 	if ((all->prog_exec = pid) == 0)
 	{
 		if (!ft_strncmp(bin, "/bin/bash", ft_strlen("/bin/bash")))
-			reset_term();
+			reset_term(all);
 		if (execve(bin, argv_bin, all->env_exec) == -1)
 			error("EXECVE");
 		exit(1);

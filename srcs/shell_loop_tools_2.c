@@ -59,7 +59,6 @@ void		create_and_exec_command(t_all *all)
 	char		*tmp;
 
 	create_cmd(all);
-	f_cpy(all);
 	(all->cmd[ft_strlen(all->cmd) - 1] == '\n') ?
 	all->cmd[ft_strlen(all->cmd) - 1] = '\0' : write(1, "\0", 1);
 	write(1, "\n", 1);

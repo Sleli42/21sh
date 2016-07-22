@@ -112,6 +112,7 @@ void	loop(t_all *all)
 	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	display_prompt(all);
 	already_in_func(all);
+	f_cpy(all);
 	while (*all->buff != '\n')
 	{
 		define_nb_lines(all);

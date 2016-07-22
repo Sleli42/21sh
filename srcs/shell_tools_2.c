@@ -17,7 +17,10 @@ void		control_d(t_all *all)
 	create_cmd(all);
 	if ((int)all->cmd_termcaps->lenght > 0 \
 		&& CURSOR - PROMPT_LEN < (int)all->cmd_termcaps->lenght)
-		del_char(all);
+	{
+		// ft_putstr("Nike bien ta race\n");
+		del_char_k_delete(all);
+	}
 	else if (CURSOR - PROMPT_LEN >= (int)all->cmd_termcaps->lenght
 		&& (int)all->cmd_termcaps->lenght > 0)
 		search_autocomplete(all);

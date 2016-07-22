@@ -36,13 +36,11 @@ void	tputs_termcap(char *tc)
 	tputs(res, 0, lu_putchar);
 }
 
-void	reset_term(void)
+void	reset_term(t_all *all)
 {
-	struct termios	term;
-
-	if (tcgetattr(0, &term) == -1)
+	if (tcgetattr(0, &all->term) == -1)
 		;
-	term.c_lflag = (ECHO | ICANON);
-	if (tcsetattr(0, TCSADRAIN, &term) == -1)
+	all->term.c_lflag |= (ECHO | ICANON);
+	if (tcsetattr(0, TCSADRAIN, &all->term) == -1)
 		;
 }

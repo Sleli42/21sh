@@ -25,7 +25,7 @@ typedef struct termios	t_termios;
 *** ======================= termcaps_init.c
 */
 
-void		init_term(char **env);
+void		init_term(t_all *all, char **env);
 void		init_windows_size(t_all *all);
 int			init_tty(void);
 
@@ -37,6 +37,6 @@ t_all		*f_cpy(t_all *all);
 int			lu_putchar(int c);
 void		tputs_termcap(char *tc);
 void		restore_term(t_termios restore);
-void		reset_term(void);
+void		reset_term(t_all *all);
 
 #endif
