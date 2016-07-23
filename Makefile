@@ -97,6 +97,7 @@ SRC			= main.c \
 			aggregation2.c \
 			aggregation3.c \
 			aggregation_tools.c \
+			aggregation_tools_2.c \
 			aggregation_error.c \
 			error.c \
 			shell_init.c \
@@ -108,7 +109,8 @@ SRC			= main.c \
 			termcaps_init.c \
 			termcaps_tools.c \
 			binary_operators.c \
-			binary_operators_tools.c
+			binary_operators_tools.c \
+			signals.c
 
 OBJ = $(SRC:.c=.o)
 

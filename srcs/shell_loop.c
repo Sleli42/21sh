@@ -79,6 +79,13 @@ void	already_in_func(t_all *all)
 		all->p_mark = NULL;
 	}
 	all->cmd = !all->cmd ? ft_strnew(MAXLEN - 1) : NULL;
+	if (!all->already_autocomplete && all->tmp_cmd)
+	{
+		realloc_termcaps_cmd(all, all->tmp_cmd);
+		create_cmd(all);
+		ft_putstr(all->cmd);
+		all->tmp_cmd ? ft_strdel(&all->tmp_cmd) : NULL;
+	}
 }
 
 void	already_in_func_extended(t_all *all)
@@ -109,7 +116,6 @@ void	loop(t_all *all)
 {
 	init_loop(all);
 	init_glob(all);
-	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	display_prompt(all);
 	already_in_func(all);
 	f_cpy(all);

@@ -49,6 +49,7 @@ char	**modify_pipe_array(t_all *all, char **array);
 int		check_pipe_error(char ***pipe2exec);
 int		redirect_in_args(char **array);
 int		redirect_in_arrays(t_all *all, char ***arrays);
+int		check_and_operator(char ***array);
 
 /*
 *** ======================= redirection.c
@@ -115,6 +116,7 @@ void	exec_agg1(t_all *all, char *cmd);
 char	*rework_cmd_agg2(char *cmd);
 char	*get_good_file_agg2(char **array);
 char	**create_argv_cmd_agg2(char **split_agg, char *file);
+void	exec_agg2_extended_2(t_all *all, char **split_2exec);
 void	exec_agg2_extended(t_all *all, char **split_agg, char *file);
 void	exec_agg2(t_all *all, char *cmd);
 
@@ -137,6 +139,14 @@ char	*check_file_in_cmd(char *cmd);
 int		count_arg_agg(char **array, char *file);
 void	close_fd(t_all *all, char *fd2close);
 void	exec_aggregations(t_all *all, char *cmd);
+
+/*
+*** ======================= aggregation_tools_2.c
+*/
+
+int		check_fd_to_fd(char	*s);
+int		check_close_fd(char **array);
+void	exec_double_fd(t_all *all, char **array);
 
 /*
 *** ======================= aggregation_error.c

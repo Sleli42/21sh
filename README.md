@@ -31,10 +31,14 @@
 |    •   					                           						   |
 |______________________________________________________________________________|
 
-	30/05/16:
 
-- desactiver/reactiver termcaps/execve
-- autocompletion rework
-- hashtable rework
-- redirection rework -> csh
-	error: "> ls cat" prbl ctrl+C
+
+agg close fd possibilities:
+
+	- 1>&-
+	- 2>&-
+	- basta !
+
+Attention: pas de resize pendant l'exec du programme
+			leger bug 1/50: "ls " + K_UP -> bug termcaps
+			------------->  OPT+L to clear screen

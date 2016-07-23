@@ -15,6 +15,7 @@
 void	display_prompt(t_all *all)
 {
 	tputs_termcap("ve");
+	(all->already_autocomplete) ? write(1, "\n", 1) : write(1, "\0", 1);
 	write(1, "$: ", 3);
 	all->cursor_pos += PROMPT_LEN;
 }

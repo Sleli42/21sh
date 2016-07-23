@@ -57,19 +57,10 @@ int		count_arg_agg(char **array, char *file)
 
 void	close_fd(t_all *all, char *fd2close)
 {
-	if (ft_isdigit(fd2close[0]) && ft_atoi(fd2close) == 0)
-		;
-	else if ((ft_isdigit(fd2close[0]) && ft_atoi(fd2close) == 1)
-		|| !ft_isdigit(fd2close[0]))
-	{
+	if ((ft_isdigit(fd2close[0]) && !ft_strcmp(fd2close, "1>&-")))
 		all->fd2restore = 1;
-		close(STDOUT_FILENO);
-	}
-	else if ((ft_isdigit(fd2close[0]) && ft_atoi(fd2close) == 2))
-	{
+	else if ((ft_isdigit(fd2close[0]) && !ft_strcmp(fd2close, "2>&-")))
 		all->fd2restore = 2;
-		close(STDERR_FILENO);
-	}
 }
 
 void	exec_aggregations(t_all *all, char *cmd)

@@ -29,6 +29,16 @@ typedef struct s_glob		t_glob;
 int			main(int ac, char **av, char **env);
 
 /*
+*** ======================= signals.c
+*/
+
+void		sig_stop(int sig);
+void		sig_cont(int sig);
+void		sig_winch(int sig);
+void		sig_int(int sig);
+void		sig_catch(void);
+
+/*
 *** ======================= shell_init.c
 */
 
