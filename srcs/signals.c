@@ -73,8 +73,6 @@ void			sig_int(int sig)
 		{
 			ft_bzero(cp, 3);
 			cp[0] = '\n';
-			(all->tmp_cmd && *all->tmp_cmd) ? ft_strdel(&all->tmp_cmd) : NULL;
-			all->tmp_cmd = ft_strdup(all->cmd);
 			all && !CMD_NULL ? del_dlist2(all->cmd_termcaps) : NULL;
 			all && all->cmd && *all->cmd ? ft_strdel(&all->cmd) : NULL;
 			ioctl(0, TIOCSTI, cp);

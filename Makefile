@@ -79,6 +79,7 @@ SRC			= main.c \
 			hash.c \
 		 	history.c \
 		 	history_tools.c \
+		 	history_search.c \
 		 	clist.c \
 			dlist.c \
 			dlist_tools.c \

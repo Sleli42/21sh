@@ -40,5 +40,4 @@ agg close fd possibilities:
 	- basta !
 
 Attention: pas de resize pendant l'exec du programme
-			leger bug 1/50: "ls " + K_UP -> bug termcaps
-			------------->  OPT+L to clear screen
+

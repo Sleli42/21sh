@@ -107,6 +107,13 @@ void	goto_latest_commands(t_all *all)
 		return ;
 	get_cursor_row(all);
 	all->lines2del = count_lines_2del(all);
+	if (CURSOR > PROMPT_LEN && all->lines2del == 1 && all->first_cmd)
+	{
+		all->first_cmd = 0;
+		while (--CURSOR > PROMPT_LEN)
+			tputs_termcap("le");
+		tputs_termcap("le");
+	}
 	if (CURSOR == PROMPT_LEN)
 		tputs_termcap("sc");
 	if (all->current_key == K_UP)

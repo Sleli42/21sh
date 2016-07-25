@@ -61,16 +61,19 @@
 # define K_CTRL_COPY	-6990000
 # define K_CTRL_PASTE	-4302000
 # define K_CTRL_CUT		-4310000
+# define K_CTRL_HISTO	-7020000
 # define K_SHIFT_UP		-23279175
 # define K_SHIFT_DOWN	-23279174
 # define K_SHIFT_RIGHT	-23279173
 # define K_SHIFT_LEFT	-23279172
 # define NOTATTY 		1
-# define PROMPT_LEN		3
+# define PROMPT_LEN		(int)ft_strlen(all->prompt)
+# define SEARCH_PROMPT	19 + (int)ft_strlen(all->cmd) - 1
 # define LINE_LEN		all->ws.ws_col
 # define CURSOR			all->cursor_pos
 # define CMD_T			all->cmd_termcaps
 # define CMD_NULL		(!CMD_T || !CMD_T->head || !CMD_T->head->c)
+# define SEARCH_NULL	(!CMD_T || !CMD_T->head || !CMD_T->head->c)
 # define SPLIT_T		" ;&<>()=|*/{}\"\'`\n"
 # define GLOB			"\"\'\\{}()[]"
 
@@ -154,6 +157,7 @@ typedef struct			s_all
 	int					pcmd_i;
 	int					current_key;
 	char				*buff;
+	char				*prompt;
 	t_clist				*list_dir;
 	t_select			*nav_dir;
 	t_winsize			ws;
@@ -227,6 +231,11 @@ typedef struct			s_all
 	int					err;
 	char				*path_mod;
 	int					dbl_fd;
+	int					first_cmd;
+	int					already_in_search;
+	char				*histo_prompt;
+	t_dlist2			*cmd_search_tmp;
+	// char				*cmd_search_str;
 }						t_all;
 
 /*

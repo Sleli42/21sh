@@ -47,7 +47,7 @@ void	realloc_termcaps_cmd(t_all *all, char *cmd2realloc)
 	}
 	else
 		all->pcmd_t = NULL;
-	while (cmd2realloc[ct])
+	while (cmd2realloc && cmd2realloc[ct])
 		dlst_add_back_2(all->cmd_termcaps, dlst_cmd_new(cmd2realloc[ct++]));
 	CURSOR = (int)all->cmd_termcaps->lenght + PROMPT_LEN;
 	define_current_line(all);
@@ -64,7 +64,7 @@ void	create_cmd(t_all *all)
 		return ;
 	nav = all->cmd_termcaps->head;
 	i = 0;
-	if (all->cmd && *all->cmd)
+	if (all->cmd || *all->cmd)
 		ft_strdel(&all->cmd);
 	if (!(all->cmd = (char *)malloc(sizeof(char) * \
 				len_lst_cmd(all->cmd_termcaps->head) + 1)))

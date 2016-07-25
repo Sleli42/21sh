@@ -88,6 +88,9 @@ t_all		*init_all(char **env)
 	all->tmp_cmd = NULL;
 	all->already_autocomplete = 0;
 	all->already_open = 0;
+	all->first_cmd = 1;
+	all->prompt = ft_strdup("$: ");
+	all->already_in_search = 0;
 	all->hash = malloc(sizeof(char *) * 250);
 	while (i < 250)
 		all->hash[i++] = 0;
