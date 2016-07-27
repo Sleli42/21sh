@@ -18,6 +18,8 @@ int			check_str(char *buff)
 	int		ct;
 
 	ct = 0;
+	if (!buff)
+		return (0);
 	while (buff[ct])
 	{
 		if (!ft_isprint(buff[ct]))

@@ -84,10 +84,12 @@ static int	dlst_del_one2_ex(t_cmd **tmp, t_dlist2 **lst, int *found)
 {
 	if (!(*tmp)->next && !(*tmp)->prev)
 	{
+		// printf("tmp->c2del: |%c|\n", (*tmp)->c);
 		(*tmp)->c = 0;
 		free((*tmp));
 		(*lst)->lenght--;
 		(*lst)->tail = NULL;
+		(*lst)->head = (*tmp);
 		return (1);
 	}
 	else

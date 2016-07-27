@@ -234,6 +234,7 @@ typedef struct			s_all
 	int					first_cmd;
 	int					already_in_search;
 	char				*histo_prompt;
+	char				*histo_match_tmp;
 	t_dlist2			*cmd_search_tmp;
 	// char				*cmd_search_str;
 }						t_all;

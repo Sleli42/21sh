@@ -71,7 +71,11 @@ void		insert_char(t_all *all)
 		if (all->cursor_pos == all->ws.ws_col * all->curr_line)
 			all->curr_line++;
 		if (*all->buff != '\n')
+		{
 			write_buffer(all);
+			if (all->already_in_search)
+				update_search_line(all);
+		}
 	}
 	tputs_termcap("ei");
 }
