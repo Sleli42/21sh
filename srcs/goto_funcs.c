@@ -26,28 +26,15 @@ void	goto_right(t_all *all)
 
 void	goto_left(t_all *all)
 {
-	// printf("CURSOR: %d\n", CURSOR);
-	// printf("PROMPT_LEN: %d\n", PROMPT_LEN);
 	if (all->curr_line > 1
 			&& CURSOR == ((all->curr_line - 1) * LINE_LEN))
-	{
-		// printf("CURSOR 1: %d\n", CURSOR);
 		goto_up(all);
-	}
 	else if (CURSOR == ((all->curr_line) * LINE_LEN) - 1
 			&& all->already_in_select)
-	{
-		// printf("CURSOR 2: %d\n", CURSOR);
 		reprint_char(all, goto_cursor_pos(all->cmd_termcaps->head, \
 												CURSOR - PROMPT_LEN));
-	}
 	else
-	{
-		// printf("CURSOR 3: %d\n", CURSOR);
-	// printf("PROMPT_LEN: %d\n", PROMPT_LEN);
 		tputs_termcap("le");
-		// printf("CURSOR: %d\n", CURSOR);
-	}
 	CURSOR--;
 }
 

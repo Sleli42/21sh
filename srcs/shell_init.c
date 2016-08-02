@@ -37,6 +37,7 @@ void		init_history(t_all *all)
 	char	buf[512];
 
 	all->history_path = NULL;
+	all->already_in_search = 0;
 	if ((all->fd_history = open(".21sh_history", \
 				O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
 		write(1, "open error\n", 11);
@@ -90,7 +91,6 @@ t_all		*init_all(char **env)
 	all->already_open = 0;
 	all->first_cmd = 1;
 	all->prompt = ft_strdup("$: ");
-	all->already_in_search = 0;
 	all->hash = malloc(sizeof(char *) * 250);
 	while (i < 250)
 		all->hash[i++] = 0;

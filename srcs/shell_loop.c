@@ -86,8 +86,6 @@ void	already_in_func(t_all *all)
 		ft_putstr(all->cmd);
 		all->tmp_cmd ? ft_strdel(&all->tmp_cmd) : NULL;
 	}
-	// if (all->already_in_search)
-	// 	all->cmd_search_str = all->cmd;
 }
 
 void	already_in_func_extended(t_all *all)

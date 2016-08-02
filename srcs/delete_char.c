@@ -45,16 +45,8 @@ void	del_char_multi_lines(t_all *all)
 
 void	del_char_k_delete(t_all *all)
 {
-// 	if (all->already_in_search)
-// 	{
-// 		(all->prompt) ? ft_strdel(&all->prompt) : NULL;
-// 		all->prompt = ft_strdup(all->histo_prompt);
-// 	}
-	// printf("CURSOR: %d\n", CURSOR);
-	// printf("PROMPT_LEN: %d\n", PROMPT_LEN);
 	if (all->cmd_termcaps->lenght > 0 && CURSOR >= PROMPT_LEN)
 	{
-		// ft_putstr("yes\n");
 		tputs_termcap("dm");
 		if ((size_t)CURSOR - PROMPT_LEN <= all->cmd_termcaps->lenght + 1)
 			dlst_del_one2(all->cmd_termcaps, CURSOR - (PROMPT_LEN - 1));
@@ -69,7 +61,6 @@ void	del_char_k_backspace(t_all *all)
 {
 	if (all->cmd_termcaps->lenght > 0 && CURSOR >= PROMPT_LEN)
 	{
-		// ft_putstr("yes\n");
 		tputs_termcap("dm");
 		if (all->already_in_search && all->cmd_termcaps->lenght >= 1)
 		{

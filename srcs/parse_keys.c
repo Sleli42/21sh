@@ -54,7 +54,6 @@ int			down_line(t_all *all)
 int			check_keys_arrows(t_all *all, char *buff)
 {
 	all->current_key = getkey(buff);
-	// printf("Key: %d\n", all->current_key);
 	if (all->current_key == K_ENTER || all->current_key == K_SHIFT_UP \
 	|| all->current_key == K_SHIFT_DOWN || all->current_key == K_SHIFT_RIGHT \
 										|| all->current_key == K_SHIFT_LEFT)

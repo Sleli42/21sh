@@ -65,15 +65,12 @@ void	reprint_char(t_all *all, t_cmd *nav)
 
 void	horizontal_moves(t_all *all)
 {
-	// ft_putstr("yes 0\n");
 	all->already_open = 0;
 	if (all->already_in_search)
 	{
 		(all->prompt) ? ft_strdel(&all->prompt) : NULL;
 		all->prompt = ft_strdup(all->histo_prompt);
 	}
-	// printf("Cursor : %d\n", CURSOR);
-	// printf("prompt: %d\n", PROMPT_LEN);
 	if (all->already_in_select \
 		&& ((size_t)all->cursor_pos - PROMPT_LEN) < all->cmd_termcaps->lenght)
 	{
@@ -82,9 +79,7 @@ void	horizontal_moves(t_all *all)
 	}
 	if (all->current_key == K_LEFT && CURSOR > PROMPT_LEN)
 	{
-		// ft_putstr("yes\n");
 		goto_left(all);
-		// ft_putstr("yes 2\n");
 		all->cpy_move_left += \
 			(all->already_in_select && all->cpy_move_right == 0) ? 1 : 0;
 	}
