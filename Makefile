@@ -80,6 +80,8 @@ SRC			= main.c \
 		 	history.c \
 		 	history_tools.c \
 		 	history_search.c \
+		 	history_search_tools.c \
+		 	history_search_tools_2.c \
 		 	clist.c \
 			dlist.c \
 			dlist_tools.c \

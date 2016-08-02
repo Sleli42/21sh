@@ -54,4 +54,19 @@ void			update_search_line(t_all *all);
 void			display_search_histo_prompt(t_all *all);
 void			search_history(t_all *all);
 
+/*
+*** ======================= history_search_tools.c
+*/
+
+int				check_keys_arrows_histo(t_all *all, char *buff);
+void			parse_keys_histo(t_all *all);
+int				read_keys_search(t_all *all);
+
+/*
+*** ======================= history_search_tools_2.c
+*/
+
+void			refresh_line(t_all *all);
+char			*skip_index(char *s);
+
 #endif
